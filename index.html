@@ -5,44 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Hub</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="img/artisthubLogo.png" type="image/icon type">
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/main/artisthubLogo.png?raw=true" alt="Artist Hub Logo">
+            <img src="img/artisthubLogo.png" alt="Artist Hub Logo">
         </div>
-        <nav>
-            <ul class="navi">
-                <li><a href="#">Virtual Tour</a></li>
-                <li><a href="#">Artists</a></li>
-                <li><a href="#">Event</a></li>
-                <li><a href="#">Forum</a></li>
-            </ul>
-        </nav>
+
+        <div class="nav-bar">
+            <div class="nav-container">
+
+                <nav>
+                    <div class="nav-mobile">
+                        <a href="#" id="nav-toggle">
+                            <span></span>
+                        </a>
+                    </div>
+                    <ul class="nav-list">
+                        <li><a href="#virtual">Virtual Tour</a></li>
+                        <li><a href="#">Artists</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Forum</a></li>
+                        </li>
+                        
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </header>
 
     <main>
-        <section class="section1">
-            <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/main/trial%201.png?raw=true" alt="Artist Hub Logo">
-        </section>
-        <section class="section2">
-            <h2>IMPORTANT EVENTS</h2>
-            <div class="event-list">
-                <div class="event-item">
-                    <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/main/ibagiw-baguio-creative-city-festival-2019-1024x576.jpg?raw=true" alt="iBagiw Competition">
-                    <p>iBagiw Competition</p>
+        <div class="container">
+            <section class="big">
+                <img src="img/biglogo.png" alt="Artist Hub Logo">
+            </section>
+            <section class="events">
+                <h2>IMPORTANT EVENTS</h2>
+                <div class="event-list">
+                    <div class="event-item">
+                        <img src="img/ibagiw.jpg" alt="iBagiw Competition">
+                        <p>iBagiw Competition</p>
+                    </div>
+                    <div class="event-item">
+                        <img src="img/ibagiw.jpg" alt="iBagiw Competition">
+                        <p>Nurturing the Environment</p>
+                    </div>
+                    <div class="event-item">
+                        <img src="img/ibagiw.jpg" alt="iBagiw Competition">
+                        <p>iBagiw Competition</p>
+                    </div>
                 </div>
-                <div class="event-item">
-                    <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/main/ibagiw-baguio-creative-city-festival-2019-1024x576.jpg?raw=true" alt="iBagiw Competition">
-                    <p>Nurturing the Environment</p>
-                </div>
-                <div class="event-item">
-                    <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/main/ibagiw-baguio-creative-city-festival-2019-1024x576.jpg?raw=true" alt="iBagiw Competition">
-                    <p>iBagiw Competition</p>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
+    <section class="artists-highlight">
+        <div class="artist-container">
+            <div class="artist-item">
+                <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/artists/kidlat%20tahimik.jpg?raw=true" alt="KidlatTahimik">
+                <p>Read More >>></p>
+            </div>
+            <div class="artist-item">
+                <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/artists/bencab.jpg?raw=true" alt="bencab">
+                <p>Read More >>></p>
+            </div>
+            <div class="artist-item">
+                <img src="https://raw.githubusercontent.com/ALmiiiii/ArtistHub-BaguioCity/refs/heads/new-branch/artists/wang-od.webp" alt="wang-od">
+                <p>Read More >>></p>
+            </div>
+        </div>
+            
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="script.js"></script>
 <!-- test -->
 </body>
 </html>
