@@ -98,8 +98,7 @@ nav ul li a:hover {
     margin: 0;
 }
 
-h2 {
+.events h2 {
     font-size: 2rem;
-    margin: 0px;
-    padding: 0;
+    margin-bottom: 20px;
 }
