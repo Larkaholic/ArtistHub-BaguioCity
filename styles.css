@@ -7,11 +7,11 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url('img/back.jpg');
+    background-image: url("https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/mike-uderevsky-4fqXRDI4gXQ-unsplash.jpg?raw=true");
     background-size: cover;
     color: white;
 }
-
+/* test */
 header {
     display: flex;
     justify-content: space-between;
