@@ -13,7 +13,7 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url("https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/mike-uderevsky-4fqXRDI4gXQ-unsplash.jpg?raw=true");
+    background-image: url("https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
     background-size: cover;
     color: white;
     overflow-y: scroll;
@@ -176,6 +176,10 @@ section {
 }
 
 /* events */
+.EvntPage {
+    height: 100dvh;
+}
+
 .EvntContainer {
     margin-top: 5%;
     height: 90%;
@@ -186,6 +190,7 @@ section {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
     backdrop-filter: blur(5px);
 }
+
 .EvntTitle {
     text-align: center;
     color: black;
@@ -194,15 +199,29 @@ section {
     backdrop-filter: blur(5px);
     border-radius: 50px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-    backdrop-filter: blur(5px);
-
 }
 
 .EvntRow {
-    text-align: center;
+    display: block;
     color: black;
-    padding: 17px;
-    margin-bottom: 17px;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
     backdrop-filter: blur(5px);
-    border-radius: 20px;
+    border-radius: 10px;
+    background: rgba(119, 119, 119, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.212);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.EvntRow:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Forum */
+.Forum {
+    height: 100dvh;
 }
