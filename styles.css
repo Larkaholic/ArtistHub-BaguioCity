@@ -18,7 +18,7 @@ body {
     color: white;
     overflow-y: scroll;
 }
-
+/* global header */
 header {
     display: flex;
     justify-content: space-between;
@@ -38,7 +38,7 @@ header {
     display: flex;
     margin-left: 20px;
 }
-
+/* nav */
 nav ul {
     list-style: none;
     display: flex;
@@ -63,15 +63,14 @@ main {
     height: 100vh;
     overflow-y: scroll;
 }
-
+/* Landing Page */
 section {
     scroll-snap-align: start;
-    height: 100vh; /* Each section takes full viewport height */
+    height: 100vh;
     display: flex;
     padding: 20px;
 }
 
-/* First section layout: Logo on the left, events on the right */
 .container {
     display: flex;
     justify-content: space-between;
@@ -174,4 +173,36 @@ section {
 
 .bttn:hover {
     background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* events */
+.EvntContainer {
+    margin-top: 5%;
+    height: 90%;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(5px);
+}
+.EvntTitle {
+    text-align: center;
+    color: black;
+    padding: 20px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(5px);
+    border-radius: 50px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(5px);
+
+}
+
+.EvntRow {
+    text-align: center;
+    color: black;
+    padding: 17px;
+    margin-bottom: 17px;
+    backdrop-filter: blur(5px);
+    border-radius: 20px;
 }
