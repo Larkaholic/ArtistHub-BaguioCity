@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="gallery.css">
+    <link rel="icon" href="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" type="image/icon type">
+    
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo">
+        </div>
+
+        <div class="nav-bar">
+                <nav>
+                    <ul class="nav-list">
+                        <li><a href="#">Virtual Tour</a></li>
+                        <li><a href="#">Artists</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Forum</a></li>
+                        </li>
+                    </ul>
+                </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="carousel-container">
+            <button class="prev-btn">◀</button>
+            <div class="carousel">
+                <div class="carousel-track">
+                    <img src="images\carousel\Screen-Shot-2019-11-22-at-3.22.59-PM.png" alt="Image 1" class="carousel-image">
+                    <img src="images\carousel\Art-festival-amid-a-pandemic.jpg" alt="Image 2" class="carousel-image">
+                    <img src="images\carousel\GBC_BAGUIO16_NORTHERN78.jpg" alt="Image 3" class="carousel-image">
+                    <img src="images\carousel\ibagiw3-1574050165.jpg" alt="Image 4" class="carousel-image">
+                    <img src="images\carousel\INDIO-GENIUS-500-Taon-ng-Labanang-Kultural-1521-2021-9-photo-by-Michelle-Anne-P.-Soliman-1-scaled.jpg" alt="Image 5" class="carousel-image">
+                    <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.25-PM.png" alt="Image-6" class="carousel-image">
+                    <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.35-PM.png" alt="Image-7" class="carousel-image">
+                </div>
+            </div>
+            <button class="next-btn">▶</button>
+        </div>
+        
+        <div class="carousel-dots">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+            <span class="dot" onclick="currentSlide(4)"></span>
+            <span class="dot" onclick="currentSlide(5)"></span>
+        </div>
+        
+        <script src="carousel.js"></script>
+    </main>
+</body>
+</html>
