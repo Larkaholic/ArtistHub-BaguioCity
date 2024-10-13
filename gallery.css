@@ -56,75 +56,46 @@ nav ul li a:hover {
     border-radius: 5px;
 }
 
+main {
+    width: 100vh;
+}
+
 /* Carousel Container */
 .carousel-container {
-    width: 90%;
-    margin-top: 5%;
-}
-
-/* Carousel */
-.carousel {
-    overflow: hidden;
-}
-
-/* Carousel Track */
-.carousel-track {
+    position: relative;
+    max-width: 100%; /* adjust to your desired width */
+    margin: 40px auto;
+  }
+  
+  .carousel-inner {
     display: flex;
-    transition: transform 0.4s ease-in-out;
-}
-
-/* Individual Images */
-.carousel-image {
-    margin: 0 5px;
-    height: 500px;
-    width: 300px;
-    border-radius: 20px;
+    max-width: 100%;
+    
+  }
+  
+  .carousel-image {
+    margin-top: 40px;
+    max-height: 500px;
+    max-width: 100%;
     object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Navigation Buttons */
-.prev-btn, .next-btn {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 2rem;
-    cursor: pointer;
+    transition: transform 0.5s ease;
+  }
+  
+  .carousel-prev, .carousel-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 1000;
-}
-
-.prev-btn {
-    left: 0;
-}
-
-.next-btn {
-    right: 0;
-}
-
-.prev-btn:hover, .next-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-/* Carousel Dots */
-.carousel-dots {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.dot {
-    height: 15px;
-    width: 15px;
-    margin: 0 5px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
+    background-color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
     cursor: pointer;
-}
-
-.active, .dot:hover {
-    background-color: #353535;
-}
+  }
+  
+  .carousel-prev {
+    left: 10px;
+  }
+  
+  .carousel-next {
+    right: 10px;
+  }
