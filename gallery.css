@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url("https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
 }
 
 /* global header */
@@ -61,9 +61,9 @@ nav ul li a:hover {
 }
 
 .swiper-pagination-bullet {
-background: #4F46E5;
+    background: #000000;
 }
 
 .swiper-pagination-bullet-active {
-background: #4F46E5 !important;
+    background: #000000 !important;
 }
