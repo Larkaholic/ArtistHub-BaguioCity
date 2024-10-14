@@ -6,7 +6,9 @@
     <title>Gallery</title>
     <link rel="stylesheet" href="gallery.css">
     <link rel="icon" href="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" type="image/icon type">
-    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 </head>
 
 <body>
@@ -29,33 +31,58 @@
     </header>
 
     <main>
-        <!-- Carousel Container -->
-        <div class="carousel-container">
-            <!-- Carousel Inner -->
-            <div class="carousel-inner">
-            <!-- Carousel Images -->
-                <img src="images\carousel\Art-festival-amid-a-pandemic.jpg" alt="Image 1" class="carousel-image">
-                <img src="images\carousel\GBC_BAGUIO16_NORTHERN78.jpg" alt="Image 2" class="carousel-image">
-                <img src="images\carousel\ibagiw3-1574050165.jpg" alt="Image 3" class="carousel-image">
-                <img src="images\carousel\INDIO-GENIUS-500-Taon-ng-Labanang-Kultural-1521-2021-9-photo-by-Michelle-Anne-P.-Soliman-1-scaled.jpg" alt="Image 4" class="carousel-image">
-                <img src="images\carousel\Screen-Shot-2019-11-22-at-3.22.59-PM.png" alt="Image 5" class="carousel-image">
-                <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.25-PM.png" alt="Image-6" class="carousel-image">
-                <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.35-PM.png" alt="Image-7" class="carousel-image">lass="carousel-image" src="image3.jpg" alt="Image 3">
-            <!-- Add more images here -->
+
+      <div class="w-full relative">
+        <div class="my-32 swiper centered-slide-carousel swiper-container relative">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                <img src="images\carousel\Art-festival-amid-a-pandemic.jpg" alt="Slide 1" class="object-cover h-full w-full rounded-2xl" />
+              </div>
             </div>
-            <!-- Carousel Controls -->
-            <button class="carousel-prev">Prev</button>
-            <button class="carousel-next">Next</button>
+            <div class="swiper-slide">
+              <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                <img src="images\carousel\GBC_BAGUIO16_NORTHERN78.jpg" alt="Slide 2" class="object-cover h-full w-full rounded-2xl" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                <img src="images\carousel\ibagiw3-1574050165.jpg" alt="Slide 3" class="object-cover h-full w-full rounded-2xl" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                <img src="images\carousel\INDIO-GENIUS-500-Taon-ng-Labanang-Kultural-1521-2021-9-photo-by-Michelle-Anne-P.-Soliman-1-scaled.jpg" alt="Slide 4" class="object-cover h-full w-full rounded-2xl" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                <img src="images\carousel\Screen-Shot-2019-11-22-at-3.22.59-PM.png" alt="Slide 5" class="object-cover h-full w-full rounded-2xl" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.25-PM.png" alt="Slide 6" class="object-cover h-full w-full rounded-2xl" />
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.35-PM.png" alt="Slide 6" class="object-cover h-full w-full rounded-2xl" />
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
         </div>
-        
-        <div class="carousel-dots">
-            <span class="dot" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-            <span class="dot" onclick="currentSlide(3)"></span>
-            <span class="dot" onclick="currentSlide(4)"></span>
-            <span class="dot" onclick="currentSlide(5)"></span>
-        </div>
-        
+      </div>
+
+        <!-- <img src="images\carousel\Art-festival-amid-a-pandemic.jpg" alt="Image 1" class="carousel-image">     
+        <img src="images\carousel\GBC_BAGUIO16_NORTHERN78.jpg" alt="Image 2" class="carousel-image">
+        <img src="images\carousel\ibagiw3-1574050165.jpg" alt="Image 3" class="carousel-image">
+        <img src="images\carousel\INDIO-GENIUS-500-Taon-ng-Labanang-Kultural-1521-2021-9-photo-by-Michelle-Anne-P.-Soliman-1-scaled.jpg" alt="Image 4" class="carousel-image">
+        <img src="images\carousel\Screen-Shot-2019-11-22-at-3.22.59-PM.png" alt="Image 5" class="carousel-image">
+        <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.25-PM.png" alt="Image-6" class="carousel-image">
+        <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.35-PM.png" alt="Image-7" class="carousel-image">
+         -->
         <script src="carousel.js"></script>
     </main>
 </body>

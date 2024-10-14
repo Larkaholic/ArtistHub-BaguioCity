@@ -6,13 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background-color: #f0f0f0;
     background-image: url("https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
-    overflow: hidden;
 }
 
 /* global header */
@@ -56,46 +50,20 @@ nav ul li a:hover {
     border-radius: 5px;
 }
 
-main {
-    width: 100vh;
+/* CSS Code */
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
 }
 
-/* Carousel Container */
-.carousel-container {
-    position: relative;
-    max-width: 100%; /* adjust to your desired width */
-    margin: 40px auto;
-  }
-  
-  .carousel-inner {
-    display: flex;
-    max-width: 100%;
-    
-  }
-  
-  .carousel-image {
-    margin-top: 40px;
-    max-height: 500px;
-    max-width: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  .carousel-prev, .carousel-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .carousel-prev {
-    left: 10px;
-  }
-  
-  .carousel-next {
-    right: 10px;
-  }
+.swiper-pagination-bullet {
+background: #4F46E5;
+}
+
+.swiper-pagination-bullet-active {
+background: #4F46E5 !important;
+}
