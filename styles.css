@@ -16,7 +16,7 @@ body {
     background-image: url("https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
     background-size: cover;
     color: white;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 /* global header */
 header {
@@ -225,3 +225,4 @@ section {
 .Forum {
     height: 100dvh;
 }
+

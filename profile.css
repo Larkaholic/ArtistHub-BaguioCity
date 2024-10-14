@@ -111,6 +111,7 @@ main {
 
 /* Social media icons */
 .social-media {
+    margin-left: 50px;
     display: flex;
     gap: 10px;
     margin-top: 15px;
@@ -149,6 +150,7 @@ main {
 }
 .option-btn {
     width: 200px;
+    margin-left: 50px;
     background-color: rgba(255, 255, 255, 0.3);
     border: none;
     border-radius: 50px;
@@ -157,4 +159,16 @@ main {
     cursor: pointer;
     text-align: center;
     padding: 10px 20px;
+}
+
+/* social icons */
+.fa {
+    padding: 15px;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+}
+
+.fa:hover {
+    background-color: rgba(255, 255, 255, 0.5);
 }
