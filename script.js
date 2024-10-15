@@ -6,3 +6,10 @@ window.addEventListener('scroll', function() {
         header.style.backgroundColor = 'rgba(217, 217, 217, 1)'; // Solid gray
     }
 });
+
+function landingPage() {
+    document.getElementById("landingPage").scrollIntoView({
+        behavior: 'smooth',
+        block: "start"
+    });
+}

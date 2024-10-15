@@ -6,19 +6,23 @@
     <title>Artist Hub</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="./output.css" href="output.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
 </head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo">
+<body class="">
+    <header class="flex justify-between items-center top-0 left-0 right-0 z-50 p-1">
+        <div class="flex w-24 ml-5">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo" onclick="landingPage()">
         </div>
 
         <div class="nav-bar">
                 <nav>
-                    <ul class="nav-list">
-                        <li><a href="#">Artists</a></li>
-                        <li><a href="#">Events</a></li>
-                        <li><a href="#">Gallery</a></li>
+                    <ul class="nav-list flex gap-5 text-black text-md p-2">
+                        <li><a href="#artists">Artists</a></li>
+                        <li><a href="#events">Events</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
                         <li><a href="#">Login</a></li>
                         </li>
                     </ul>
@@ -27,13 +31,13 @@
     </header>
 
     <main>
-        <section class="container">
-            <div class="big">
-                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/trial1.png?raw=true" alt="Artist Hub Logo">
+        <section id="landingPage" class="container flex content-between items-center w-dvw">
+            <div class="big flex flex-1 content-start">
+                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/trial1.png?raw=true" alt="Artist Hub Logo" class="w-dvw max-w-md">
             </div>
-            <div class="events">
-                <h2>IMPORTANT EVENTS</h2>
-                <div class="event-list">
+            <div class="events flex-1 p-6 mt-5 border-r-8">
+                <h2 class="text-4xl mb-6 text-center">IMPORTANT EVENTS</h2>
+                <div class="event-list flex flex-col gap-6">
                     <div class="event-item">
                         <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/ibagiw.jpg?raw=true" alt="iBagiw Competition">
                         <p>iBagiw Competition</p>
@@ -69,7 +73,7 @@
 
         </section>
         <!-- Events -->
-        <section class="EvntPage">
+        <section id="events" class="EvntPage">
             <container class="EvntContainer">
                 <h2 class="EvntTitle">
                     UPCOMING EVENTS
@@ -94,13 +98,65 @@
                 </button>
             </container>
         </section>
-        <section class="Forum">
-            <h1 class="my-24 text-3xl font-bold underline">
-                Hello world!
-            </h1>
+        <section id="gallery">
+            <div class="w-full relative">
+                <div class="my-32 swiper centered-slide-carousel swiper-container relative">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                      <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <img src="images\carousel\Art-festival-amid-a-pandemic.jpg" alt="Slide 1" class="object-cover h-full w-full rounded-2xl" />
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <img src="images\carousel\GBC_BAGUIO16_NORTHERN78.jpg" alt="Slide 2" class="object-cover h-full w-full rounded-2xl" />
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <img src="images\carousel\ibagiw3-1574050165.jpg" alt="Slide 3" class="object-cover h-full w-full rounded-2xl" />
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <img src="images\carousel\INDIO-GENIUS-500-Taon-ng-Labanang-Kultural-1521-2021-9-photo-by-Michelle-Anne-P.-Soliman-1-scaled.jpg" alt="Slide 4" class="object-cover h-full w-full rounded-2xl" />
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <img src="images\carousel\Screen-Shot-2019-11-22-at-3.22.59-PM.png" alt="Slide 5" class="object-cover h-full w-full rounded-2xl" />
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.25-PM.png" alt="Slide 6" class="object-cover h-full w-full rounded-2xl" />
+                      </div>
+                    </div>
+                    <div class="swiper-slide">
+                      <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+                        <img src="images\carousel\Screen-Shot-2019-11-22-at-3.23.35-PM.png" alt="Slide 6" class="object-cover h-full w-full rounded-2xl" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-8 lg:justify-start justify-center">
+                    <button id="slider-button-left" class="swiper-button-prev group !p-6 flex justify-center items-center border border-solid border-black !w-12 !h-12 transition-all duration-500 rounded-full !top-2/4 !-translate-y-8 !left-5 hover:bg-green-700 " data-carousel-prev>
+                      <svg class="h-5 w-5 text-green-900 group-hover:text-black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M10.0002 11.9999L6 7.99971L10.0025 3.99719" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
+                    <button id="slider-button-right" class="swiper-button-next group !p-6 flex justify-center items-center border border-solid border-black !w-12 !h-12 transition-all duration-500 rounded-full !top-2/4 !-translate-y-8  !right-5 hover:bg-green-700" data-carousel-next>
+                      <svg class="h-5 w-5 text-green-900 group-hover:text-black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M5.99984 4.00012L10 8.00029L5.99748 12.0028" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </button>
+                   </div>
+                  <div class="swiper-pagination"></div>
+                </div>
+              </div>
         </section>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="carousel.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

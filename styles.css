@@ -20,41 +20,20 @@ body {
 }
 /* global header */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     background-color: rgba(217, 217, 217, 0.8);
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 10px 20px;
     transition: background-color 0.3s ease;
 }
 
-.logo img {
-    width: 120px;
-    display: flex;
-    margin-left: 20px;
-}
 /* nav */
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
+
 
 nav ul li a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
-    padding: 5px 10px;
     transition: background-color 0.3s ease;
 }
 
 nav ul li a:hover {
-    background: #0004fd;
+    background: #838383;
     border-radius: 5px;
 }
 
@@ -70,45 +49,10 @@ section {
     display: flex;
     padding: 20px;
 }
-
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.big {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.big img {
-    width: 100%;
-    max-width: 500px;
-}
-
 .events {
-    flex: 1;
     background-color: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    margin-top: 5%;
-    border-radius: 10px;
     height: 75vh;
     overflow-y: auto;
-}
-
-.events h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.event-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 .event-item {
@@ -224,5 +168,22 @@ section {
 /* Forum */
 .Forum {
     height: 100dvh;
+}
+
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+
+.swiper-pagination-bullet {
+    background: #000000;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000000 !important;
 }
 
