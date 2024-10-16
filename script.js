@@ -12,4 +12,5 @@ function landingPage() {
         behavior: 'smooth',
         block: "start"
     });
+
 }

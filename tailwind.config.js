@@ -11,11 +11,20 @@ module.exports = {
       '4xl': '2.441rem',
       '5xl': '3.052rem',
     },
+    screens: {
+      xs: '370px',
+      sm: '640px',
+      md: '768px',
+    },
     extend: {
 
     },
     
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('tailwindcss-filters')
+  ],
 }
 
