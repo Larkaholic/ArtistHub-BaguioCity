@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Hub</title>
+    <link rel="stylesheet" href="log.css">
+    <link rel="icon" href="images/artisthubLogo.png" type="image/icon type">
+</head>
+<div class="logo">
+    <img src="images/artisthubLogo.png" alt="Artist Hub Logo">
+    </div>
+<body>
+    <div class="big">
+        <img src="images/trial1.png" alt="logo" width="60%">
+    </div>
+    <div class="container">
+        <div class="content">
+          <!-- Registration form -->
+          <form action="#">
+            <div class="user-details">          
+              <!-- Input for Username -->
+              <div class="input-box">
+                <span class="details">Username</span>
+                <input type="text" placeholder="Enter your username" required>
+              </div>
+              <!-- Input for Password -->
+              <div class="input-box">
+                <span class="details">Password</span>
+                <input type="text" placeholder="Enter your password" required>
+              </div>
+            </div>
+            <div class="gender-details">
+            </div>
+            <!-- Submit button -->
+            <div button class="back" type="button" onclick="location.href='user.html'"></button>
+              <input  type="submit" value="LOG-IN">
+            </div>
+            <!--Main-->
+            <div class="back">
+                <input type="back" value="BACK" onclick="location.href='index.html'">
+              </div>
+          </form>
+        </div>
+      </div>
+      <script type="text/javascript">
+        (function(d, t) {
+            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            v.onload = function() {
+              window.voiceflow.chat.load({
+                verify: { projectID: '6706887ba2382c6fe907495e' },
+                url: 'https://general-runtime.voiceflow.com',
+                versionID: 'production'
+              });
+            }
+            v.src = "https://cdn.voiceflow.com/widget/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+        })(document, 'script');
+      </script>
+</body>
+</html>
