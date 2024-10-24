@@ -1,0 +1,174 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
+    background-size: cover;
+    color: white;
+    overflow-y: scroll;
+}
+/* global header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(217, 217, 217, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.logo img {
+    width: 120px;
+    display: flex;
+    margin-left: 20px;
+}
+/* nav */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background: #0004fd;
+    border-radius: 5px;
+}
+
+main {
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+/* Artist Profile */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    height: 100vh;
+    overflow: auto;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* image and options section */
+.profile-image {
+    display: flex;
+    margin-top: 7%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.profile-image img {
+    width: 300px;
+    height: 300px;
+    border-radius: 40%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+/* Buttons below the image */
+.options-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    
+}
+
+/* Social media icons */
+.social-media {
+    margin-left: 50px;
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.social-media img {
+    width: 30px;
+    height: 30px;
+}
+
+.profile-details {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    margin-top: 7%;
+    border-radius: 10px;
+    height: 65dvh;
+    max-width: 800px;
+}
+
+.feedback-btn {
+    display: block;
+    position: absolute;
+    bottom: 20px;
+    right: 80px;
+    margin-top: 20px;
+    margin-left: 100px;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+}
+.option-btn {
+    width: 200px;
+    margin-left: 50px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px 20px;
+}
+
+/* social icons */
+.fa {
+    padding: 15px;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+}
+
+.fa:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
