@@ -1,0 +1,383 @@
+/* removed unnecessary styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow: hidden;
+}
+
+@media print {
+    .table, .table__body {
+     overflow: visible;
+     height: auto !important;
+     width: auto !important;
+    }
+   }
+    
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 250px 2fr;
+    min-height: 100vh;
+    background: url(images/html_table.jpg) center / cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* global header */
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* nav */
+
+.loader{
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:#8383839a;
+    transition: opacity 20s, visibility 0.50s;
+}
+.loader--hidden{
+    opacity:0;
+    visibility: hidden;
+
+}
+
+.loader::after{
+    content: "";
+    width: 75px;
+    height: 75px;
+    border: 15px solid#dddddd;
+    border-top-color: aqua;
+    border-radius: 50%;
+    animation: loading 0.75s ease infinite;   
+}
+
+@keyframes loading{
+    from {transform:rotate(0turn)}
+    to {transform: rotate(1turn)}
+}
+
+/* nav */
+
+.nav-container{
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+nav{
+    float: right;
+}
+
+nav ul{
+    list-style: none;
+}
+
+nav ul li{
+    float: left;
+    position: relative;
+    left:2%;
+}
+
+nav ul li a{
+    display: block;
+    padding: 0 20px;
+    line-height: 70px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+nav ul li a:hover{
+    background: #7173f167;
+    border-radius: 15px;
+    
+}
+
+nav ul li a:not(:only-child):after{
+    content: '▼';
+    padding-left: 5px;
+}
+
+nav ul li ul li {
+    min-width: 190px;
+}
+
+nav ul li ul li a{
+    padding: 15px;
+    line-height: 20px;
+}
+
+.nav-dropdown{
+    position: absolute;
+    display: none;
+    z-index: 1;
+}
+
+.nav-mobile{
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 70px;
+    width: 70px;
+}
+
+#nav-toggle{
+    position: absolute;
+    left: 18px;
+    top: 22px;
+    cursor: pointer;
+    padding: 10px 35px 15px 0px;
+}
+
+#nav-toggle span,
+#nav-toggle span::before,
+#nav-toggle span::after{
+    position: absolute;
+    display: block;
+    content: '';
+    background: #fff;
+    height: 5px;
+    width: 35px;
+    transition: all 300ms ease-in-out;
+}
+
+#nav-toggle span::before{
+    top: -10px;
+}
+
+#nav-toggle span::after{
+    bottom: -10px;
+}
+
+#nav-toggle.active span{
+    background-color: transparent;
+}
+
+#nav-toggle.active span::before, #nav-toggle.active span::after{
+    top: 0;
+}
+
+#nav-toggle.active span::before{
+    transform: rotate(45deg);
+}
+
+#nav-toggle.active span::after{
+    transform: rotate(-45deg);
+}
+
+@media only screen and (max-width: 768px) {
+
+    .nav-mobile{
+        display: block;
+    }
+
+    nav{
+        width: 100%;
+        padding: 70px 0 15px;
+    }
+
+    nav ul{
+        display: none;
+    }
+
+    nav ul li {
+        float: none;
+    }
+
+    nav ul li a{
+        padding: 15px;
+        line-height: 20px;
+        padding-left: 25%;
+    }
+
+
+    nav ul li ul li a{
+        padding-left: 30%;
+    }
+
+    .nav-dropdown{
+        position: static;
+    }
+}
+
+@media screen and (min-width: 799px){
+    .nav-list{
+        display: block !important;
+    }
+}
+
+.flyout {
+    display: none;
+}
+.flyout.active {
+    display: flex;
+}
+
+
+/*Sidebar*/
+.sidebar{
+    background-color: rgba(0, 0, 0, 0.685);
+}
+.img{
+    position: relative;
+    top:8vh;
+    }
+
+
+/*buttons*/
+
+.genbttn {
+    position: absolute;
+    bottom: 70%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.genbttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.usbttn {
+    position: absolute;
+    bottom: 63%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.usbttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.artbttn {
+    position: absolute;
+    bottom: 56%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.artbttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.evebttn {
+    position: absolute;
+    bottom: 49%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.evebttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.cubttn {
+    position: absolute;
+    bottom: 42%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cubttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.aubttn {
+    position: absolute;
+    bottom: 35%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.aubttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.apbttn {
+    position: absolute;
+    bottom: 28%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.apbttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+.sobttn {
+    position: absolute;
+    bottom: 7%; 
+    right: 86%;  
+    background-color: rgba(0, 0, 0, 0.178);
+    color: white;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sobttn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+section {
+    scroll-snap-align: start;
+    height: 100vh;
+    display: flex;
+    padding: 20px;
+}
+
+/*table*/

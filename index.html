@@ -33,6 +33,7 @@
                     <li><a href="#events">Events</a></li>
                     <li><a href="gallery.html">Gallery</a></li>
                     <li><a href="" onclick="toggleLoginFlyout(event)">Login</a></li>
+                    <li><a href="" onclick="toggleLoginFlyout(event)">Admin</a></li>
                     </li>
                     
                 </ul>
@@ -40,7 +41,7 @@
         </div>
     </div>
     </header>
-
+    <!--UserLogin-->
     <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
         <div class="glass-header items-center rounded-lg w-96 mx-10">
             <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
@@ -60,7 +61,26 @@
             </form>
         </div>
     </div>
-
+<!--AdminLogin-->
+<div id="AdminFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+    <div class="glass-header items-center rounded-lg w-96 mx-10">
+        <h2 class="flex justify-center font-bold text-2xl my-4">Admin Login</h2>
+        <form>
+            <div class="mx-2 mb-4">
+                <label for="email" class="block font-medium">Admin User:</label>
+                <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+            </div>
+            <div class="mx-2 mb-4">
+                <label for="password" class="block font-medium">Password:</label>
+                <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+            </div>
+            <div class="flex items-center justify-between mx-20 my-5">
+                <button type="button" onclick="location.href='admin.html'">Login</button>
+                <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
 
     <main>
         <section id="landingPage" class="container flex flex-col md:flex-row content-between items-center w-full px-4 py-6 truncate overflow-auto">
