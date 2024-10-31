@@ -13,50 +13,24 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url("https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
-    background-size: cover;
-    color: white;
-    overflow-y: scroll;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
 }
 /* global header */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgba(217, 217, 217, 0.8);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 10px 20px;
-    transition: background-color 0.3s ease;
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.logo img {
-    width: 120px;
-    display: flex;
-    margin-left: 20px;
-}
 /* nav */
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
+
 
 nav ul li a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
-    padding: 5px 10px;
     transition: background-color 0.3s ease;
 }
 
-nav ul li a:hover {
-    background: #0004fd;
-    border-radius: 5px;
-}
 
 main {
     scroll-snap-type: y mandatory;
@@ -71,148 +45,30 @@ section {
     padding: 20px;
 }
 
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+.flyout {
+    display: none;
 }
-
-.big {
-    flex: 1;
+.flyout.active {
     display: flex;
-    justify-content: flex-start;
-}
-
-.big img {
-    width: 100%;
-    max-width: 500px;
 }
 
 .events {
-    flex: 1;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    margin-top: 5%;
-    border-radius: 10px;
     height: 75vh;
-    overflow-y: auto;
-}
 
-.events h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.event-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.event-item {
-    display: flex;
-    align-items: center;
-}
-
-.event-item img {
-    width: 50px;
-    margin-right: 10px;
-}
-
-.event-item p {
-    font-size: 1.2rem;
-}
-
-/* Artists Section */
-.artists-highlight {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-    width: 100%;
-    text-align: center;
-}
-
-.artist-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5%;   
-    width: 100%;   
 }
 
 .artist-item {
-    position: relative;
-    width: 30%;
-    border-radius: 3%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    width: 50%;
 }
 
 .artist-item img {
-    width: 100%;
     height: 75dvh;
-    object-fit: cover;
-    display: block;
 }
 
-.bttn {
-    position: absolute;
-    bottom: 9%; 
-    right: 25%;  
-    background-color: rgba(0, 0, 0, 0.178);
-    color: white;
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.bttn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
 
 /* events */
 .EvntPage {
     height: 100dvh;
-}
-
-.EvntContainer {
-    margin-top: 5%;
-    height: 90%;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-    backdrop-filter: blur(5px);
-}
-
-.EvntTitle {
-    text-align: center;
-    color: black;
-    padding: 20px;
-    margin-bottom: 25px;
-    backdrop-filter: blur(5px);
-    border-radius: 50px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-}
-
-.EvntRow {
-    display: block;
-    color: black;
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
-    background: rgba(119, 119, 119, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.212);
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
 }
 
 .EvntRow:hover {
@@ -224,4 +80,21 @@ section {
 /* Forum */
 .Forum {
     height: 100dvh;
+}
+
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+
+.swiper-pagination-bullet {
+    background: #000000;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000000 !important;
 }
