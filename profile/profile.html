@@ -7,7 +7,7 @@
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="profile.css">
     <link rel="./output.css" href="output.css">
 </head>
@@ -66,41 +66,42 @@
         </div>
     </div>
 
-    <main>
+    <main class="md:overflow-hidden">
         <section class="flex flex-col items-center text-center p-3 h-full">
+            <div class="flex flex-col justify-items-evenly md:flex-row gap-4 md:gap-5 h-full md:justify-center">
+                <div class="profile-details flex flex-row mt-12 items-start md:flex-col flex-grow">
+                    <img class="flex-col mb-1 object-cover rounded-2xl md:rounded-3xl items-end max-w-full" src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/artists/kidlat%20tahimik.jpg?raw=true" alt="artist 1">
 
-            <div class="flex flex-col items-start justify-between gap-4 h-full w-full">
-
-                <div class="profile-details flex flex-row mt-12 items-start">
-
-                    <img class="flex-col mb-4 object-cover rounded-lg items-end max-w-96" src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/artists/kidlat%20tahimik.jpg?raw=true" alt="artist 1">
-        
-                    <div class="flex flex-col items-center h-14 gap-14 mt-10 mx-7">
-                        <a href="#" class="fa fa-facebook"></a>
-                        <a href="#" class="fa fa-instagram"></a>
-                        <a href="#" class="fa fa-youtube"></a>
-                        <a href="#" class="fa fa-google"></a>
+                    <div class="flex flex-col items-center gap-4 mx-7 mt-10 md:mt-4 md:gap-6">
+                        <div class="flex gap-10 md:flex-row flex-col">
+                            <a href="#" class="fa fa-facebook"></a>
+                            <a href="#" class="fa fa-instagram"></a>
+                            <a href="#" class="fa fa-youtube"></a>
+                            <a href="#" class="fa fa-google"></a>
+                        </div>
+                        <div class="w-full mt-1 hidden md:flex">
+                            <button class="glass-header p-2 rounded-lg w-full" onclick="location.href='gallery.html'">Gallery</button>
+                        </div>
                     </div>
                 </div>
-                                    
-                <div class="flex flex-col max-w-full w-96">
+                <div class="w-full mt-1 md:hidden">
                     <button class="glass-header p-2 rounded-lg w-full" onclick="location.href='gallery.html'">Gallery</button>
                 </div>
-        
-                <div class="glass-header mt-9">
+                <div class="glass-header text-black mt-2 max-w-full w-full rounded-3xl text-2xl object-bottom md:mt-16 md:mb-10 flex-grow min-h-dvh md:w-full md:ml-5 md:mr-10">
                     <h2 class="font-bold text-3xl my-4">Kidlat Tahimik</h2>
                     <h3 class="text-2xl underline mb-3">
                         artist details
                     </h3>
-                    <p class="">
-                        Eric Oteyza de Guia (born October 3, 1942), better known as Kidlat Tahimik ("Silent Lightning"), is a film director, writer and actor whose films are commonly associated with the Third Cinema movement through their critiques of neocolonialism.
+                    <p>
+                        Eric Oteyza de Guia (born October 3, 1942), better known as Kidlat Tahimik ("Silent Lightning"), is a film director, writer, and actor whose films are commonly associated with the Third Cinema movement through their critiques of neocolonialism.
                     </p>
-                    <p class="">
+                    <p class=" mb-10">
                         For his contributions to the development of Philippine independent cinema, he was recognized in 2018 as a National Artist of the Philippines for Film - a conferment which represents the Philippine state’s highest recognition for artists.
                     </p>
                 </div>
             </div>
         </section>
+        
         
     </main>
 
