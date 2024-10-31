@@ -36,7 +36,7 @@ html {
 }
 
 body.dark {
-	--light: #1919dd;
+	--light: #0C0C1E;
 	--grey: #060714;
 	--dark: #FBFBFB;
 }
@@ -153,6 +153,10 @@ body {
 	justify-content: center;
 }
 /* SIDEBAR */
+
+
+
+
 
 /* CONTENT */
 #content {
@@ -508,6 +512,14 @@ body {
 }
 /* MAIN */
 /* CONTENT */
+
+
+
+
+
+
+
+
 
 @media screen and (max-width: 768px) {
 	#sidebar {
