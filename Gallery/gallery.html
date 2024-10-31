@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery</title>
+  <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="gallery.css">
+  <link rel="../output.css" href="output.css">
+</head>
+
+<body class="overflow-hidden">
+  <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+    <div class="flex w-24 ml-5">
+      <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo" onclick="landingPage()" style="cursor: pointer">
+    </div>
+    <div class="nav-bar">
+      <nav>
+        <ul class="nav-list flex gap-5 text-black text-md p-2">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.html#artists">Artists</a></li>
+          <li><a href="../index.html#events">Events</a></li>
+          <li><a href="" onclick="toggleLoginFlyout(event)">Login</a></li>
+          </li>
+        </ul>
+      </nav>
+    </div>
+</header>
+
+<div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+  <div class="glass-header items-center rounded-lg w-96 mx-10">
+    <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
+    <form>
+      <div class="mx-2 mb-4">
+        <label for="email" class="block font-medium">Email:</label>
+        <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+      </div>
+      <div class="mx-2 mb-4">
+        <label for="password" class="block font-medium">Password:</label>
+        <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+      </div>
+      <div class="flex items-center justify-between mx-20 my-5">
+        <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Login</button>
+        <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<main>
+  <div class="w-full relative">
+    <div class="my-32 swiper centered-slide-carousel swiper-container relative">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="relative bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/carousel/Art-festival-amid-a-pandemic.jpg?raw=true" alt="Slide 1" 
+            class="absolute object-cover h-full w-full rounded-2xl z-0"/>
+            <button class="absolute bottom-4 right-4 glass-header px-2 py-2 rounded-md hover:bg-green-400 hover:text-white">
+              Image Info
+            </button>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/carousel/GBC_BAGUIO16_NORTHERN78.jpg?raw=true" alt="Slide 2" 
+            class="object-cover h-full w-full rounded-2xl" />
+            <button class="absolute bottom-4 right-4 glass-header px-2 py-2 rounded-md hover:bg-green-400 hover:text-white">
+              Image Info
+            </button>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/carousel/INDIO-GENIUS-500-Taon-ng-Labanang-Kultural-1521-2021-9-photo-by-Michelle-Anne-P.-Soliman-1-scaled.jpg?raw=true" alt="Slide 3" 
+            class="object-cover h-full w-full rounded-2xl" />
+            <button class="absolute bottom-4 right-4 glass-header px-2 py-2 rounded-md hover:bg-green-400 hover:text-white">
+              Image Info
+            </button>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/carousel/Screen-Shot-2019-11-22-at-3.22.59-PM.png?raw=true" alt="Slide 4" 
+            class="object-cover h-full w-full rounded-2xl" />
+            <button class="absolute bottom-4 right-4 glass-header px-2 py-2 rounded-md hover:bg-green-400 hover:text-white">
+              Image Info
+            </button>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/carousel/Screen-Shot-2019-11-22-at-3.23.25-PM.png?raw=true" alt="Slide 5" 
+            class="object-cover h-full w-full rounded-2xl" />
+            <button class="absolute bottom-4 right-4 glass-header px-2 py-2 rounded-md hover:bg-green-400 hover:text-white">
+              Image Info
+            </button>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/carousel/Screen-Shot-2019-11-22-at-3.23.35-PM.png?raw=true" alt="Slide 6" 
+            class="object-cover h-full w-full rounded-2xl" />
+            <button class="absolute bottom-4 right-4 glass-header px-2 py-2 rounded-md hover:bg-green-400 hover:text-white">
+              Image Info
+            </button>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="bg-indigo-50 rounded-2xl h-96 flex justify-center items-center">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/carousel/ibagiw3-1574050165.jpg?raw=true" alt="Slide 6" 
+            class="object-cover h-full w-full rounded-2xl" />
+            <button class="absolute bottom-4 right-4 glass-header px-2 py-2 rounded-md hover:bg-green-400 hover:text-white">
+              Image Info
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-8 lg:justify-start justify-center">
+        <button id="slider-button-left" class="swiper-button-prev group !p-6 flex justify-center items-center border border-solid border-black !w-22 !h-22 transition-all duration-500 rounded-full !top-2/4 !-translate-y-8 !left-5 hover:bg-green-700 " data-carousel-prev>
+          <svg class="h-4 w-4 text-green-900 group-hover:text-black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10.0002 11.9999L6 7.99971L10.0025 3.99719" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button id="slider-button-right" class="swiper-button-next group !p-6 flex justify-center items-center border border-solid border-black !w-12 !h-12 transition-all duration-500 rounded-full !top-2/4 !-translate-y-8  !right-5 hover:bg-green-700" data-carousel-next>
+          <svg class="h-4 w-4 text-green-900 group-hover:text-black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M5.99984 4.00012L10 8.00029L5.99748 12.0028" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+      <div class="swiper-pagination mx-10"></div>
+    </div>
+  </div>
+    <script src="carousel.js"></script>
+  </main>
+</body>
+</html>

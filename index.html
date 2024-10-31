@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Hub</title>
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="./output.css" href="output.css">
+    
+
+</head>
+<body class="bg-cover">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+        <div class="flex w-24 ml-5">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo" onclick="landingPage()" style="cursor: pointer">
+        </div>
+
+        <div class="sm:hidden flex items-center mr-5">
+            <button onclick="toggleNav()" class="burger-icon">
+                <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-5">
+            <ul class="text-black text-md flex spac e-x-5">
+                <li><a href="#artists">Artists</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="Gallery/gallery.html">Gallery</a></li>
+                <li><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="flyout-menu" class="glass-header fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
+        <nav>
+            <ul class="text-black text-2xl space-y-4">
+                <li><a href="#artists" onclick="toggleNav()">Artists</a></li>
+                <li><a href="#events" onclick="toggleNav()">Events</a></li>
+                <li><a href="Gallery/gallery.html" onclick="toggleNav()">Gallery</a></li>
+                <li><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    
+    
+
+    <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+        <div class="glass-header items-center rounded-lg w-96 mx-10">
+            <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
+            <form>
+                <div class="mx-2 mb-4">
+                    <label for="email" class="block font-medium">Email:</label>
+                    <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+                </div>
+                <div class="mx-2 mb-4">
+                    <label for="password" class="block font-medium">Password:</label>
+                    <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+                </div>
+                <div class="flex items-center justify-between mx-20 my-5">
+                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Login</button>
+                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <main>
+        <section id="landingPage" class="container flex flex-col md:flex-row content-between items-center w-full px-4 py-6 truncate overflow-auto">
+            <div class="big flex flex-1 content-start mb-6 md:mb-12 mt-10 md:mt-20">
+                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/trial1.png?raw=true" alt="Artist Hub Logo" class="w-full max-w-xs md:max-w-md lg:max-w-2xl">
+            </div>
+            <div class="events flex-1 p-4 sm:w-full sm:mb-0 md:p-6 mt-6 md:mt-0 mb-6 bg-slate-400 text-black rounded-md glass-header">
+                <h2 class="text-2xl md:text-3xl lg:text-4xl mb-4 md:mb-6 text-center">IMPORTANT EVENTS</h2>
+                <div class="event-list flex flex-col gap-4 md:gap-6">
+                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="navigateToEvent()" style="cursor: pointer;">
+                        <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/ibagiw.jpg?raw=true" alt="iBagiw Competition" class="w-14 h-14 md:w-14 md:h-14 rounded-md object-cover">
+                        <p class="text-center md:text-left md:text-2xl md:ml-3 md:mt-2 md:underline">iBagiw Competition</p>
+                    </div>
+                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="location.href='events.html'" style="cursor: pointer;">
+                        <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/ibagiw.jpg?raw=true" alt="Nurturing the Environment" class="w-14 h-14 md:w-14 md:h-14 rounded-md object-cover">
+                        <p class="text-center md:text-left md:text-2xl md:ml-3 md:mt-2 md:underline">Nurturing the Environment</p>
+                    </div>
+                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="location.href='events.html'" style="cursor: pointer;">
+                        <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/ibagiw.jpg?raw=true" alt="iBagiw Competition" class="w-14 h-14 md:w-14 md:h-14 rounded-md object-cover">
+                        <p class="text-center md:text-left md:text-2xl md:ml-3 md:mt-2 md:underline">iBagiw Competition</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- artists -->
+        <section id="artists" class="artists-highlight flex flex-col content-center mt-8 w-full truncate">
+            <div class="relative flex justify-end w-full">
+                <input
+                    class="appearance-none border-2 pl-4 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-56 py-2 px-3 mt-11 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
+                    id="username"
+                    type="text"
+                    placeholder="Search for artist"
+                />
+            </div>
+            <div class="artist-container flex sm:justify-between justify-evenly gap-4 sm:w-full my-3 h-full">
+                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col ">
+                    <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/artists/kidlat%20tahimik.jpg?raw=true" 
+                    class="w-full object-cover" alt="KidlatTahimik">
+                    <button class="bttn absolute bottom-4 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile.html'"><p>Read More >>></p></button>
+                </div>
+                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col ">
+                    <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/artists/bencab.jpg?raw=true" 
+                    class="w-full object-cover" alt="bencab">
+                    <button class="bttn absolute bottom-4 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile.html'"><p>Read More >>></p></button>
+                </div>
+                <div class="artist-item hidden sm:flex relative w-full rounded-lg overflow-hidden flex-col">
+                    <img src="https://raw.githubusercontent.com/ALmiiiii/ArtistHub-BaguioCity/refs/heads/new-branch/artists/wang-od.webp" 
+                    class="w-full object-cover" alt="wang-od">
+                    <button class="bttn absolute bottom-4 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile.html'"><p>Read More >>></p></button>
+                </div>
+            </div>            
+        </section>        
+        
+        <!-- Events -->
+        <section id="events" class="EvntPage">
+            <container class="EvntContainer overflow-auto glass-header mt-12 w-full p-6 rounded-lg">
+                <h2 class="EvntTitle text-center glass-header rounded-lg p-3 font-bold mb-4">
+                    UPCOMING EVENTS
+                </h2>
+                <button class="EvntRow glass-header rounded-full w-full p-2 mb-4" onclick="location.href='events/events.html'" style="cursor: pointer;">
+                    No event yet
+                </button>
+                <button class="EvntRow glass-header rounded-full w-full p-2 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
+                    No event yet
+                </button>
+                <button class="EvntRow glass-header rounded-full w-full p-2 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
+                    No event yet
+                </button>
+                <button class="EvntRow glass-header rounded-full w-full p-2 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
+                    No event yet
+                </button>
+                <button class="EvntRow glass-header rounded-full w-full p-2 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
+                    No event yet
+                </div>
+                <button class="EvntRow glass-header rounded-full w-full p-2 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
+                    No event yet
+                </button>
+            </container>
+        </section>
+    </main>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</body>
+</html>
