@@ -30,19 +30,6 @@ nav ul {
     gap: 20px;
 }
 
-nav ul li a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
-    padding: 5px 10px;
-    transition: background-color 0.3s ease;
-}
-
-nav ul li a:hover {
-    background: #0004fd;
-    border-radius: 5px;
-}
-
 main {
     scroll-snap-type: y mandatory;
     height: 100vh;

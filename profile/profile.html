@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="profile.css">
     <link rel="./output.css" href="output.css">
 </head>
-<body class="overflow-scroll">
+<body class="overflow-hidden md:overflow-hidden">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
         <div class="flex w-24 ml-5">
             <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo" onclick="landingPage()" style="cursor: pointer">
@@ -29,7 +29,7 @@
             <ul class="text-black text-md flex space-x-5">
                 <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#artists">Artists</a></li>
                 <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#events">Events</a></li>
-                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="Gallery/gallery.html">Gallery</a></li>
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="../Gallery\gallery.html">Gallery</a></li>
                 <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
             </ul>
         </nav>
@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <main class="md:overflow-hidden">
+    <main class="overflow-scroll md:overflow-hidden">
         <section class="flex flex-col items-center text-center p-3 h-full">
             <div class="flex flex-col justify-items-evenly md:flex-row gap-4 md:gap-5 h-full md:justify-center">
                 <div class="profile-details flex flex-row mt-12 items-start md:flex-col flex-grow">
