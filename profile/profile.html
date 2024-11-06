@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="./output.css" href="output.css">
+</head>
+<body class="overflow-hidden md:overflow-hidden">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+        <div class="flex w-24 ml-5">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo" onclick="landingPage()" style="cursor: pointer">
+        </div>
+
+        <div class="sm:hidden flex items-center mr-5">
+            <button onclick="toggleNav()" class="burger-icon">
+                <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <nav class="hidden sm:flex sm:items-center sm:space-x-5 flex mr-5">
+            <ul class="text-black text-md flex space-x-5">
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#artists">Artists</a></li>
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#events">Events</a></li>
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="../Gallery\gallery.html">Gallery</a></li>
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="flyout-menu" class="glass-header rounded-lg fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
+        <nav>
+            <ul class="text-black text-2xl">
+                <li><a href="#artists" onclick="toggleNav()">Artists</a></li>
+                <li><a href="#events" onclick="toggleNav()">Events</a></li>
+                <li><a href="Gallery/gallery.html" onclick="toggleNav()">Gallery</a></li>
+                <li><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+        <div class="glass-header items-center rounded-lg w-96 mx-10">
+            <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
+            <form>
+                <div class="mx-2 mb-4">
+                    <label for="email" class="block font-medium">Email:</label>
+                    <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+                </div>
+                <div class="mx-2 mb-4">
+                    <label for="password" class="block font-medium">Password:</label>
+                    <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+                </div>
+                <div class="flex items-center justify-between mx-20 my-5">
+                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Login</button>
+                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <main class="overflow-scroll md:overflow-hidden">
+        <section class="flex flex-col items-center text-center p-3 h-full">
+            <div class="flex flex-col justify-items-evenly md:flex-row gap-4 md:gap-5 h-full md:justify-center">
+                <div class="profile-details flex flex-row mt-12 items-start md:flex-col flex-grow">
+                    <img class="flex-col mb-1 object-cover rounded-2xl md:rounded-3xl items-end max-w-full" src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/artists/kidlat%20tahimik.jpg?raw=true" alt="artist 1">
+
+                    <div class="flex flex-col items-center gap-4 mx-7 mt-10 md:mt-4 md:gap-6">
+                        <div class="flex gap-10 md:flex-row flex-col">
+                            <a href="#" class="fa fa-facebook"></a>
+                            <a href="#" class="fa fa-instagram"></a>
+                            <a href="#" class="fa fa-youtube"></a>
+                            <a href="#" class="fa fa-google"></a>
+                        </div>
+                        <div class="w-full mt-1 hidden md:flex">
+                            <button class="glass-header p-2 rounded-lg w-full" onclick="location.href='gallery.html'">Gallery</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full mt-1 md:hidden">
+                    <button class="glass-header p-2 rounded-lg w-full" onclick="location.href='gallery.html'">Gallery</button>
+                </div>
+                <div class="glass-header text-black mt-2 max-w-full w-full rounded-3xl text-2xl object-bottom md:mt-16 md:mb-10 flex-grow min-h-dvh md:w-full md:ml-5 md:mr-10">
+                    <h2 class="font-bold text-3xl my-4">Kidlat Tahimik</h2>
+                    <h3 class="text-2xl underline mb-3">
+                        artist details
+                    </h3>
+                    <p>
+                        Eric Oteyza de Guia (born October 3, 1942), better known as Kidlat Tahimik ("Silent Lightning"), is a film director, writer, and actor whose films are commonly associated with the Third Cinema movement through their critiques of neocolonialism.
+                    </p>
+                    <p class=" mb-10">
+                        For his contributions to the development of Philippine independent cinema, he was recognized in 2018 as a National Artist of the Philippines for Film - a conferment which represents the Philippine state’s highest recognition for artists.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        
+    </main>
+
+</body>
+</html>

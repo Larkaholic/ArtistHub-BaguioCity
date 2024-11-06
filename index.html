@@ -26,19 +26,19 @@
             </button>
         </div>
 
-        <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-5">
-            <ul class="text-black text-md flex spac e-x-5">
-                <li><a href="#artists">Artists</a></li>
-                <li><a href="#events">Events</a></li>
-                <li><a href="Gallery/gallery.html">Gallery</a></li>
-                <li><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
+        <nav class="hidden sm:flex sm:items-center sm:space-x-5 flex mr-5">
+            <ul class="text-black text-md flex space-x-5">
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#artists">Artists</a></li>
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#events">Events</a></li>
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="Gallery/gallery.html">Gallery</a></li>
+                <li class="hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
             </ul>
         </nav>
     </header>
 
-    <div id="flyout-menu" class="glass-header fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
+    <div id="flyout-menu" class="glass-header rounded-lg fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
         <nav>
-            <ul class="text-black text-2xl space-y-4">
+            <ul class="text-black text-2xl">
                 <li><a href="#artists" onclick="toggleNav()">Artists</a></li>
                 <li><a href="#events" onclick="toggleNav()">Events</a></li>
                 <li><a href="Gallery/gallery.html" onclick="toggleNav()">Gallery</a></li>
@@ -47,9 +47,6 @@
         </nav>
     </div>
     
-    
-    
-
     <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
         <div class="glass-header items-center rounded-lg w-96 mx-10">
             <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
@@ -58,7 +55,7 @@
                     <label for="email" class="block font-medium">Email:</label>
                     <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
                 </div>
-                <div class="mx-2 mb-4">
+                <!-- <div class="mx-2 mb-4"> -->
                     <label for="password" class="block font-medium">Password:</label>
                     <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
                 </div>
@@ -78,15 +75,15 @@
             <div class="events flex-1 p-4 sm:w-full sm:mb-0 md:p-6 mt-6 md:mt-0 mb-6 bg-slate-400 text-black rounded-md glass-header">
                 <h2 class="text-2xl md:text-3xl lg:text-4xl mb-4 md:mb-6 text-center">IMPORTANT EVENTS</h2>
                 <div class="event-list flex flex-col gap-4 md:gap-6">
-                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="navigateToEvent()" style="cursor: pointer;">
+                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="navToEvent('events/events.html')" style="cursor: pointer;">
                         <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/ibagiw.jpg?raw=true" alt="iBagiw Competition" class="w-14 h-14 md:w-14 md:h-14 rounded-md object-cover">
                         <p class="text-center md:text-left md:text-2xl md:ml-3 md:mt-2 md:underline">iBagiw Competition</p>
                     </div>
-                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="location.href='events.html'" style="cursor: pointer;">
+                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="navToEvent('events/events.html')" style="cursor: pointer;">
                         <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/ibagiw.jpg?raw=true" alt="Nurturing the Environment" class="w-14 h-14 md:w-14 md:h-14 rounded-md object-cover">
                         <p class="text-center md:text-left md:text-2xl md:ml-3 md:mt-2 md:underline">Nurturing the Environment</p>
                     </div>
-                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="location.href='events.html'" style="cursor: pointer;">
+                    <div class="event-item flex flex-col items-center md:flex-row md:items-start gap-2 border border-green-800 p-0.5" onclick="navToEvent('events/events.html')" style="cursor: pointer;">
                         <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/ibagiw.jpg?raw=true" alt="iBagiw Competition" class="w-14 h-14 md:w-14 md:h-14 rounded-md object-cover">
                         <p class="text-center md:text-left md:text-2xl md:ml-3 md:mt-2 md:underline">iBagiw Competition</p>
                     </div>
@@ -105,20 +102,20 @@
                 />
             </div>
             <div class="artist-container flex sm:justify-between justify-evenly gap-4 sm:w-full my-3 h-full">
-                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col ">
+                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col " onclick="navToEvent('profile/profile.html')">
                     <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/artists/kidlat%20tahimik.jpg?raw=true" 
                     class="w-full object-cover" alt="KidlatTahimik">
-                    <button class="bttn absolute bottom-4 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile.html'"><p>Read More >>></p></button>
+                    <button class="bttn absolute bottom-12 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile/profile.html'"><p>Read More >>></p></button>
                 </div>
-                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col ">
+                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col " onclick="navToEvent('profile/profile.html')">
                     <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/artists/bencab.jpg?raw=true" 
                     class="w-full object-cover" alt="bencab">
-                    <button class="bttn absolute bottom-4 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile.html'"><p>Read More >>></p></button>
+                    <button class="bttn absolute bottom-12 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile/profile.html'"><p>Read More >>></p></button>
                 </div>
-                <div class="artist-item hidden sm:flex relative w-full rounded-lg overflow-hidden flex-col">
+                <div class="artist-item hidden sm:flex relative w-full rounded-lg overflow-hidden flex-col" onclick="navToEvent('profile/profile.html')">
                     <img src="https://raw.githubusercontent.com/ALmiiiii/ArtistHub-BaguioCity/refs/heads/new-branch/artists/wang-od.webp" 
                     class="w-full object-cover" alt="wang-od">
-                    <button class="bttn absolute bottom-4 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile.html'"><p>Read More >>></p></button>
+                    <button class="bttn absolute bottom-12 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile/profile.html'"><p>Read More >>></p></button>
                 </div>
             </div>            
         </section>        
@@ -150,6 +147,58 @@
             </container>
         </section>
     </main>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZ2WE5C7MB-6OhT2v_qojehC3Li2fukiA",
+            authDomain: "artisthub-baguiocity.firebaseapp.com",
+            databaseURL: "https://artisthub-baguiocity-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "artisthub-baguiocity",
+            storageBucket: "artisthub-baguiocity.firebasestorage.app",
+            messagingSenderId: "481059602109",
+            appId: "1:481059602109:web:e119db0f679387992d81d4",
+            measurementId: "G-73PDT6JZW6"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        import{getDatabase, set, get, update, remove, ref, child}
+        from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
+
+        const db = getDatabase();
+
+        var enterEmail = document.querySelector("#enterEmail");
+        var enterPassword = document.querySelector("#enterPassword");
+        var findEmail = document.querySelector("#findEmail");
+        var findPassword = document.querySelector("#findPassword");
+
+        var login = document.querySelector("#login");
+
+        function insertData(){
+            set(ref(db, "people/"),   {
+                Email: email.value,
+                Password: password.value
+            })
+            .then(() => {
+                alert("Data added successfully!")
+            })
+            .catch((error) => {
+                alert(error);
+            });
+        }
+
+        insertData.addEventListener('click', insertData);
+
+    </script>
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </body>
