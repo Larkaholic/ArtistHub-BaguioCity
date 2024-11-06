@@ -49,8 +49,8 @@
     
     <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
         <div class="glass-header items-center rounded-lg w-96 mx-10">
-            <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
-            <form>
+            <h2 class="flex justify-center font-bold text-2xl my-4">Register</h2>
+            <form id="registerForm">
                 <div class="mx-2 mb-4">
                     <label for="email" class="block font-medium">Email:</label>
                     <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
@@ -60,7 +60,7 @@
                     <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
                 </div>
                 <div class="flex items-center justify-between mx-20 my-5">
-                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Login</button>
+                    <button id="submit" type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Submit</button>
                     <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
                 </div>
             </form>
@@ -147,6 +147,7 @@
             </container>
         </section>
     </main>
+    
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </body>
