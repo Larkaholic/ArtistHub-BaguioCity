@@ -24,3 +24,6 @@ function toggleNav() {
     flyoutMenu.classList.toggle('translate-x-full');  // Slide in or out
 }
 
+function navToEvent(url) {
+    window.location.href = url;
+}
