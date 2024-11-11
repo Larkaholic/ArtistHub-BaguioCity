@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Events</title>
+        <link rel="icon" href="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" type="image/icon type">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="events.css">
+    </head>
+    
+    <body class="overflow-hidden">
+        <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+            <div class="flex w-24 ml-5">
+                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo" onclick="navigateToIndex()" style="cursor: pointer">
+            </div>
+            <div class="nav-bar">
+                    <nav>
+                        <ul class="nav-list flex gap-5 text-black text-md p-2">
+                            <li><a href="../index.html">Home</a></li>
+                            <li><a href="../index.html#artists">Artists</a></li>
+                            <li><a href="../index.html#events" class="nav-link">Events</a></li>
+                            <li><a href="" onclick="toggleLoginFlyout(event)">Login</a></li>
+                            </li>
+                        </ul>
+                    </nav>
+            </div>
+        </header>
+
+        <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+            <div class="glass-header items-center rounded-lg w-96 mx-10">
+                <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
+                <form>
+                    <div class="mx-2 mb-4">
+                        <label for="email" class="block font-medium">Email:</label>
+                        <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+                    </div>
+                    <div class="mx-2 mb-4">
+                        <label for="password" class="block font-medium">Password:</label>
+                        <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+                    </div>
+                    <div class="flex items-center justify-between mx-20 my-5">
+                        <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Login</button>
+                        <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <section id="events" class="flex subEvents flex items-center justify-center">
+            <div class="eventContainer lg:mx-10 glass-header rounded-lg flex flex-col items-center">
+                <h2 class="glass-header p-1 lg:p-2 w-full rounded-t-lg rounded-b-none text-center text-2xl lg:text-4xl decoration-2">
+                    Event Title
+                </h2>
+                <div class="eventDetailContainer glass-header rounded-t-none rounded-b-lg h-full w-full">
+                    <div class="eventTime justify-center lg:p-2 text-xl lg:text-3xl flex mt-1 lg:mt-3 text-center">
+                        October 15, 2024, 6:00PM-9:00PM
+                    </div>
+                    <div class="eventVenue justify-center font-bold text-2xl lg:text-4xl flex mb-3 lg:mb-4 text-center">
+                        Convention Center
+                    </div>
+                    <div class="eventDesc text-clip h-40 mx-2 border-2 border-gray-600 md:border-none md:text-xl text-center lg:text-xl overflow-scroll md:overflow-hidden">
+                        disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le 
+                        agregó humor, o palabras aleatorias que no parecen ni un poco creíbles. Si vas a utilizar 
+                        un pasaje de Lorem Ipsum, necesitás estar seguro de que no hay nada avergonzante escondido 
+                        en el medio del texto. Todos los generadore
+                    </div>
+                    <div class="flex flex-row ml-2 justify-evenly mt-4 md:mt-0">
+                        <div class="">
+                            <span class="font-bold">Featured Artist</span>
+                            <ul class="ml-6 list-disc">
+                                <li>Kidlat Tahimik</li>
+                                <li>benedicto cabrera</li>
+                                <li>Whan-od</li>
+                            </ul>
+                        </div>
+                        <div class="">
+                            <span class="font-bold">Event Schedule</span>
+                            <ul class="ml-2 list-disc">
+                                <li>Event Opening & Welcome Speech</li>
+                                <li>Artist Q&A and Gallery  Walkthrough</li>
+                                <li>Live Music Performance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="events.js"></script>
+    </body>
+</html>

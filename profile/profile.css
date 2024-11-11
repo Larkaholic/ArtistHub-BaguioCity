@@ -1,0 +1,75 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/new-branch/images/bg.jpg?raw=true");
+    background-size: cover;
+    color: white;
+}
+/* global header */
+
+.logo img {
+    width: 120px;
+    display: flex;
+    margin-left: 20px;
+}
+/* nav */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+main {
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+}
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.flyout {
+    display: none;
+}
+.flyout.active {
+    display: flex;
+}
+
+.profile-details {
+    width: 80%;
+}
+.profile-details img {
+    height: 60dvh;
+    height: 70dvh;
+}
+
+.option-btn {
+    cursor: pointer;
+}
+
+/* social icons */
+.fa {
+    padding: 20px;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+}
+
+.fa:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}

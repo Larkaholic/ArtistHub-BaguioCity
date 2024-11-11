@@ -1,0 +1,24 @@
+{
+  "name": "artisthubbaguiocity",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.14",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
+    "aos": "^2.3.4",
+    "express": "^4.21.1",
+    "mysql2": "^3.11.4"
+  },
+  "keywords": [],
+  "description": ""
+}
