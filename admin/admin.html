@@ -1,132 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="feds.css">
-	<link rel="icon" type="image/x-icon" href="images/artisthubLogo.png">
-	<title>AdminHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="./output.css" href="output.css">
+    <link rel="stylesheet" href="admin.css">
+    <title>Admin</title>
 </head>
 <body>
-	<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="#" class="brand">			
-			<span class="text">Admin Dashboard</span>
-		</a>
-		<ul class="side-menu top">
-			<li class="active">
-                <a href="Feeds.html">
-					<i class='bx bxs-message-dots' ></i>
-					<span class="text">Reports and Feedback</span>
-				</a>
-				
-			</li>
-			<li>
-                <a href="admin.html">
-					<i class='bx bxs-dashboard' ></i>
-					<span class="text">Account Dashboard</span>
-				</a>
+    <div class="flex flex-row glass-header w-full text-center p-4 mb-2 font-bold justify-between">
+            <div class="flex justify-between w-full">
+                <h2 class="text-2xl">Admin Dashboard</h2>
+                <button style="font-size:16px; padding: 4px 8px;">Button <i class="fa fa-sign-out"></i></button>
+            </div>
+    </div>
+    <div class="glass-header flex flex-row overflow-x-auto whitespace-nowrap p-2">
+        <h3 class="glass-header p-2 rounded-xl mr-4">Account Dashboard</h3>
+        <h3 class="glass-header p-2 rounded-xl mr-4">Events</h3>
+        <h3 class="glass-header p-2 rounded-xl mr-4">Reports & Feedback</h3>
+        <h3 class="glass-header p-2 rounded-xl mr-4">Announcements</h3>
+    </div>
+    <div class="">
+        <div class="flex glass-header w-full p-2">
+            <h3 class="">User Accounts</h3>
+        </div>
+        <table class="glass-header w-full">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Date Registered</th>
+                    <th>Status</th>
+                    <th>Status</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <img src="">
+                        <p>Kyle </p>
+                    </td>
+                    <td>01-10-2021</td>
+                    <td><span class="">Completed</span></td>
+                    <td><button>Notify</button></td>
+                    <td><button>Remove</button></td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="">
+                        <p>Jay Derrick</p>
+                    </td>
+                    <td>01-10-2021</td>
+                    <td><span class="">New Register</span></td>
+                    <td><button>Notify</button></td>
+                    <td><button>Remove</button></td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="">
+                        <p>Lark Orillos</p>
+                    </td>
+                    <td>01-10-2021</td>
+                    <td><span class="">Pending</span></td>
+                    <td><button>Notify</button></td>
+                    <td><button>Remove</button></td>
+                </tr>
 
-			</li>
-			<li>
-				<a href="events.html">
-					<i class='bx bxs-doughnut-chart' ></i>
-					<span class="text">Events</span>
-				</a>
-			</li>
-		</ul>
-		<ul class="side-menu">
-			<li>
-				<a href="#">
-					<i class='bx bxs-log-in-circle' ></i>
-					<span class="text">Login User</span>
-				</a>
-			</li>
-			<li>
-				<a href="index.html" class="logout">
-					<i class='bx bxs-log-out-circle' ></i>
-					<span class="text">Logout</span>
-				</a>
-			</li>
-		</ul>
-	</section>
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu' ></i>
-			<a href="#" class="nav-link">Categories</a>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-				</div>
-			</form>
-		</nav>
-		<!-- MAIN -->
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>REPORTS AND FEEDBACK</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a class="active" href="#">Dashboard</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-
-			<ul class="box-info">
-			</ul>
-			<div class="table-data">
-				<div class="order">
-					<div class="head">
-						<h3>Reports</h3>
-						<i class='bx bx-search' ></i>
-					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>User</th>
-								<th>Date Report</th>
-								<th>Status</th>
-                                <th>View</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<img src="images/female.jfif">
-									<p>Aubrey Tahimik</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status completed">Completed</span></td>
-                                <td><button>View File</button></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="images/male1.jfif">
-									<p>David</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status pending">Pending</span></td>
-                                <td><button>View File</button></td>
-							</tr>
-							<tr>
-								<td>
-									<img src="images/male2.jfif">
-									<p>John Doe</p>
-								</td>
-								<td>01-10-2021</td>
-								<td><span class="status process">Process</span></td>
-                                <td><button>View File</button></td>
-							</tr>
-
-						</tbody>
-					</table>
-				</div>
-		</main>
-	</section>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
