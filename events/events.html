@@ -11,41 +11,83 @@
     
     <body class="overflow-hidden">
         <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
-            <div class="flex w-24 ml-5">
-                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" alt="Artist Hub Logo" onclick="navigateToIndex()" style="cursor: pointer">
+            <div class="flex w-24 ml-16">
+                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
             </div>
-            <div class="nav-bar">
-                    <nav>
-                        <ul class="nav-list flex gap-5 text-black text-md p-2">
-                            <li><a href="../index.html">Home</a></li>
-                            <li><a href="../index.html#artists">Artists</a></li>
-                            <li><a href="../index.html#events" class="nav-link">Events</a></li>
-                            <li><a href="" onclick="toggleLoginFlyout(event)">Login</a></li>
-                            </li>
-                        </ul>
-                    </nav>
+        
+            <div class="sm:hidden flex items-center mr-5">
+                <button onclick="toggleNav()" class="burger-icon">
+                    <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
             </div>
-        </header>
-
-        <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div class="glass-header items-center rounded-lg w-96 mx-10">
-                <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
-                <form>
-                    <div class="mx-2 mb-4">
-                        <label for="email" class="block font-medium">Email:</label>
-                        <input type="email" id="email" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
-                    </div>
-                    <div class="mx-2 mb-4">
-                        <label for="password" class="block font-medium">Password:</label>
-                        <input type="password" name="password" id="password" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
-                    </div>
-                    <div class="flex items-center justify-between mx-20 my-5">
-                        <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Login</button>
-                        <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        
+            <nav class="hidden sm:flex sm:items-center sm:space-x-5 flex mr-10">
+                <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#index" onclick="navToEvent('../index.html')">Home</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html#artists')">Artists</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
+                </ul>
+            </nav>
+          </header>
+        
+          <div id="flyout-menu" class="glass-header rounded-lg fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
+              <nav>
+                  <ul class="text-black text-2xl">
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#index" onclick="navToEvent('../index.html')">Home</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html#artists')">Artists</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="toggleLoginFlyout(event)">Login</a></li>
+                  </ul>
+              </nav>
+          </div>
+        
+          <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+              <!-- Login Form -->
+              <div id="loginForm" class="glass-header items-center rounded-lg w-96 mx-10">
+                  <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
+                  <form>
+                      <div class="mx-2 mb-4">
+                          <label for="loginEmail" class="block font-medium">Email:</label>
+                          <input type="email" id="loginEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+                      </div>
+                      <div class="mx-2 mb-4">
+                          <label for="loginPassword" class="block font-medium">Password:</label>
+                          <input type="password" id="loginPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+                      </div>
+                      <div class="flex items-center justify-between mx-20 my-5">
+                          <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitLogin()">Login</button>
+                          <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                      </div>
+                      <div class="text-center mb-4">
+                          <p>Need an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">SIGN UP</a></p>
+                      </div>
+                  </form>
+              </div>
+              <!-- register -->
+              <div id="registerForm" class="glass-header items-center rounded-lg w-96 mx-10 hidden">
+                  <h2 class="flex justify-center font-bold text-2xl my-4">Register</h2>
+                  <form>
+                      <div class="mx-2 mb-4">
+                          <label for="registerEmail" class="block font-medium">Email:</label>
+                          <input type="email" id="registerEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+                      </div>
+                      <div class="mx-2 mb-4">
+                          <label for="registerPassword" class="block font-medium">Password:</label>
+                          <input type="password" id="registerPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+                      </div>
+                      <div class="flex items-center justify-between mx-20 my-5">
+                          <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="submitRegister()">Register</button>
+                          <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                      </div>
+                      <div class="text-center mb-4">
+                          <p>Already have an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">LOGIN</a></p>
+                      </div>
+                  </form>
+              </div>
+          </div>
 
         <section id="events" class="flex subEvents flex items-center justify-center">
             <div class="eventContainer lg:mx-10 glass-header rounded-lg flex flex-col items-center">
