@@ -14,20 +14,13 @@ body {
     font-family: Arial, sans-serif;
     background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
     background-size: cover;
-    color: white;
 }
 /* global header */
 
-.logo img {
-    width: 120px;
-    display: flex;
-    margin-left: 20px;
-}
+
 /* nav */
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 20px;
+nav ul li a {
+    transition: background-color 0.3s ease;
 }
 
 main {

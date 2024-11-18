@@ -45,11 +45,6 @@ nav ul li a {
     transition: background-color 0.3s ease;
 }
 
-nav ul li a:hover {
-    background: #0004fd;
-    border-radius: 5px;
-}
-
 .flyout {
     display: none;
 }
