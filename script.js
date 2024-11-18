@@ -18,12 +18,8 @@ window.onclick = function(event) {
     }
 }
 
-// function navigateToEvent (){
-//     window.location.href("events/events.html");
-// }
-
-function navToEvent(url) {
-    window.location.href = url;
+function navigateToEvent (){
+    window.location.href("events/events.html");
 }
 
 function toggleNav() {
@@ -31,3 +27,21 @@ function toggleNav() {
     flyoutMenu.classList.toggle('hidden');            // Show or hide the flyout
     flyoutMenu.classList.toggle('translate-x-full');  // Slide in or out
 }
+
+function toggleForms() {
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    
+    if (loginForm.classList.contains('hidden')) {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+    } else {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+    }
+}
+
+function navToEvent(url) {
+    window.location.href = url;
+}
+
