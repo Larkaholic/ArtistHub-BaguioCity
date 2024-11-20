@@ -45,12 +45,12 @@ section {
     padding: 20px;
 }
 
-.flyout {
+/* .flyout {
     display: none;
 }
 .flyout.active {
     display: flex;
-}
+} */
 
 .events {
     height: 75vh;
