@@ -45,12 +45,12 @@ nav ul li a {
     transition: background-color 0.3s ease;
 }
 
-.flyout {
+/* .flyout {
     display: none;
 }
 .flyout.active {
     display: flex;
-}
+} */
 
 
 /* CSS Code */
