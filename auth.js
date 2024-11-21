@@ -1,127 +1,318 @@
-import { auth } from './firebase-config.js';
+import { auth, db } from './firebase-config.js';
 import { 
+    createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+    doc, 
+    setDoc, 
+    getDoc,
+    collection
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Wait for DOM to be loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Add form submit event listener
-    const loginForm = document.getElementById('loginFormElement');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
-    }
-});
+// Predefined admin emails (store these securely in production)
+const ADMIN_EMAILS = [
+    'admin@artisthub.com',
+    'developer@artisthub.com'
+    // Add other admin emails
+];
 
-// Authentication state observer
-onAuthStateChanged(auth, (user) => {
-    console.log('Auth state changed:', user ? 'logged in' : 'logged out');
-    const loginButtons = document.querySelectorAll('.login-button');
-    const userMenus = document.querySelectorAll('#userMenu');
+// Registration handler
+window.handleRegister = async function(e) {
+    e.preventDefault();
     
-    loginButtons.forEach(button => {
-        if (user) {
-            // User is logged in - show logout button
-            button.innerHTML = `
-                <button onclick="handleLogout()" class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    Logout (${user.email})
-                </button>
-            `;
-            // Hide the login flyout if it's open
-            const loginFlyout = document.getElementById('LoginFlyout');
-            if (loginFlyout) {
-                loginFlyout.classList.add('hidden');
-            }
-        } else {
-            // User is logged out - show login button
-            button.innerHTML = `
-                <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    Login
-                </button>
-            `;
-        }
-    });
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const userType = document.getElementById('userType').value;
 
-    // Show/hide user menu
-    userMenus.forEach(menu => {
-        if (user) {
-            menu.classList.remove('hidden');
-        } else {
-            menu.classList.add('hidden');
+    try {
+        // Check if email is in admin list
+        const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase());
+        if (userType === 'admin' && !isAdmin) {
+            alert('Unauthorized to register as admin');
+            return;
         }
-    });
-});
+
+        // Create auth user
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
+
+        // Base user data
+        const userData = {
+            email: email,
+            createdAt: new Date(),
+            displayName: '',
+            photoURL: ''
+        };
+
+        // Store user data in appropriate collection based on role
+        switch(userType) {
+            case 'admin':
+                await setDoc(doc(db, "admins", uid), {
+                    ...userData,
+                    privileges: {
+                        canManageUsers: true,
+                        canManageContent: true,
+                        canManageEvents: true
+                    }
+                });
+                break;
+
+            case 'artist':
+                await setDoc(doc(db, "artists", uid), {
+                    ...userData,
+                    artistProfile: {
+                        bio: '',
+                        specialization: '',
+                        portfolio: [],
+                        socialLinks: {
+                            facebook: '',
+                            instagram: '',
+                            youtube: ''
+                        },
+                        verified: false // Admin needs to verify artists
+                    }
+                });
+                break;
+
+            default: // regular user/buyer
+                await setDoc(doc(db, "users", uid), {
+                    ...userData,
+                    preferences: {
+                        favoriteArtists: [],
+                        savedEvents: []
+                    },
+                    purchaseHistory: []
+                });
+                break;
+        }
+
+        console.log('Registration successful:', email);
+        toggleLoginFlyout();
+        
+    } catch (error) {
+        console.error('Registration error:', error);
+        alert(error.message);
+    }
+};
 
 // Login handler
-async function handleLogin(e) {
+window.handleLogin = async function(e) {
     e.preventDefault();
-    console.log('Login attempt...');
-    
+    console.log('Login attempt started');
+
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
     try {
-        console.log('Attempting login with:', email);
+        // First authenticate the user
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log('Login successful:', userCredential.user.email);
+        console.log('Authentication successful:', userCredential.user.email);
+
+        // Then check all possible role collections
+        const uid = userCredential.user.uid;
+        let userRole = null;
+        let userData = null;
+
+        // Try admin first
+        try {
+            const adminDoc = await getDoc(doc(db, "admins", uid));
+            if (adminDoc.exists()) {
+                userRole = 'admin';
+                userData = adminDoc.data();
+            }
+        } catch (error) {
+            console.log('Not an admin, checking artist role...');
+        }
+
+        // If not admin, try artist
+        if (!userRole) {
+            try {
+                const artistDoc = await getDoc(doc(db, "artists", uid));
+                if (artistDoc.exists()) {
+                    userRole = 'artist';
+                    userData = artistDoc.data();
+                }
+            } catch (error) {
+                console.log('Not an artist, checking user role...');
+            }
+        }
+
+        // If not admin or artist, try regular user
+        if (!userRole) {
+            try {
+                const userDoc = await getDoc(doc(db, "users", uid));
+                if (userDoc.exists()) {
+                    userRole = 'user';
+                    userData = userDoc.data();
+                }
+            } catch (error) {
+                console.log('No user data found, creating new user...');
+            }
+        }
+
+        // If no role found, create as regular user
+        if (!userRole) {
+            userData = {
+                email: userCredential.user.email,
+                createdAt: new Date(),
+                role: 'user'
+            };
+            await setDoc(doc(db, "users", uid), userData);
+            userRole = 'user';
+        }
+
+        console.log('Login successful with role:', userRole);
         
-        // Clear form
+        // Update UI based on role
+        updateUIForRole(userRole, userData);
+        
+        // Clear form and close flyout
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPassword').value = '';
-        
-        // Close login flyout
-        const loginFlyout = document.getElementById('LoginFlyout');
-        if (loginFlyout) {
-            loginFlyout.classList.add('hidden');
-        }
+        document.getElementById('LoginFlyout').classList.add('hidden');
 
     } catch (error) {
         console.error('Login error:', error);
         alert('Login failed: ' + error.message);
     }
+};
+
+// Update UI based on role
+function updateUIForRole(role, userData) {
+    const userMenu = document.getElementById('userMenu');
+    if (!userMenu) return;
+
+    let menuContent = '';
+    switch(role) {
+        case 'admins':
+            menuContent = `
+                <div class="glass-header rounded-lg p-4">
+                    <nav>
+                        <ul>
+                            <li><a href="/admin/dashboard.html">Admin Dashboard</a></li>
+                            <li><a href="/admin/manage-users.html">Manage Users</a></li>
+                            <li><a href="/admin/manage-events.html">Manage Events</a></li>
+                            <li><a href="/admin/verify-artists.html">Verify Artists</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            `;
+            break;
+
+        case 'artists':
+            menuContent = `
+                <div class="glass-header rounded-lg p-4">
+                    <nav>
+                        <ul>
+                            <li><a href="/profile/artist-profile.html">Artist Profile</a></li>
+                            <li><a href="/portfolio/manage.html">Manage Portfolio</a></li>
+                            <li><a href="/events/my-events.html">My Events</a></li>
+                            ${userData.artistProfile.verified ? 
+                                '<li><span class="text-green-500">✓ Verified Artist</span></li>' : 
+                                '<li><span class="text-yellow-500">Pending Verification</span></li>'
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            `;
+            break;
+
+        case 'users':
+            menuContent = `
+                <div class="glass-header rounded-lg p-4">
+                    <nav>
+                        <ul>
+                            <li><a href="/profile/profile.html">My Profile</a></li>
+                            <li><a href="/events/saved-events.html">Saved Events</a></li>
+                            <li><a href="/purchases/history.html">Purchase History</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            `;
+            break;
+    }
+    
+    userMenu.innerHTML = menuContent;
+    userMenu.classList.remove('hidden');
 }
 
+// Auth state observer
+onAuthStateChanged(auth, async (user) => {
+    const loginButtons = document.querySelectorAll('.login-button');
+    
+    if (user) {
+        console.log('User is signed in:', user.email);
+        // Get user role
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+        const userRole = userData?.role || 'user';
+
+        // Update login buttons
+        loginButtons.forEach(button => {
+            button.innerHTML = `
+                <button onclick="handleLogout()" class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    Logout (${userRole})
+                </button>
+            `;
+        });
+
+        // Show appropriate menu based on role
+        updateUIForRole(userRole, userData);
+
+    } else {
+        console.log('User is signed out');
+        // Reset login buttons
+        loginButtons.forEach(button => {
+            button.innerHTML = `
+                <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    Login
+                </button>
+            `;
+        });
+
+        // Hide user menu
+        const userMenu = document.getElementById('userMenu');
+        if (userMenu) userMenu.classList.add('hidden');
+    }
+});
+
 // Logout handler
-async function handleLogout() {
+window.handleLogout = async function() {
     try {
         await signOut(auth);
         console.log('Logged out successfully');
         
-        // Additional cleanup if needed
+        // Hide login flyout and user menu
         const loginFlyout = document.getElementById('LoginFlyout');
-        if (loginFlyout) {
-            loginFlyout.classList.add('hidden');
-        }
+        if (loginFlyout) loginFlyout.classList.add('hidden');
+        
+        const userMenu = document.getElementById('userMenu');
+        if (userMenu) userMenu.classList.add('hidden');
         
     } catch (error) {
         console.error('Logout error:', error);
         alert('Error logging out: ' + error.message);
     }
-}
+};
 
 // Toggle login flyout
-function toggleLoginFlyout(event) {
+window.toggleLoginFlyout = function(event) {
     if (event) event.preventDefault();
     const flyout = document.getElementById('LoginFlyout');
     if (flyout) {
         flyout.classList.toggle('hidden');
     }
-}
+};
 
 // Toggle forms
-function toggleForms() {
+window.toggleForms = function() {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
-    
     if (loginForm && registerForm) {
         loginForm.classList.toggle('hidden');
         registerForm.classList.toggle('hidden');
     }
-}
-
-// Make all functions available globally
-window.handleLogin = handleLogin;
-window.handleLogout = handleLogout;
-window.toggleLoginFlyout = toggleLoginFlyout;
-window.toggleForms = toggleForms; 
+}; 
