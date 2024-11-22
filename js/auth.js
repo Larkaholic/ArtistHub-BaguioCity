@@ -1,4 +1,4 @@
-import { auth, db } from '/ArtistHub-BaguioCity/js/firebase-config.js';
+import { auth, db } from './firebase-config.js';
 import { 
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -14,14 +14,20 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Predefined admin emails (store these securely in production)
+// predefined admin emails (store these securely in production)
 const ADMIN_EMAILS = [
     'admin@artisthub.com',
     'developer@artisthub.com'
     // Add other admin emails
 ];
 
-// Registration handler
+// add the navigation helper at the top of the file
+function goToProfile() {
+    const basePath = window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity' : '';
+    window.location.href = `${basePath}/profile/profile.html`;
+}
+
+// registration handler
 window.handleRegister = async function(e) {
     e.preventDefault();
     
@@ -139,6 +145,9 @@ window.handleLogin = async function(e) {
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPassword').value = '';
         document.getElementById('LoginFlyout').classList.add('hidden');
+
+        // After successful login, navigate to profile
+        goToProfile();
 
     } catch (error) {
         console.error('Login error:', error);
@@ -281,4 +290,7 @@ window.toggleForms = function() {
         loginForm.classList.toggle('hidden');
         registerForm.classList.toggle('hidden');
     }
-}; 
+};
+
+// Make it available globally if needed
+window.goToProfile = goToProfile; 

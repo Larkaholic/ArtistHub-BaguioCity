@@ -3,6 +3,9 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
+const isGitHubPages = window.location.hostname.includes('github.io');
+const basePath = isGitHubPages ? '/ArtistHub-BaguioCity' : '';
+
 const firebaseConfig = {
   apiKey: "AIzaSyAyIfQ9879WmJ50X0-RODrLR7E_XMIZuDo",
   authDomain: "artisthub-baguiocity-9213d.firebaseapp.com",
@@ -16,6 +19,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app); 
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app); 
+
+export { app, auth, db, basePath }; 
