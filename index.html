@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles.css">
     <!-- AOS Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body class="bg-cover">
@@ -134,33 +135,14 @@
         </section>
     
         <!-- artists -->
-        <section id="artists" class="artists-highlight flex flex-col content-center mt-8 w-full truncate">
-            <div class="relative flex justify-end w-full">
-                <input
-                    class="appearance-none border-2 pl-4 border-gray-300 hover:border-gray-400 transition-colors rounded-md w-56 py-2 px-3 mt-11 text-gray-800 leading-tight focus:outline-none focus:ring-purple-600 focus:border-purple-600 focus:shadow-outline"
-                    id="username"
-                    type="text"
-                    placeholder="Search for artist"
-                />
+        <section id="artists" class="min-h-screen py-16 overflow-scroll">
+            <div class="container mx-auto px-4 h-full">
+                <h2 class="glass-header text-3xl font-bold text-center mb-8">Featured Artists</h2>
+                <div id="artistsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[calc(100vh-12rem)]">
+                    <!-- artists will be loaded here dynamically -->
+                </div>
             </div>
-            <div class="artist-container flex sm:justify-between justify-evenly gap-4 sm:w-full my-3 h-full">
-                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col " onclick="navToEvent('profile/profile.html')">
-                    <img src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/artists/kidlat%20tahimik.jpg?raw=true" 
-                    class="w-full object-cover" alt="KidlatTahimik">
-                    <button class="bttn absolute bottom-12 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile/profile.html'"><p>Read More >>></p></button>
-                </div>
-                <div class="artist-item flex relative w-full rounded-lg overflow-hidden flex-col " onclick="navToEvent('profile/profile.html')">
-                    <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/artists/bencab.jpg?raw=true" 
-                    class="w-full object-cover" alt="bencab">
-                    <button class="bttn absolute bottom-12 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile/profile.html'"><p>Read More >>></p></button>
-                </div>
-                <div class="artist-item hidden sm:flex relative w-full rounded-lg overflow-hidden flex-col" onclick="navToEvent('profile/profile.html')" >
-                    <img src="https://raw.githubusercontent.com/ALmiiiii/ArtistHub-BaguioCity/refs/heads/master/artists/wang-od.webp" 
-                    class="w-full object-cover" alt="wang-od">
-                    <button class="bttn absolute bottom-12 right-4 hover:bg-green-800 glass-header p-0.5 rounded-md md:p-1 hidden sm:flex" type="button" onclick="location.href='profile/profile.html'"><p>Read More >>></p></button>
-                </div>
-            </div>            
-        </section>        
+        </section>
         
         <!-- Events -->
         <section id="events" class="EvntPage bg-gray-600 bg-opacity-50">
@@ -213,5 +195,8 @@
             </nav>
         </div>
     </div>
+    <script type="module" src="js/artists.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script type="module" src="js/loadArtists.js"></script>
 </body>
 </html>

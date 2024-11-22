@@ -66,3 +66,16 @@ main {
 .fa:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
+.fixed.bottom-8.right-8 {
+    position: fixed !important;
+    bottom: 2rem !important;
+    right: 2rem !important;
+    z-index: 9999 !important;
+}
+
+#editProfileButton {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}

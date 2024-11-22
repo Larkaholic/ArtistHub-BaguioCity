@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Artist Profile</title>
+    <!-- Make sure these paths are correct relative to profile.html -->
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link rel="icon" href="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/icon type">
+    <link rel="icon" href="../images/artisthubLogo.png" type="image/icon type">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style.css">  <!-- Update path to your main CSS -->
     <link rel="stylesheet" href="profile.css">
-    <link rel="./output.css" href="output.css">
     
 </head>
 <body class="overflow-hidden md:overflow-hidden">
@@ -112,14 +113,14 @@
         <section class="flex flex-col items-center text-center p-3 h-full">
             <div class="flex flex-col justify-items-evenly md:flex-row gap-4 md:gap-5 h-full md:justify-center">
                 <div class="profile-details flex flex-row mt-12 items-start md:flex-col flex-grow">
-                    <img class="flex-col mb-1 object-cover rounded-2xl md:rounded-3xl items-end max-w-full" src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/artists/kidlat%20tahimik.jpg?raw=true" alt="artist 1">
+                    <img id="profileImage" class="flex-col mb-1 object-cover rounded-2xl md:rounded-3xl items-end max-w-full" src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true" alt="Profile Image">
 
                     <div class="flex flex-col items-center gap-4 mx-7 mt-10 md:mt-4 md:gap-6">
                         <div class="flex gap-10 md:flex-row flex-col">
-                            <a href="#" class="fa fa-facebook"></a>
-                            <a href="#" class="fa fa-instagram"></a>
-                            <a href="#" class="fa fa-youtube"></a>
-                            <a href="#" class="fa fa-google"></a>
+                            <a id="facebookLink" href="#" class="fa fa-facebook hidden"></a>
+                            <a id="instagramLink" href="#" class="fa fa-instagram hidden"></a>
+                            <a id="youtubeLink" href="#" class="fa fa-youtube hidden"></a>
+                            <a id="googleLink" href="#" class="fa fa-google hidden"></a>
                         </div>
                         <div class="w-full mt-1 hidden md:flex">
                             <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('../Gallery/gallery.html')">Gallery</button>
@@ -130,16 +131,10 @@
                     <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('../Gallery/gallery.html')">Gallery</button>
                 </div>
                 <div class="glass-header text-black mt-2 max-w-full w-full rounded-3xl text-2xl object-bottom md:mt-16 md:mb-10 flex-grow min-h-dvh md:w-full md:ml-5 md:mr-10">
-                    <h2 class="font-bold text-3xl my-4">Kidlat Tahimik</h2>
-                    <h3 class="text-2xl underline mb-3">
-                        artist details
-                    </h3>
-                    <p>
-                        Eric Oteyza de Guia (born October 3, 1942), better known as Kidlat Tahimik ("Silent Lightning"), is a film director, writer, and actor whose films are commonly associated with the Third Cinema movement through their critiques of neocolonialism.
-                    </p>
-                    <p class=" mb-10">
-                        For his contributions to the development of Philippine independent cinema, he was recognized in 2018 as a National Artist of the Philippines for Film - a conferment which represents the Philippine state’s highest recognition for artists.
-                    </p>
+                    <h2 id="displayName" class="font-bold text-3xl my-4">Loading...</h2>
+                    <h3 class="text-2xl underline mb-3">Artist Details</h3>
+                    <p id="artistBio" class="mb-4">Loading...</p>
+                    <p id="specialization" class="mb-10">Loading...</p>
                 </div>
             </div>
         </section>
@@ -168,5 +163,38 @@
             </nav>
         </div>
     </div>
+    <div class="fixed bottom-8 right-8 z-50"> 
+        <button 
+            onclick="goToEditProfile()" 
+            id="editProfileButton"
+            class="glass-header text-white p-4 rounded-full shadow-lg hover:bg-gray-300 hover:text-black transform hover:scale-105 transition-all duration-200 flex items-center space-x-2"
+            style="background-color: rgba(0, 0, 0, 0.5);"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+            <span>Edit Profile</span>
+        </button>
+    </div>
+    <script>
+    function goToEditProfile() {
+        window.location.href = 'edit-profile.html';
+    }
+    </script>
+    <script type="module">
+        import { auth } from '../firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Debug the button visibility
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('User is logged in:', user.uid);
+                const editButton = document.getElementById('editProfileButton');
+                if (editButton) {
+                    editButton.style.display = 'flex';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
