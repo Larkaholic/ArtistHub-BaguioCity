@@ -9,7 +9,9 @@ import {
     doc, 
     setDoc, 
     getDoc,
-    collection
+    collection,
+    updateDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Predefined admin emails (store these securely in production)
@@ -37,64 +39,28 @@ window.handleRegister = async function(e) {
 
         // Create auth user
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
+        const user = userCredential.user;
 
-        // Base user data
-        const userData = {
+        // Create initial user document
+        await setDoc(doc(db, "users", user.uid), {
             email: email,
-            createdAt: new Date(),
+            userType: userType,
             displayName: '',
-            photoURL: ''
-        };
-
-        // Store user data in appropriate collection based on role
-        switch(userType) {
-            case 'admin':
-                await setDoc(doc(db, "admins", uid), {
-                    ...userData,
-                    privileges: {
-                        canManageUsers: true,
-                        canManageContent: true,
-                        canManageEvents: true
-                    }
-                });
-                break;
-
-            case 'artist':
-                await setDoc(doc(db, "artists", uid), {
-                    ...userData,
-                    artistProfile: {
-                        bio: '',
-                        specialization: '',
-                        portfolio: [],
-                        socialLinks: {
-                            facebook: '',
-                            instagram: '',
-                            youtube: ''
-                        },
-                        verified: false // Admin needs to verify artists
-                    }
-                });
-                break;
-
-            default: // regular user/buyer
-                await setDoc(doc(db, "users", uid), {
-                    ...userData,
-                    preferences: {
-                        favoriteArtists: [],
-                        savedEvents: []
-                    },
-                    purchaseHistory: []
-                });
-                break;
-        }
-
-        console.log('Registration successful:', email);
+            photoURL: '',
+            createdAt: serverTimestamp(),
+            artistDetails: userType === 'artist' ? {
+                bio: '',
+                specialization: ''
+            } : null,
+            socialLinks: {}
+        });
+        
+        alert('Registration successful!');
         toggleLoginFlyout();
         
     } catch (error) {
         console.error('Registration error:', error);
-        alert(error.message);
+        alert(`Registration failed: ${error.message}`);
     }
 };
 

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Artist Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Include your header/navigation here -->
+
+    <main class="container mx-auto mt-20 p-4">
+        <div class="glass-header rounded-lg p-6 max-w-4xl mx-auto">
+            <h1 class="text-2xl font-bold mb-6">Edit Artist Profile</h1>
+
+            <form id="editProfileForm" class="space-y-6">
+                <!-- Profile Image -->
+                <div class="relative">
+                    <img id="profileImage" src="/path/to/default-image.jpg" alt="Profile" 
+                         class="w-32 h-32 rounded-full object-cover">
+                    <input type="file" id="imageInput" accept="image/*" class="hidden">
+                    <button type="button" onclick="document.getElementById('imageInput').click()" 
+                            class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2">
+                        Change Photo
+                    </button>
+                </div>
+
+                <!-- Basic Info -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block font-medium mb-2">Display Name</label>
+                        <input type="text" id="displayName" class="w-full p-2 border rounded-md">
+                    </div>
+                    
+                    <div>
+                        <label class="block font-medium mb-2">Specialization</label>
+                        <input type="text" id="specialization" class="w-full p-2 border rounded-md">
+                    </div>
+                </div>
+
+                <!-- Bio -->
+                <div>
+                    <label class="block font-medium mb-2">Bio</label>
+                    <textarea id="bio" rows="4" class="w-full p-2 border rounded-md"></textarea>
+                </div>
+
+                <!-- Social Links -->
+                <div class="space-y-4">
+                    <h3 class="font-medium">Social Media Links</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm mb-1">Facebook</label>
+                            <input type="url" id="facebook" placeholder="Facebook URL" class="w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-1">Instagram</label>
+                            <input type="url" id="instagram" placeholder="Instagram URL" class="w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-1">YouTube</label>
+                            <input type="url" id="youtube" placeholder="YouTube URL" class="w-full p-2 border rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-1">Google</label>
+                            <input type="url" id="google" placeholder="Google URL" class="w-full p-2 border rounded-md">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="window.location.href='profile.html'" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">
+                        Cancel
+                    </button>
+                    <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { auth, db } from '../firebase-config.js';
+        import { doc, getDoc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        import cloudinaryConfig from '../cloudinary-config.js';
+        const storage = getStorage();
+
+        // Load current profile data
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        
+                        // Populate form fields
+                        document.getElementById('displayName').value = data.displayName || '';
+                        document.getElementById('specialization').value = data.artistDetails?.specialization || '';
+                        document.getElementById('bio').value = data.artistDetails?.bio || '';
+                        document.getElementById('facebook').value = data.socialLinks?.facebook || '';
+                        document.getElementById('instagram').value = data.socialLinks?.instagram || '';
+                        document.getElementById('youtube').value = data.socialLinks?.youtube || '';
+                        document.getElementById('google').value = data.socialLinks?.google || '';
+                        
+                        if (data.photoURL) {
+                            document.getElementById('profileImage').src = data.photoURL;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading profile:', error);
+                    alert('Error loading profile data');
+                }
+            } else {
+                window.location.href = '/index.html';
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            console.log('Submitting form with data:', {
+                displayName: document.getElementById('displayName').value,
+                bio: document.getElementById('bio').value,
+                specialization: document.getElementById('specialization').value,
+                socialLinks: {
+                    facebook: document.getElementById('facebook').value,
+                    instagram: document.getElementById('instagram').value,
+                    youtube: document.getElementById('youtube').value,
+                    google: document.getElementById('google').value
+                }
+            });
+
+            if (!auth.currentUser) {
+                alert('Please log in to save changes');
+                return;
+            }
+
+            try {
+                const userDocRef = doc(db, "users", auth.currentUser.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                const updatedData = {
+                    displayName: document.getElementById('displayName').value,
+                    photoURL: document.getElementById('profileImage').src,
+                    artistDetails: {
+                        bio: document.getElementById('bio').value,
+                        specialization: document.getElementById('specialization').value
+                    },
+                    socialLinks: {
+                        facebook: document.getElementById('facebook').value,
+                        instagram: document.getElementById('instagram').value,
+                        youtube: document.getElementById('youtube').value,
+                        google: document.getElementById('google').value
+                    },
+                    userType: 'artist',
+                    updatedAt: new Date()
+                };
+
+                if (userDoc.exists()) {
+                    await updateDoc(userDocRef, updatedData);
+                } else {
+                    await setDoc(userDocRef, {
+                        ...updatedData,
+                        createdAt: new Date(),
+                        email: auth.currentUser.email
+                    });
+                }
+
+                alert('Profile updated successfully!');
+                window.location.href = 'profile.html';
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Error updating profile: ' + error.message);
+            }
+        });
+
+        // Handle image upload
+        document.getElementById('imageInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    // Show loading state
+                    const uploadButton = e.target.nextElementSibling;
+                    uploadButton.textContent = 'Uploading...';
+
+                    // First, ensure user document exists
+                    const userDocRef = doc(db, "users", auth.currentUser.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (!userDoc.exists()) {
+                        // Create the user document if it doesn't exist
+                        await setDoc(userDocRef, {
+                            displayName: auth.currentUser.displayName || 'Unnamed Artist',
+                            email: auth.currentUser.email,
+                            userType: 'artist',
+                            createdAt: serverTimestamp(),
+                            photoURL: '',
+                            artistDetails: {
+                                bio: '',
+                                specialization: ''
+                            },
+                            socialLinks: {}
+                        });
+                    }
+
+                    // Upload image to Cloudinary
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', cloudinaryConfig.uploadPreset);
+
+                    const response = await fetch(
+                        `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`,
+                        {
+                            method: 'POST',
+                            body: formData
+                        }
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(`Upload failed: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.secure_url) {
+                        // Update profile image preview
+                        document.getElementById('profileImage').src = data.secure_url;
+
+                        // Update the user document with the new photo URL
+                        await updateDoc(userDocRef, {
+                            photoURL: data.secure_url
+                        });
+
+                        alert('Profile image updated successfully!');
+                    }
+
+                    // Reset button text
+                    uploadButton.textContent = 'Change Photo';
+
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    alert(`Error uploading image: ${error.message}`);
+                    const uploadButton = e.target.nextElementSibling;
+                    uploadButton.textContent = 'Change Photo';
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
