@@ -7,13 +7,12 @@
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="/main.js"></script>
     <link rel="./output.css" href="output.css">
     <link rel="stylesheet" href="styles.css">
     <!-- AOS Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <base href="/ArtistHub-BaguioCity/">
 </head>
 <body class="bg-cover">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
@@ -137,7 +136,7 @@
         <!-- artists -->
         <section id="artists" class="min-h-screen py-16 overflow-scroll">
             <div class="container mx-auto px-4 h-full">
-                <h2 class="glass-header text-3xl font-bold text-center mb-8">Featured Artists</h2>
+                <h2 class="glass-header rounded-2xl p-2 text-3xl font-bold text-center mb-8 sticky top-0">Featured Artists</h2>
                 <div id="artistsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[calc(100vh-12rem)]">
                     <!-- artists will be loaded here dynamically -->
                 </div>
@@ -183,8 +182,8 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-    <script type="module" src="/firebase-config.js"></script>
-    <script type="module" src="/auth.js"></script>
+    <script type="module" src="/ArtistHub-BaguioCity/js/firebase-config.js"></script>
+    <script type="module" src="/ArtistHub-BaguioCity/js/auth.js"></script>
     <div id="userMenu" class="hidden">
         <div class="glass-header rounded-lg p-4">
             <nav>
@@ -195,8 +194,8 @@
             </nav>
         </div>
     </div>
-    <script type="module" src="js/artists.js"></script>
+    <script type="module" src="/ArtistHub-BaguioCity/js/artists.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script type="module" src="js/loadArtists.js"></script>
+    <script type="module" src="/ArtistHub-BaguioCity/js/loadArtists.js"></script>
 </body>
 </html>

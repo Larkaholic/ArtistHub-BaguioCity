@@ -16,8 +16,17 @@ body {
 }
 
 /* global header */
-nav ul li a {
-    transition: background-color 0.3s ease;
+.nav-item button,
+.login-button button {
+    font-weight: 600 !important;
+}
+
+
+nav ul li,
+nav ul li button,
+.nav-item,
+.nav-item button {
+    font-weight: 600 !important;
 }
 
 

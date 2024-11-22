@@ -37,12 +37,16 @@ nav ul {
     gap: 20px;
 }
 
-nav ul li a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
-    padding: 5px 10px;
-    transition: background-color 0.3s ease;
+.nav-item button,
+.login-button button {
+    font-weight: 600 !important;
+}
+
+nav ul li,
+nav ul li button,
+.nav-item,
+.nav-item button {
+    font-weight: 600 !important;
 }
 
 /* .flyout {
