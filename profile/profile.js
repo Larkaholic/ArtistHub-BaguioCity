@@ -1,44 +1,23 @@
 import { getBasePath } from '../js/utils.js';
 
-function toggleLoginFlyout(event) {
-    if (event) event.preventDefault(); // Prevent the default anchor behavior
+export function toggleLoginFlyout(event) {
+    if (event) event.preventDefault();
     const flyout = document.getElementById('LoginFlyout');
-    flyout.classList.toggle('active'); // Toggle the active class
+    flyout.classList.toggle('active');
 }
 
-// Dummy function for login submission
-function submitLogin() {
+export function submitLogin() {
     alert('Login submitted!');
-    toggleLoginFlyout(); // Optionally close the flyout after submission
+    toggleLoginFlyout();
 }
 
-// Close the login flyout when clicking outside of it
-window.onclick = function(event) {
-    const flyout = document.getElementById('LoginFlyout');
-    if (event.target === flyout) {
-        flyout.classList.remove('active');
-    }
-}
-
-function navToEvent(url) {
-    const basePath = getBasePath();
-    // Remove leading slash if present
-    url = url.replace(/^\//, '');
-    window.location.href = `${basePath}/${url}`;
-}
-
-function navigateToEvent() {
-    const basePath = getBasePath();
-    window.location.href = `${basePath}/events/events.html`;
-}
-
-function toggleNav() {
+export function toggleNav() {
     const flyoutMenu = document.getElementById('flyout-menu');
-    flyoutMenu.classList.toggle('hidden');            // Show or hide the flyout
-    flyoutMenu.classList.toggle('translate-x-full');  // Slide in or out
+    flyoutMenu.classList.toggle('hidden');
+    flyoutMenu.classList.toggle('translate-x-full');
 }
 
-function toggleForms() {
+export function toggleForms() {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     
@@ -51,6 +30,9 @@ function toggleForms() {
     }
 }
 
-// Make navigation function global
-window.navToEvent = navToEvent;
+export function navToEvent(url) {
+    const basePath = getBasePath();
+    url = url.replace(/^\//, '');
+    window.location.href = `${basePath}/${url}`;
+}
 

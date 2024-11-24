@@ -1,87 +1,55 @@
-import { auth, db } from '../js/firebase-config.js';
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { db } from '../js/firebase-config.js';
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// At the top of your file
-console.log('artistProfile.js loaded');
-
-// Add this at the top of your file
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if CSS is loaded
-    const cssLoaded = Array.from(document.styleSheets).some(styleSheet => 
-        styleSheet.href && styleSheet.href.includes('profile.css')
-    );
-    
-    if (!cssLoaded) {
-        console.warn('Profile CSS not loaded, attempting to reload');
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = 'profile.css';
-        document.head.appendChild(link);
-    }
-});
-
-// Get profile ID from URL or use current user's ID
+// get profile id from url
 const urlParams = new URLSearchParams(window.location.search);
-const profileId = urlParams.get('id') || auth.currentUser?.uid;
+const profileId = urlParams.get('id');
 
-// Load profile data
-onAuthStateChanged(auth, async (user) => {
-    console.log('Auth state changed:', user);
-    if (user) {
-        try {
-            console.log('Loading profile for user:', user.uid);
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (userDoc.exists()) {
-                console.log('User data:', userDoc.data());
-                loadArtistData(userDoc.data());
-            } else {
-                console.log('No user document found');
-            }
-        } catch (error) {
-            console.error('Error loading profile:', error);
+// load profile data immediately without auth check
+async function loadProfile() {
+    if (!profileId) {
+        window.location.href = '../index.html';
+        return;
+    }
+
+    try {
+        const userDoc = await getDoc(doc(db, "users", profileId));
+        if (userDoc.exists()) {
+            loadArtistData(userDoc.data());
+        } else {
+            window.location.href = '../index.html';
         }
-    } else {
-        console.log('No user logged in, redirecting to login');
+    } catch (error) {
         window.location.href = '../index.html';
     }
-});
+}
 
-async function loadArtistData(userData) {
-    console.log('Loading artist data:', userData); // Debug log
-
-    // Update profile image
+function loadArtistData(userData) {
+    // update profile image
     const profileImage = document.getElementById('profileImage');
     if (profileImage) {
-        if (userData.photoURL && userData.photoURL !== '') {
-            profileImage.src = userData.photoURL;
-            console.log('Setting profile image to:', userData.photoURL);
-        } else {
-            profileImage.src = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
-            console.log('Using default profile image');
-        }
+        profileImage.src = userData.photoURL || 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
     }
 
-    // Update display name
+    // update display name
     const displayName = document.getElementById('displayName');
     if (displayName) {
-        displayName.textContent = userData.displayName || 'Unnamed Artist';
+        displayName.textContent = userData.displayName || 'unnamed artist';
     }
 
-    // Update bio
+    // update bio
     const artistBio = document.getElementById('artistBio');
     if (artistBio) {
-        artistBio.textContent = userData.artistDetails?.bio || 'No bio available';
+        artistBio.textContent = userData.artistDetails?.bio || 'no bio available';
     }
 
-    // Update specialization
+    // update specialization
     const specialization = document.getElementById('specialization');
     if (specialization) {
-        specialization.textContent = userData.artistDetails?.specialization || 'Artist';
+        specialization.textContent = userData.artistDetails?.specialization || 'artist';
     }
 
-    // Update social links
+    // update social links
     const socialLinks = userData.socialLinks || {};
     updateSocialLink('facebook', socialLinks.facebook);
     updateSocialLink('instagram', socialLinks.instagram);
@@ -101,21 +69,6 @@ function updateSocialLink(platform, url) {
     }
 }
 
-// Make functions available globally
-window.goToEditProfile = function() {
-    window.location.href = 'edit-profile.html';
-};
-
-// When saving profile image
-async function saveProfileImage(imageUrl) {
-    try {
-        const userDoc = doc(db, "users", auth.currentUser.uid);
-        await updateDoc(userDoc, {
-            profileImage: imageUrl // Save the image URL
-        });
-    } catch (error) {
-        console.error("Error saving profile image:", error);
-        alert("Failed to save profile image");
-    }
-}
+// load profile when page loads
+document.addEventListener('DOMContentLoaded', loadProfile);
   

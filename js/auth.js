@@ -27,6 +27,11 @@ function goToProfile() {
     window.location.href = './profile/profile.html';
 }
 
+// get base url for both environments
+const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
+    ? '' 
+    : '/ArtistHub-BaguioCity';
+
 // registration handler
 window.handleRegister = async function(e) {
     e.preventDefault();
@@ -53,108 +58,56 @@ window.handleRegister = async function(e) {
             userType: userType,
             createdAt: new Date().toISOString(),
             displayName: email.split('@')[0],
+            photoURL: 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true',
             artistDetails: userType === 'artist' ? {
-                bio: 'No bio yet',
-                specialization: 'Artist'
+                bio: 'no bio yet',
+                specialization: 'artist'
             } : null
         });
 
-        // Redirect based on user type
-        if (userType === 'artist') {
-            // Use window.location for more reliable navigation
-            window.location.href = './profile/profile.html';
-        } else {
-            window.location.href = './index.html';
+        // Hide registration flyout
+        const loginFlyout = document.getElementById('LoginFlyout');
+        if (loginFlyout) {
+            loginFlyout.classList.add('hidden');
         }
 
+        // Redirect to profile edit page
+        window.location.href = `${baseUrl}/profile/edit-profile.html`;
+
     } catch (error) {
-        console.error("Registration error:", error);
-        alert(`Registration failed: ${error.message}`);
+        alert('registration failed: ' + error.message);
     }
 };
 
 // Login handler
 window.handleLogin = async function(e) {
     e.preventDefault();
-    console.log('Login attempt started');
-
+    
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
 
     try {
-        // First authenticate the user
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log('Authentication successful:', userCredential.user.email);
+        const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+        const userData = userDoc.data();
 
-        // Then check all possible role collections
-        const uid = userCredential.user.uid;
-        let userRole = null;
-        let userData = null;
-
-        // Try admin first
-        try {
-            const adminDoc = await getDoc(doc(db, "admins", uid));
-            if (adminDoc.exists()) {
-                userRole = 'admin';
-                userData = adminDoc.data();
-            }
-        } catch (error) {
-            console.log('Not an admin, checking artist role...');
+        // hide login flyout
+        const loginFlyout = document.getElementById('LoginFlyout');
+        if (loginFlyout) {
+            loginFlyout.classList.add('hidden');
         }
 
-        // If not admin, try artist
-        if (!userRole) {
-            try {
-                const artistDoc = await getDoc(doc(db, "artists", uid));
-                if (artistDoc.exists()) {
-                    userRole = 'artist';
-                    userData = artistDoc.data();
-                }
-            } catch (error) {
-                console.log('Not an artist, checking user role...');
-            }
-        }
-
-        // If not admin or artist, try regular user
-        if (!userRole) {
-            try {
-                const userDoc = await getDoc(doc(db, "users", uid));
-                if (userDoc.exists()) {
-                    userRole = 'user';
-                    userData = userDoc.data();
-                }
-            } catch (error) {
-                console.log('No user data found, creating new user...');
-            }
-        }
-
-        // If no role found, create as regular user
-        if (!userRole) {
-            userData = {
-                email: userCredential.user.email,
-                createdAt: new Date(),
-                role: 'user'
-            };
-            await setDoc(doc(db, "users", uid), userData);
-            userRole = 'user';
-        }
-
-        console.log('Login successful with role:', userRole);
-        
-        // Update UI based on role
-        updateUIForRole(userRole, userData);
-        
-        // Clear form and close flyout
+        // clear form
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPassword').value = '';
-        document.getElementById('LoginFlyout').classList.add('hidden');
 
-        // After successful login, navigate to profile
-        goToProfile();
+        // redirect admin to dashboard
+        if (userData?.isAdmin) {
+            window.location.href = `${baseUrl}/admin/dashboard.html`;
+        }
 
     } catch (error) {
-        console.error('Login error:', error);
-        alert('Login failed: ' + error.message);
+        alert('login failed: ' + error.message);
     }
 };
 
@@ -240,6 +193,23 @@ onAuthStateChanged(auth, async (user) => {
         // Show appropriate menu based on role
         updateUIForRole(userRole, userData);
 
+        // Check admin status
+        const adminBadge = document.getElementById('adminBadge');
+        const adminDashboard = document.getElementById('adminDashboard');
+        
+        if (userData?.isAdmin) {
+            // Show admin indicators
+            adminBadge.classList.remove('hidden');
+            adminDashboard.classList.remove('hidden');
+            
+            // Optional: Add to console for verification
+            console.log('logged in as admin');
+        } else {
+            // Hide admin indicators
+            adminBadge.classList.add('hidden');
+            adminDashboard.classList.add('hidden');
+        }
+
     } else {
         console.log('User is signed out');
         // Reset login buttons
@@ -254,6 +224,39 @@ onAuthStateChanged(auth, async (user) => {
         // Hide user menu
         const userMenu = document.getElementById('userMenu');
         if (userMenu) userMenu.classList.add('hidden');
+
+        // Hide admin indicators when logged out
+        const adminBadge = document.getElementById('adminBadge');
+        const adminDashboard = document.getElementById('adminDashboard');
+        
+        adminBadge.classList.add('hidden');
+        adminDashboard.classList.add('hidden');
+    }
+
+    // get current page
+    const isAdminDashboard = window.location.pathname.includes('/admin/');
+    
+    if (!isAdminDashboard) {
+        // only try to update UI elements on main page
+        const adminBadge = document.getElementById('adminBadge');
+        const adminDashboard = document.getElementById('adminDashboard');
+        
+        if (user) {
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                const isAdmin = userDoc.data()?.isAdmin;
+                
+                if (isAdmin && adminBadge && adminDashboard) {
+                    adminBadge.classList.remove('hidden');
+                    adminDashboard.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('error checking admin status');
+            }
+        } else if (adminBadge && adminDashboard) {
+            adminBadge.classList.add('hidden');
+            adminDashboard.classList.add('hidden');
+        }
     }
 });
 
@@ -261,18 +264,13 @@ onAuthStateChanged(auth, async (user) => {
 window.handleLogout = async function() {
     try {
         await signOut(auth);
-        console.log('Logged out successfully');
-        
-        // Hide login flyout and user menu
         const loginFlyout = document.getElementById('LoginFlyout');
-        if (loginFlyout) loginFlyout.classList.add('hidden');
-        
         const userMenu = document.getElementById('userMenu');
-        if (userMenu) userMenu.classList.add('hidden');
         
+        if (loginFlyout) loginFlyout.classList.add('hidden');
+        if (userMenu) userMenu.classList.add('hidden');
     } catch (error) {
-        console.error('Logout error:', error);
-        alert('Error logging out: ' + error.message);
+        alert('error logging out: ' + error.message);
     }
 };
 

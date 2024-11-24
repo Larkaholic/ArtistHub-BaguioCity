@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #1B4242, #092635);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        input, textarea {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <!-- navbar -->
+    <header class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center z-50">
+        <div class="flex items-center gap-4">
+            <h1 class="text-2xl font-bold text-white">admin dashboard</h1>
+            <a href="../index.html" class="text-white hover:text-gray-200">← back to home</a>
+        </div>
+        <button onclick="handleLogout()" class="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200">
+            logout
+        </button>
+    </header>
+
+    <main class="container mx-auto mt-24 p-4 space-y-6">
+        <!-- add event form -->
+        <div class="glass-header rounded-lg p-6">
+            <h2 class="text-xl font-bold mb-6 text-white text-center">add new event</h2>
+            <form id="eventForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-white mb-2">event title</label>
+                        <input type="text" id="eventTitle" required
+                            class="w-full p-2 rounded-md bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/50">
+                    </div>
+                    <div>
+                        <label class="block text-white mb-2">event date</label>
+                        <input type="date" id="eventDate" required
+                            class="w-full p-2 rounded-md bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/50">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">event description</label>
+                    <textarea id="eventDescription" required rows="4"
+                        class="w-full p-2 rounded-md bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/50"></textarea>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">event location</label>
+                    <input type="text" id="eventLocation" required
+                        class="w-full p-2 rounded-md bg-white/10 border border-white/20 text-white focus:outline-none focus:border-white/50">
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="isFeatured" class="rounded">
+                    <label class="text-white">featured event</label>
+                </div>
+                <div class="text-center">
+                    <button type="submit" 
+                        class="bg-white text-black px-8 py-2 rounded-md hover:bg-gray-200 transition duration-300">
+                        add event
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- existing events -->
+        <div class="glass-header rounded-lg p-6">
+            <h2 class="text-xl font-bold mb-6 text-white text-center">manage events</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="eventsList">
+                <!-- events loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="./admin-auth.js"></script>
+    <script type="module" src="./dashboard.js"></script>
+</body>
+</html> 

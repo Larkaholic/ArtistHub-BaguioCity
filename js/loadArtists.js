@@ -1,98 +1,59 @@
 import { db } from './firebase-config.js';
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
+    ? '' 
+    : '/ArtistHub-BaguioCity';
 
 async function loadArtists() {
     const artistsGrid = document.getElementById('artistsGrid');
-    if (!artistsGrid) {
-        console.error('artistsGrid element not found!');
-        return;
-    }
-
+    if (!artistsGrid) return;
+    
     try {
-        const artistsRef = collection(db, "users");
-        const q = query(artistsRef, where("userType", "==", "artist"));
-        const querySnapshot = await getDocs(q);
-        
-        let artistsWithImages = [];
+        artistsGrid.innerHTML = '';
+        const artistsQuery = query(collection(db, "users"), where("userType", "==", "artist"));
+        const querySnapshot = await getDocs(artistsQuery);
+        const artists = [];
 
         querySnapshot.forEach((doc) => {
-            const artistData = doc.data();
-            console.log('Artist data:', artistData);
-            if (artistData.photoURL && artistData.photoURL.trim() !== '') {
-                artistsWithImages.push({ id: doc.id, ...artistData });
+            const artistData = {
+                ...doc.data(),
+                uid: doc.id
+            };
+            if (artistData.displayName && artistData.photoURL) {
+                artists.push(artistData);
             }
         });
 
-        // Clear the grid
-        artistsGrid.innerHTML = '';
-
-        // Debug log
-        console.log('Artists to display:', artistsWithImages);
-
-        artistsWithImages.forEach((artist) => {
-            // Create the main card container
-            const cardDiv = document.createElement('div');
-            cardDiv.className = 'glass-header rounded-lg p-6 flex flex-col items-center';
-            cardDiv.style.cssText = `
-                background: rgba(0, 0, 0, 0.7);
-                min-height: 300px;
-                border: 1px solid rgba(255, 255, 255, 0.2);
+        artists.slice(0, 15).forEach((artist) => {
+            const card = document.createElement('div');
+            card.className = `
+                glass-header rounded-lg p-6 flex flex-col items-center
+                min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1
+            `;
+            
+            const specialization = artist.artistDetails?.specialization ?? 'artist';
+            
+            card.innerHTML = `
+                <img src="${artist.photoURL}" alt="${artist.displayName}" 
+                    class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                <h3 class="text-2xl font-bold mb-2 text-white">${artist.displayName}</h3>
+                <p class="text-center mb-4 text-gray-200 text-lg">${specialization}</p>
+                <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold">
+                    view profile
+                </button>
             `;
 
-            // Create and append image
-            const img = document.createElement('img');
-            img.src = artist.photoURL;
-            img.alt = artist.displayName || 'Artist';
-            img.className = 'w-32 h-32 rounded-full object-cover mb-4';
-            img.style.cssText = `
-                border: 4px solid white;
-                box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-            `;
-            cardDiv.appendChild(img);
-
-            // Create and append name
-            const name = document.createElement('h3');
-            name.textContent = artist.displayName || 'Artist';
-            name.className = 'text-2xl font-bold mb-2 text-white';
-            cardDiv.appendChild(name);
-
-            // Create and append specialization
-            const specialization = document.createElement('p');
-            specialization.textContent = artist.artistDetails?.specialization || 'Artist';
-            specialization.className = 'text-center mb-4 text-gray-200 text-lg';
-            cardDiv.appendChild(specialization);
-
-            // Create and append button
-            const button = document.createElement('button');
-            button.textContent = 'View Profile';
-            button.className = 'bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold';
-            button.onclick = () => {
-                window.location.href = `./profile/profile.html?id=${artist.id}`;
+            card.querySelector('button').onclick = () => {
+                window.location.href = `${baseUrl}/profile/profile.html?id=${artist.uid}`;
             };
-            cardDiv.appendChild(button);
 
-            // Debug logs
-            console.log('Created card for:', artist.displayName);
-            console.log('Card HTML:', cardDiv.innerHTML);
-
-            // Append the card to the grid
-            artistsGrid.appendChild(cardDiv);
+            artistsGrid.appendChild(card);
         });
 
     } catch (error) {
-        console.error("Error loading artists:", error);
-        artistsGrid.innerHTML = `
-            <div class="col-span-full text-center p-4">
-                <p class="text-lg text-red-500">Error loading artists. Please try again later.</p>
-            </div>`;
+        artistsGrid.innerHTML = '<div class="text-white text-center">error loading artists</div>';
     }
 }
 
-// Load artists when the page loads
-document.addEventListener('DOMContentLoaded', loadArtists);
-
-// Also try loading when window is fully loaded
-window.addEventListener('load', loadArtists);
-
-// Export the function so it can be called manually if needed
-window.loadArtists = loadArtists; 
+document.addEventListener('DOMContentLoaded', loadArtists); 

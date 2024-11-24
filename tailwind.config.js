@@ -24,7 +24,11 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
-    require('tailwindcss-filters')
+    require('tailwindcss-filters'),
+    require('tailwind-scrollbar')
   ],
+  variants: {
+    scrollbar: ['rounded']
+  }
 }
 
