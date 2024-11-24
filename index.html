@@ -76,6 +76,12 @@
                         Login
                     </button>
                 </li>
+                <li id="adminBadge" class="hidden">
+                    <span class="bg-red-500 text-white px-2 py-1 rounded-md text-sm">admin</span>
+                </li>
+                <li id="adminDashboard" class="hidden nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="admin/dashboard.html">dashboard</a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -172,12 +178,18 @@
         </section>
     
         <!-- artists -->
-        <section id="artists" class="relative py-12 px-4">
-            <div class="container mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-8 text-white">Our Artists</h2>
-                <div id="artistsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Loading state -->
-                    <div class="text-white text-center">Loading artists...</div>
+        <section id="artists" class="mt-12 px-4 flex flex-col gap-4">
+            <!-- title container -->
+            <div class="glass-header rounded-lg p-4 w-full text-center">
+                <h2 class="text-3xl font-bold text-white">featured artists</h2>
+            </div>
+            
+            <!-- artist grid container -->
+            <div class="glass-header rounded-lg p-4">
+                <div id="artistsGrid" class="grid gap-4 p-2 overflow-y-auto scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent
+                    max-h-[800px] md:max-h-[600px]
+                    grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    <!-- artists loaded here -->
                 </div>
             </div>
         </section>
@@ -188,24 +200,7 @@
                 <h2 class="EvntTitle text-center glass-header rounded-full p-3 font-bold mb-4">
                     UPCOMING EVENTS
                 </h2>
-                <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4" onclick="location.href='events/events.html'" style="cursor: pointer;">
-                    No event yet
-                </button>
-                <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
-                    No event yet
-                </button>
-                <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
-                    No event yet
-                </button>
-                <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
-                    No event yet
-                </button>
-                <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
-                    No event yet
-                </div>
-                <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4" onclick="navigateToEvent()" style="cursor: pointer;">
-                    No event yet
-                </button>
+                <!-- Events will be loaded here -->
             </container>
         </section>
     </main>
@@ -305,5 +300,6 @@
             background: #d1d5db;
         }
     </style>
+    <script type="module" src="./js/loadEvents.js"></script>
 </body>
 </html>
