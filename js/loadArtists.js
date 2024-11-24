@@ -1,95 +1,98 @@
 import { db } from './firebase-config.js';
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-function createArtistCard(userData, userId) {
-    const defaultImage = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
-    
-    const card = document.createElement('div');
-    card.className = 'glass-header rounded-lg p-6 text-center transform transition duration-300 hover:scale-105 h-full flex flex-col justify-between';
-    
-    const displayName = userData?.displayName ?? 'Unnamed Artist';
-    const specialization = userData?.artistDetails?.specialization ?? 'Artist';
-    const bio = userData?.artistDetails?.bio ?? 'No bio available';
-    const photoURL = userData?.photoURL ?? defaultImage;
-    
-    card.innerHTML = `
-        <div class="flex flex-col items-center">
-            <div class="relative mb-4">
-                <img src="${photoURL}" 
-                     alt="${displayName}"
-                     class="w-32 h-32 rounded-full object-cover"
-                     onerror="this.src='${defaultImage}'">
-            </div>
-            <h3 class="text-xl font-semibold mb-2">${displayName}</h3>
-            <p class="text-gray-600 mb-3">${specialization}</p>
-            <p class="text-sm mb-4 line-clamp-3">${bio}</p>
-        </div>
-        <div class="mt-auto">
-            <div class="flex justify-center space-x-4 mb-4">
-                ${createSocialLinks(userData?.socialLinks)}
-            </div>
-            <button onclick="viewArtistProfile('${userId}')" 
-                    class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">
-                View Profile
-            </button>
-        </div>
-    `;
-
-    return card;
-}
-
-function createSocialLinks(socialLinks = {}) {
-    const links = [];
-    
-    if (socialLinks?.facebook) {
-        links.push(`<a href="${socialLinks.facebook}" target="_blank" class="text-blue-600 hover:text-blue-800">
-            <i class="fa fa-facebook"></i>
-        </a>`);
-    }
-    
-    if (socialLinks?.instagram) {
-        links.push(`<a href="${socialLinks.instagram}" target="_blank" class="text-pink-600 hover:text-pink-800">
-            <i class="fa fa-instagram"></i>
-        </a>`);
-    }
-    
-    if (socialLinks?.youtube) {
-        links.push(`<a href="${socialLinks.youtube}" target="_blank" class="text-red-600 hover:text-red-800">
-            <i class="fa fa-youtube"></i>
-        </a>`);
-    }
-    
-    if (socialLinks?.google) {
-        links.push(`<a href="${socialLinks.google}" target="_blank" class="text-yellow-600 hover:text-yellow-800">
-            <i class="fa fa-google"></i>
-        </a>`);
-    }
-    
-    return links.join('');
-}
-
-// Update the viewArtistProfile function
-window.viewArtistProfile = function(userId) {
-    // Use the correct relative path from index.html to profile.html
-    window.location.href = `profile/profile.html?id=${userId}`;
-};
-
-// Load artists immediately when the page loads
-document.addEventListener('DOMContentLoaded', async () => {
+async function loadArtists() {
     const artistsGrid = document.getElementById('artistsGrid');
-    
+    if (!artistsGrid) {
+        console.error('artistsGrid element not found!');
+        return;
+    }
+
     try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        artistsGrid.innerHTML = ''; // Clear any loading state
+        const artistsRef = collection(db, "users");
+        const q = query(artistsRef, where("userType", "==", "artist"));
+        const querySnapshot = await getDocs(q);
         
+        let artistsWithImages = [];
+
         querySnapshot.forEach((doc) => {
-            const userData = doc.data();
-            if (userData.userType === 'artist') {
-                const artistCard = createArtistCard(userData, doc.id);
-                artistsGrid.appendChild(artistCard);
+            const artistData = doc.data();
+            console.log('Artist data:', artistData);
+            if (artistData.photoURL && artistData.photoURL.trim() !== '') {
+                artistsWithImages.push({ id: doc.id, ...artistData });
             }
         });
+
+        // Clear the grid
+        artistsGrid.innerHTML = '';
+
+        // Debug log
+        console.log('Artists to display:', artistsWithImages);
+
+        artistsWithImages.forEach((artist) => {
+            // Create the main card container
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'glass-header rounded-lg p-6 flex flex-col items-center';
+            cardDiv.style.cssText = `
+                background: rgba(0, 0, 0, 0.7);
+                min-height: 300px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            `;
+
+            // Create and append image
+            const img = document.createElement('img');
+            img.src = artist.photoURL;
+            img.alt = artist.displayName || 'Artist';
+            img.className = 'w-32 h-32 rounded-full object-cover mb-4';
+            img.style.cssText = `
+                border: 4px solid white;
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            `;
+            cardDiv.appendChild(img);
+
+            // Create and append name
+            const name = document.createElement('h3');
+            name.textContent = artist.displayName || 'Artist';
+            name.className = 'text-2xl font-bold mb-2 text-white';
+            cardDiv.appendChild(name);
+
+            // Create and append specialization
+            const specialization = document.createElement('p');
+            specialization.textContent = artist.artistDetails?.specialization || 'Artist';
+            specialization.className = 'text-center mb-4 text-gray-200 text-lg';
+            cardDiv.appendChild(specialization);
+
+            // Create and append button
+            const button = document.createElement('button');
+            button.textContent = 'View Profile';
+            button.className = 'bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold';
+            button.onclick = () => {
+                window.location.href = `./profile/profile.html?id=${artist.id}`;
+            };
+            cardDiv.appendChild(button);
+
+            // Debug logs
+            console.log('Created card for:', artist.displayName);
+            console.log('Card HTML:', cardDiv.innerHTML);
+
+            // Append the card to the grid
+            artistsGrid.appendChild(cardDiv);
+        });
+
     } catch (error) {
         console.error("Error loading artists:", error);
+        artistsGrid.innerHTML = `
+            <div class="col-span-full text-center p-4">
+                <p class="text-lg text-red-500">Error loading artists. Please try again later.</p>
+            </div>`;
     }
-}); 
+}
+
+// Load artists when the page loads
+document.addEventListener('DOMContentLoaded', loadArtists);
+
+// Also try loading when window is fully loaded
+window.addEventListener('load', loadArtists);
+
+// Export the function so it can be called manually if needed
+window.loadArtists = loadArtists; 
