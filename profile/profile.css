@@ -12,8 +12,11 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
+    background-image: url("../images/bg.jpg");
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
 /* global header */
 
@@ -37,11 +40,10 @@ main {
 }
 
 .glass-header {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 /* 
 .flyout {
@@ -87,3 +89,28 @@ main {
     visibility: visible !important;
     opacity: 1 !important;
 }
+
+/* Profile specific styles */
+.profile-container {
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.social-links a {
+    margin: 0 10px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #666;
+}
+
+/* Add any other styles you need */

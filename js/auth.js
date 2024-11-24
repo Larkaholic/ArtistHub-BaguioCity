@@ -13,6 +13,7 @@ import {
     updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getBasePath } from './utils.js';
 
 // predefined admin emails (store these securely in production)
 const ADMIN_EMAILS = [
@@ -23,8 +24,7 @@ const ADMIN_EMAILS = [
 
 // add the navigation helper at the top of the file
 function goToProfile() {
-    const basePath = window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity' : '';
-    window.location.href = `${basePath}/profile/profile.html`;
+    window.location.href = './profile/profile.html';
 }
 
 // registration handler
@@ -51,21 +51,24 @@ window.handleRegister = async function(e) {
         await setDoc(doc(db, "users", user.uid), {
             email: email,
             userType: userType,
-            displayName: '',
-            photoURL: '',
-            createdAt: serverTimestamp(),
+            createdAt: new Date().toISOString(),
+            displayName: email.split('@')[0],
             artistDetails: userType === 'artist' ? {
-                bio: '',
-                specialization: ''
-            } : null,
-            socialLinks: {}
+                bio: 'No bio yet',
+                specialization: 'Artist'
+            } : null
         });
-        
-        alert('Registration successful!');
-        toggleLoginFlyout();
-        
+
+        // Redirect based on user type
+        if (userType === 'artist') {
+            // Use window.location for more reliable navigation
+            window.location.href = './profile/profile.html';
+        } else {
+            window.location.href = './index.html';
+        }
+
     } catch (error) {
-        console.error('Registration error:', error);
+        console.error("Registration error:", error);
         alert(`Registration failed: ${error.message}`);
     }
 };

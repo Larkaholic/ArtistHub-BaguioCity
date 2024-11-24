@@ -4,21 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Profile</title>
-    <!-- Make sure these paths are correct relative to profile.html -->
+
+    <!-- External CSS - Load these first -->
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <link rel="icon" href="../images/artisthubLogo.png" type="image/icon type">
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../css/style.css">  <!-- update path to your main CSS -->
-    <link rel="stylesheet" href="profile.css">
-    <base href="/ArtistHub-BaguioCity/">
     
+    <!-- Your CSS - Use absolute paths -->
+    <style>
+        /* Fallback styles in case CSS doesn't load */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        body {
+            background-image: url('../images/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+    </style>
+    
+    <!-- Load your CSS file last -->
+    <link rel="stylesheet" href="profile.css" type="text/css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
+    
+    <script>
+        // Reload page if styles aren't loaded properly
+        window.addEventListener('load', function() {
+            const styleCheck = setInterval(() => {
+                const styles = document.styleSheets;
+                let allStylesLoaded = true;
+                
+                // Check if Tailwind is loaded
+                const hasTailwind = Array.from(styles).some(sheet => 
+                    sheet.href && sheet.href.includes('tailwindcss')
+                );
+                
+                // Check if profile.css is loaded
+                const hasProfileCSS = Array.from(styles).some(sheet => 
+                    sheet.href && sheet.href.includes('profile.css')
+                );
+                
+                if (!hasTailwind || !hasProfileCSS) {
+                    allStylesLoaded = false;
+                }
+                
+                if (!allStylesLoaded) {
+                    console.log('Styles not loaded properly, reloading...');
+                    window.location.reload();
+                } else {
+                    clearInterval(styleCheck);
+                }
+            }, 1000); // Check every second
+            
+            // Stop checking after 5 seconds
+            setTimeout(() => clearInterval(styleCheck), 5000);
+        });
+    </script>
 </head>
 <body class="overflow-hidden md:overflow-hidden">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
         <div class="flex w-24 ml-16">
-            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
+            <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" alt="HeaderLogo" href="javascript:void(0)" onclick="navToEvent('index.html')" style="cursor: pointer">
         </div>
 
         <div class="sm:hidden flex items-center mr-5">
@@ -31,11 +84,17 @@
 
         <nav class="hidden sm:flex sm:items-center sm:space-x-5 flex mr-10">
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html')">Home</a></li>
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../index.html#events')">Events</a></li>
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="../Gallery/gallery.html">Gallery</a></li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('index.html')">Home</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('index.html#events')">Events</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('Gallery/gallery.html')">Gallery</a>
+                </li>
                 <li class="login-button">
-                    <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
                         Login
                     </button>
                 </li>
@@ -46,11 +105,17 @@
     <div id="flyout-menu" class="glass-header rounded-lg fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
         <nav>
             <ul class="text-black text-2xl">
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html')">Home</a></li>
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../index.html#events')">Events</a></li>
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="../Gallery/gallery.html">Gallery</a></li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="../index.html">Home</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="../index.html#events">Events</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="../Gallery/gallery.html">Gallery</a>
+                </li>
                 <li class="login-button">
-                    <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
                         Login
                     </button>
                 </li>
@@ -147,12 +212,12 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
-    <script type="module" src="/ArtistHub-BaguioCity/js/firebase-config.js"></script>
+    <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="artistProfile.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-    <script type="module" src="/ArtistHub-BaguioCity/js/auth.js"></script>
+    <script type="module" src="../js/auth.js"></script>
     <div id="userMenu" class="hidden">
         <div class="glass-header rounded-lg p-4">
             <nav>
@@ -194,6 +259,33 @@
                     editButton.style.display = 'flex';
                 }
             }
+        });
+    </script>
+    <script type="module" src="../js/utils.js"></script>
+    <script type="module">
+        // Import and make navToEvent global
+        import { getBasePath } from '../js/utils.js';
+        
+        window.navToEvent = function(url) {
+            const basePath = getBasePath();
+            // Remove leading slash if present
+            url = url.replace(/^\//, '');
+            window.location.href = `${basePath}/${url}`;
+        };
+
+        window.navigateToEvent = function() {
+            const basePath = getBasePath();
+            window.location.href = `${basePath}/events/events.html`;
+        };
+    </script>
+    <script type="module">
+        import { ensureStylesLoaded } from '../js/utils.js';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const requiredStyles = [
+                'profile.css'
+            ];
+            ensureStylesLoaded(requiredStyles);
         });
     </script>
 </body>

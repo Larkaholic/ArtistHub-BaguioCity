@@ -1,3 +1,5 @@
+import { getBasePath } from '../js/utils.js';
+
 function toggleLoginFlyout(event) {
     if (event) event.preventDefault(); // Prevent the default anchor behavior
     const flyout = document.getElementById('LoginFlyout');
@@ -18,8 +20,16 @@ window.onclick = function(event) {
     }
 }
 
-function navigateToEvent (){
-    window.location.href("events/events.html");
+function navToEvent(url) {
+    const basePath = getBasePath();
+    // Remove leading slash if present
+    url = url.replace(/^\//, '');
+    window.location.href = `${basePath}/${url}`;
+}
+
+function navigateToEvent() {
+    const basePath = getBasePath();
+    window.location.href = `${basePath}/events/events.html`;
 }
 
 function toggleNav() {
@@ -41,7 +51,6 @@ function toggleForms() {
     }
 }
 
-function navToEvent(url) {
-    window.location.href = url;
-}
+// Make navigation function global
+window.navToEvent = navToEvent;
 

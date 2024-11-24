@@ -1,9 +1,26 @@
 import { auth, db } from '../js/firebase-config.js';
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // At the top of your file
 console.log('artistProfile.js loaded');
+
+// Add this at the top of your file
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if CSS is loaded
+    const cssLoaded = Array.from(document.styleSheets).some(styleSheet => 
+        styleSheet.href && styleSheet.href.includes('profile.css')
+    );
+    
+    if (!cssLoaded) {
+        console.warn('Profile CSS not loaded, attempting to reload');
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'profile.css';
+        document.head.appendChild(link);
+    }
+});
 
 // Get profile ID from URL or use current user's ID
 const urlParams = new URLSearchParams(window.location.search);
@@ -11,30 +28,23 @@ const profileId = urlParams.get('id') || auth.currentUser?.uid;
 
 // Load profile data
 onAuthStateChanged(auth, async (user) => {
+    console.log('Auth state changed:', user);
     if (user) {
         try {
-            console.log('Loading profile for ID:', user.uid);
+            console.log('Loading profile for user:', user.uid);
             const userDoc = await getDoc(doc(db, "users", user.uid));
-            
             if (userDoc.exists()) {
-                const userData = userDoc.data();
-                loadArtistData(userData);
-                
-                // Debug edit button
-                const editButton = document.getElementById('editProfileButton');
-                console.log('Edit button element:', editButton);
-                if (editButton) {
-                    console.log('Setting edit button display to flex');
-                    editButton.style.display = 'flex';
-                    editButton.style.visibility = 'visible';
-                    editButton.style.opacity = '1';
-                }
+                console.log('User data:', userDoc.data());
+                loadArtistData(userDoc.data());
+            } else {
+                console.log('No user document found');
             }
         } catch (error) {
             console.error('Error loading profile:', error);
         }
     } else {
-        console.log('No user logged in');
+        console.log('No user logged in, redirecting to login');
+        window.location.href = '../index.html';
     }
 });
 
@@ -94,4 +104,18 @@ function updateSocialLink(platform, url) {
 // Make functions available globally
 window.goToEditProfile = function() {
     window.location.href = 'edit-profile.html';
-}; 
+};
+
+// When saving profile image
+async function saveProfileImage(imageUrl) {
+    try {
+        const userDoc = doc(db, "users", auth.currentUser.uid);
+        await updateDoc(userDoc, {
+            profileImage: imageUrl // Save the image URL
+        });
+    } catch (error) {
+        console.error("Error saving profile image:", error);
+        alert("Failed to save profile image");
+    }
+}
+  

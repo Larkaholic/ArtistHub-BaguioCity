@@ -38,117 +38,13 @@
             </nav>
           </header>
         
-          <div id="flyout-menu" class="glass-header rounded-lg fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
-              <nav>
-                  <ul class="text-black text-2xl">
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#index" onclick="navToEvent('../index.html')">Home</a></li>
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html#artists')">Artists</a></li>
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a></li>
-                    <li class="login-button">
-                        <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                            Login
-                        </button>
-                    </li>
-                  </ul>
-              </nav>
-          </div>
-        
-          <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
-              <!-- Login Form -->
-              <div id="loginForm" class="glass-header items-center rounded-lg w-96 mx-10">
-                  <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
-                  <form id="loginFormElement" onsubmit="handleLogin(event)">
-                      <div class="mx-2 mb-4">
-                          <label for="loginEmail" class="block font-medium">Email:</label>
-                          <input type="email" id="loginEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
-                      </div>
-                      <div class="mx-2 mb-4">
-                          <label for="loginPassword" class="block font-medium">Password:</label>
-                          <input type="password" id="loginPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
-                      </div>
-                      <div class="flex items-center justify-between mx-20 my-5">
-                          <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Login</button>
-                          <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
-                      </div>
-                      <div class="text-center mb-4">
-                          <p>Need an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">SIGN UP</a></p>
-                      </div>
-                  </form>
-              </div>
-              <!-- register -->
-              <div id="registerForm" class="glass-header items-center rounded-lg w-96 mx-10 hidden">
-                  <h2 class="flex justify-center font-bold text-2xl my-4">Register</h2>
-                  <form onsubmit="return handleRegister(event)">
-                      <div class="mx-2 mb-4">
-                          <label for="registerEmail" class="block font-medium">Email:</label>
-                          <input type="email" id="registerEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
-                      </div>
-                      <div class="mx-2 mb-4">
-                          <label for="registerPassword" class="block font-medium">Password:</label>
-                          <input type="password" id="registerPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
-                      </div>
-                      <div class="mx-2 mb-4">
-                          <label for="userType" class="block font-medium">Account Type:</label>
-                          <select id="userType" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
-                              <option value="user">Regular User</option>
-                              <option value="artist">Artist</option>
-                          </select>
-                      </div>
-                      <div class="flex items-center justify-between mx-20 my-5">
-                          <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Register</button>
-                          <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
-                      </div>
-                      <div class="text-center mb-4">
-                          <p>Already have an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">LOGIN</a></p>
-                      </div>
-                  </form>
-              </div>
-          </div>
+        <main>
+            <!-- Your events content -->
+        </main>
 
-        <section id="events" class="flex subEvents flex items-center justify-center">
-            <div class="eventContainer lg:mx-10 glass-header rounded-lg flex flex-col items-center">
-                <h2 class="glass-header p-1 lg:p-2 w-full rounded-t-lg rounded-b-none text-center text-2xl lg:text-4xl decoration-2">
-                    Event Title
-                </h2>
-                <div class="eventDetailContainer glass-header rounded-t-none rounded-b-lg h-full w-full">
-                    <div class="eventTime justify-center lg:p-2 text-xl lg:text-3xl flex mt-1 lg:mt-3 text-center">
-                        October 15, 2024, 6:00PM-9:00PM
-                    </div>
-                    <div class="eventVenue justify-center font-bold text-2xl lg:text-4xl flex mb-3 lg:mb-4 text-center">
-                        Convention Center
-                    </div>
-                    <div class="eventDesc text-clip h-40 mx-2 border-2 border-gray-600 md:border-none md:text-xl text-center lg:text-xl overflow-scroll md:overflow-hidden">
-                        disponibles, pero la mayoría sufrió alteraciones en alguna manera, ya sea porque se le 
-                        agregó humor, o palabras aleatorias que no parecen ni un poco creíbles. Si vas a utilizar 
-                        un pasaje de Lorem Ipsum, necesitás estar seguro de que no hay nada avergonzante escondido 
-                        en el medio del texto. Todos los generadore
-                    </div>
-                    <div class="flex flex-row ml-2 justify-evenly mt-4 md:mt-0">
-                        <div class="">
-                            <span class="font-bold">Featured Artist</span>
-                            <ul class="ml-6 list-disc">
-                                <li>Kidlat Tahimik</li>
-                                <li>benedicto cabrera</li>
-                                <li>Whan-od</li>
-                            </ul>
-                        </div>
-                        <div class="">
-                            <span class="font-bold">Event Schedule</span>
-                            <ul class="ml-2 list-disc">
-                                <li>Event Opening & Welcome Speech</li>
-                                <li>Artist Q&A and Gallery  Walkthrough</li>
-                                <li>Live Music Performance</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="events.js"></script>
-        <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-        <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-        <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+        <!-- Scripts -->
+        <script type="module" src="../js/utils.js"></script>
+        <script type="module" src="../js/firebase-config.js"></script>
         <script type="module" src="../js/auth.js"></script>
         <div id="userMenu" class="hidden">
             <div class="glass-header rounded-lg p-4">
