@@ -2,95 +2,135 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Artist Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>edit profile</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            background-image: url('https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            margin: 0;
+            color: white;
+        }
+
+        .edit-form-container {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        
+        .button-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: rgba(27, 66, 66, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 50;
+        }
+
+        .edit-form-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .edit-form-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .edit-form-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+        }
+
+        input, textarea {
+            color: black;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <main class="container mx-auto mt-20 p-4">
-        <div class="glass-header rounded-lg p-6 max-w-4xl mx-auto">
+<body>
+    <div class="container mx-auto px-4 py-8">
+        <form id="editProfileForm" class="glass-header rounded-lg p-6 edit-form-container">
             <h1 class="text-2xl font-bold mb-6">Edit Artist Profile</h1>
 
-            <form id="editProfileForm" class="space-y-6">
-                <!-- Profile Image -->
-                <div class="relative">
-                    <img id="profileImage" 
-                         src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true" 
-                         alt="Profile" 
-                         class="w-32 h-32 rounded-full object-cover">
-                    <input type="file" id="imageInput" accept="image/*" class="hidden">
-                    <button type="button" 
-                            onclick="document.getElementById('imageInput').click()" 
-                            class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2">
-                        Change Photo
-                    </button>
-                </div>
+            <!-- Profile Image -->
+            <div class="relative">
+                <img id="profileImage" 
+                     src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true" 
+                     alt="Profile" 
+                     class="w-32 h-32 rounded-full object-cover">
+                <input type="file" id="imageInput" accept="image/*" class="hidden">
+                <button type="button" 
+                        onclick="document.getElementById('imageInput').click()" 
+                        class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2">
+                    Change Photo
+                </button>
+            </div>
 
-                <!-- Basic Info -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block font-medium mb-2">Display Name</label>
-                        <input type="text" id="displayName" class="w-full p-2 border rounded-md">
-                    </div>
-                    
-                    <div>
-                        <label class="block font-medium mb-2">Specialization</label>
-                        <input type="text" id="specialization" class="w-full p-2 border rounded-md">
-                    </div>
-                </div>
-
-                <!-- Bio -->
+            <!-- Basic Info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block font-medium mb-2">Bio</label>
-                    <textarea id="bio" rows="4" class="w-full p-2 border rounded-md"></textarea>
+                    <label class="block font-medium mb-2">Display Name</label>
+                    <input type="text" id="displayName" class="w-full p-2 border rounded-md">
                 </div>
+                
+                <div>
+                    <label class="block font-medium mb-2">Specialization</label>
+                    <input type="text" id="specialization" class="w-full p-2 border rounded-md">
+                </div>
+            </div>
 
-                <!-- Social Links -->
-                <div class="space-y-4">
-                    <h3 class="font-medium">Social Media Links</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm mb-1">Facebook</label>
-                            <input type="url" id="facebook" placeholder="Facebook URL" class="w-full p-2 border rounded-md">
-                        </div>
-                        <div>
-                            <label class="block text-sm mb-1">Instagram</label>
-                            <input type="url" id="instagram" placeholder="Instagram URL" class="w-full p-2 border rounded-md">
-                        </div>
-                        <div>
-                            <label class="block text-sm mb-1">YouTube</label>
-                            <input type="url" id="youtube" placeholder="YouTube URL" class="w-full p-2 border rounded-md">
-                        </div>
-                        <div>
-                            <label class="block text-sm mb-1">Google</label>
-                            <input type="url" id="google" placeholder="Google URL" class="w-full p-2 border rounded-md">
-                        </div>
+            <!-- Bio -->
+            <div>
+                <label class="block font-medium mb-2">Bio</label>
+                <textarea id="bio" rows="4" class="w-full p-2 border rounded-md"></textarea>
+            </div>
+
+            <!-- Social Links -->
+            <div class="space-y-4">
+                <h3 class="font-medium">Social Media Links</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm mb-1">Facebook</label>
+                        <input type="url" id="facebook" placeholder="Facebook URL" class="w-full p-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Instagram</label>
+                        <input type="url" id="instagram" placeholder="Instagram URL" class="w-full p-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">YouTube</label>
+                        <input type="url" id="youtube" placeholder="YouTube URL" class="w-full p-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Google</label>
+                        <input type="url" id="google" placeholder="Google URL" class="w-full p-2 border rounded-md">
                     </div>
                 </div>
+            </div>
+        </form>
 
-                <!-- Buttons -->
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="window.location.href='profile.html'" 
-                            class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">
-                        Cancel
-                    </button>
-                    <button type="submit" 
-                            class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
+        <!-- Fixed Button Container -->
+        <div class="button-container">
+            <div class="container mx-auto max-w-4xl flex justify-center gap-4 px-4">
+                <button type="submit" form="editProfileForm"
+                    class="bg-green-500 text-white px-8 py-3 rounded-md hover:bg-green-600 transition duration-300 w-full sm:w-auto text-lg">
+                    save changes
+                </button>
+                <button type="button" 
+                    onclick="window.location.href='profile.html'" 
+                    class="bg-red-500 text-white px-8 py-3 rounded-md hover:bg-red-600 transition duration-300 w-full sm:w-auto text-lg">
+                    cancel
+                </button>
+            </div>
         </div>
-    </main>
+    </div>
 
-    <!-- Firebase Scripts -->
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
-    
-    <!-- Your Scripts -->
     <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="./edit-profile.js"></script>
 </body>
