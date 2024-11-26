@@ -3,19 +3,20 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Events</title>
-        <link rel="icon" href="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/icon type">
+        <title>Event Details - Artist Hub</title>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="events.css">
-        
+        <link rel="stylesheet" href="../styles.css">
     </head>
-    
-    <body class="overflow-hidden">
-        <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+    <body class="bg-cover">
+        <!-- Header/Navbar -->
+        <header class="glass-header fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1">
             <div class="flex w-24 ml-16">
-                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
+                <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" 
+                     alt="HeaderLogo" 
+                     onclick="window.location.href='../index.html'" 
+                     style="cursor: pointer">
             </div>
-        
+
             <div class="sm:hidden flex items-center mr-5">
                 <button onclick="toggleNav()" class="burger-icon">
                     <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -23,38 +24,85 @@
                     </svg>
                 </button>
             </div>
-        
+
             <nav class="hidden sm:flex sm:items-center sm:space-x-5 flex mr-10">
                 <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#index" onclick="navToEvent('../index.html')">Home</a></li>
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html#artists')">Artists</a></li>
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="../index.html#artists">Artists</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="../index.html#events">Events</a></li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="../Gallery/gallery.html">Gallery</a></li>
                     <li class="login-button">
                         <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
                             Login
                         </button>
                     </li>
+                    <li id="adminBadge" class="hidden">
+                        <span class="bg-red-500 text-white px-2 py-1 rounded-md text-sm">admin</span>
+                    </li>
+                    <li id="adminDashboard" class="hidden nav-item hover:bg-green-500 p-1 rounded-lg">
+                        <a href="../admin/dashboard.html">dashboard</a>
+                    </li>
                 </ul>
             </nav>
-          </header>
-        
-        <main>
-            <!-- Your events content -->
-        </main>
+        </header>
 
-        <!-- Scripts -->
-        <script type="module" src="../js/utils.js"></script>
-        <script type="module" src="../js/firebase-config.js"></script>
-        <script type="module" src="../js/auth.js"></script>
-        <div id="userMenu" class="hidden">
-            <div class="glass-header rounded-lg p-4">
+        <!-- Mobile Nav Menu -->
+        <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen bg-white transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+            <div class="glass-header h-full p-6">
+                <div class="flex justify-end mb-6">
+                    <button onclick="toggleNav()" class="p-2 hover:bg-gray-200 rounded-lg">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
                 <nav>
-                    <ul>
-                        <li><a href="/profile/profile.html">Profile</a></li>
-                        <!-- Add more menu items as needed -->
+                    <ul class="flex flex-col space-y-4">
+                        <li><a href="../index.html#artists" onclick="toggleNav()" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Artists</a></li>
+                        <li><a href="../index.html#events" onclick="toggleNav()" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Events</a></li>
+                        <li><a href="../Gallery/gallery.html" onclick="toggleNav()" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Gallery</a></li>
+                        <li class="login-button">
+                            <button onclick="toggleLoginFlyout(event)" class="w-full text-left py-2 hover:bg-gray-100 rounded-lg px-4">
+                                Login
+                            </button>
+                        </li>
                     </ul>
                 </nav>
             </div>
         </div>
+
+        <!-- Login Flyout -->
+        <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden z-[9999]">
+            <!-- Login form content here (copy from index.html) -->
+        </div>
+
+        <main class="container mx-auto mt-24 p-4">
+            <!-- Event Details Container -->
+            <div id="eventDetails" class="glass-header rounded-lg p-8">
+                <!-- Event details will be loaded here -->
+                <div class="animate-pulse">
+                    <div class="h-8 bg-white/20 rounded w-3/4 mb-4"></div>
+                    <div class="h-4 bg-white/20 rounded w-1/2 mb-2"></div>
+                    <div class="h-4 bg-white/20 rounded w-1/3"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script type="module" src="../js/firebase-config.js"></script>
+        <script type="module" src="../js/auth.js"></script>
+        <script type="module" src="./events.js"></script>
+        <script>
+            function toggleNav() {
+                const menu = document.getElementById('flyout-menu');
+                menu.classList.toggle('translate-x-full');
+            }
+
+            function toggleLoginFlyout(event) {
+                if (event) event.preventDefault();
+                const flyout = document.getElementById('LoginFlyout');
+                flyout.classList.toggle('hidden');
+            }
+        </script>
     </body>
 </html>

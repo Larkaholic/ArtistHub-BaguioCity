@@ -16,44 +16,49 @@
 <body class="overflow-hidden">
   <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
     <div class="flex w-24 ml-16">
-        <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
+        <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
     </div>
 
     <div class="sm:hidden flex items-center mr-5">
-        <button onclick="toggleNav()" class="burger-icon">
-            <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button onclick="toggleNav()" class="burger-icon p-2 hover:bg-gray-200 rounded-lg">
+            <svg class="w-6 h-6 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
     </div>
 
-    <nav class="hidden sm:flex sm:items-center sm:space-x-5 flex mr-10">
+    <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-10">
         <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
-            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#index" onclick="navToEvent('../index.html')">Home</a></li>
-            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html#artists')">Artists</a></li>
-            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../index.html#events')">Events</a></li>
+            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="navToEvent('../index.html')">Home</a></li>
+            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="navToEvent('../index.html#artists')">Artists</a></li>
+            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#" onclick="navToEvent('../index.html#events')">Events</a></li>
             <li class="login-button">
-                <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    Login
-                </button>
+                <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">Login</button>
             </li>
         </ul>
     </nav>
   </header>
 
-  <div id="flyout-menu" class="glass-header rounded-lg fixed right-0 z-40 flex items-center justify-center position mt-12 h-56 w-56 hidden">
-      <nav>
-          <ul class="text-black text-2xl">
-            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#index" onclick="navToEvent('../index.html')">Home</a></li>
-            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists" onclick="navToEvent('../index.html#artists')">Artists</a></li>
-            <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events" onclick="navToEvent('../index.html#events')">Events</a></li>
-            <li class="login-button">
-                <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    Login
-                </button>
-            </li>
-          </ul>
-      </nav>
+  <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen bg-white transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+    <div class="glass-header h-full p-6">
+        <div class="flex justify-end mb-6">
+            <button onclick="toggleNav()" class="p-2 hover:bg-gray-200 rounded-lg">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <nav>
+            <ul class="flex flex-col space-y-4">
+                <li><a href="#" onclick="navToEvent('../index.html')" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Home</a></li>
+                <li><a href="#" onclick="navToEvent('../index.html#artists')" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Artists</a></li>
+                <li><a href="#" onclick="navToEvent('../index.html#events')" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Events</a></li>
+                <li class="login-button">
+                    <button onclick="toggleLoginFlyout(event)" class="w-full text-left py-2 hover:bg-gray-100 rounded-lg px-4">Login</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
   </div>
 
   <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
@@ -197,5 +202,8 @@
   <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
   <script type="module" src="./js/auth.js"></script>
+  <script type="module" src="../js/utils.js"></script>
+<script type="module" src="../js/firebase-config.js"></script>
+<script type="module" src="../js/auth.js"></script>
 </body>
 </html>

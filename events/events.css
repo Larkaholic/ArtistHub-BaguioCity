@@ -55,3 +55,36 @@ section {
     height: 85%;
     width: 94%;
 } 
+
+/* Mobile navigation */
+#flyout-menu {
+    transition: transform 0.3s ease-in-out;
+}
+
+#flyout-menu.active {
+    transform: translateX(0);
+}
+
+/* Overlay when menu is open */
+.menu-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Ensure proper glass effect on mobile menu */
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
