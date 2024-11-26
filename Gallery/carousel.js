@@ -84,3 +84,36 @@ function toggleForms() {
       registerForm.classList.remove('hidden');
   }
 }
+
+// Toggle navigation function
+function toggleNav() {
+    const menu = document.getElementById('flyout-menu');
+    const body = document.body;
+    
+    // Toggle the menu
+    menu.classList.toggle('translate-x-full');
+    
+    // Create or get overlay
+    let overlay = document.querySelector('.menu-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'menu-overlay';
+        overlay.onclick = toggleNav;
+        document.body.appendChild(overlay);
+    }
+    
+    // Toggle overlay
+    overlay.classList.toggle('active');
+    
+    // Toggle body scroll
+    body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
+}
+
+// Navigation helper
+function navToEvent(url) {
+    window.location.href = url;
+}
+
+// Make functions globally available
+window.toggleNav = toggleNav;
+window.navToEvent = navToEvent;

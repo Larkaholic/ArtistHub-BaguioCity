@@ -18,10 +18,9 @@ body {
 /* global header */
 .glass-header {
     background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* nav */
@@ -41,12 +40,17 @@ nav ul li button,
 
 
 main {
+    position: relative;
+    z-index: 1;
     scroll-snap-type: y mandatory;
     height: 100vh;
     overflow-y: scroll;
+    padding-top: 64px;
 }
 /* Landing Page */
 section {
+    position: relative;
+    z-index: 1;
     scroll-snap-align: start;
     height: 100vh;
     display: flex;
@@ -173,4 +177,79 @@ section {
 
 .artist-card:hover {
     transform: translateY(-5px);
+}
+
+/* header z-index */
+header.glass-header {
+    z-index: 1000;
+}
+
+/* login flyout styles */
+.flyout {
+    z-index: 9999;
+}
+
+/* ensure other glass-header elements stay below */
+.glass-header:not(header) {
+    z-index: 1;
+}
+
+/* Update the section styles */
+section#landingPage {
+    height: calc(100vh - 64px); /* Subtract header height */
+    padding: 0; /* Remove padding to ensure full width/height */
+    margin-top: 64px; /* Add margin for header */
+}
+
+.artist-item img {
+    height: 100%; /* Use full height of container */
+    width: 100%;
+}
+
+.important-events {
+    padding: 1rem;
+}
+
+/* Update section styles */
+section#events {
+    display: block !important;
+    height: auto !important;
+    min-height: 100vh;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+  
+}
+
+/* Update container styles */
+.EvntContainer {
+    width: 100%;
+    height: auto !important;
+    min-height: fit-content;
+    overflow: visible !important;
+    padding: 1rem;
+}
+
+#upcomingEventsList {
+    width: 100%;
+    height: auto !important;
+    overflow: visible !important;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Ensure proper scroll behavior */
+main {
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+    overflow-y: auto;
+    padding-top: 64px;
+}
+
+/* Make sections take full height */
+section {
+    min-height: 100vh;
+    scroll-snap-align: start;
+    position: relative;
 }

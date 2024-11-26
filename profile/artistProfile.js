@@ -1,5 +1,6 @@
-import { db } from '../js/firebase-config.js';
+import { db, auth } from '../js/firebase-config.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // get profile id from url
 const urlParams = new URLSearchParams(window.location.search);
@@ -16,10 +17,24 @@ async function loadProfile() {
         const userDoc = await getDoc(doc(db, "users", profileId));
         if (userDoc.exists()) {
             loadArtistData(userDoc.data());
+            
+            // Check if current user is the profile owner
+            onAuthStateChanged(auth, (user) => {
+                const editButton = document.getElementById('editProfileButton');
+                if (editButton) {
+                    // Only show edit button if user is logged in and viewing their own profile
+                    if (user && user.uid === profileId) {
+                        editButton.style.display = 'flex';
+                    } else {
+                        editButton.style.display = 'none';
+                    }
+                }
+            });
         } else {
             window.location.href = '../index.html';
         }
     } catch (error) {
+        console.error("Error loading profile:", error);
         window.location.href = '../index.html';
     }
 }

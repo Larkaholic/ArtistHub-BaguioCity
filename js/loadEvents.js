@@ -1,80 +1,104 @@
 import { db } from './firebase-config.js';
-import { 
-    collection, 
-    query, 
-    orderBy, 
-    getDocs, 
-    where 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 async function loadEvents() {
-    // get containers
-    const upcomingEventsContainer = document.querySelector('.EvntContainer');
-    if (!upcomingEventsContainer) return;
-
     try {
-        // get events from firestore
-        const eventsQuery = query(
-            collection(db, "events"),
-            orderBy("date", "asc")
-        );
-        
-        const querySnapshot = await getDocs(eventsQuery);
-        
-        // clear existing "no event yet" buttons
-        upcomingEventsContainer.innerHTML = `
-            <h2 class="EvntTitle text-center glass-header rounded-full p-3 font-bold mb-4">
-                UPCOMING EVENTS
-            </h2>
-        `;
+        // Get containers
+        const importantEventsSection = document.querySelector('#landingPage .important-events');
+        const eventsContainer = document.querySelector('#events .EvntContainer');
 
-        if (querySnapshot.empty) {
-            // if no events, show default message
-            upcomingEventsContainer.innerHTML += `
-                <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4">
-                    No event yet
-                </button>
-            `;
-            return;
-        }
-
-        // add each event to the container
-        querySnapshot.forEach((doc) => {
-            const event = doc.data();
-            const eventDate = new Date(event.date);
-            const formattedDate = eventDate.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-
-            const eventButton = document.createElement('button');
-            eventButton.className = 'EvntRow glass-header rounded-lg w-full p-3 mb-4';
-            eventButton.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <div class="text-left">
-                        <h3 class="text-lg font-bold">${event.title}</h3>
-                        <p class="text-sm">${formattedDate}</p>
-                        <p class="text-sm">${event.location}</p>
-                    </div>
-                    ${event.isFeatured ? '<span class="bg-yellow-500 text-black px-2 py-1 rounded-md text-sm">featured</span>' : ''}
+        // Clear and initialize featured events section
+        if (importantEventsSection) {
+            importantEventsSection.innerHTML = `
+                <div class="glass-header rounded-lg p-4 h-auto">
+                    <h2 class="text-2xl font-bold mb-6">Featured Events</h2>
+                    <div class="featured-events-container space-y-4"></div>
                 </div>
             `;
-            upcomingEventsContainer.appendChild(eventButton);
+        }
+
+        // Initialize events container with title
+        if (eventsContainer) {
+            eventsContainer.innerHTML = `
+                <div class="mt-12">
+                    <h2 class="text-2xl font-bold text-center glass-header rounded-full p-4 mb-6">
+                        UPCOMING EVENTS
+                    </h2>
+                    <div id="upcomingEventsList" class="space-y-4"></div>
+                </div>
+            `;
+        }
+
+        const featuredEventsContainer = importantEventsSection?.querySelector('.featured-events-container');
+        const upcomingEventsList = document.querySelector('#upcomingEventsList');
+
+        // Get events
+        const eventsQuery = query(collection(db, "events"), orderBy("date", "asc"));
+        const querySnapshot = await getDocs(eventsQuery);
+
+        // Process events
+        querySnapshot.forEach((doc) => {
+            const event = doc.data();
+            
+            // Featured events
+            if (event.isFeatured && featuredEventsContainer) {
+                const featuredEvent = document.createElement('div');
+                featuredEvent.className = 'mb-4 p-6 glass-header rounded-lg cursor-pointer hover:bg-white/20 transition-all';
+                featuredEvent.onclick = () => window.location.href = `events/events.html?id=${doc.id}`;
+                
+                featuredEvent.innerHTML = `
+                    <div class="flex items-center gap-6">
+                        <div class="flex-shrink-0">
+                            <img src="${event.imageUrl || 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/ibagiw.jpg'}" 
+                                alt="${event.title}" 
+                                class="w-24 h-24 rounded-full object-cover">
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <h3 class="text-2xl font-bold text-black truncate mb-2">${event.title}</h3>
+                            <p class="text-lg text-black mb-2">${new Date(event.date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}</p>
+                            <p class="text-lg text-black truncate">${event.location}</p>
+                        </div>
+                    </div>
+                `;
+                featuredEventsContainer.appendChild(featuredEvent);
+            }
+            
+            // Upcoming events
+            if (!event.isFeatured && upcomingEventsList) {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'glass-header rounded-lg p-5 w-full mb-4 cursor-pointer hover:bg-white/20 transition-all';
+                eventElement.onclick = () => window.location.href = `events/events.html?id=${doc.id}`;
+                
+                eventElement.innerHTML = `
+                    <div class="flex flex-col md:flex-row items-center gap-4 w-full">
+                        <img src="${event.imageUrl || 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/ibagiw.jpg'}" 
+                             alt="${event.title}" 
+                             class="w-24 h-24 rounded-lg object-cover">
+                        <div class="flex flex-col items-center md:items-start w-full">
+                            <h3 class="text-2xl font-bold text-center md:text-left mb-2">${event.title}</h3>
+                            <p class="text-lg text-gray-300 mb-1">${new Date(event.date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}</p>
+                            <p class="text-lg text-gray-300">${event.location}</p>
+                        </div>
+                    </div>
+                `;
+                upcomingEventsList.appendChild(eventElement);
+            }
         });
 
     } catch (error) {
-        console.error('error loading events:', error);
-        upcomingEventsContainer.innerHTML = `
-            <h2 class="EvntTitle text-center glass-header rounded-full p-3 font-bold mb-4">
-                UPCOMING EVENTS
-            </h2>
-            <button class="EvntRow glass-header rounded-lg w-full p-3 mb-4">
-                Error loading events
-            </button>
-        `;
+        console.error("Error loading events:", error);
     }
 }
 
-// load events when page loads
-document.addEventListener('DOMContentLoaded', loadEvents); 
+// Load events when DOM is ready
+document.addEventListener('DOMContentLoaded', loadEvents);
+
+export { loadEvents }; 
