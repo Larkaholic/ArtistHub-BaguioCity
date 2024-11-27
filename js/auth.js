@@ -321,33 +321,26 @@ window.toggleNav = function() {
 };
 
 function updateUIForUser(user) {
+    const elements = {
+        loginButtons: document.querySelectorAll('.login-button'),
+        logoutButtons: document.querySelectorAll('.logout-button'),
+        adminElements: document.querySelectorAll('.admin-only'),
+        userElements: document.querySelectorAll('.user-only'),
+        guestElements: document.querySelectorAll('.guest-only')
+    };
+
     try {
-        // get all nav elements
-        const loginButtons = document.querySelectorAll('.login-button');
-        const logoutButtons = document.querySelectorAll('.logout-button');
-        const adminElements = document.querySelectorAll('.admin-only');
-        const userElements = document.querySelectorAll('.user-only');
-        const guestElements = document.querySelectorAll('.guest-only');
-
-        // hide login, show logout
-        loginButtons.forEach(button => button.style.display = 'none');
-        logoutButtons.forEach(button => button.style.display = 'block');
+        if (elements.loginButtons.length) elements.loginButtons.forEach(btn => btn.style.display = 'none');
+        if (elements.logoutButtons.length) elements.logoutButtons.forEach(btn => btn.style.display = 'block');
+        if (elements.userElements.length) elements.userElements.forEach(elem => elem.style.display = 'block');
+        if (elements.guestElements.length) elements.guestElements.forEach(elem => elem.style.display = 'none');
         
-        // show user-only elements
-        userElements.forEach(elem => elem.style.display = 'block');
-        
-        // hide guest-only elements
-        guestElements.forEach(elem => elem.style.display = 'none');
-
-        // check if user is admin
-        if (user.email === 'admin@gmail.com') {
-            adminElements.forEach(elem => elem.style.display = 'block');
-        } else {
-            adminElements.forEach(elem => elem.style.display = 'none');
+        // Check for admin
+        if (user.email === 'admin@gmail.com' && elements.adminElements.length) {
+            elements.adminElements.forEach(elem => elem.style.display = 'block');
         }
-
     } catch (error) {
-        console.warn('error updating ui for user:', error);
+        console.warn('Error updating UI:', error);
     }
 }
 
@@ -376,4 +369,22 @@ function updateUIForNoUser() {
     } catch (error) {
         console.warn('error updating ui for no user:', error);
     }
-} 
+}
+
+auth.onAuthStateChanged((user) => {
+  const loginButton = document.querySelector('.login-button');
+  const logoutButton = document.querySelector('.logout-button');
+  const uploadSection = document.getElementById('uploadSection');
+
+  if (loginButton && logoutButton) {
+    if (user) {
+      loginButton.style.display = 'none';
+      logoutButton.style.display = 'block';
+      if (uploadSection) uploadSection.classList.remove('hidden');
+    } else {
+      loginButton.style.display = 'block';
+      logoutButton.style.display = 'none';
+      if (uploadSection) uploadSection.classList.add('hidden');
+    }
+  }
+}); 
