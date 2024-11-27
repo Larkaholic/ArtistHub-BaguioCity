@@ -318,4 +318,62 @@ window.toggleNav = function() {
     
     // Toggle body scroll
     body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
-}; 
+};
+
+function updateUIForUser(user) {
+    try {
+        // get all nav elements
+        const loginButtons = document.querySelectorAll('.login-button');
+        const logoutButtons = document.querySelectorAll('.logout-button');
+        const adminElements = document.querySelectorAll('.admin-only');
+        const userElements = document.querySelectorAll('.user-only');
+        const guestElements = document.querySelectorAll('.guest-only');
+
+        // hide login, show logout
+        loginButtons.forEach(button => button.style.display = 'none');
+        logoutButtons.forEach(button => button.style.display = 'block');
+        
+        // show user-only elements
+        userElements.forEach(elem => elem.style.display = 'block');
+        
+        // hide guest-only elements
+        guestElements.forEach(elem => elem.style.display = 'none');
+
+        // check if user is admin
+        if (user.email === 'admin@gmail.com') {
+            adminElements.forEach(elem => elem.style.display = 'block');
+        } else {
+            adminElements.forEach(elem => elem.style.display = 'none');
+        }
+
+    } catch (error) {
+        console.warn('error updating ui for user:', error);
+    }
+}
+
+function updateUIForNoUser() {
+    try {
+        // get all nav elements
+        const loginButtons = document.querySelectorAll('.login-button');
+        const logoutButtons = document.querySelectorAll('.logout-button');
+        const adminElements = document.querySelectorAll('.admin-only');
+        const userElements = document.querySelectorAll('.user-only');
+        const guestElements = document.querySelectorAll('.guest-only');
+
+        // show login, hide logout
+        loginButtons.forEach(button => button.style.display = 'block');
+        logoutButtons.forEach(button => button.style.display = 'none');
+        
+        // hide user-only elements
+        userElements.forEach(elem => elem.style.display = 'none');
+        
+        // show guest-only elements
+        guestElements.forEach(elem => elem.style.display = 'block');
+        
+        // hide admin elements
+        adminElements.forEach(elem => elem.style.display = 'none');
+
+    } catch (error) {
+        console.warn('error updating ui for no user:', error);
+    }
+} 

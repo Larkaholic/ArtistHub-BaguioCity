@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
     <script>
         function reloadIfStylesMissing() {
             const styles = document.styleSheets;
@@ -71,7 +72,7 @@
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#artists">Artists</a></li>
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="#events">Events</a></li>
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg"><a href="Gallery/gallery.html">Gallery</a></li>
-                <li class="login-button">
+                <li class="login-button guest-only">
                     <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
                         Login
                     </button>
@@ -100,7 +101,7 @@
                     <li><a href="#artists" onclick="toggleNav()" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Artists</a></li>
                     <li><a href="#events" onclick="toggleNav()" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Events</a></li>
                     <li><a href="Gallery/gallery.html" onclick="toggleNav()" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Gallery</a></li>
-                    <li class="login-button">
+                    <li class="login-button guest-only">
                         <button onclick="toggleLoginFlyout(event)" class="w-full text-left py-2 hover:bg-gray-100 rounded-lg px-4">
                             Login
                         </button>
