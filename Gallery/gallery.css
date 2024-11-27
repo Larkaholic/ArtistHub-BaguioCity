@@ -116,3 +116,33 @@ nav ul li button,
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
+/* Add these Swiper navigation styles */
+.swiper-button-next,
+.swiper-button-prev {
+    color: #000 !important;
+    width: 40px !important;
+    height: 40px !important;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 20px !important;
+}
+
+/* Optional: Add hover effects */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+/* Make sure slides are visible */
+.swiper-slide {
+    opacity: 0.4;
+    transition: opacity 0.3s;
+}
+
+.swiper-slide-active {
+    opacity: 1;
+}
+
