@@ -253,3 +253,24 @@ section {
     scroll-snap-align: start;
     position: relative;
 }
+
+/* update the artists grid container */
+.artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    width: 100%;
+    height: auto; /* changed from fixed height */
+    min-height: 100vh;
+    overflow: visible; /* changed from hidden/auto */
+    margin-bottom: 2rem; /* added bottom margin */
+}
+
+/* ensure the section containing the grid is properly sized */
+section#artists {
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 4rem; /* added padding at bottom */
+}

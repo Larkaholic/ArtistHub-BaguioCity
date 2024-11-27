@@ -14,7 +14,7 @@
             const styles = document.styleSheets;
             let missingStyles = [];
             
-            // Check each required stylesheet
+            // check each required stylesheet
             if (!Array.from(styles).some(sheet => sheet.href && sheet.href.includes('tailwindcss'))) {
                 missingStyles.push('Tailwind');
             }
@@ -37,16 +37,16 @@
             }
         }
 
-        // Check immediately after DOM loads
+        // check immediately after DOM loads
         document.addEventListener('DOMContentLoaded', () => {
             reloadIfStylesMissing();
         });
 
-        // Check again after everything loads
+        // check again after everything loads
         window.addEventListener('load', () => {
             reloadIfStylesMissing();
             
-            // Keep checking for a few seconds
+            // keep checking for a few seconds
             const styleCheck = setInterval(reloadIfStylesMissing, 1000);
             setTimeout(() => clearInterval(styleCheck), 5000);
         });
@@ -172,31 +172,31 @@
                      data-aos-duration="1500">
             </div>
             <div class="important-events w-full h-1/2 md:w-1/2 md:h-full md:mt-24 overflow-y-auto">
-                <!-- Featured events will replace content here -->
+                <!-- Featured events will dynamically load here -->
             </div>
         </section>
     
         <!-- artists -->
-        <section id="artists" class="mt-12 px-4 flex flex-col gap-4">
+        <section id="artists" class=" flex flex-col gap-4 overflow-hidden">
             <!-- title container -->
-            <div class="glass-header rounded-lg p-4 w-full text-center">
-                <h2 class="text-3xl font-bold text-white">featured artists</h2>
+            <div class="glass-header rounded-lg p-2 mt-10 w-full text-center">
+                <h2 class="text-3xl font-bold text-white">FEATURED ARTISTS</h2>
             </div>
             
             <!-- artist grid container -->
-            <div class="glass-header rounded-lg p-4">
-                <div id="artistsGrid" class="grid gap-4 p-2 overflow-y-auto scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent
+            <div class="glass-header rounded-lg p-2">
+                <div id="artistsGrid" class="grid gap-4 p-2  overflow-y-auto scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent
                     max-h-[800px] md:max-h-[600px]
                     grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- artists loaded here -->
+                    <!-- artists will dynamically load here -->
                 </div>
             </div>
         </section>
         
         <!-- Events -->
-        <section id="events" class="EvntPage bg-gray-600 bg-opacity-50">
+        <section id="events" class="EvntPage bg-gray-600 bg-opacity-50 ">
             <container class="EvntContainer overflow-auto mt-8 w-full p-6 rounded-lg">
-                <!-- Events will be loaded here -->
+                <!-- events will dynamically load here -->
             </container>
         </section>
     </main>
@@ -219,7 +219,6 @@
             <nav>
                 <ul>
                     <li><a href="./profile/profile.html">Profile</a></li>
-                    <!-- Add more menu items as needed -->
                 </ul>
             </nav>
         </div>
@@ -295,17 +294,17 @@
         }
 
         .featured-artist img {
-            width: 100%;  /* Make image fill container width */
-            height: auto; /* Maintain aspect ratio */
-            max-width: 800px; /* Increase from previous size */
-            margin: 0 auto; /* Center the image */
-            display: block; /* Ensure proper margin centering */
+            width: 100%;
+            height: auto;
+            max-width: 800px;
+            margin: 0 auto;
+            display: block;
         }
 
-        /* If you have a container div, you might also want to adjust its size */
+
         .featured-artist {
             width: 100%;
-            max-width: 800px; /* Match the image max-width */
+            max-width: 800px;
             margin: 0 auto;
             padding: 1rem;
         }
