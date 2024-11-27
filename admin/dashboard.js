@@ -32,29 +32,6 @@ function checkAdminAccess() {
     });
 }
 
-// handle event form submission
-document.getElementById('eventForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const eventData = {
-        title: document.getElementById('eventTitle').value,
-        date: document.getElementById('eventDate').value,
-        description: document.getElementById('eventDescription').value,
-        location: document.getElementById('eventLocation').value,
-        isFeatured: document.getElementById('isFeatured').checked,
-        createdAt: new Date().toISOString()
-    };
-
-    try {
-        await addDoc(collection(db, "events"), eventData);
-        alert('event added successfully');
-        document.getElementById('eventForm').reset();
-        loadEvents();
-    } catch (error) {
-        alert('error adding event: ' + error.message);
-    }
-});
-
 // load existing events
 async function loadEvents() {
     const eventsList = document.getElementById('eventsList');

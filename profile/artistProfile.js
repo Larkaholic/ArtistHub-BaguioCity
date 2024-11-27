@@ -8,34 +8,32 @@ const profileId = urlParams.get('id');
 
 // load profile data immediately without auth check
 async function loadProfile() {
-    if (!profileId) {
-        window.location.href = '../index.html';
-        return;
-    }
-
     try {
+        if (!profileId) {
+            window.location.href = '../index.html';
+            return;
+        }
+
         const userDoc = await getDoc(doc(db, "users", profileId));
         if (userDoc.exists()) {
-            loadArtistData(userDoc.data());
-            
-            // Check if current user is the profile owner
+            const userData = userDoc.data();
+            loadArtistData(userData);
+
+            // check if current user is the profile owner
             onAuthStateChanged(auth, (user) => {
                 const editButton = document.getElementById('editProfileButton');
                 if (editButton) {
-                    // Only show edit button if user is logged in and viewing their own profile
-                    if (user && user.uid === profileId) {
-                        editButton.style.display = 'flex';
+                    // completely remove the button if not the profile owner
+                    if (user && user.email === userData.email) {
+                        editButton.style.display = 'block';
                     } else {
-                        editButton.style.display = 'none';
+                        editButton.remove(); // removes the button from DOM
                     }
                 }
             });
-        } else {
-            window.location.href = '../index.html';
         }
     } catch (error) {
         console.error("Error loading profile:", error);
-        window.location.href = '../index.html';
     }
 }
 
