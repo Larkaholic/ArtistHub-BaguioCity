@@ -48,9 +48,19 @@ export function toggleForms() {
 }
 
 export function navToEvent(url) {
-    const basePath = getBasePath();
+    // remove any leading slashes
     url = url.replace(/^\//, '');
-    window.location.href = `${basePath}/${url}`;
+    
+    // get the repository name from the current path
+    const repoName = 'ArtistHub-BaguioCity'; // hardcode the repo name
+    
+    // construct the correct github pages url
+    const baseUrl = `/${repoName}`;
+    
+    // combine the base url with the target path
+    const fullUrl = `${baseUrl}/${url}`;
+    
+    window.location.href = fullUrl;
 }
 
 // Make functions globally available
