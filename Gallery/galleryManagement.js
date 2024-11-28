@@ -212,17 +212,31 @@ function closeImageModal() {
 }
 
 // Auth state observer
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async (user) => {
+    const uploadSection = document.getElementById('uploadSection');
+    
     if (user) {
-        loadGallery();
-    } else {
-        const swiperWrapper = document.querySelector('.swiper-wrapper');
-        if (swiperWrapper) {
-            swiperWrapper.innerHTML = '<div class="swiper-slide"><p class="text-center">Please login to view the gallery</p></div>';
+        try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            const userData = userDoc.data();
+
+            if (uploadSection) {
+                if (userData.status === 'approved') {
+                    uploadSection.classList.remove('hidden');
+                } else {
+                    uploadSection.innerHTML = `
+                        <div class="text-yellow-500 text-center p-4">
+                            Your profile is pending approval. You will be able to upload images once an admin approves your profile.
+                        </div>
+                    `;
+                }
+            }
+        } catch (error) {
+            console.error("Error checking user status:", error);
         }
-        if (swiper) {
-            swiper.destroy();
-            swiper = null;
+    } else {
+        if (uploadSection) {
+            uploadSection.classList.add('hidden');
         }
     }
 });

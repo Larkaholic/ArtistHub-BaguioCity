@@ -11,9 +11,13 @@ import {
     getDoc,
     collection,
     updateDoc,
-    serverTimestamp
+    serverTimestamp,
+    deleteDoc,
+    query,
+    where,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getBasePath } from './utils.js';
+import { getBasePath, isUserAdmin, navToEvent } from './utils.js';
 
 // predefined admin emails (store these securely in production)
 const ADMIN_EMAILS = [
@@ -41,41 +45,30 @@ window.handleRegister = async function(e) {
     const userType = document.getElementById('userType').value;
 
     try {
-        // Check if email is in admin list
-        const isAdmin = ADMIN_EMAILS.includes(email.toLowerCase());
-        if (userType === 'admin' && !isAdmin) {
-            alert('Unauthorized to register as admin');
-            return;
-        }
-
-        // Create auth user
+        // Create user account
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Create initial user document
+        // Create initial user document with pending status
         await setDoc(doc(db, "users", user.uid), {
             email: email,
             userType: userType,
+            status: 'pending', // All new artists start as pending
             createdAt: new Date().toISOString(),
-            displayName: email.split('@')[0],
-            photoURL: 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true',
-            artistDetails: userType === 'artist' ? {
-                bio: 'no bio yet',
-                specialization: 'artist'
-            } : null
+            role: userType === 'artist' ? 'artist' : 'user'
         });
 
-        // Hide registration flyout
+        // Close registration flyout
         const loginFlyout = document.getElementById('LoginFlyout');
         if (loginFlyout) {
             loginFlyout.classList.add('hidden');
         }
 
-        // Redirect to profile edit page
+        // Redirect to profile edit page for initial setup
         window.location.href = `${baseUrl}/profile/edit-profile.html`;
 
     } catch (error) {
-        alert('registration failed: ' + error.message);
+        alert('Registration failed: ' + error.message);
     }
 };
 
@@ -170,7 +163,18 @@ function updateUIForRole(role, userData) {
     userMenu.classList.remove('hidden');
 }
 
-// Auth state observer
+// add this function to check user status
+export async function checkUserStatus(user) {
+    if (!user) return false;
+    
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (!userDoc.exists()) return false;
+    
+    const userData = userDoc.data();
+    return userData.status === 'approved';
+}
+
+// use this function when checking user access
 onAuthStateChanged(auth, async (user) => {
     const loginButtons = document.querySelectorAll('.login-button');
     
@@ -208,6 +212,13 @@ onAuthStateChanged(auth, async (user) => {
             // Hide admin indicators
             adminBadge.classList.add('hidden');
             adminDashboard.classList.add('hidden');
+        }
+
+        // Check user status
+        const isApproved = await checkUserStatus(user);
+        if (!isApproved) {
+            // handle unapproved user silently
+            return;
         }
 
     } else {
@@ -264,13 +275,11 @@ onAuthStateChanged(auth, async (user) => {
 window.handleLogout = async function() {
     try {
         await signOut(auth);
-        const loginFlyout = document.getElementById('LoginFlyout');
-        const userMenu = document.getElementById('userMenu');
-        
-        if (loginFlyout) loginFlyout.classList.add('hidden');
-        if (userMenu) userMenu.classList.add('hidden');
+        const basePath = getBasePath();
+        window.location.href = `${basePath}/index.html`;
     } catch (error) {
-        alert('error logging out: ' + error.message);
+        console.error("Error signing out:", error);
+        alert("Error signing out");
     }
 };
 
@@ -320,71 +329,211 @@ window.toggleNav = function() {
     body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
 };
 
-function updateUIForUser(user) {
-    const elements = {
-        loginButtons: document.querySelectorAll('.login-button'),
-        logoutButtons: document.querySelectorAll('.logout-button'),
-        adminElements: document.querySelectorAll('.admin-only'),
-        userElements: document.querySelectorAll('.user-only'),
-        guestElements: document.querySelectorAll('.guest-only')
-    };
-
-    try {
-        if (elements.loginButtons.length) elements.loginButtons.forEach(btn => btn.style.display = 'none');
-        if (elements.logoutButtons.length) elements.logoutButtons.forEach(btn => btn.style.display = 'block');
-        if (elements.userElements.length) elements.userElements.forEach(elem => elem.style.display = 'block');
-        if (elements.guestElements.length) elements.guestElements.forEach(elem => elem.style.display = 'none');
-        
-        // Check for admin
-        if (user.email === 'admin@gmail.com' && elements.adminElements.length) {
-            elements.adminElements.forEach(elem => elem.style.display = 'block');
-        }
-    } catch (error) {
-        console.warn('Error updating UI:', error);
+// Update UI based on auth state
+async function updateUIForUser(user) {
+    const profileLink = document.getElementById('profileLink');
+    
+    if (user && profileLink) {
+        // Set the href directly to the edit profile page with the user's ID
+        profileLink.href = `profile/edit-profile.html?uid=${user.uid}`;
+    } else if (profileLink) {
+        // If not logged in, keep the link but maybe show a login prompt
+        profileLink.href = '#';
+        profileLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openLoginModal();
+        });
     }
 }
 
 function updateUIForNoUser() {
     try {
-        // get all nav elements
-        const loginButtons = document.querySelectorAll('.login-button');
-        const logoutButtons = document.querySelectorAll('.logout-button');
-        const adminElements = document.querySelectorAll('.admin-only');
-        const userElements = document.querySelectorAll('.user-only');
-        const guestElements = document.querySelectorAll('.guest-only');
+        // Get all nav elements if they exist
+        const elements = {
+            loginButtons: document.querySelectorAll('.login-button'),
+            logoutButtons: document.querySelectorAll('.logout-button'),
+            adminElements: document.querySelectorAll('.admin-only'),
+            userElements: document.querySelectorAll('.user-only'),
+            guestElements: document.querySelectorAll('.guest-only')
+        };
 
-        // show login, hide logout
-        loginButtons.forEach(button => button.style.display = 'block');
-        logoutButtons.forEach(button => button.style.display = 'none');
-        
-        // hide user-only elements
-        userElements.forEach(elem => elem.style.display = 'none');
-        
-        // show guest-only elements
-        guestElements.forEach(elem => elem.style.display = 'block');
-        
-        // hide admin elements
-        adminElements.forEach(elem => elem.style.display = 'none');
-
+        // Only update elements if they exist
+        if (elements.loginButtons?.length) {
+            elements.loginButtons.forEach(btn => btn.style.display = 'block');
+        }
+        if (elements.logoutButtons?.length) {
+            elements.logoutButtons.forEach(btn => btn.style.display = 'none');
+        }
+        if (elements.userElements?.length) {
+            elements.userElements.forEach(elem => elem.style.display = 'none');
+        }
+        if (elements.guestElements?.length) {
+            elements.guestElements.forEach(elem => elem.style.display = 'block');
+        }
+        if (elements.adminElements?.length) {
+            elements.adminElements.forEach(elem => elem.style.display = 'none');
+        }
     } catch (error) {
-        console.warn('error updating ui for no user:', error);
+        console.warn('Error updating UI for no user:', error);
     }
 }
 
+// Update auth state observer
 auth.onAuthStateChanged((user) => {
-  const loginButton = document.querySelector('.login-button');
-  const logoutButton = document.querySelector('.logout-button');
-  const uploadSection = document.getElementById('uploadSection');
+    try {
+        const loginButton = document.querySelector('.login-button');
+        const logoutButton = document.querySelector('.logout-button');
+        const uploadSection = document.getElementById('uploadSection');
 
-  if (loginButton && logoutButton) {
-    if (user) {
-      loginButton.style.display = 'none';
-      logoutButton.style.display = 'block';
-      if (uploadSection) uploadSection.classList.remove('hidden');
-    } else {
-      loginButton.style.display = 'block';
-      logoutButton.style.display = 'none';
-      if (uploadSection) uploadSection.classList.add('hidden');
+        if (user) {
+            if (loginButton) loginButton.style.display = 'none';
+            if (logoutButton) logoutButton.style.display = 'block';
+            if (uploadSection) uploadSection.classList.remove('hidden');
+        } else {
+            if (loginButton) loginButton.style.display = 'block';
+            if (logoutButton) logoutButton.style.display = 'none';
+            if (uploadSection) uploadSection.classList.add('hidden');
+        }
+    } catch (error) {
+        console.warn('Error in auth state change:', error);
     }
-  }
+});
+
+window.handleAdminAction = async function() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const isAdmin = await isUserAdmin(user.uid);
+    if (!isAdmin) {
+        alert('You do not have admin privileges');
+        return;
+    }
+
+    const action = prompt('Admin Controls: \n1. Manage User Profile\n2. Manage Content\n3. View Reports\n4. Delete Profile');
+    
+    switch(action) {
+        case '1':
+            navToEvent('admin/manage-users.html');
+            break;
+        case '2':
+            navToEvent('admin/manage-content.html');
+            break;
+        case '3':
+            navToEvent('admin/view-reports.html');
+            break;
+        case '4':
+            const userEmail = prompt('Enter the user\'s email address to delete:');
+            if (userEmail) {
+                try {
+                    // First verify admin status again
+                    const adminStatus = await isUserAdmin(user.uid);
+                    if (!adminStatus) {
+                        alert('You do not have permission to delete profiles');
+                        return;
+                    }
+
+                    // Query to find user by email
+                    const usersRef = collection(db, "users");
+                    const q = query(usersRef, where("email", "==", userEmail));
+                    const querySnapshot = await getDocs(q);
+
+                    if (querySnapshot.empty) {
+                        alert('No user found with that email address');
+                        return;
+                    }
+
+                    const userDoc = querySnapshot.docs[0];
+                    const confirmDelete = confirm(`Are you sure you want to delete the profile for ${userEmail}? This action cannot be undone.`);
+                    if (confirmDelete) {
+                        const finalConfirm = confirm('This will permanently delete all user data, images, and account information. Continue?');
+                        if (finalConfirm) {
+                            await deleteDoc(doc(db, "users", userDoc.id));
+                            alert('Profile deleted successfully');
+                            window.location.href = `${getBasePath()}/index.html`;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error deleting profile:', error);
+                    alert(`Error deleting profile: ${error.message}`);
+                }
+            }
+            break;
+        default:
+            if (action !== null) {
+                alert('Invalid option');
+            }
+    }
+}
+
+// Add this if not already present
+async function handleLogout() {
+    try {
+        await signOut(auth);
+        const basePath = getBasePath();
+        window.location.href = `${basePath}/index.html`;
+    } catch (error) {
+        console.error("Error signing out:", error);
+        alert("Error signing out");
+    }
+}
+
+// Make it globally available
+window.handleLogout = handleLogout;
+
+// Make sure your auth state observer updates the buttons
+auth.onAuthStateChanged((user) => {
+    const loginButton = document.querySelector('.login-button');
+    const logoutButton = document.querySelector('.logout-button');
+    
+    if (user) {
+        if (loginButton) loginButton.style.display = 'none';
+        if (logoutButton) logoutButton.style.display = 'block';
+    } else {
+        if (loginButton) loginButton.style.display = 'block';
+        if (logoutButton) logoutButton.style.display = 'none';
+    }
 }); 
+
+async function registerUser(email, password, userType) {
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Create user document with pending status for artists
+        await setDoc(doc(db, "users", user.uid), {
+            email: email,
+            userType: userType,
+            status: userType === 'artist' ? 'pending' : 'approved',
+            createdAt: serverTimestamp(),
+            displayName: '',
+            artistDetails: {}
+        });
+
+        // Redirect to profile edit for artists
+        if (userType === 'artist') {
+            window.location.href = `${getBasePath()}/profile/edit-profile.html`;
+        } else {
+            window.location.href = `${getBasePath()}/index.html`;
+        }
+    } catch (error) {
+        console.error("Error registering user:", error);
+        alert(error.message);
+    }
+}
+
+// Check admin status
+async function checkAdminStatus(uid) {
+    try {
+        const userDoc = await getDoc(doc(db, "users", uid));
+        return userDoc.exists() && userDoc.data().isAdmin === true;
+    } catch (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+    }
+}
+
+// Initialize auth state observer
+auth.onAuthStateChanged((user) => {
+    updateUIForUser(user);
+});
+

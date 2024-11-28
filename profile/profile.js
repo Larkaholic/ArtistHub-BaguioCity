@@ -1,4 +1,6 @@
-import { getBasePath } from '../js/utils.js';
+import { auth } from '../js/firebase-config.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { isUserAdmin, setupAdminUI, navToEvent } from '../js/utils.js';
 
 export function toggleLoginFlyout(event) {
     if (event) event.preventDefault();
@@ -47,25 +49,61 @@ export function toggleForms() {
     }
 }
 
-export function navToEvent(url) {
-    // remove any leading slashes
-    url = url.replace(/^\//, '');
-    
-    // get the repository name from the current path
-    const repoName = 'ArtistHub-BaguioCity'; // hardcode the repo name
-    
-    // construct the correct github pages url
-    const baseUrl = `/${repoName}`;
-    
-    // combine the base url with the target path
-    const fullUrl = `${baseUrl}/${url}`;
-    
-    window.location.href = fullUrl;
-}
-
 // Make functions globally available
 window.toggleNav = toggleNav;
 window.navToEvent = navToEvent;
 window.toggleLoginFlyout = toggleLoginFlyout;
 window.toggleForms = toggleForms;
+
+// add admin action handler
+export async function handleAdminAction() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const isAdmin = await isUserAdmin(user.uid);
+    if (!isAdmin) {
+        alert('you do not have admin privileges');
+        return;
+    }
+
+    const action = prompt('enter admin action: \n1. manage users\n2. manage content\n3. view reports');
+    
+    switch(action) {
+        case '1':
+            navToEvent('admin/manage-users.html');
+            break;
+        case '2':
+            navToEvent('admin/manage-content.html');
+            break;
+        case '3':
+            navToEvent('admin/view-reports.html');
+            break;
+        default:
+            alert('invalid action');
+    }
+}
+
+// update your existing code
+document.addEventListener('DOMContentLoaded', async () => {
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            console.log('User is logged in:', user.uid);
+            const isAdmin = await isUserAdmin(user.uid);
+            console.log('is admin:', isAdmin); // check if user is admin
+            
+            const adminButton = document.querySelector('.admin-only');
+            console.log('admin button element:', adminButton); // check if button exists
+            
+            if (isAdmin) {
+                console.log('showing admin controls');
+                if (adminButton) {
+                    adminButton.style.display = 'flex';
+                }
+            }
+        }
+    });
+});
+
+// make sure handleAdminAction is globally available
+window.handleAdminAction = handleAdminAction;
 
