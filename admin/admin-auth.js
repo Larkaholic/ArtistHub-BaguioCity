@@ -1,13 +1,8 @@
 import { auth, db } from '../js/firebase-config.js';
-import { 
-    onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { 
-    doc, 
-    getDoc 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// admin-only auth check
+// Admin-only auth check
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = '../index.html';
@@ -24,12 +19,12 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// logout handler
+// Logout handler
 window.handleLogout = async function() {
     try {
         await auth.signOut();
         window.location.href = '../index.html';
     } catch (error) {
-        alert('error logging out');
+        alert('Error logging out');
     }
 }; 
