@@ -85,13 +85,13 @@
         <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-10">
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('index.html')">Home</a>
                 </li>
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('index.html#events')">Events</a>
                 </li>
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('Gallery/gallery.html')">Gallery</a>
                 </li>
                 <li class="login-button">
                     <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
@@ -190,12 +190,12 @@
                             <a id="googleLink" href="#" class="fa fa-google hidden"></a>
                         </div>
                         <div class="w-full mt-1 hidden md:flex">
-                            <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('../Gallery/gallery.html')">Gallery</button>
+                            <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('Gallery/gallery.html')">Gallery</button>
                         </div>
                     </div>
                 </div>
                 <div class="w-full mt-1 md:hidden">
-                    <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('../Gallery/gallery.html')">Gallery</button>
+                    <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('Gallery/gallery.html')">Gallery</button>
                 </div>
                 <div class="glass-header text-black mt-2 max-w-full w-full rounded-3xl text-2xl object-bottom md:mt-16 md:mb-10 flex-grow min-h-dvh md:w-full md:ml-5 md:mr-10">
                     <h2 id="displayName" class="font-bold text-3xl my-4">Loading...</h2>
@@ -256,7 +256,7 @@
     </div>
     <script>
     function goToEditProfile() {
-        window.location.href = 'edit-profile.html';
+        navToEvent('profile/edit-profile.html');
     }
     </script>
     <script type="module">
