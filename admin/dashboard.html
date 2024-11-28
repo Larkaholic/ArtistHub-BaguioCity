@@ -6,6 +6,7 @@
     <title>Admin Dashboard - Artist Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <!-- Navigation -->
@@ -32,11 +33,74 @@
         <!-- Events Section -->
         <div class="glass-header rounded-lg p-6">
             <h2 class="text-xl font-bold mb-6">Manage Events</h2>
+            <button onclick="openAddEventModal()" 
+                    class="mb-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                Add New Event
+            </button>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="eventsList">
                 <!-- Events will be loaded here -->
             </div>
         </div>
     </main>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="glass-header rounded-lg p-6 w-full max-w-2xl mx-4">
+            <h3 id="modalTitle" class="text-xl font-bold mb-4">Add New Event</h3>
+            <form id="eventForm">
+                <input type="hidden" id="eventId">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Title</label>
+                        <input type="text" id="eventTitle" required
+                               class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white p-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Date</label>
+                        <input type="date" id="eventDate" required
+                               class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white p-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Location</label>
+                        <input type="text" id="eventLocation" required
+                               class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white p-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Description</label>
+                        <textarea id="eventDescription" rows="3" required
+                                 class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white p-2"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Event Image</label>
+                        <input type="hidden" id="eventImageUrl">
+                        <button type="button" 
+                                id="upload_widget" 
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Upload Image
+                        </button>
+                        <div id="imagePreview" class="hidden mt-2">
+                            <img id="previewImg" src="" alt="Event preview" 
+                                 class="max-w-full h-auto rounded-lg max-h-48 object-contain">
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="eventFeatured" class="mr-2">
+                        <label class="text-sm font-medium">Featured Event</label>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" onclick="closeEventModal()"
+                            class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                        Save Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="./admin-auth.js"></script>

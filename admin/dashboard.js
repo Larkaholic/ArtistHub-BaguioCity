@@ -1,6 +1,7 @@
 import { auth, db } from '../js/firebase-config.js';
 import { 
     collection, 
+    addDoc,
     getDocs, 
     deleteDoc, 
     doc, 
@@ -9,6 +10,40 @@ import {
     where,
     updateDoc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Add Cloudinary widget configuration
+var myWidget = cloudinary.createUploadWidget(
+    {
+        cloudName: 'dxeyr4pvf', 
+        uploadPreset: 'artist_profiles',
+        sources: ['local', 'url', 'camera'],
+        multiple: false,
+        maxFiles: 1,
+        maxFileSize: 5000000,
+        folder: 'events'
+    },
+    (error, result) => {
+        if (!error && result && result.event === "success") {
+            console.log('Upload successful:', result.info);
+            // Update preview
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            const imageUrlInput = document.getElementById('eventImageUrl');
+            
+            imageUrlInput.value = result.info.secure_url;
+            previewImg.src = result.info.secure_url;
+            preview.classList.remove('hidden');
+        }
+        if (error) {
+            console.error('Upload error:', error);
+        }
+    }
+);
+
+// Add click handler for upload button
+document.getElementById('upload_widget').addEventListener('click', function() {
+    myWidget.open();
+}, false);
 
 // Load pending registrations
 async function loadPendingRegistrations() {
@@ -93,6 +128,49 @@ window.rejectRegistration = async (userId) => {
     }
 };
 
+// Event Modal Functions
+window.openAddEventModal = function() {
+    document.getElementById('modalTitle').textContent = 'Add New Event';
+    document.getElementById('eventForm').reset();
+    document.getElementById('eventId').value = '';
+    document.getElementById('eventModal').classList.remove('hidden');
+};
+
+window.closeEventModal = function() {
+    document.getElementById('eventModal').classList.add('hidden');
+};
+
+// Handle Event Form Submission
+document.getElementById('eventForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const imageUrl = document.getElementById('eventImageUrl').value;
+    if (!imageUrl) {
+        alert('Please upload an image for the event');
+        return;
+    }
+
+    const eventData = {
+        title: document.getElementById('eventTitle').value,
+        date: document.getElementById('eventDate').value,
+        location: document.getElementById('eventLocation').value,
+        description: document.getElementById('eventDescription').value,
+        isFeatured: document.getElementById('eventFeatured').checked,
+        imageUrl: imageUrl,
+        createdAt: new Date().toISOString()
+    };
+
+    try {
+        await addDoc(collection(db, "events"), eventData);
+        alert('Event created successfully!');
+        closeEventModal();
+        loadEvents();
+    } catch (error) {
+        console.error('Error creating event:', error);
+        alert('Failed to create event: ' + error.message);
+    }
+});
+
 // Load existing events
 async function loadEvents() {
     const eventsList = document.getElementById('eventsList');
@@ -129,6 +207,10 @@ async function loadEvents() {
                         '<span class="bg-yellow-500 text-black px-2 py-1 rounded-md text-sm">Featured</span>' 
                         : ''}
                 </div>
+                ${event.imageUrl ? `
+                    <img src="${event.imageUrl}" alt="${event.title}" 
+                         class="w-full h-48 object-cover rounded-lg">
+                ` : ''}
                 <p class="text-gray-200">Date: ${formattedDate}</p>
                 <p class="text-gray-200">Location: ${event.location}</p>
                 <p class="text-gray-200">${event.description}</p>
