@@ -177,71 +177,39 @@ export async function checkUserStatus(user) {
 // use this function when checking user access
 onAuthStateChanged(auth, async (user) => {
     const loginButtons = document.querySelectorAll('.login-button');
-    
+    const logoutButtons = document.querySelectorAll('.logout-button');
+    const adminButtons = document.querySelectorAll('.admin-button');
+    const profileLinks = document.querySelectorAll('#profileLink');
+
     if (user) {
+        // User is signed in
         console.log('User is signed in:', user.email);
-        // Get user role
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        const userData = userDoc.data();
-        const userRole = userData?.role || 'user';
-
-        // Update login buttons
-        loginButtons.forEach(button => {
-            button.innerHTML = `
-                <button onclick="handleLogout()" class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    Logout (${userRole})
-                </button>
-            `;
-        });
-
-        // Show appropriate menu based on role
-        updateUIForRole(userRole, userData);
-
-        // Check admin status
-        const adminBadge = document.getElementById('adminBadge');
-        const adminDashboard = document.getElementById('adminDashboard');
         
-        if (userData?.isAdmin) {
-            // Show admin indicators
-            adminBadge.classList.remove('hidden');
-            adminDashboard.classList.remove('hidden');
+        // Check if user is admin
+        try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            const isAdmin = userDoc.exists() && userDoc.data().isAdmin;
             
-            // Optional: Add to console for verification
-            console.log('logged in as admin');
-        } else {
-            // Hide admin indicators
-            adminBadge.classList.add('hidden');
-            adminDashboard.classList.add('hidden');
+            // Show/hide admin button based on role
+            adminButtons.forEach(btn => {
+                btn.style.display = isAdmin ? 'block' : 'none';
+            });
+        } catch (error) {
+            console.error('Error checking admin status:', error);
+            adminButtons.forEach(btn => btn.style.display = 'none');
         }
 
-        // Check user status
-        const isApproved = await checkUserStatus(user);
-        if (!isApproved) {
-            // handle unapproved user silently
-            return;
-        }
-
+        // Update other UI elements
+        loginButtons.forEach(btn => btn.style.display = 'none');
+        logoutButtons.forEach(btn => btn.style.display = 'block');
+        profileLinks.forEach(link => link.style.display = 'block');
     } else {
+        // User is signed out
         console.log('User is signed out');
-        // Reset login buttons
-        loginButtons.forEach(button => {
-            button.innerHTML = `
-                <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    Login
-                </button>
-            `;
-        });
-
-        // Hide user menu
-        const userMenu = document.getElementById('userMenu');
-        if (userMenu) userMenu.classList.add('hidden');
-
-        // Hide admin indicators when logged out
-        const adminBadge = document.getElementById('adminBadge');
-        const adminDashboard = document.getElementById('adminDashboard');
-        
-        adminBadge.classList.add('hidden');
-        adminDashboard.classList.add('hidden');
+        loginButtons.forEach(btn => btn.style.display = 'block');
+        logoutButtons.forEach(btn => btn.style.display = 'none');
+        adminButtons.forEach(btn => btn.style.display = 'none');
+        profileLinks.forEach(link => link.style.display = 'none');
     }
 
     // get current page
