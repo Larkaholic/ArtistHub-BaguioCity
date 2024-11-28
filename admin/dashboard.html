@@ -6,17 +6,56 @@
     <title>Admin Dashboard - Artist Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
-    <!-- Add Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #1B4242, #092635);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        input, textarea {
+            color: black;
+        }
+        #eventsList::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #eventsList::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        #eventsList::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        #eventsList::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 </head>
-<body class="bg-gradient-to-br from-gray-900 to-black min-h-screen text-white">
-    <!-- Main Dashboard Content -->
-    <div id="dashboardContent">
-        <!-- Sidebar -->
-        <aside class="fixed left-0 top-0 h-full w-64 bg-black/30 backdrop-blur-xl border-r border-white/10 p-6">
-            <div class="flex items-center gap-3 mb-8">
-                <i class="fas fa-paint-brush text-2xl text-purple-500"></i>
-                <h1 class="text-xl font-bold">Artist Hub Admin</h1>
+<body>
+    <!-- navbar -->
+    <header class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center z-50">
+        <div class="flex items-center gap-4">
+            <h1 class="text-2xl font-bold text-white">admin dashboard</h1>
+            <a href="../index.html" class="text-white hover:text-gray-200">← back to home</a>
+        </div>
+        <button onclick="handleLogout()" class="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200">
+            logout
+        </button>
+    </header>
+
+    <main class="container mx-auto mt-24 p-4 space-y-6 min-h-screen pb-24">
+
+        <!-- existing events -->
+        <div class="glass-header rounded-lg p-6">
+
+            <h2 class="text-xl font-bold mb-6 text-white text-center">manage events</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto" id="eventsList">
+                <!-- events loaded here -->
             </div>
             <nav class="space-y-4">
                 <a href="#pending" class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
