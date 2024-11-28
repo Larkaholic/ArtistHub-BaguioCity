@@ -62,36 +62,70 @@ async function createEvent(eventData) {
 
 // read events
 async function loadEvents() {
-    try {
-        const eventsQuery = query(collection(db, "events"), orderBy("date", "asc"));
-        const querySnapshot = await getDocs(eventsQuery);
-        const tableBody = document.getElementById('eventsTableBody');
-        tableBody.innerHTML = '';
+    const eventsList = document.getElementById('eventsList');
+    
+    if (!eventsList) {
+        console.warn('Events list container not found - waiting for dashboard initialization');
+        return;
+    }
 
+    try {
+        // Show loading state
+        eventsList.innerHTML = `
+            <div class="animate-pulse space-y-4">
+                <div class="h-20 bg-white/10 rounded-lg"></div>
+                <div class="h-20 bg-white/10 rounded-lg"></div>
+            </div>
+        `;
+
+        // Load events
+        const q = query(collection(db, "events"), orderBy("date", "desc"));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            eventsList.innerHTML = `
+                <div class="text-center py-8 bg-white/5 rounded-lg">
+                    <p class="text-gray-400">No events found</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Display events
+        eventsList.innerHTML = '';
         querySnapshot.forEach((doc) => {
             const event = doc.data();
-            const row = document.createElement('tr');
-            row.className = 'border-b hover:bg-gray-50';
-            row.innerHTML = `
-                <td class="py-3 px-6">${event.title}</td>
-                <td class="py-3 px-6">${new Date(event.date).toLocaleDateString()}</td>
-                <td class="py-3 px-6">${event.location}</td>
-                <td class="py-3 px-6">${event.isFeatured ? 'Yes' : 'No'}</td>
-                <td class="py-3 px-6">
-                    <button onclick="editEvent('${doc.id}')" 
-                            class="text-blue-500 hover:text-blue-700 mr-2">
-                        Edit
-                    </button>
-                    <button onclick="deleteEvent('${doc.id}')"
-                            class="text-red-500 hover:text-red-700">
-                        Delete
-                    </button>
-                </td>
+            const date = event.date ? new Date(event.date).toLocaleDateString() : 'No date';
+            
+            eventsList.innerHTML += `
+                <div class="glass-header p-4 rounded-lg mb-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">${event.title}</h3>
+                            <p class="text-gray-300">${date}</p>
+                            <p class="text-gray-300">${event.location || 'No location'}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editEvent('${doc.id}')" 
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                Edit
+                            </button>
+                            <button onclick="deleteEvent('${doc.id}')" 
+                                class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
             `;
-            tableBody.appendChild(row);
         });
     } catch (error) {
-        console.error("error loading events:", error);
+        console.error("Error loading events:", error);
+        eventsList.innerHTML = `
+            <div class="text-center py-8 bg-red-500/10 rounded-lg">
+                <p class="text-red-400">Error loading events</p>
+            </div>
+        `;
     }
 }
 

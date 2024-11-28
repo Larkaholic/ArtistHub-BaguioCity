@@ -6,7 +6,6 @@ const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'artist_profiles';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Check authentication
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
             window.location.href = 'profile.html';
@@ -14,10 +13,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         try {
-            // Load existing profile data
             const userDoc = await getDoc(doc(db, "users", user.uid));
+            const userData = userDoc.data();
+
+            // Disable image upload if status is pending
+            const imageUploadSection = document.getElementById('imageUploadSection');
+            const profileImageInput = document.getElementById('imageInput');
+            
+            if (userData.status === 'pending') {
+                if (imageUploadSection) imageUploadSection.style.display = 'none';
+                if (profileImageInput) profileImageInput.disabled = true;
+                
+                // Add pending notice
+                const pendingNotice = document.createElement('div');
+                pendingNotice.className = 'text-yellow-500 text-center mb-4';
+                pendingNotice.innerHTML = 'Your profile is pending admin approval. You will be able to upload images once approved.';
+                document.querySelector('form').prepend(pendingNotice);
+            }
+
+            // Load existing profile data
             if (userDoc.exists()) {
                 const data = userDoc.data();
+                
+                // show status message if pending/rejected
+                if (data.status !== 'approved') {
+                    const statusMessage = document.createElement('div');
+                    statusMessage.className = 'bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4';
+                    statusMessage.innerHTML = `
+                        <p class="font-bold">profile status: ${data.status}</p>
+                        <p>${data.status === 'pending' 
+                            ? 'your profile is pending admin approval. you can still edit your details.' 
+                            : 'your profile has been rejected. please contact admin for more information.'}
+                        </p>
+                    `;
+                    document.getElementById('editProfileForm').prepend(statusMessage);
+                }
                 
                 // Fill in the form with existing data
                 document.getElementById('displayName').value = data.displayName || '';
@@ -33,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         } catch (error) {
-            console.error("Error loading profile:", error);
+            console.error("Error:", error);
         }
     });
 

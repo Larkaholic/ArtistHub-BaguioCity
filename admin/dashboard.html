@@ -3,153 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>admin dashboard</title>
+    <title>Admin Dashboard - Artist Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
-    <style>
-        body {
-            background: linear-gradient(to bottom right, #1B4242, #092635);
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            color: white;
-        }
-        input, textarea {
-            color: black;
-        }
-        #eventsList::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #eventsList::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        #eventsList::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-        }
-
-        #eventsList::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-    </style>
-    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <!-- navbar -->
-    <header class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center z-50">
-        <div class="flex items-center gap-4">
-            <h1 class="text-2xl font-bold text-white">admin dashboard</h1>
-            <a href="../index.html" class="text-white hover:text-gray-200">← back to home</a>
-        </div>
-        <button onclick="handleLogout()" class="bg-white text-black px-4 py-2 rounded-md hover:bg-gray-200">
-            logout
-        </button>
-    </header>
-
-    <main class="container mx-auto mt-24 p-4 space-y-6 min-h-screen pb-24">
-
-        <!-- existing events -->
-        <div class="glass-header rounded-lg p-6">
-            <h2 class="text-xl font-bold mb-6 text-white text-center">manage events</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto" id="eventsList">
-                <!-- events loaded here -->
+<body class="bg-gradient-to-br from-gray-900 to-black min-h-screen text-white">
+    <!-- Main Dashboard Content -->
+    <div id="dashboardContent">
+        <!-- Sidebar -->
+        <aside class="fixed left-0 top-0 h-full w-64 bg-black/30 backdrop-blur-xl border-r border-white/10 p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <i class="fas fa-paint-brush text-2xl text-purple-500"></i>
+                <h1 class="text-xl font-bold">Artist Hub Admin</h1>
             </div>
-        </div>
+            <nav class="space-y-4">
+                <a href="#pending" class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-user-clock"></i>
+                    <span>Pending Artists</span>
+                </a>
+                <a href="#events" class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Events</span>
+                </a>
+                <a href="../index.html" class="flex items-center gap-3 text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-home"></i>
+                    <span>Back to Home</span>
+                </a>
+            </nav>
+        </aside>
 
-        <!-- Add this in your events section -->
-        <div class="events-crud-section p-6 glass-header rounded-lg">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Manage Events</h2>
-                <button onclick="openAddEventModal()" 
-                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                    Add New Event
-                </button>
-            </div>
-
-            <!-- events table -->
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="py-3 px-6">Title</th>
-                            <th class="py-3 px-6">Date</th>
-                            <th class="py-3 px-6">Location</th>
-                            <th class="py-3 px-6">Featured</th>
-                            <th class="py-3 px-6">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="eventsTableBody">
-                        <!-- events will be loaded here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- add/edit event modal -->
-        <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-            <div class="bg-white rounded-lg p-8 max-w-2xl w-full">
-                <h3 id="modalTitle" class="text-2xl font-bold mb-4 text-black">Add New Event</h3>
-                <form id="eventForm" class="space-y-4">
-                    <input type="hidden" id="eventId">
-                    <div>
-                        <label class="block mb-2 text-black">Title</label>
-                        <input type="text" id="eventTitle" required
-                            class="w-full p-2 border rounded-md">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-black">Date</label>
-                        <input type="date" id="eventDate" required
-                            class="w-full p-2 border rounded-md">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-black">Location</label>
-                        <input type="text" id="eventLocation" required
-                            class="w-full p-2 border rounded-md">
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-black">Description</label>
-                        <textarea id="eventDescription" required
-                            class="w-full p-2 border rounded-md"></textarea>
-                    </div>
-                    <div>
-                        <label class="flex items-center text-black">
-                            <input type="checkbox" id="eventFeatured" class="mr-2">
-                            Featured Event
-                        </label>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-black">Event Image</label>
-                        <button type="button" 
-                                id="upload_widget" 
-                                class="w-full p-2 border rounded-md bg-white hover:bg-gray-100">
-                            Upload Image
-                        </button>
-                        <div id="imagePreview" class="mt-2 hidden">
-                            <img id="previewImg" class="max-h-40 rounded">
+        <!-- Main Content -->
+        <main class="ml-64 p-8">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="bg-gradient-to-br from-purple-500/20 to-purple-600/20 backdrop-blur-xl rounded-xl p-6 border border-purple-500/20">
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-user-clock text-2xl text-purple-400"></i>
+                        <div>
+                            <h3 class="text-sm text-gray-400">Pending Artists</h3>
+                            <p class="text-2xl font-bold" id="pendingCount">0</p>
                         </div>
-                        <input type="hidden" id="eventImageUrl">
                     </div>
-                    <div class="flex justify-end space-x-4 mt-6 text-black">
+                </div>
+                <div class="bg-gradient-to-br from-blue-500/20 to-blue-600/20 backdrop-blur-xl rounded-xl p-6 border border-blue-500/20">
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-calendar text-2xl text-blue-400"></i>
+                        <div>
+                            <h3 class="text-sm text-gray-400">Total Events</h3>
+                            <p class="text-2xl font-bold" id="eventCount">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-green-500/20 to-green-600/20 backdrop-blur-xl rounded-xl p-6 border border-green-500/20">
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-users text-2xl text-green-400"></i>
+                        <div>
+                            <h3 class="text-sm text-gray-400">Active Artists</h3>
+                            <p class="text-2xl font-bold" id="artistCount">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Artists Section -->
+            <section id="pending" class="mb-12">
+                <div class="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold flex items-center gap-3">
+                            <i class="fas fa-user-clock text-purple-400"></i>
+                            Pending Artist Requests
+                        </h2>
+                    </div>
+                    <div id="pendingRequests" class="space-y-4">
+                        <!-- Loading placeholder -->
+                        <div class="animate-pulse space-y-4">
+                            <div class="h-20 bg-white/5 rounded-xl"></div>
+                            <div class="h-20 bg-white/5 rounded-xl"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Events Management Section -->
+            <section id="events" class="mb-12">
+                <div class="bg-white/5 backdrop-blur-xl rounded-xl p-6 border border-white/10">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold flex items-center gap-3">
+                            <i class="fas fa-calendar-alt text-blue-400"></i>
+                            Events Management
+                        </h2>
+                        <button onclick="openAddEventModal()" 
+                                class="flex items-center gap-2 px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-plus"></i>
+                            Add New Event
+                        </button>
+                    </div>
+                    <div id="eventsList" class="space-y-4">
+                        <!-- Loading placeholder -->
+                        <div class="animate-pulse space-y-4">
+                            <div class="h-20 bg-white/5 rounded-xl"></div>
+                            <div class="h-20 bg-white/5 rounded-xl"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Event Modal -->
+        <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center">
+            <div class="bg-gray-900 rounded-xl p-8 max-w-2xl w-full mx-4 border border-white/10">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="modalTitle" class="text-2xl font-bold">Add New Event</h2>
+                    <button onclick="closeEventModal()" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="eventForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Title</label>
+                        <input type="text" id="eventTitle" required
+                               class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Date</label>
+                        <input type="date" id="eventDate" required
+                               class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Location</label>
+                        <input type="text" id="eventLocation" required
+                               class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                        <textarea id="eventDescription" rows="4" required
+                                class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3">
                         <button type="button" onclick="closeEventModal()"
-                            class="px-4 py-2 border rounded-md hover:bg-gray-100">
+                                class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors">
                             Cancel
                         </button>
                         <button type="submit"
-                            class="px-4 py-2 bg-green-500 text-black rounded-md hover:bg-green-600 text-black">
+                                class="px-4 py-2 bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors">
                             Save Event
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-    </main>
+    </div>
 
+    <!-- Scripts -->
     <script type="module" src="../js/firebase-config.js"></script>
-    <script type="module" src="./admin-auth.js"></script>
     <script type="module" src="./dashboard.js"></script>
-    <script type="module" src="eventManagement.js"></script>
+    <script type="module" src="./eventManagement.js"></script>
 </body>
 </html> 

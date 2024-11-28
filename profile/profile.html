@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Profile</title>
 
-    <!-- External CSS - Load these first -->
+    <!-- external CSS - load these first -->
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
-    <!-- Your CSS - Use absolute paths -->
+    <!-- use absolute paths -->
     <style>
         /* Fallback styles in case CSS doesn't load */
         .glass-header {
@@ -27,9 +27,7 @@
             min-height: 100vh;
         }
     </style>
-    
-    <!-- Load your CSS file last -->
-    <link rel="stylesheet" href="profile.css" type="text/css">
+     <link rel="stylesheet" href="profile.css" type="text/css">
     
     <!-- Favicon -->
     <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
@@ -71,7 +69,7 @@
 <body class="overflow-hidden md:overflow-hidden">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
         <div class="flex w-24 ml-16">
-            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
+            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
         </div>
 
         <div class="sm:hidden flex items-center mr-5">
@@ -93,9 +91,19 @@
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
                     <a href="javascript:void(0)" onclick="navToEvent('Gallery/gallery.html')">Gallery</a>
                 </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('profile/profile.html')">Profile</a>
+                </li>
                 <li class="login-button">
-                    <button onclick="toggleLoginFlyout(event)" class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                    <button onclick="toggleLoginFlyout(event)" 
+                            class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
                         Login
+                    </button>
+                </li>
+                <li class="logout-button" style="display: none;">
+                    <button onclick="handleLogout()" 
+                            class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                        Logout
                     </button>
                 </li>
             </ul>
@@ -104,20 +112,17 @@
 
     <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
         <div class="glass-header h-full p-6">
-            <div class="flex justify-end mb-6">
-                <button onclick="toggleNav()" class="p-2 hover:bg-gray-200 rounded-lg">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
             <nav>
                 <ul class="flex flex-col space-y-4">
-                    <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Home</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Events</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('../Gallery/gallery.html')" class="block py-2 hover:bg-gray-100 rounded-lg px-4">Gallery</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('index.html')">Home</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('index.html#events')">Events</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('Gallery/gallery.html')">Gallery</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('profile/profile.html')">Profile</a></li>
                     <li class="login-button">
-                        <button onclick="toggleLoginFlyout(event)" class="w-full text-left py-2 hover:bg-gray-100 rounded-lg px-4">Login</button>
+                        <button onclick="toggleLoginFlyout(event)">Login</button>
+                    </li>
+                    <li class="logout-button" style="display: none;">
+                        <button onclick="handleLogout()">Logout</button>
                     </li>
                 </ul>
             </nav>
@@ -209,26 +214,31 @@
 
     </main>
     <script type="module">
-        // Import the functions from profile.js
+        // Import navigation function
+        import { navToEvent } from '../js/utils.js';
+        
+        // Make navigation function available globally
+        window.navToEvent = navToEvent;
+        
+        // Import other functions
         import { 
             toggleLoginFlyout, 
             submitLogin, 
             toggleNav, 
-            toggleForms, 
-            navToEvent 
+            toggleForms 
         } from './profile.js';
 
-        // Make them available globally
+        // Make other functions available globally
         window.toggleLoginFlyout = toggleLoginFlyout;
         window.submitLogin = submitLogin;
         window.toggleNav = toggleNav;
         window.toggleForms = toggleForms;
-        window.navToEvent = navToEvent;
     </script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/utils.js"></script>
     <script type="module" src="./artistProfile.js"></script>
     <script type="module" src="../js/auth.js"></script>
     <div id="userMenu" class="hidden">
@@ -236,70 +246,24 @@
             <nav>
                 <ul>
                     <li><a href="/profile/profile.html">Profile</a></li>
-                    <!-- Add more menu items as needed -->
                 </ul>
             </nav>
         </div>
     </div>
-    <div class="fixed bottom-8 right-8 z-50"> 
+    <div class="fixed bottom-8 right-8 z-50" style="display: none;"> 
         <button 
-            onclick="goToEditProfile()" 
             id="editProfileButton"
             class="glass-header text-white p-4 rounded-full shadow-lg hover:bg-gray-300 hover:text-black transform hover:scale-105 transition-all duration-200 flex items-center space-x-2"
             style="background-color: rgba(0, 0, 0, 0.5); display: none;"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
             <span>Edit Profile</span>
         </button>
     </div>
-    <script>
-    function goToEditProfile() {
-        navToEvent('profile/edit-profile.html');
-    }
-    </script>
-    <script type="module">
-        import { auth } from '../js/firebase-config.js';
-        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // Debug the button visibility
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log('User is logged in:', user.uid);
-                const editButton = document.getElementById('editProfileButton');
-                if (editButton) {
-                    editButton.style.display = 'flex';
-                }
-            }
-        });
-    </script>
+    <!-- Scripts -->
+    <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="../js/utils.js"></script>
-    <script type="module">
-        // Import and make navToEvent global
-        import { getBasePath } from '../js/utils.js';
-        
-        window.navToEvent = function(url) {
-            const basePath = getBasePath();
-            // Remove leading slash if present
-            url = url.replace(/^\//, '');
-            window.location.href = `${basePath}/${url}`;
-        };
-
-        window.navigateToEvent = function() {
-            const basePath = getBasePath();
-            window.location.href = `${basePath}/events/events.html`;
-        };
-    </script>
-    <script type="module">
-        import { ensureStylesLoaded } from '../js/utils.js';
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const requiredStyles = [
-                'profile.css'
-            ];
-            ensureStylesLoaded(requiredStyles);
-        });
-    </script>
+    <script type="module" src="./artistProfile.js"></script>
+    <script type="module" src="../js/auth.js"></script>
 </body>
 </html>
