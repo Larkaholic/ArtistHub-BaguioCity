@@ -18,7 +18,9 @@ var myWidget = cloudinary.createUploadWidget(
     {
         cloudName: 'dxeyr4pvf',
         uploadPreset: 'artist_profiles',
-        folder: 'user_galleries'
+        folder: 'user_galleries',
+        sources: ['local', 'url', 'camera'],  // specify allowed upload sources
+        maxFiles: 10,  // limit number of files per upload
     },
     async (error, result) => {
         if (!error && result && result.event === "success") {
@@ -29,20 +31,16 @@ var myWidget = cloudinary.createUploadWidget(
                     return;
                 }
 
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                if (!userDoc.exists() || userDoc.data()?.userType !== 'artist') {
-                    alert('Only artists can upload images');
-                    return;
-                }
-
+                // save the cloudinary url to firebase
                 await addDoc(collection(db, "gallery_images"), {
                     userId: user.uid,
                     imageUrl: result.info.secure_url,
                     caption: result.info.original_filename,
-                    timestamp: new Date().toISOString()
+                    timestamp: new Date().toISOString(),
+                    public_id: result.info.public_id  // store cloudinary's public_id
                 });
 
-                loadGallery();
+                loadGallery();  // reload gallery after upload
             } catch (error) {
                 console.error("Error saving image:", error);
                 alert("Failed to save image");
@@ -51,57 +49,66 @@ var myWidget = cloudinary.createUploadWidget(
     }
 );
 
+// auth state observer and gallery loader
+auth.onAuthStateChanged(async (user) => {
+    console.log('Auth state changed:', user?.email);
+    
+    // load gallery when auth state is confirmed
+    if (user) {
+        await loadGallery();
+    }
+});
+
 // Load gallery images
 async function loadGallery() {
     const swiperWrapper = document.querySelector('.swiper-wrapper');
     const uploadSection = document.getElementById('uploadSection');
-    if (!swiperWrapper) return;
+    if (!swiperWrapper) {
+        console.error('Swiper wrapper not found');
+        return;
+    }
 
     try {
-        swiperWrapper.innerHTML = '<div class="swiper-slide"><p class="text-center">Loading...</p></div>';
-        if (swiper) {
-            swiper.destroy();
-            swiper = null;
-        }
+        console.log('Loading gallery...');
+        const currentUser = auth.currentUser;
+        console.log('Current user in loadGallery:', currentUser?.email);
 
-        const user = auth.currentUser;
-        if (!user) {
-            swiperWrapper.innerHTML = '<div class="swiper-slide"><p class="text-center">Please login to view the gallery</p></div>';
-            if (uploadSection) {
-                uploadSection.style.display = 'none';
-            }
+        if (!currentUser) {
+            console.log('No user logged in');
+            swiperWrapper.innerHTML = '<div class="swiper-slide"><p class="text-center">Please log in to view your gallery</p></div>';
             return;
         }
 
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (!userDoc.exists() || userDoc.data()?.userType !== 'artist') {
-            swiperWrapper.innerHTML = '<div class="swiper-slide"><p class="text-center">Only artists can view their galleries</p></div>';
-            if (uploadSection) {
-                uploadSection.style.display = 'none';
-            }
-            return;
-        }
-
-        // Show upload section for artists
-        if (uploadSection) {
-            uploadSection.style.display = 'block';
-        }
-
-        // Simplified query without ordering while index builds
+        // create query for current user's images
         const q = query(
             collection(db, "gallery_images"),
-            where("userId", "==", user.uid)
+            where("userId", "==", currentUser.uid),
+            orderBy("timestamp", "desc")
         );
-
+        
         const querySnapshot = await getDocs(q);
+        console.log('Found images for user:', currentUser.uid, querySnapshot.size);
+
         if (querySnapshot.empty) {
-            swiperWrapper.innerHTML = '<div class="swiper-slide"><p class="text-center">No images yet</p></div>';
+            swiperWrapper.innerHTML = '<div class="swiper-slide"><p class="text-center">No images uploaded yet</p></div>';
             return;
+        }
+
+        // show/hide upload section based on user status
+        if (uploadSection) {
+            if (auth.currentUser) {
+                const userDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+                const isArtist = userDoc?.exists() && userDoc.data()?.userType === 'artist';
+                uploadSection.style.display = isArtist ? 'block' : 'none';
+            } else {
+                uploadSection.style.display = 'none';
+            }
         }
 
         swiperWrapper.innerHTML = '';
         querySnapshot.forEach((doc) => {
             const data = doc.data();
+            const isOwner = auth.currentUser && data.userId === auth.currentUser.uid;
             const swiperSlide = document.createElement('div');
             swiperSlide.className = 'swiper-slide';
             swiperSlide.innerHTML = `
@@ -110,6 +117,7 @@ async function loadGallery() {
                          alt="${data.caption}" 
                          class="w-full h-full object-cover rounded-lg cursor-pointer" 
                          onclick="openImageModal('${data.imageUrl}', '${data.caption}')">
+                    ${isOwner ? `
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300">
                         <button onclick="deleteImage('${doc.id}')" 
                                 class="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform hover:scale-110">
@@ -118,6 +126,7 @@ async function loadGallery() {
                             </svg>
                         </button>
                     </div>
+                    ` : ''}
                 </div>
             `;
             swiperWrapper.appendChild(swiperSlide);
@@ -211,54 +220,10 @@ function closeImageModal() {
     modal.classList.remove('flex');
 }
 
-// Auth state observer
-auth.onAuthStateChanged(async (user) => {
-    const uploadSection = document.getElementById('uploadSection');
-    
-    if (user) {
-        try {
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            const userData = userDoc.data();
-
-            if (uploadSection) {
-                if (userData.status === 'approved') {
-                    uploadSection.classList.remove('hidden');
-                } else {
-                    uploadSection.innerHTML = `
-                        <div class="text-yellow-500 text-center p-4">
-                            Your profile is pending approval. You will be able to upload images once an admin approves your profile.
-                        </div>
-                    `;
-                }
-            }
-        } catch (error) {
-            console.error("Error checking user status:", error);
-        }
-    } else {
-        if (uploadSection) {
-            uploadSection.classList.add('hidden');
-        }
-    }
-});
-
 // Make functions globally available
 window.openImageModal = openImageModal;
 window.closeImageModal = closeImageModal;
 window.deleteImage = deleteImage;
-
-// Add click handler for upload button
-document.addEventListener('DOMContentLoaded', () => {
-    const uploadButton = document.getElementById('upload_widget');
-    if (uploadButton) {
-        uploadButton.addEventListener('click', () => {
-            if (!auth.currentUser) {
-                alert("Please login to upload images");
-                return;
-            }
-            myWidget.open();
-        });
-    }
-});
 
 function initSwiper(slideCount) {
     const loopEnabled = slideCount > 3; // Only enable loop if there are more than 3 slides
@@ -330,4 +295,18 @@ function initSwiper(slideCount) {
         e.preventDefault();
         swiper.slidePrev();
     });
-} 
+}
+
+// initialize upload widget button when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    const uploadButton = document.getElementById('upload_widget');
+    if (uploadButton) {
+        uploadButton.addEventListener('click', () => {
+            if (!auth.currentUser) {
+                alert("Please login to upload images");
+                return;
+            }
+            myWidget.open();
+        });
+    }
+}); 
