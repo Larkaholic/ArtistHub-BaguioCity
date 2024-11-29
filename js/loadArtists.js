@@ -37,8 +37,8 @@ async function loadArtists() {
             card.innerHTML = `
                 <img src="${artist.photoURL}" alt="${artist.displayName}" 
                     class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-white shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                <h3 class="text-2xl font-bold mb-2 text-white">${artist.displayName}</h3>
-                <p class="text-center mb-4 text-gray-200 text-lg">${specialization}</p>
+                <h3 class="text-2xl font-bold mb-2 text-black">${artist.displayName}</h3>
+                <p class="text-center mb-4 text-black text-lg">${specialization}</p>
                 <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold">
                     view profile
                 </button>

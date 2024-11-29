@@ -7,7 +7,7 @@ const q = query(
 
 onSnapshot(q, (querySnapshot) => {
     const artistsContainer = document.getElementById('artists-container');
-    artistsContainer.innerHTML = ''; // Clear existing content
+    artistsContainer.innerHTML = '';
 
     querySnapshot.forEach((doc) => {
         const artistData = doc.data();

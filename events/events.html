@@ -60,10 +60,10 @@
             <div class="glass-header h-full p-6">
                 <nav>
                     <ul class="flex flex-col space-y-4">
-                        <li><a href="javascript:void(0)" onclick="navToEvent('index.html')">Home</a></li>
-                        <li><a href="javascript:void(0)" onclick="navToEvent('index.html#events')">Events</a></li>
-                        <li><a href="javascript:void(0)" onclick="navToEvent('Gallery/gallery.html')">Gallery</a></li>
-                        <li><a href="javascript:void(0)" onclick="navToEvent('profile/profile.html')">Profile</a></li>
+                        <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a></li>
+                        <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a></li>
+                        <li><a href="javascript:void(0)" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a></li>
+                        <li><a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')">Profile</a></li>
                         <li class="login-button">
                             <button onclick="toggleLoginFlyout(event)">Login</button>
                         </li>
@@ -107,6 +107,13 @@
                 if (event) event.preventDefault();
                 const flyout = document.getElementById('LoginFlyout');
                 flyout.classList.toggle('hidden');
+            }
+
+            function navToEvent(path) {
+                const baseUrl = window.location.hostname.includes('github.io') 
+                    ? '/ArtistHub-BaguioCity'
+                : '';   
+                window.location.href = baseUrl + '/' + path;
             }
         </script>
     </body>

@@ -66,7 +66,7 @@ function createArtistCard(artistData, artistId) {
                 ${createSocialLinks(artistData?.socialLinks)}
             </div>
             <button onclick="viewArtistProfile('${artistId}')" 
-                    class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">
+                    class="glass-header text-black py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">
                 View Profile
             </button>
         </div>

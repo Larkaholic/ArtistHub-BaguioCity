@@ -11,7 +11,7 @@ import {
     updateDoc 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Add Cloudinary widget configuration
+// cloudinary widget configuration
 var myWidget = cloudinary.createUploadWidget(
     {
         cloudName: 'dxeyr4pvf', 
@@ -40,12 +40,12 @@ var myWidget = cloudinary.createUploadWidget(
     }
 );
 
-// Add click handler for upload button
+// click handler for upload button
 document.getElementById('upload_widget').addEventListener('click', function() {
     myWidget.open();
 }, false);
 
-// Load pending registrations
+// load pending registrations
 async function loadPendingRegistrations() {
     const pendingList = document.getElementById('pendingList');
     pendingList.innerHTML = '';
