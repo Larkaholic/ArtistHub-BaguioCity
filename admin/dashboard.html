@@ -33,12 +33,15 @@
         <!-- Events Section -->
         <div class="glass-header rounded-lg p-6">
             <h2 class="text-xl font-bold mb-6">Manage Events</h2>
-            <button onclick="openAddEventModal()" 
-                    class="mb-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                Add New Event
-            </button>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="eventsList">
-                <!-- Events will be loaded here -->
+            <div class="container mx-auto px-4 py-8 mb-20">
+                <button onclick="openAddEventModal()" 
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
+                    Add New Event
+                </button>
+                
+                <div id="eventsList" class="space-y-4">
+                    <!-- Events will be loaded here -->
+                </div>
             </div>
         </div>
     </main>
