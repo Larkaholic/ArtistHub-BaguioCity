@@ -107,3 +107,58 @@ document.addEventListener('DOMContentLoaded', async () => {
 // make sure handleAdminAction is globally available
 window.handleAdminAction = handleAdminAction;
 
+// When creating the artist profile view
+function createProfileView(artistData) {
+    return `
+        <div class="profile-info">
+            <!-- Other profile information -->
+            
+            <!-- Gallery link with email parameter -->
+            <a href="../Gallery/gallery.html?email=${artistData.email}" 
+               class="gallery-link">
+                View Gallery
+            </a>
+        </div>
+    `;
+}
+
+function displayProfile(userData) {
+    const profileContainer = document.getElementById('profileContainer');
+    if (!profileContainer) return;
+
+    profileContainer.innerHTML = `
+        <div class="max-w-4xl mx-auto p-4">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <!-- Profile Image -->
+                <div class="flex justify-center mb-4">
+                    <img src="${userData.profileImage || '../assets/default-profile.png'}" 
+                         alt="Profile" 
+                         class="w-32 h-32 rounded-full object-cover">
+                </div>
+
+                <!-- Profile Info -->
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold mb-2">${userData.name || 'Name not set'}</h2>
+                    <p class="text-gray-600">${userData.email}</p>
+                    <p class="text-gray-700 mt-2">${userData.bio || 'No bio available'}</p>
+                </div>
+
+                <!-- Gallery Link -->
+                <div class="text-center mt-4">
+                    <a href="../Gallery/gallery.html?email=${userData.email}" 
+                       class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                        View Gallery
+                    </a>
+                </div>
+
+                <!-- Other profile sections -->
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold mb-3">Contact Information</h3>
+                    <p class="text-gray-700">Location: ${userData.location || 'Not specified'}</p>
+                    <p class="text-gray-700">Phone: ${userData.phone || 'Not specified'}</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+

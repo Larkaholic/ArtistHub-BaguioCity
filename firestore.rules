@@ -1,28 +1,75 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to get user data
-    function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+    // Helper functions
+    function isAdmin() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
     
-    // Users collection rules
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users collection
     match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth.uid == userId;
+      allow read: if true;  // Anyone can read user profiles
+      allow create: if isAuthenticated() && (
+        request.resource.data.userType == 'user' || 
+        request.resource.data.userType == 'artist'
+      );
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+
+      // Additional validation for artist status
+      function isValidUserData() {
+        let data = request.resource.data;
+        return data.userType == 'artist' ? (
+          data.status == 'pending' || // New artists start as pending
+          (data.status == 'approved' && isAdmin()) // Only admins can approve artists
+        ) : true; // Regular users don't need status validation
+      }
     }
     
-    // Events collection rules
+    // Artists collection
+    match /artists/{artistId} {
+      allow read: if true;
+      allow write: if isAuthenticated() && (
+        request.auth.uid == artistId || 
+        isAdmin()
+      );
+    }
+    
+    // Events collection
     match /events/{eventId} {
       allow read: if true;
-      allow create: if getUserData().role in ['admin', 'artist'];
-      allow update, delete: if getUserData().role == 'admin' || 
-        (getUserData().role == 'artist' && resource.data.createdBy == request.auth.uid);
+      allow create, update, delete: if isAdmin();
     }
-    
-    // Admin-only collection
-    match /admin/{document=**} {
-      allow read, write: if getUserData().role == 'admin';
+
+    // Gallery images collection
+    match /gallery_images/{imageId} {
+      allow read: if true;  // Anyone can view images
+      allow create: if isAuthenticated() && 
+                   request.resource.data.artistEmail == request.auth.token.email;  // Only artist can upload to their gallery
+      allow update, delete: if isAuthenticated() && 
+                           get(/databases/$(database)/documents/gallery_images/$(imageId)).data.artistEmail == request.auth.token.email;  // Only artist can modify their own images
     }
   }
-} 
+}
+
+// Storage rules
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read;
+      allow write: if request.auth != null 
+                  && request.resource.size < 5 * 1024 * 1024
+                  && request.resource.contentType.matches('image/.*');
+    }
+  }
+}
