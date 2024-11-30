@@ -95,14 +95,16 @@ async function loadEvents() {
         eventsList.innerHTML = '';
         querySnapshot.forEach((doc) => {
             const event = doc.data();
-            const date = event.date ? new Date(event.date).toLocaleDateString() : 'No date';
+            const startDate = event.startDate ? new Date(event.startDate).toLocaleDateString() : 'No date';
+            const endDate = event.endDate ? new Date(event.endDate).toLocaleDateString() : 'No date';
             
             eventsList.innerHTML += `
                 <div class="glass-header p-4 rounded-lg mb-4">
                     <div class="flex justify-between items-center">
                         <div>
                             <h3 class="text-xl font-bold text-white">${event.title}</h3>
-                            <p class="text-gray-300">${date}</p>
+                            <p class="text-gray-300">Start: ${startDate}</p>
+                            <p class="text-gray-300">End: ${endDate}</p>
                             <p class="text-gray-300">${event.location || 'No location'}</p>
                         </div>
                         <div class="flex gap-2">
@@ -191,7 +193,8 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
 
         const eventData = {
             title: document.getElementById('eventTitle').value,
-            date: document.getElementById('eventDate').value,
+            startDate: document.getElementById('eventStartDate').value,
+            endDate: document.getElementById('eventEndDate').value,
             location: document.getElementById('eventLocation').value,
             description: document.getElementById('eventDescription').value,
             isFeatured: document.getElementById('eventFeatured').checked,
@@ -224,7 +227,8 @@ async function editEvent(eventId) {
             
             document.getElementById('eventId').value = eventId;
             document.getElementById('eventTitle').value = event.title;
-            document.getElementById('eventDate').value = event.date;
+            document.getElementById('eventStartDate').value = event.startDate;
+            document.getElementById('eventEndDate').value = event.endDate;
             document.getElementById('eventLocation').value = event.location;
             document.getElementById('eventDescription').value = event.description || '';
             document.getElementById('eventFeatured').checked = event.isFeatured || false;
