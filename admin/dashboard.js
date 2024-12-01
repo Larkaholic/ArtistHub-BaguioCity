@@ -8,7 +8,8 @@ import {
     deleteDoc,
     doc,
     query,
-    orderBy 
+    orderBy,
+    where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Modal functions
@@ -167,18 +168,98 @@ async function deleteEvent(eventId) {
     }
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing dashboard...');
-    
-    // Add form submit event listener
-    const form = document.getElementById('eventForm');
-    if (form) {
-        form.addEventListener('submit', handleFormSubmit);
-    }
+// Load pending registrations
+async function loadPendingRegistrations() {
+    try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("status", "==", "pending"));
+        const querySnapshot = await getDocs(q);
+        const pendingList = document.getElementById('pendingArtists');
+        
+        if (pendingList) {
+            if (querySnapshot.empty) {
+                pendingList.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-gray-500">
+                            No pending registrations found
+                        </td>
+                    </tr>`;
+                return;
+            }
 
-    // Load initial events
-    loadEvents();
+            let pendingHTML = '';
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                pendingHTML += `
+                    <tr class="hover:bg-gray-700">
+                        <td class="px-6 py-4">${data.name || 'N/A'}</td>
+                        <td class="px-6 py-4">${data.email || 'N/A'}</td>
+                        <td class="px-6 py-4">${data.phone || 'N/A'}</td>
+                        <td class="px-6 py-4">${data.address || 'N/A'}</td>
+                        <td class="px-6 py-4">${new Date(data.registeredAt).toLocaleDateString()}</td>
+                        <td class="px-6 py-4">
+                            <button onclick="approveArtist('${doc.id}')"
+                                    class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">
+                                Approve
+                            </button>
+                            <button onclick="rejectArtist('${doc.id}')"
+                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                Reject
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+            pendingList.innerHTML = pendingHTML;
+        }
+    } catch (error) {
+        console.error("Error loading pending registrations:", error);
+    }
+}
+
+// Approve artist function
+async function approveArtist(email) {
+    try {
+        const userRef = doc(db, "users", email);
+        await updateDoc(userRef, {
+            status: 'approved',
+            approved: true,
+            approvedAt: new Date().toISOString()
+        });
+        alert('Artist approved successfully');
+        loadPendingRegistrations();
+    } catch (error) {
+        console.error("Error approving artist:", error);
+        alert('Failed to approve artist');
+    }
+}
+
+// Reject artist function
+async function rejectArtist(email) {
+    if (confirm('Are you sure you want to reject this registration?')) {
+        try {
+            const userRef = doc(db, "users", email);
+            await updateDoc(userRef, {
+                status: 'rejected',
+                approved: false,
+                rejectedAt: new Date().toISOString()
+            });
+            alert('Artist registration rejected');
+            loadPendingRegistrations();
+        } catch (error) {
+            console.error("Error rejecting artist:", error);
+            alert('Failed to reject artist');
+        }
+    }
+}
+
+// Make functions globally available
+window.approveArtist = approveArtist;
+window.rejectArtist = rejectArtist;
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', () => {
+    loadPendingRegistrations();
+    // ... existing initialization code ...
 });
 
 // Make functions globally available

@@ -22,13 +22,6 @@
 
     <!-- Main Content -->
     <main class="container mx-auto mt-24 p-4 space-y-6">
-        <!-- Pending Registrations Section -->
-        <div class="glass-header rounded-lg p-6">
-            <h2 class="text-xl font-bold mb-6">Pending Artist Registrations</h2>
-            <div class="grid grid-cols-1 gap-4" id="pendingList">
-                <!-- Pending registrations will be loaded here -->
-            </div>
-        </div>
 
         <!-- Events Section -->
         <div class="glass-header rounded-lg p-6">
@@ -42,6 +35,28 @@
                 <div id="eventsList" class="space-y-4">
                     <!-- Events will be loaded here -->
                 </div>
+            </div>
+        </div>
+
+        <!-- Add this section where you want to display pending registrations -->
+        <div class="container mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-4">Pending Artist Registrations</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Address</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Registered Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingArtists" class="divide-y divide-gray-700">
+                        <!-- Pending registrations will be loaded here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
