@@ -49,13 +49,16 @@ window.handleRegister = async function(e) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        const artistId = `artist_${user.uid}`;
+
         // Create initial user document with pending status
         await setDoc(doc(db, "users", user.uid), {
             email: email,
             userType: userType,
             status: 'pending', // All new artists start as pending
             createdAt: new Date().toISOString(),
-            role: userType === 'artist' ? 'artist' : 'user'
+            role: userType === 'artist' ? 'artist' : 'user',
+            artistId: artistId
         });
 
         // Close registration flyout
