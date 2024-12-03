@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Artist Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../styles.css">
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-    <!-- Navigation -->
     <nav class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">Admin Dashboard</h1>
         <div class="flex items-center space-x-4">
@@ -20,44 +18,35 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="container mx-auto mt-24 p-4 space-y-6">
-
-        <!-- Events Section -->
-        <div class="glass-header rounded-lg p-6">
-            <h2 class="text-xl font-bold mb-6">Manage Events</h2>
-            <div class="container mx-auto px-4 py-8 mb-20">
-                <button onclick="openAddEventModal()" 
-                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
-                    Add New Event
-                </button>
-                
-                <div id="eventsList" class="space-y-4">
-                    <!-- Events will be loaded here -->
-                </div>
-            </div>
+        <h2 class="text-xl font-bold mb-6">Manage Events</h2>
+        <button onclick="openAddEventModal()" 
+                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
+            Add New Event
+        </button>
+        
+        <div id="eventsList" class="space-y-4">
+            <!-- Events will be loaded here -->
         </div>
 
-        <!-- Add this section where you want to display pending registrations -->
-        <div class="container mx-auto px-4 py-8">
-            <h2 class="text-2xl font-bold mb-4">Pending Artist Registrations</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                    <thead class="bg-gray-700">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Address</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Registered Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pendingArtists" class="divide-y divide-gray-700">
-                        <!-- Pending registrations will be loaded here -->
-                    </tbody>
-                </table>
-            </div>
+        <!-- Pending Artist Registrations Section -->
+        <h2 class="text-2xl font-bold mb-4">Pending Artist Registrations</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                <thead class="bg-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Address</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Registered Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="pendingArtists" class="divide-y divide-gray-700">
+                    <!-- Pending registrations will be loaded here -->
+                </tbody>
+            </table>
         </div>
     </main>
 
@@ -95,7 +84,12 @@
                 <div>
                     <label for="eventDescription" class="block text-sm font-medium text-gray-300">Description</label>
                     <textarea id="eventDescription" rows="3"
-                             class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white"></textarea>
+                              class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white"></textarea>
+                </div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="eventFeatured" class="rounded bg-gray-700 border-gray-600 text-blue-500">
+                    <label for="eventFeatured" class="ml-2 text-sm text-gray-300">Featured Event</label>
                 </div>
 
                 <div>
@@ -114,11 +108,6 @@
                     </div>
                 </div>
 
-                <div class="flex items-center">
-                    <input type="checkbox" id="eventFeatured" class="rounded bg-gray-700 border-gray-600 text-blue-500">
-                    <label for="eventFeatured" class="ml-2 text-sm text-gray-300">Featured Event</label>
-                </div>
-
                 <div class="flex justify-end space-x-3 mt-6">
                     <button type="button" onclick="closeEventModal()"
                             class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
@@ -134,7 +123,7 @@
     </div>
 
     <script type="module" src="../js/firebase-config.js"></script>
-    <script type="module" src="./admin-auth.js"></script>
+    <script type="module" src="./eventManagement.js"></script>
     <script type="module" src="./dashboard.js"></script>
     <script>
         // Initialize Cloudinary widget
@@ -179,6 +168,96 @@
             preview.classList.add('hidden');
             imageUrlInput.value = '';
         }
+
+        // Load pending registrations
+        async function loadPendingRegistrations() {
+            try {
+                const usersRef = collection(db, "users");
+                const q = query(usersRef, where("status", "==", "pending"));
+                const querySnapshot = await getDocs(q);
+                const pendingList = document.getElementById('pendingArtists');
+                
+                if (pendingList) {
+                    if (querySnapshot.empty) {
+                        pendingList.innerHTML = `
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-gray-500">
+                                    No pending registrations found
+                                </td>
+                            </tr>`;
+                        return;
+                    }
+
+                    let pendingHTML = '';
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        pendingHTML += `
+                            <tr class="hover:bg-gray-700">
+                                <td class="px-6 py-4">${data.name || 'N/A'}</td>
+                                <td class="px-6 py-4">${data.email || 'N/A'}</td>
+                                <td class="px-6 py-4">${data.phone || 'N/A'}</td>
+                                <td class="px-6 py-4">${data.address || 'N/A'}</td>
+                                <td class="px-6 py-4">${new Date(data.registeredAt).toLocaleDateString()}</td>
+                                <td class="px-6 py-4">
+                                    <button onclick="approveArtist('${doc.id}')"
+                                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">
+                                        Approve
+                                    </button>
+                                    <button onclick="rejectArtist('${doc.id}')"
+                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        Reject
+                                    </button>
+                                </td>
+                            </tr>`;
+                    });
+                    pendingList.innerHTML = pendingHTML;
+                }
+            } catch (error) {
+                console.error("Error loading pending registrations:", error);
+            }
+        }
+
+        // Approve artist function
+        async function approveArtist(email) {
+            try {
+                const userRef = doc(db, "users", email);
+                await updateDoc(userRef, {
+                    status: 'approved',
+                    approved: true,
+                    approvedAt: new Date().toISOString()
+                });
+                alert('Artist approved successfully');
+                loadPendingRegistrations();
+            } catch (error) {
+                console.error("Error approving artist:", error);
+                alert('Failed to approve artist');
+            }
+        }
+
+        // Reject artist function
+        async function rejectArtist(email) {
+            if (confirm('Are you sure you want to reject this registration?')) {
+                try {
+                    const userRef = doc(db, "users", email);
+                    await updateDoc(userRef, {
+                        status: 'rejected',
+                        approved: false,
+                        rejectedAt: new Date().toISOString()
+                    });
+                    alert('Artist registration rejected');
+                    loadPendingRegistrations();
+                } catch (error) {
+                    console.error("Error rejecting artist:", error);
+                    alert('Failed to reject artist');
+                }
+            }
+        }
+
+        // Load events and pending registrations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEvents();
+            loadPendingRegistrations();
+        });
     </script>
 </body>
 </html> 

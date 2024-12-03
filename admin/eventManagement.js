@@ -52,11 +52,17 @@ document.getElementById('upload_widget').addEventListener('click', function() {
 async function createEvent(eventData) {
     try {
         await addDoc(collection(db, "events"), eventData);
+        console.log("Event created successfully");
         loadEvents();
-        closeEventModal();
+
+        // Check if the modal exists before trying to close it
+        const modal = document.getElementById('eventModal');
+        if (modal) {
+            closeEventModal();
+        }
     } catch (error) {
-        console.error("error creating event:", error);
-        alert("failed to create event");
+        console.error("Error creating event:", error);
+        alert("Failed to create event");
     }
 }
 
@@ -145,28 +151,56 @@ async function updateEvent(eventId, eventData) {
 
 // delete event
 async function deleteEvent(eventId) {
-    if (confirm("are you sure you want to delete this event?")) {
+    if (confirm("Are you sure you want to delete this event?")) {
         try {
             // Get event data to get image URL
             const eventDoc = await getDoc(doc(db, "events", eventId));
-            if (eventDoc.exists() && eventDoc.data().imageUrl) {
-                // Delete image from storage
-                const imageRef = ref(storage, eventDoc.data().imageUrl);
-                try {
-                    await deleteObject(imageRef);
-                } catch (error) {
-                    console.warn("error deleting image:", error);
+            if (eventDoc.exists()) {
+                const eventData = eventDoc.data();
+                const imageUrl = eventData.imageUrl;
+
+                // Extract public ID from Cloudinary URL
+                if (imageUrl) {
+                    const publicId = imageUrl.split('/').pop().split('.')[0]; // Get the public ID from the URL
+                    await deleteCloudinaryImage(publicId); // Call the function to delete from Cloudinary
                 }
             }
-            
+
             // Delete event document
             await deleteDoc(doc(db, "events", eventId));
             loadEvents();
         } catch (error) {
-            console.error("error deleting event:", error);
-            alert("failed to delete event");
+            console.error("Error deleting event:", error);
+            alert("Failed to delete event");
         }
     }
+}
+
+// Function to delete image from Cloudinary
+async function deleteCloudinaryImage(publicId) {
+    const cloudName = 'dxeyr4pvf'; // Your Cloudinary cloud name
+    const url = `https://api.cloudinary.com/v1_1/${cloudName}/delete_by_token`; // Cloudinary delete URL
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            public_id: publicId,
+            type: 'upload',
+        }),
+    });
+
+    // Log the response for debugging
+    const responseData = await response.json();
+    console.log('Cloudinary response:', responseData);
+
+    if (!response.ok) {
+        throw new Error(`Failed to delete image from Cloudinary: ${responseData.message || 'Unknown error'}`);
+    }
+
+    console.log('Image deleted from Cloudinary successfully');
 }
 
 // modal functions
@@ -200,6 +234,8 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
             isFeatured: document.getElementById('eventFeatured').checked,
             imageUrl: imageUrl
         };
+
+        console.log("Event Data:", eventData);
 
         if (eventId) {
             await updateEvent(eventId, eventData);
@@ -251,7 +287,9 @@ async function editEvent(eventId) {
     }
 }
 
-// make functions globally available
+// Make functions globally available
+window.loadEvents = loadEvents;
+window.createEvent = createEvent;
 window.openAddEventModal = openAddEventModal;
 window.closeEventModal = closeEventModal;
 window.deleteEvent = deleteEvent;
