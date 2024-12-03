@@ -1,3 +1,24 @@
+function showInstructions(platform) {
+    const instructions = {
+        facebook: "1. Open the Facebook app on your phone.\n2. Go to your profile.\n3. Tap the three dots (•••) on the top-right.\n4. Tap 'Copy Link' or 'Copy URL'.\n5. Paste the link here.",
+        instagram: "1. Open the Instagram app.\n2. Go to your profile page.\n3. Tap the three dots (•••) on the top-right.\n4. Tap 'Copy Profile URL'.\n5. Paste the link here.",
+        youtube: "1. Open the YouTube app.\n2. Go to your channel.\n3. Tap the three dots (•••) on the top-right.\n4. Tap 'Copy Link'.\n5. Paste the link here.",
+        google: "1. Open the Google app.\n2. Go to your Google profile or business page.\n3. Tap the three dots (•••) on the top-right.\n4. Tap 'Share' and then 'Copy Link'.\n5. Paste the link here."
+    };
+    document.getElementById('instructionsText').innerText = instructions[platform];
+    document.getElementById('instructionsModal').classList.remove('hidden');
+}
+
+// Function to close the instructions modal when clicking outside of it
+function closeInstructions(event) {
+    if (event.target === event.currentTarget) {
+        document.getElementById('instructionsModal').classList.add('hidden');
+    }
+}
+
+window.showInstructions = showInstructions;
+window.closeInstructions = closeInstructions;
+
 import { auth, db } from '../js/firebase-config.js';
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -35,15 +56,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (userDoc.exists()) {
                 const data = userDoc.data();
                 
-                // show status message if pending/rejected
+                // Show status message if pending/rejected
                 if (data.status !== 'approved') {
                     const statusMessage = document.createElement('div');
                     statusMessage.className = 'bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4';
                     statusMessage.innerHTML = `
-                        <p class="font-bold">profile status: ${data.status}</p>
+                        <p class="font-bold">Profile status: ${data.status}</p>
                         <p>${data.status === 'pending' 
-                            ? 'your profile is pending admin approval. you can still edit your details.' 
-                            : 'your profile has been rejected. please contact admin for more information.'}
+                            ? 'Your profile is pending admin approval. You can still edit your details.' 
+                            : 'Your profile has been rejected. Please contact admin for more information.'}
                         </p>
                     `;
                     document.getElementById('editProfileForm').prepend(statusMessage);
@@ -140,6 +161,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    // Handle cancel button click
+    document.getElementById('cancelButton').addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent form submission
+        window.location.href = 'profile.html'; // Redirect to profile page
+    });
+
     // Improve image preview handling
     document.getElementById('imageInput').addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -167,4 +194,4 @@ document.addEventListener('DOMContentLoaded', async () => {
             reader.readAsDataURL(file);
         }
     });
-}); 
+});

@@ -45,29 +45,29 @@ window.handleRegister = async function(e) {
     const userType = document.getElementById('userType').value;
 
     try {
-        // Create user account
+        // create user account
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
         const artistId = `artist_${user.uid}`;
 
-        // Create initial user document with pending status
+        // create initial user document with pending status
         await setDoc(doc(db, "users", user.uid), {
             email: email,
             userType: userType,
-            status: 'pending', // All new artists start as pending
+            status: 'pending', // all new artists start as pending
             createdAt: new Date().toISOString(),
             role: userType === 'artist' ? 'artist' : 'user',
             artistId: artistId
         });
 
-        // Close registration flyout
+        // close registration flyout
         const loginFlyout = document.getElementById('LoginFlyout');
         if (loginFlyout) {
             loginFlyout.classList.add('hidden');
         }
 
-        // Redirect to profile edit page for initial setup
+        // redirect to profile edit page for initial setup
         window.location.href = `${baseUrl}/profile/edit-profile.html`;
 
     } catch (error) {
@@ -75,7 +75,7 @@ window.handleRegister = async function(e) {
     }
 };
 
-// Login handler
+// login handler
 window.handleLogin = async function(e) {
     e.preventDefault();
     
@@ -107,7 +107,7 @@ window.handleLogin = async function(e) {
     }
 };
 
-// Update UI based on role
+// update UI based on role
 function updateUIForRole(role, userData) {
     const userMenu = document.getElementById('userMenu');
     if (!userMenu) return;
@@ -242,7 +242,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Logout handler
+// logout handler
 window.handleLogout = async function() {
     try {
         await signOut(auth);
@@ -254,7 +254,7 @@ window.handleLogout = async function() {
     }
 };
 
-// Toggle login flyout
+// toggle login flyout
 window.toggleLoginFlyout = function(event) {
     if (event) event.preventDefault();
     const flyout = document.getElementById('LoginFlyout');
@@ -263,7 +263,7 @@ window.toggleLoginFlyout = function(event) {
     }
 };
 
-// Toggle forms
+// toggle forms
 window.toggleForms = function() {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
@@ -273,18 +273,18 @@ window.toggleForms = function() {
     }
 };
 
-// Make it available globally if needed
+// make it available globally if needed
 window.goToProfile = goToProfile;
 
-// Add this near your other window functions
+// add this near your other window functions
 window.toggleNav = function() {
     const menu = document.getElementById('flyout-menu');
     const body = document.body;
     
-    // Toggle the menu
+    // toggle the menu
     menu.classList.toggle('translate-x-full');
     
-    // Create or get overlay
+    // create or get overlay
     let overlay = document.querySelector('.menu-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -293,10 +293,10 @@ window.toggleNav = function() {
         document.body.appendChild(overlay);
     }
     
-    // Toggle overlay
+    // toggle overlay
     overlay.classList.toggle('active');
     
-    // Toggle body scroll
+    // toggle body scroll
     body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
 };
 
