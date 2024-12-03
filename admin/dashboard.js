@@ -1,15 +1,16 @@
 import { db } from '../js/firebase-config.js';
 import { 
+    getFirestore,
     collection, 
-    addDoc, 
-    getDocs,
     getDoc,
-    updateDoc,
-    deleteDoc,
-    doc,
-    query,
-    orderBy,
-    where
+    getDocs, 
+    query, 
+    where, 
+    orderBy, 
+    doc, 
+    updateDoc, 
+    deleteDoc, 
+    addDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Modal functions
@@ -46,14 +47,16 @@ async function loadEvents() {
         eventsList.innerHTML = '';
         querySnapshot.forEach((doc) => {
             const event = doc.data();
+            const startDate = event.startDate ? new Date(event.startDate.seconds * 1000) : null;
+            const endDate = event.endDate ? new Date(event.endDate.seconds * 1000) : null;
             const div = document.createElement('div');
             div.className = 'bg-gray-800 rounded-lg p-4 mb-4';
             div.innerHTML = `
                 <div class="flex justify-between items-start">
                     <div>
                         <h3 class="text-xl font-bold text-white">${event.title}</h3>
-                        <p class="text-gray-300">Start: ${event.startDate}</p>
-                        <p class="text-gray-300">End: ${event.endDate}</p>
+                        <p class="text-gray-300">Start: ${startDate ? startDate.toLocaleDateString() : 'N/A'}</p>
+                        <p class="text-gray-300">End: ${endDate ? endDate.toLocaleDateString() : 'N/A'}</p>
                         <p class="text-gray-300">Location: ${event.location}</p>
                         ${event.description ? `<p class="text-gray-300 mt-2">${event.description}</p>` : ''}
                         ${event.isFeatured ? '<span class="bg-yellow-500 text-black px-2 py-1 rounded text-sm">Featured</span>' : ''}
@@ -69,7 +72,7 @@ async function loadEvents() {
                         </button>
                     </div>
                 </div>
-                ${event.imageUrl ? `
+                ${event.imageUrl ? ` 
                     <img src="${event.imageUrl}" alt="${event.title}" 
                          class="mt-4 w-full h-48 object-cover rounded">
                 ` : ''}
@@ -190,13 +193,14 @@ async function loadPendingRegistrations() {
             let pendingHTML = '';
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
+                const registeredAt = data.registeredAt ? new Date(data.registeredAt.seconds * 1000) : new Date();
                 pendingHTML += `
                     <tr class="hover:bg-gray-700">
                         <td class="px-6 py-4">${data.name || 'N/A'}</td>
                         <td class="px-6 py-4">${data.email || 'N/A'}</td>
                         <td class="px-6 py-4">${data.phone || 'N/A'}</td>
                         <td class="px-6 py-4">${data.address || 'N/A'}</td>
-                        <td class="px-6 py-4">${new Date(data.registeredAt).toLocaleDateString()}</td>
+                        <td class="px-6 py-4">${registeredAt.toLocaleDateString()}</td>
                         <td class="px-6 py-4">
                             <button onclick="approveArtist('${doc.id}')"
                                     class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">
@@ -213,57 +217,39 @@ async function loadPendingRegistrations() {
         }
     } catch (error) {
         console.error("Error loading pending registrations:", error);
+        alert("Failed to load pending registrations");
     }
 }
 
-// Approve artist function
-async function approveArtist(email) {
+// Approve artist
+async function approveArtist(userId) {
     try {
-        const userRef = doc(db, "users", email);
-        await updateDoc(userRef, {
-            status: 'approved',
-            approved: true,
-            approvedAt: new Date().toISOString()
-        });
-        alert('Artist approved successfully');
+        const userRef = doc(db, "users", userId);
+        await updateDoc(userRef, { status: 'approved' });
+        alert('Artist approved');
         loadPendingRegistrations();
     } catch (error) {
         console.error("Error approving artist:", error);
-        alert('Failed to approve artist');
+        alert("Failed to approve artist");
     }
 }
 
-// Reject artist function
-async function rejectArtist(email) {
-    if (confirm('Are you sure you want to reject this registration?')) {
-        try {
-            const userRef = doc(db, "users", email);
-            await updateDoc(userRef, {
-                status: 'rejected',
-                approved: false,
-                rejectedAt: new Date().toISOString()
-            });
-            alert('Artist registration rejected');
-            loadPendingRegistrations();
-        } catch (error) {
-            console.error("Error rejecting artist:", error);
-            alert('Failed to reject artist');
-        }
+// Reject artist
+async function rejectArtist(userId) {
+    try {
+        const userRef = doc(db, "users", userId);
+        await updateDoc(userRef, { status: 'rejected' });
+        alert('Artist rejected');
+        loadPendingRegistrations();
+    } catch (error) {
+        console.error("Error rejecting artist:", error);
+        alert("Failed to reject artist");
     }
 }
 
-// Make functions globally available
-window.approveArtist = approveArtist;
-window.rejectArtist = rejectArtist;
-
-// Initialize dashboard
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize page
+window.onload = function() {
+    loadEvents();
     loadPendingRegistrations();
-    // ... existing initialization code ...
-});
-
-// Make functions globally available
-window.openAddEventModal = openAddEventModal;
-window.closeEventModal = closeEventModal;
-window.editEvent = editEvent;
-window.deleteEvent = deleteEvent; 
+    document.getElementById('eventForm').addEventListener('submit', handleFormSubmit);
+};
