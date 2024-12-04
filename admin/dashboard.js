@@ -171,85 +171,8 @@ async function deleteEvent(eventId) {
     }
 }
 
-// Load pending registrations
-async function loadPendingRegistrations() {
-    try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("status", "==", "pending"));
-        const querySnapshot = await getDocs(q);
-        const pendingList = document.getElementById('pendingArtists');
-        
-        if (pendingList) {
-            if (querySnapshot.empty) {
-                pendingList.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="text-center py-4 text-gray-500">
-                            No pending registrations found
-                        </td>
-                    </tr>`;
-                return;
-            }
-
-            let pendingHTML = '';
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const registeredAt = data.registeredAt ? new Date(data.registeredAt.seconds * 1000) : new Date();
-                pendingHTML += `
-                    <tr class="hover:bg-gray-700">
-                        <td class="px-6 py-4">${data.name || 'N/A'}</td>
-                        <td class="px-6 py-4">${data.email || 'N/A'}</td>
-                        <td class="px-6 py-4">${data.phone || 'N/A'}</td>
-                        <td class="px-6 py-4">${data.address || 'N/A'}</td>
-                        <td class="px-6 py-4">${registeredAt.toLocaleDateString()}</td>
-                        <td class="px-6 py-4">
-                            <button onclick="approveArtist('${doc.id}')"
-                                    class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">
-                                Approve
-                            </button>
-                            <button onclick="rejectArtist('${doc.id}')"
-                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                Reject
-                            </button>
-                        </td>
-                    </tr>`;
-            });
-            pendingList.innerHTML = pendingHTML;
-        }
-    } catch (error) {
-        console.error("Error loading pending registrations:", error);
-        alert("Failed to load pending registrations");
-    }
-}
-
-// Approve artist
-async function approveArtist(userId) {
-    try {
-        const userRef = doc(db, "users", userId);
-        await updateDoc(userRef, { status: 'approved' });
-        alert('Artist approved');
-        loadPendingRegistrations();
-    } catch (error) {
-        console.error("Error approving artist:", error);
-        alert("Failed to approve artist");
-    }
-}
-
-// Reject artist
-async function rejectArtist(userId) {
-    try {
-        const userRef = doc(db, "users", userId);
-        await updateDoc(userRef, { status: 'rejected' });
-        alert('Artist rejected');
-        loadPendingRegistrations();
-    } catch (error) {
-        console.error("Error rejecting artist:", error);
-        alert("Failed to reject artist");
-    }
-}
-
 // Initialize page
 window.onload = function() {
     loadEvents();
-    loadPendingRegistrations();
     document.getElementById('eventForm').addEventListener('submit', handleFormSubmit);
 };
