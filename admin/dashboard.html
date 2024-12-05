@@ -17,14 +17,12 @@
             </button>
         </div>
     </nav>
-
     <main class="container mx-auto mt-24 p-4 space-y-6">
         <h2 class="text-xl font-bold mb-6">Manage Events</h2>
         <button onclick="openAddEventModal()" 
                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
             Add New Event
         </button>
-        
         <div id="eventsList" class="space-y-4">
             <!-- Events will be loaded here -->
         </div>
@@ -49,7 +47,6 @@
             </table>
         </div>
     </main>
-
     <!-- Event Modal -->
     <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-gray-800 p-8 rounded-lg w-full max-w-md relative">
@@ -126,35 +123,5 @@
     <script type="module" src="./eventManagement.js"></script>
     <script type="module" src="./artistRequest.js"></script>
     <script type="module" src="./dashboard.js"></script>
-    <script>
-        // Initialize Cloudinary widget
-        var myWidget = cloudinary.createUploadWidget(
-            {
-                cloudName: 'dxeyr4pvf',
-                uploadPreset: 'artist_profiles',
-                sources: ['local', 'url', 'camera'],
-                multiple: false,
-                maxFiles: 1,
-                maxFileSize: 5000000,
-                folder: 'events'
-            },
-            (error, result) => {
-                if (!error && result && result.event === "success") {
-                    console.log('Upload successful:', result.info);
-                    // Update preview
-                    const preview = document.getElementById('imagePreview');
-                    const previewImg = document.getElementById('previewImg');
-                    const imageUrlInput = document.getElementById('eventImageUrl');
-                    
-                    imageUrlInput.value = result.info.secure_url;
-                    previewImg.src = result.info.secure_url;
-                    preview.classList.remove('hidden');
-                }
-                if (error) {
-                    console.error('Upload error:', error);
-                }
-            }
-        );
-    </script>
 </body>
 </html> 
