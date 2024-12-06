@@ -131,10 +131,10 @@ function loadGallery() {
         swiperSlide.className = 'swiper-slide';
         swiperSlide.innerHTML = `
             <div class="relative w-[300px] h-[300px] rounded-lg overflow-hidden bg-gray-100">
-                <div class="w-full h-full">
+                <div class="w-full h-full ">
                     <img src="${imageData.imageUrl}" 
                          alt="${imageData.title}" 
-                         class="w-full h-full object-cover rounded-lg cursor-pointer" 
+                         class="w-full h-full rounded-lg cursor-pointer" 
                          onclick="openImageModal('${imageData.imageUrl}', '${imageData.title}')">
                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
                         <p class="text-xs">${new Date(imageData.timestamp).toLocaleDateString()}</p>

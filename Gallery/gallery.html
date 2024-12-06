@@ -127,9 +127,27 @@
       </div>
   </div>
 
-<main class="container mx-auto pt-24 px-4">
+<main class="container mx-auto pt-16 px-2">
+    <div class="flex justify-end">
+        <svg class="w-12 h-12 text-gray-800 dark:text-white bg-green-300 rounded-full p-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+        </svg>
+        <span>0</span>
+    </div>
+
+    <!-- <div class="cartModal flex flex-col glass-header rounded-lg hidden">
+        <h1 class="glass-header text-center font-black text-2xl p-1 text-black">Shopping Cart</h1>
+        <div class="flex flex-row justify-center gap-10 p-1">
+            <button class="glass-header p-1 rounded-md text-red-500 hover:bg-red-500 hover:text-white">Close</button>
+            <button class="glass-header p-1 rounded-md text-black hover:bg-gray-700 hover:text-white">Checkout</button>
+        </div>
+        <div>
+
+        </div>
+    </div> -->
+    
     <!-- Upload Section (visible only to logged-in users) -->
-    <div id="uploadSection" class="user-only hidden mb-8">
+    <div id="uploadSection" class="user-only hidden mb-8 z-0">
         <div class="glass-header p-6 rounded-lg">
             <h2 class="text-2xl font-bold mb-4 text-center font-bold text-3xl text-white">My Gallery</h2>
             <div class="flex items-center space-x-4 justify-center">
@@ -137,6 +155,7 @@
                         class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                     Upload New Image
                 </button>
+
             </div>
         </div>
     </div>
