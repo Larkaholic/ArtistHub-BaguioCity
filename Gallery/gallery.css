@@ -1,0 +1,344 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: url("../images/bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: white;
+}
+
+/* global header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(217, 217, 217, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+
+.logo img {
+    width: 120px;
+    display: flex;
+    margin-left: 20px;
+}
+/* nav */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-item button,
+.login-button button {
+    font-weight: 600 !important;
+}
+
+nav ul li,
+nav ul li button,
+.nav-item,
+.nav-item button {
+    font-weight: 600 !important;
+}
+
+/* .flyout {
+    display: none;
+}
+.flyout.active {
+    display: flex;
+} */
+
+
+/* CSS Code */
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+
+.swiper-pagination-bullet {
+    background: #000000;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000000 !important;
+}
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile navigation */
+#flyout-menu {
+    transition: transform 0.3s ease-in-out;
+}
+
+#flyout-menu.active {
+    transform: translateX(0);
+}
+
+/* Overlay when menu is open */
+.menu-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Ensure proper glass effect on mobile menu */
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Navigation buttons */
+.swiper-button-next,
+.swiper-button-prev {
+    position: static !important;
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 10px !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-radius: 50%;
+    color: #fff !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer !important;
+    z-index: 10 !important;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 18px !important;
+    font-weight: bold;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: rgba(0, 0, 0, 0.9) !important;
+    transform: scale(1.1);
+}
+
+/* Make sure controls are clickable */
+.swiper-controls {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    z-index: 20 !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure slides are grabbable */
+.swiper-slide {
+    cursor: grab !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.swiper-slide:active {
+    cursor: grabbing !important;
+}
+
+/* Pagination */
+.swiper-pagination {
+    position: static !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+    pointer-events: auto !important;
+}
+
+.swiper-pagination-bullet {
+    width: 12px !important;
+    height: 12px !important;
+    background: #000 !important;
+    opacity: 0.5 !important;
+    margin: 0 8px !important;
+    cursor: pointer !important;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    transform: scale(1.2);
+}
+
+.swiper-container {
+    width: 100%;
+    height: 500px !important;
+    padding: 20px 0 40px !important;
+    overflow: visible !important;
+}
+
+.swiper-slide {
+    width: 400px !important;
+    height: 400px !important;
+    background: transparent;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    opacity: 0.4;
+    transform: scale(0.8);
+}
+
+.swiper-slide-active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 1;
+}
+
+.swiper-slide-prev,
+.swiper-slide-next {
+    opacity: 0.7;
+    transform: scale(0.9);
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.carousel-section {
+    overflow: hidden;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Container for pagination and navigation */
+.swiper-controls {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Pagination */
+.swiper-pagination {
+    position: static !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center;
+}
+
+.swiper-pagination-bullet {
+    width: 12px !important;
+    height: 12px !important;
+    background: #000 !important;
+    opacity: 0.5 !important;
+    margin: 0 8px !important;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    transform: scale(1.2);
+}
+
+/* Navigation buttons */
+.swiper-button-next,
+.swiper-button-prev {
+    position: static !important;
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 10px !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    border-radius: 50%;
+    color: #fff !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 18px !important;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Delete button hover effects */
+.swiper-slide .group:hover .bg-opacity-30 {
+    backdrop-filter: blur(2px);
+}
+
+/* Success message animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+.success-message {
+    animation: fadeInOut 3.5s ease-in-out forwards;
+}
+
+/* Delete confirmation dialog styling */
+.delete-confirm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.cartModal {
+    height: 500px;
+    width: 300px;
+    /* position: fixed; */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    inset: 0 0 0 auto;
+    grid-template-rows: 70px 1fr 70px;
+}

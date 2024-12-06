@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
+}
+
+/* global header */
+.nav-item button,
+.login-button button {
+    font-weight: 600 !important;
+}
+
+
+nav ul li,
+nav ul li button,
+.nav-item,
+.nav-item button {
+    font-weight: 600 !important;
+}
+
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.flyout {
+    display: none;
+}
+.flyout.active {
+    display: flex;
+}
+
+section {
+    height: 100dvh;
+}
+
+.eventContainer {
+    margin-top: 50px;
+    max-height: 100dvh;
+    height: 85%;
+    width: 94%;
+} 
+
+/* Mobile navigation */
+#flyout-menu {
+    transition: transform 0.3s ease-in-out;
+}
+
+#flyout-menu.active {
+    transform: translateX(0);
+}
+
+/* Overlay when menu is open */
+.menu-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Ensure proper glass effect on mobile menu */
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}

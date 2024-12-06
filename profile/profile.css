@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    scroll-behavior: smooth;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("../images/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+/* global header */
+
+
+/* nav */
+.nav-item button,
+.login-button button {
+    font-weight: 600 !important;
+}
+
+nav ul li,
+nav ul li button,
+.nav-item,
+.nav-item button {
+    font-weight: 600 !important;
+}
+
+main {
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+}
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+/* 
+.flyout {
+    display: none;
+}
+.flyout.active {
+    display: flex;
+} */
+
+.profile-details {
+    width: 80%;
+}
+.profile-details img {
+    height: 60dvh;
+    height: 70dvh;
+}
+
+.option-btn {
+    cursor: pointer;
+}
+
+/* social icons */
+.fa {
+    padding: 20px;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+}
+
+.fa:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.fixed.bottom-8.right-8 {
+    position: fixed !important;
+    bottom: 2rem !important;
+    right: 2rem !important;
+    z-index: 9999 !important;
+}
+
+#editProfileButton {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Profile specific styles */
+.profile-container {
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.social-links a {
+    margin: 0 10px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #666;
+}
+
+/* Add any other styles you need */
+
+/* Mobile navigation */
+#flyout-menu {
+    transition: transform 0.3s ease-in-out;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+#flyout-menu.active {
+    transform: translateX(0);
+}
+
+/* Overlay when menu is open */
+.menu-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.menu-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Ensure proper glass effect on mobile menu */
+.glass-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Burger icon styles */
+.burger-icon {
+    cursor: pointer;
+    z-index: 50;
+}
+
+.burger-icon svg {
+    width: 24px;
+    height: 24px;
+}

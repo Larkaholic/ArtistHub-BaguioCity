@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script type="module" src="../js/firebase-config.js"></script>
+
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <nav class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Test Dashboard</h1>
+        <div class="flex items-center space-x-4">
+            <a href="../index.html" class="text-white hover:text-gray-300">Home</a>
+            <button onclick="handleLogout()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                Logout
+            </button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-24 p-4 space-y-6">
+        <h2 class="text-xl font-bold mb-6">Pending Artist Requests</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden">
+                <thead class="bg-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="pendingArtistRequests" class="divide-y divide-gray-700">
+                    <!-- Pending artist requests will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script type="module" src="./admin/artistRequest.js"></script>
+</body>
+</html> 

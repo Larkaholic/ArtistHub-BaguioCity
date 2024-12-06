@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
+</head>
+<body class="bg-cover">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+        <div class="flex w-24 ml-16">
+            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
+        </div>
+
+        <div class="sm:hidden flex items-center mr-5">
+            <button onclick="toggleNav()" class="burger-icon">
+                <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-10">
+            <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./index.html#events')">Events</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./Gallery/gallery.html')">Gallery</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="#" id="profileLink">Profile</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
+                    <a href="./admin/dashboard.html">Admin</a>
+                </li>
+                <li class="login-button">
+                    <button onclick="toggleLoginFlyout(event)" 
+                            class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                        Login
+                    </button>
+                </li>
+                <li class="logout-button" style="display: none;">
+                    <button onclick="handleLogout()" 
+                            class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                        Logout
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+        <div class="glass-header h-full p-6">
+            <nav>
+                <ul class="flex flex-col space-y-4">
+                    <li><a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('./index.html#events')">Events</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('./Gallery/gallery.html')">Gallery</a></li>
+                    <li><a href="#" id="profileLink">Profile</a></li>
+                    <li class="admin-button" style="display: none;">
+                        <a href="./admin/dashboard.html">Admin</a>
+                    </li>
+                    <li class="login-button">
+                        <button onclick="toggleLoginFlyout(event)">Login</button>
+                    </li>
+                    <li class="logout-button" style="display: none;">
+                        <button onclick="handleLogout()">Logout</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden z-[9999]">
+        <!-- Login Form -->
+        <div id="loginForm" class="glass-header items-center rounded-lg w-96 mx-10">
+            <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
+            <form id="loginFormElement" onsubmit="handleLogin(event)">
+                <div class="mx-2 mb-4">
+                    <label for="loginEmail" class="block font-medium">Email:</label>
+                    <input type="email" id="loginEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+                </div>
+                <div class="mx-2 mb-4">
+                    <label for="loginPassword" class="block font-medium">Password:</label>
+                    <input type="password" id="loginPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+                </div>
+                <div class="flex items-center justify-between mx-20 my-5">
+                    <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Login</button>
+                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                </div>
+                <div class="text-center mb-4">
+                    <p>Need an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">SIGN UP</a></p>
+                </div>
+            </form>
+        </div>
+        <!-- register -->
+        <div id="registerForm" class="glass-header items-center rounded-lg w-96 mx-10 hidden">
+            <h2 class="flex justify-center font-bold text-2xl my-4">Register</h2>
+            <form onsubmit="return handleRegister(event)">
+                <div class="mx-2 mb-4">
+                    <label for="registerEmail" class="block font-medium">Email:</label>
+                    <input type="email" id="registerEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+                </div>
+                <div class="mx-2 mb-4">
+                    <label for="registerPassword" class="block font-medium">Password:</label>
+                    <input type="password" id="registerPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+                </div>
+                <div class="mx-2 mb-4">
+                    <label for="userType" class="block font-medium">Account Type:</label>
+                    <select id="userType" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                        <option value="user">Regular User</option>
+                        <option value="artist">Artist</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-between mx-20 my-5">
+                    <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Register</button>
+                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                </div>
+                <div class="text-center mb-4">
+                    <p>Already have an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">LOGIN</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <main class="max-w-full h-screen">
+        <section id="landingPage" class="flex flex-col md:flex-row w-full h-full items-center">
+            <div class="artist-item position-relative w-full h-1/2 md:w-1/2 md:h-full flex items-center justify-center p-0">
+                <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/trial1.png" 
+                     alt="Artist Hub Logo" 
+                     class="w-full h-full md:h-full object-contain object-center scale-150 md:scale-100" 
+                     data-aos="flip-left" 
+                     data-aos-duration="1500">
+            </div>
+            <div class="important-events w-full h-1/2 md:w-1/2 md:h-full md:mt-24 overflow-y-auto">
+                <div class="glass-header rounded-lg p-4 m-4" data-aos="fade-left">
+                    <h3 class="text-xl font-bold mb-2">Welcome to Artist Hub</h3>
+                    <p class="text-sm">Check out our upcoming events!</p>
+                    <p class="text-sm mt-4">Featured events will appear here.</p>
+                </div>
+            </div>
+        </section>
+    
+        <!-- artists -->
+        <section id="artists" class=" flex flex-col gap-4 overflow-hidden">
+            <!-- title container -->
+            <div class="glass-header rounded-lg p-2 mt-10 w-full text-center">
+                <h2 class="text-3xl font-bold text-black">FEATURED ARTISTS</h2>
+            </div>
+            
+            <!-- artist grid container -->
+            <div class="glass-header rounded-lg p-2">
+                <div id="artistsGrid" class="grid gap-4 p-2 overflow-y-auto scrollbar-thin scrollbar-thumb-white/30 scrollbar-track-transparent
+                    max-h-[800px] md:max-h-[600px]
+                    grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    <!-- artists will dynamically load here -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Events -->
+        <section id="events" class="EvntPage w-full min-h-screen p-6">
+            <div class="glass-header rounded-lg p-2 mt-10 w-full text-center mb-4">
+                <h2 class="text-3xl font-bold text-black">UPCOMING EVENTS</h2>
+            </div>
+            <div class="EvntContainer max-w-7xl mx-auto">
+                <!-- events will load here -->
+            </div>
+        </section>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            AOS.init();
+        });
+    </script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+    <script type="module" src="./js/firebase-config.js"></script>
+    <script type="module" src="./js/auth.js"></script>
+    <script type="module" src="./js/loadArtists.js"></script>
+    <div id="userMenu" class="hidden">
+        <div class="glass-header rounded-lg p-4">
+            <nav>
+                <ul>
+                    <li><a href="./profile/profile.html">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script type="module">
+        import { ensureStylesLoaded } from './js/utils.js';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const requiredStyles = [
+                'styles.css',
+                'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+                'https://unpkg.com/swiper/swiper-bundle.min.css',
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+                'https://unpkg.com/aos@2.3.1/dist/aos.css'
+            ];
+            ensureStylesLoaded(requiredStyles);
+        });
+    </script>
+    <style>
+        .glass-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        #artistsGrid {
+            position: relative;
+            z-index: 5;
+        }
+
+        #artistsGrid > div {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            min-height: 300px;
+        }
+
+        #artistsGrid img {
+            width: 128px;
+            height: 128px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        #artistsGrid h3 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        #artistsGrid p {
+            color: #e5e7eb;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        #artistsGrid button {
+            background: white;
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: all 300ms;
+        }
+
+        #artistsGrid button:hover {
+            background: #d1d5db;
+        }
+
+        .featured-artist img {
+            width: 100%;
+            height: auto;
+            max-width: 800px;
+            margin: 0 auto;
+            display: block;
+        }
+
+
+        .featured-artist {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .EvntPage {
+            position: relative;
+            background: rgba(75, 85, 99, 0.5);
+            overflow: hidden;
+            display: block;
+        }
+
+        .EvntContainer {
+            position: relative;
+            width: 100%;
+            padding: 1rem;
+            height: auto;
+            min-height: 200px;
+        }
+
+        /* Responsive containers */
+        @media (max-width: 768px) {
+            .EvntContainer {
+                padding: 0.5rem;
+            }
+        }
+
+        /* Event cards */
+        .EvntContainer .glass-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            margin-bottom: 1rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        /* Force visibility on viewport changes */
+        .EvntContainer * {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Ensure content stays visible during transitions */
+        .EvntContainer .glass-header {
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+    </style>
+    <script type="module" src="./js/loadEvents.js"></script>
+    <script src="./js/navigation.js"></script>
+</body>
+</html>

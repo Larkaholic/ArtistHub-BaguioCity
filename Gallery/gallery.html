@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery</title>
+  <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="gallery.css">
+  <link rel="../output.css" href="output.css">
+  
+</head>
+
+<body class="overflow-hidden">
+  <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+    <div class="flex w-24 ml-16">
+        <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
+    </div>
+
+    <div class="sm:hidden flex items-center mr-5">
+        <button onclick="toggleNav()" class="burger-icon p-2 hover:bg-gray-200 rounded-lg">
+            <svg class="w-6 h-6 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </div>
+
+    <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-10">
+        <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
+            <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                <a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a>
+            </li>
+            <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                <a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a>
+            </li>
+            <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                <a href="javascript:void(0)" onclick="navToEvent('./gallery.html')">Gallery</a>
+            </li>
+            <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                <a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')" id="profileLink">Profile</a>
+            </li>
+            <li class="login-button">
+                <button onclick="toggleLoginFlyout(event)" 
+                        class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                    Login
+                </button>
+            </li>
+            <li class="logout-button" style="display: none;">
+                <button onclick="handleLogout()" 
+                        class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                    Logout
+                </button>
+            </li>
+        </ul>
+    </nav>
+  </header>
+
+  <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+    <div class="glass-header h-full p-6">
+        <nav>
+            <ul class="flex flex-col space-y-4">
+                <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a></li>
+                <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a></li>
+                <li><a href="javascript:void(0)" onclick="navToEvent('./gallery.html')">Gallery</a></li>
+                <li><a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')" id="profileLink">Profile</a></li>
+                <li class="login-button">
+                    <button onclick="toggleLoginFlyout(event)">Login</button>
+                </li>
+                <li class="logout-button" style="display: none;">
+                    <button onclick="handleLogout()">Logout</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+  </div>
+
+  <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+      <!-- Login Form -->
+      <div id="loginForm" class="glass-header items-center rounded-lg w-96 mx-10">
+          <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
+          <form id="loginFormElement" onsubmit="handleLogin(event)">
+              <div class="mx-2 mb-4">
+                  <label for="loginEmail" class="block font-medium">Email:</label>
+                  <input type="email" id="loginEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+              </div>
+              <div class="mx-2 mb-4">
+                  <label for="loginPassword" class="block font-medium">Password:</label>
+                  <input type="password" id="loginPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+              </div>
+              <div class="flex items-center justify-between mx-20 my-5">
+                  <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Login</button>
+                  <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+              </div>
+              <div class="text-center mb-4">
+                  <p>Need an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">SIGN UP</a></p>
+              </div>
+          </form>
+      </div>
+      <!-- register -->
+      <div id="registerForm" class="glass-header items-center rounded-lg w-96 mx-10 hidden">
+          <h2 class="flex justify-center font-bold text-2xl my-4">Register</h2>
+          <form onsubmit="return handleRegister(event)">
+              <div class="mx-2 mb-4">
+                  <label for="registerEmail" class="block font-medium">Email:</label>
+                  <input type="email" id="registerEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Email" required>
+              </div>
+              <div class="mx-2 mb-4">
+                  <label for="registerPassword" class="block font-medium">Password:</label>
+                  <input type="password" id="registerPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
+              </div>
+              <div class="mx-2 mb-4">
+                  <label for="userType" class="block font-medium">Account Type:</label>
+                  <select id="userType" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                      <option value="user">Regular User</option>
+                      <option value="artist">Artist</option>
+                  </select>
+              </div>
+              <div class="flex items-center justify-between mx-20 my-5">
+                  <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Register</button>
+                  <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+              </div>
+              <div class="text-center mb-4">
+                  <p>Already have an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">LOGIN</a></p>
+              </div>
+          </form>
+      </div>
+  </div>
+
+<main class="container mx-auto pt-16 px-2">
+    <div class="flex justify-end">
+        <svg class="w-12 h-12 text-gray-800 dark:text-white bg-green-300 rounded-full p-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+        </svg>
+        <span>0</span>
+    </div>
+
+    <div class="cartModal flex flex-col glass-header rounded-lg">
+        <h1 class="glass-header text-center font-black text-2xl p-1 text-black">Shopping Cart</h1>
+        <div class="flex flex-row justify-center gap-10 p-1">
+            <button class="glass-header p-1 rounded-md text-red-500">Close</button>
+            <button class="glass-header p-1 rounded-md text-black">Checkout</button>
+        </div>
+    </div>
+    
+    <!-- Upload Section (visible only to logged-in users) -->
+    <div id="uploadSection" class="user-only hidden mb-8 z-0">
+        <div class="glass-header p-6 rounded-lg">
+            <h2 class="text-2xl font-bold mb-4 text-center font-bold text-3xl text-white">My Gallery</h2>
+            <div class="flex items-center space-x-4 justify-center">
+                <button id="upload_widget" 
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                    Upload New Image
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="carousel-section mt-8">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <!-- Slides will be dynamically added here -->
+            </div>
+        </div>
+        <div class="swiper-controls">
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+
+    <!-- Keep the Image Modal for viewing larger images -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
+            <img id="modalImage" class="w-full h-auto rounded-lg mb-4">
+            <div class="flex justify-between items-center">
+                <p id="modalCaption" class="text-gray-700"></p>
+                <button onclick="closeImageModal()" 
+                        class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+  <script src="carousel.js"></script>
+  <script type="module" src="../js/firebase-config.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <script type="module" src="galleryManagement.js"></script>
+  <script src="../js/navigation.js"></script>
+  <script src="./test-gallery-honeypot.js"></script>
+</body>
+</html>
