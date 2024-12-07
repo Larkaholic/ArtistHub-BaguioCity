@@ -1,84 +1,60 @@
 import { db, auth } from '../js/firebase-config.js';
-import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getBasePath } from '../js/utils.js';
 
-// Function to fetch images for a specific artist based on their userId
-async function fetchImagesForArtist(userId) {
-    try {
-        const imagesRef = collection(db, "images"); // Assuming images are stored in 'images' collection
-        const q = query(imagesRef, where("userId", "==", userId)); // Filter by userId
-        const querySnapshot = await getDocs(q);
-        const images = [];
+// async function navToGallery() {
+//     const artistId = getArtistIdFromProfile();
 
-        querySnapshot.forEach((doc) => {
-            images.push(doc.data()); // Push each image data to the array
-        });
+//     if (!artistId) {
+//         console.log("artist not found");
+//         return;
+//     }
 
-        return images;
-    } catch (error) {
-        console.error("Error fetching images for artist:", error);
-        return [];
+//     try {
+//         // reference to the artist document in firestore
+//         const artistDocRef = doc(firestore, "artists", artistId);
+//         const artistDoc = await getDoc(artistDocRef);
+
+//         if (artistDoc.exists()) {
+//             // open the gallery page for the artist
+//             const galleryUrl = 'Gallery/gallery-${artistId}.html'; // make the gallery URL
+//             window.location.href = galleryUrl;
+//         } else {
+//             console.error("artist documents not found");
+//         }
+//     } catch (error){
+//         console.error("error fetching artist data:", error);
+//     }
+// }
+
+let swiper;
+
+// Add modal functions
+function openImageModal(imageUrl, title) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    
+    if (modal && modalImage) {
+        modalImage.src = imageUrl;
+        if (modalCaption) {
+            modalCaption.textContent = title;
+        }
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
 }
 
-// Function to create the gallery slides for the artist
-async function loadGallery() {
-    const swiperWrapper = document.querySelector('.swiper-wrapper');
-    if (!swiperWrapper) return;
-
-    // Get the userId from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('id'); // Assuming the artist's userId is passed in the URL as 'id'
-    console.log('Full URL:', window.location.href); // Logs the full URL
-    console.log('User ID:', userId);
-
-    if (!userId) {
-        console.log("User ID not found in the URL.");
-        return;
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
     }
-
-    // Fetch images for the artist from Firestore
-    const images = await fetchImagesForArtist(userId);
-
-    if (images.length === 0) {
-        swiperWrapper.innerHTML = `
-            <div class="swiper-slide">
-                <p class="text-center text-gray-500">No images available</p>
-            </div>`;
-        return;
-    }
-
-    // Clear the wrapper
-    swiperWrapper.innerHTML = '';
-
-    // Create slides for each image
-    images.forEach((imageData) => {
-        const swiperSlide = document.createElement('div');
-        swiperSlide.className = 'swiper-slide';
-        swiperSlide.innerHTML = `
-            <div class="relative w-[300px] h-[300px] rounded-lg overflow-hidden bg-gray-100">
-                <div class="w-full h-full">
-                    <img src="${imageData.imageUrl}" 
-                         alt="${imageData.title}" 
-                         class="w-full h-full rounded-lg cursor-pointer" 
-                         onclick="openImageModal('${imageData.imageUrl}', '${imageData.title}')">
-                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
-                        <p class="text-xs">${new Date(imageData.timestamp).toLocaleDateString()}</p>
-                    </div>
-                </div>
-            </div>
-        `;
-        swiperWrapper.appendChild(swiperSlide);
-    });
-
-    // Initialize Swiper
-    setTimeout(() => {
-        initSwiper(images.length);
-    }, 0);
 }
 
-// Initialize Swiper
+// Add Swiper initialization function
 function initSwiper(slideCount) {
     if (typeof Swiper === 'undefined') {
         console.error('Swiper is not loaded');
@@ -129,38 +105,6 @@ function initSwiper(slideCount) {
     });
 }
 
-// Add modal functions
-function openImageModal(imageUrl, title) {
-    const modal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
-    const modalCaption = document.getElementById('modalCaption');
-
-    if (modal && modalImage) {
-        modalImage.src = imageUrl;
-        if (modalCaption) {
-            modalCaption.textContent = title;
-        }
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-}
-
-function closeImageModal() {
-    const modal = document.getElementById('imageModal');
-    if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-}
-
-// Initialize gallery on page load
-document.addEventListener('DOMContentLoaded', loadGallery);
-
-// Add upload button click handler
-document.getElementById('upload_widget')?.addEventListener('click', function() {
-    myWidget.open();
-}, false);
-
 // Initialize Cloudinary Upload Widget
 var myWidget = cloudinary.createUploadWidget(
     {
@@ -172,17 +116,18 @@ var myWidget = cloudinary.createUploadWidget(
     },
     (error, result) => {
         if (!error && result && result.event === "success") {
-            // Store the uploaded image data in Firestore under the artist's userId
+            // Store the uploaded image data in localStorage
             const imageData = {
                 imageUrl: result.info.secure_url,
                 title: result.info.original_filename,
                 timestamp: new Date().toISOString(),
-                userId: getUserIdFromAuth(), // Store userId from the authenticated user
                 public_id: result.info.public_id
             };
 
-            // Add image data to Firestore
-            addImageToFirestore(imageData);
+            // Get existing images from localStorage
+            const existingImages = JSON.parse(localStorage.getItem('galleryImages') || '[]');
+            existingImages.unshift(imageData); // Add new image at the beginning
+            localStorage.setItem('galleryImages', JSON.stringify(existingImages));
 
             // Update gallery display
             loadGallery();
@@ -191,21 +136,58 @@ var myWidget = cloudinary.createUploadWidget(
     }
 );
 
-// Function to get current authenticated user's ID
-function getUserIdFromAuth() {
-    const user = auth.currentUser;
-    return user ? user.uid : null; // Return the userId if authenticated
+// Load gallery images
+function loadGallery() {
+    const swiperWrapper = document.querySelector('.swiper-wrapper');
+    if (!swiperWrapper) return;
+
+    // Get images from localStorage
+    const images = JSON.parse(localStorage.getItem('galleryImages') || '[]');
+
+    if (images.length === 0) {
+        swiperWrapper.innerHTML = `
+            <div class="swiper-slide">
+                <p class="text-center text-gray-500">No images available</p>
+            </div>`;
+        return;
+    }
+
+    // Clear the wrapper
+    swiperWrapper.innerHTML = '';
+    
+    // Create slides
+    images.forEach((imageData) => {
+        const swiperSlide = document.createElement('div');
+        swiperSlide.className = 'swiper-slide';
+        swiperSlide.innerHTML = `
+            <div class="relative w-[300px] h-[300px] rounded-lg overflow-hidden bg-gray-100">
+                <div class="w-full h-full ">
+                    <img src="${imageData.imageUrl}" 
+                         alt="${imageData.title}" 
+                         class="w-full h-full rounded-lg cursor-pointer" 
+                         onclick="openImageModal('${imageData.imageUrl}', '${imageData.title}')">
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
+                        <p class="text-xs">${new Date(imageData.timestamp).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        swiperWrapper.appendChild(swiperSlide);
+    });
+
+    // Initialize Swiper
+    setTimeout(() => {
+        initSwiper(images.length);
+    }, 0);
 }
 
-// Function to add image data to Firestore
-async function addImageToFirestore(imageData) {
-    try {
-        const imagesRef = collection(db, "images");
-        await imagesRef.add(imageData); // Add the image data to Firestore
-    } catch (error) {
-        console.error("Error adding image to Firestore:", error);
-    }
-}
+// Initialize gallery on page load
+document.addEventListener('DOMContentLoaded', loadGallery);
+
+// Add upload button click handler
+document.getElementById('upload_widget')?.addEventListener('click', function() {
+    myWidget.open();
+}, false);
 
 // Make functions globally available
 window.openImageModal = openImageModal;
