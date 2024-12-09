@@ -22,7 +22,7 @@ window.closeInstructions = closeInstructions;
 import { auth, db } from '../js/firebase-config.js';
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Add your Cloudinary configuration
+// add your Cloudinary configuration
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'artist_profiles';
 
@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (imageUploadSection) imageUploadSection.style.display = 'none';
                 if (profileImageInput) profileImageInput.disabled = true;
                 
-                // Add pending notice
+                // add pending notice
                 const pendingNotice = document.createElement('div');
                 pendingNotice.className = 'text-yellow-500 text-center mb-4';
                 pendingNotice.innerHTML = 'Your profile is pending admin approval. You will be able to upload images once approved.';
                 document.querySelector('form').prepend(pendingNotice);
             }
 
-            // Load existing profile data
+            // load existing profile data
             if (userDoc.exists()) {
                 const data = userDoc.data();
                 

@@ -188,5 +188,27 @@
   <script type="module" src="galleryManagement.js"></script>
   <script src="../js/navigation.js"></script>
   <script src="./test-gallery-honeypot.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+    // Parse the query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const artistId = urlParams.get('artistId');
+
+        if (artistId) {
+            // Fetch gallery data for the artist using artistId
+            await loadGalleryData(artistId);
+        } else {
+            console.error("No artist ID found in the query.");
+        }
+    });
+
+    // Function to load gallery data (implement as needed)
+    async function loadGalleryData(artistId) {
+        // Example: Fetch data from Firestore or your database
+        console.log(`Loading gallery for artist ID: ${artistId}`);
+        // Use artistId to fetch and display gallery data dynamically
+    }
+
+  </script>
 </body>
 </html>

@@ -28,6 +28,51 @@ import { getBasePath } from '../js/utils.js';
 //     }
 // }
 
+// Function to delete image from Cloudinary and localStorage
+window.deleteImage = function(index) {
+    const images = JSON.parse(localStorage.getItem('galleryImages') || '[]');
+    const imageData = images[index];
+    const publicId = imageData.public_id;
+
+    if (!publicId) {
+        console.error("Public ID not found for the image.");
+        return;
+    }
+
+    // Cloudinary API URL for deleting image
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dxeyr4pvf/image/destroy`;
+
+    // Make an API request to Cloudinary to delete the image
+    fetch(cloudinaryUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${331472237828749}`, // Use your API key for authorization
+        },
+        body: JSON.stringify({
+            public_id: publicId,  // Cloudinary public ID of the image to delete
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.result === "ok") {
+            console.log("Image deleted successfully from Cloudinary.");
+            
+            // Remove image from localStorage
+            images.splice(index, 1);  // Remove the image from the array
+            localStorage.setItem('galleryImages', JSON.stringify(images));  // Update localStorage
+
+            // Reload gallery
+            loadGallery();
+        } else {
+            console.error("Error deleting image from Cloudinary:", data);
+        }
+    })
+    .catch(error => {
+        console.error("Error with Cloudinary API request:", error);
+    });
+}
+
 let swiper;
 
 // Add modal functions
@@ -154,9 +199,9 @@ function loadGallery() {
 
     // Clear the wrapper
     swiperWrapper.innerHTML = '';
-    
-    // Create slides
-    images.forEach((imageData) => {
+
+    // Create slides with delete button
+    images.forEach((imageData, index) => {
         const swiperSlide = document.createElement('div');
         swiperSlide.className = 'swiper-slide';
         swiperSlide.innerHTML = `
@@ -168,6 +213,7 @@ function loadGallery() {
                          onclick="openImageModal('${imageData.imageUrl}', '${imageData.title}')">
                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
                         <p class="text-xs">${new Date(imageData.timestamp).toLocaleDateString()}</p>
+                        <button class="text-xs text-red-500 mt-2" onclick="deleteImage(${index})">Delete</button>
                     </div>
                 </div>
             </div>
