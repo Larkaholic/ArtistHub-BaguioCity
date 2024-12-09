@@ -342,3 +342,7 @@ nav ul li button,
     inset: 0 0 0 auto;
     grid-template-rows: 70px 1fr 70px;
 }
+
+.closeCheckout {
+    margin-top: 410px;
+}
