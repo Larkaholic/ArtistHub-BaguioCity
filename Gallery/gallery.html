@@ -134,25 +134,15 @@
         </svg>
         <span>0</span>
     </div>
-
-    <div class="cartModal flex flex-col glass-header rounded-lg hidden">
-        <h1 class="glass-header text-center font-black text-2xl p-1 text-black">Shopping Cart</h1>
-        <div class="flex flex-row justify-center gap-10 p-1">
-            <button class="glass-header p-1 rounded-md text-red-500 hover:bg-red-500 hover:text-white">Close</button>
-            <button class="glass-header p-1 rounded-md text-black hover:bg-gray-700 hover:text-white">Checkout</button>
-        </div>
-    </div>
     
-    <!-- Upload Section (visible only to logged-in users) -->
-    <div id="uploadSection" class="user-only hidden mb-8 z-0">
-        <div class="glass-header p-6 rounded-lg">
+    <div id="uploadSection" class="user-only hidden mb-8">
+        <div class="glass-header p-6 rounded-lg z-900">
             <h2 class="text-2xl font-bold mb-4 text-center font-bold text-3xl text-white">My Gallery</h2>
             <div class="flex items-center space-x-4 justify-center">
                 <button id="upload_widget" 
                         class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
                     Upload New Image
                 </button>
-
             </div>
         </div>
     </div>
@@ -181,6 +171,13 @@
                     Close
                 </button>
             </div>
+        </div>
+    </div>
+    <div class="cartModal flex flex-col glass-header rounded-lg z-1000 fixed bottom-16 right-4 mt-16 w-72">
+        <h1 class="glass-header text-center font-black text-2xl p-1 text-black">Shopping Cart</h1>
+        <div class="closeCheckout flex flex-row justify-center gap-10 p-1">
+            <button class="glass-header p-1 rounded-md text-red-500 hover:bg-red-500 hover:text-white">Close</button>
+            <button class="glass-header p-1 rounded-md text-black hover:bg-gray-700 hover:text-white">Checkout</button>
         </div>
     </div>
 </main>
