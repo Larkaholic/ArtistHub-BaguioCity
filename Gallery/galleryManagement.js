@@ -29,49 +29,23 @@ import { getBasePath } from '../js/utils.js';
 // }
 
 // Function to delete image from Cloudinary and localStorage
-window.deleteImage = function(index) {
-    const images = JSON.parse(localStorage.getItem('galleryImages') || '[]');
-    const imageData = images[index];
-    const publicId = imageData.public_id;
-
-    if (!publicId) {
-        console.error("Public ID not found for the image.");
-        return;
-    }
-
-    // Cloudinary API URL for deleting image
-    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dxeyr4pvf/image/destroy`;
-
-    // Make an API request to Cloudinary to delete the image
-    fetch(cloudinaryUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${331472237828749}`, // Use your API key for authorization
-        },
-        body: JSON.stringify({
-            public_id: publicId,  // Cloudinary public ID of the image to delete
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.result === "ok") {
-            console.log("Image deleted successfully from Cloudinary.");
-            
-            // Remove image from localStorage
-            images.splice(index, 1);  // Remove the image from the array
-            localStorage.setItem('galleryImages', JSON.stringify(images));  // Update localStorage
-
-            // Reload gallery
-            loadGallery();
-        } else {
-            console.error("Error deleting image from Cloudinary:", data);
-        }
-    })
-    .catch(error => {
-        console.error("Error with Cloudinary API request:", error);
+async function deleteImageFromCloudinary(publicId) {
+    const url = "https://<your-firebase-function-url>/deleteImageFromCloudinary"; // Replace with your function URL
+  
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ publicId }),
     });
-}
+  
+    if (response.ok) {
+      alert('Image deleted successfully.');
+    } else {
+      alert('Failed to delete image.');
+    }
+  }
 
 let swiper;
 
