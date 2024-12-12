@@ -4,8 +4,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Event Details - Artist Hub</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="../styles.css">
+        <link rel="stylesheet" href="events.css">
     </head>
     <body class="bg-cover">
         <!-- Header/Navbar -->
@@ -27,27 +28,27 @@
 
             <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-10">
                 <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <li class="nav-item hover:bg-gray-400 p-1 rounded-lg">
                         <a href="javascript:void(0)" onclick="navToEvent('index.html')">Home</a>
                     </li>
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <li class="nav-item hover:bg-gray-400 p-1 rounded-lg">
                         <a href="javascript:void(0)" onclick="navToEvent('index.html#events')">Events</a>
                     </li>
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <li class="nav-item hover:bg-gray-400 p-1 rounded-lg">
                         <a href="javascript:void(0)" onclick="navToEvent('Gallery/gallery.html')">Gallery</a>
                     </li>
-                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <li class="nav-item hover:bg-gray-400 p-1 rounded-lg">
                         <a href="javascript:void(0)" onclick="navToEvent('profile/profile.html')">Profile</a>
                     </li>
                     <li class="login-button">
                         <button onclick="toggleLoginFlyout(event)" 
-                                class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                                class="nav-item hover:bg-gray-400 p-1 rounded-lg font-semibold">
                             Login
                         </button>
                     </li>
                     <li class="logout-button" style="display: none;">
                         <button onclick="handleLogout()" 
-                                class="nav-item hover:bg-green-500 p-1 rounded-lg font-semibold">
+                                class="nav-item hover:bg-gray-400 p-1 rounded-lg font-semibold">
                             Logout
                         </button>
                     </li>
@@ -82,7 +83,7 @@
 
         <main class="container mx-auto mt-24 p-4">
             <!-- Event Details Container -->
-            <div id="eventDetails" class="glass-header rounded-lg p-8">
+            <div id="eventDetails" class="eventt glass-header rounded-lg p-8">
                 <!-- Event details will be loaded here -->
                 <div class="animate-pulse">
                     <div class="h-8 bg-white/20 rounded w-3/4 mb-4"></div>
