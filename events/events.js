@@ -34,14 +34,14 @@ async function loadEventDetails() {
             <div class="flex flex-col md:flex-row gap-8">
                 <!-- event image -->
                 <div class="w-full md:w-1/2">
-                    <img src="${event.imageUrl || 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/ibagiw.jpg'}" 
-                         alt="${event.title}" 
-                         class="w-full h-[300px] object-cover rounded-lg">
+                    <img src="${event.imageUrl || 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/ibagiw.jpg'}"
+                        alt="${event.title}"
+                        class="w-full h-[300px] object-cover rounded-lg border-2 border-black">
                 </div>
 
                 <!-- event information -->
                 <div class="w-full md:w-1/2">
-                    <h1 class="text-3xl font-bold mb-4 text-black">${event.title}</h1>
+                    <h1 class="rubik-dirt-regular text-4xl text-center font-bold mb-4 text-black">${event.title}</h1>
                     
                     <div class="space-y-4">
                         <div>

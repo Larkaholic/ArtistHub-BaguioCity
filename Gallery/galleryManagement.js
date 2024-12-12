@@ -28,6 +28,25 @@ import { getBasePath } from '../js/utils.js';
 //     }
 // }
 
+// Function to delete image from Cloudinary and localStorage
+async function deleteImageFromCloudinary(publicId) {
+    const url = "https://<your-firebase-function-url>/deleteImageFromCloudinary"; // Replace with your function URL
+  
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ publicId }),
+    });
+  
+    if (response.ok) {
+      alert('Image deleted successfully.');
+    } else {
+      alert('Failed to delete image.');
+    }
+  }
+
 let swiper;
 
 // Add modal functions
@@ -154,9 +173,9 @@ function loadGallery() {
 
     // Clear the wrapper
     swiperWrapper.innerHTML = '';
-    
-    // Create slides
-    images.forEach((imageData) => {
+
+    // Create slides with delete button
+    images.forEach((imageData, index) => {
         const swiperSlide = document.createElement('div');
         swiperSlide.className = 'swiper-slide';
         swiperSlide.innerHTML = `
@@ -168,6 +187,7 @@ function loadGallery() {
                          onclick="openImageModal('${imageData.imageUrl}', '${imageData.title}')">
                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
                         <p class="text-xs">${new Date(imageData.timestamp).toLocaleDateString()}</p>
+                        <button class="text-xs text-red-500 mt-2" onclick="deleteImage(${index})">Delete</button>
                     </div>
                 </div>
             </div>

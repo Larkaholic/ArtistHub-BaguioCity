@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap');
+
+.rubik-dirt-regular {
+    font-family: "Rubik Dirt", system-ui;
+    font-weight: 400;
+    font-style: italic;
+}
+
 /* removed unnecessary styles */
 * {
     margin: 0;

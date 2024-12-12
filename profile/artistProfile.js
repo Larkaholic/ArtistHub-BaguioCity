@@ -3,13 +3,14 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getBasePath } from '../js/utils.js';
 
-// at the start of the file
+// Debugging: Verify the script is loaded
 console.log('artistProfile.js loaded');
 
-// get profile id from url
+// Extract profile ID from the URL
 const urlParams = new URLSearchParams(window.location.search);
 const profileId = urlParams.get('id');
 
+// Function to check if a user is an admin
 async function isUserAdmin(userId) {
     try {
         const userDoc = await getDoc(doc(db, "users", userId));
@@ -18,36 +19,50 @@ async function isUserAdmin(userId) {
         }
         return false;
     } catch (error) {
-        console.error("error checking admin status:", error);
+        console.error("Error checking admin status:", error);
         return false;
     }
 }
 
-// Add the navigation function
+// Dynamic gallery link update
+document.addEventListener('DOMContentLoaded', () => {
+    const artistId = getArtistIdFromProfile(); // Replace this with actual logic to fetch artist ID
+
+    if (artistId) {
+        const galleryButton = document.getElementById('dynamicGalleryButton');
+        galleryButton.setAttribute('onclick', `navToEvent('Gallery/gallery.html?artistId=${artistId}')`);
+    } else {
+        console.error("Artist ID not found.");
+    }
+});
+
+// Placeholder for getting artist ID
+function getArtistIdFromProfile() {
+    return profileId; // Adjust this logic as needed to fetch the correct artist ID dynamically
+}
+
+// Navigate to Edit Profile page
 function goToEditProfile() {
     const basePath = getBasePath();
     window.location.href = `${basePath}/profile/edit-profile.html?id=${profileId}`;
 }
 
-// Make it available globally
+// Make edit profile navigation globally accessible
 window.goToEditProfile = goToEditProfile;
 
-// load profile data immediately without auth check
+// Load artist profile data
 async function loadProfile() {
     console.log('loadProfile called');
     try {
         if (!profileId) {
-            console.log('no profileId found');
+            console.log('No profile ID found');
             window.location.href = '../index.html';
             return;
         }
 
         const userDoc = await getDoc(doc(db, "users", profileId));
-        console.log('userDoc:', userDoc.exists(), userDoc.data());
-        
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            console.log('userData:', userData);
 
             // Update profile image
             const profileImage = document.getElementById('profileImage');
@@ -84,7 +99,6 @@ async function loadProfile() {
                 google: document.getElementById('googleLink')
             };
 
-            // Show/hide social links based on availability
             Object.entries(socialLinks).forEach(([platform, element]) => {
                 if (element) {
                     if (userData.socialLinks?.[platform]) {
@@ -102,13 +116,11 @@ async function loadProfile() {
                 buttonContainer.style.display = 'none';
             }
 
-            // Check if current user is admin or profile owner
+            // Check user permissions
             onAuthStateChanged(auth, async (user) => {
                 const editButton = document.getElementById('editProfileButton');
-                const buttonContainer = document.querySelector('.fixed.bottom-8.right-8');
-                
                 if (!editButton || !buttonContainer) return;
-                
+
                 if (!user) {
                     buttonContainer.style.display = 'none';
                     return;
@@ -119,29 +131,13 @@ async function loadProfile() {
                     const isAdmin = currentUserDoc.exists() && currentUserDoc.data().isAdmin === true;
 
                     if (isAdmin) {
-                        // Show admin controls
                         buttonContainer.style.display = 'block';
-                        editButton.innerHTML = `
-                            <div class="flex items-center space-x-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                                </svg>
-                                <span>Admin Controls</span>
-                            </div>
-                        `;
+                        editButton.innerHTML = `<span>Admin Controls</span>`;
                         editButton.onclick = () => handleAdminAction(profileId);
-                        editButton.style.display = 'flex';
                     } else if (user.uid === profileId) {
-                        // Show edit profile for profile owner
                         buttonContainer.style.display = 'block';
-                        editButton.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                            <span>Edit Profile</span>
-                        `;
+                        editButton.innerHTML = `<span>Edit Profile</span>`;
                         editButton.onclick = goToEditProfile;
-                        editButton.style.display = 'flex';
                     }
                 } catch (error) {
                     console.error("Error checking user status:", error);
@@ -154,6 +150,7 @@ async function loadProfile() {
     }
 }
 
+// Update social links dynamically
 function updateSocialLink(platform, url) {
     const link = document.getElementById(`${platform}Link`);
     if (link) {
@@ -166,25 +163,19 @@ function updateSocialLink(platform, url) {
     }
 }
 
-// make sure the script is loaded and running
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, calling loadProfile');
-    loadProfile();
-});
-  
-window.handleAdminAction = async function() {
+// Handle admin actions
+window.handleAdminAction = async function(profileId) {
     const user = auth.currentUser;
     if (!user) return;
 
     const isAdmin = await isUserAdmin(user.uid);
     if (!isAdmin) {
-        alert('you do not have admin privileges');
+        alert('You do not have admin privileges');
         return;
     }
 
-    const action = prompt('admin controls: \n1. manage user profile\n2. manage content\n3. view reports');
-    
-    switch(action) {
+    const action = prompt('Admin controls: \n1. Manage User Profile\n2. Manage Content\n3. View Reports');
+    switch (action) {
         case '1':
             navToEvent('admin/manage-users.html');
             break;
@@ -196,8 +187,13 @@ window.handleAdminAction = async function() {
             break;
         default:
             if (action !== null) {
-                alert('invalid option');
+                alert('Invalid option');
             }
     }
-}
-  
+};
+
+// Ensure profile loads on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, calling loadProfile');
+    loadProfile();
+});

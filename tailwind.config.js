@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{gallery,js}"],
+  content: ["./src/**/*.{html,js}"],
   theme: {
     fontSize: {
       sm: '0.8rem',
@@ -17,9 +17,10 @@ module.exports = {
       md: '768px',
     },
     extend: {
-      
+      fontFamily: {
+        custom: ['"Rubik Dirt"', 'sans-serif'],
+      },
     },
-    
   },
   plugins: [
     require('@tailwindcss/forms'),

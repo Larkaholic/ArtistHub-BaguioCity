@@ -194,13 +194,25 @@
                             <a id="youtubeLink" href="#" class="fa fa-youtube hidden"></a>
                             <a id="googleLink" href="#" class="fa fa-google hidden"></a>
                         </div>
+
                         <div class="w-full mt-1 hidden md:flex">
-                            <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('Gallery/gallery.html')">Gallery</button>
+                            <button 
+                                id="dynamicGalleryButton" class="glass-header p-2 rounded-lg w-full" onclick="">
+                                Gallery
+                            </button>
                         </div>
+
                     </div>
                 </div>
+
                 <div class="w-full mt-1 md:hidden">
-                    <button class="glass-header p-2 rounded-lg w-full" onclick="navToEvent('Gallery/gallery.html')">Gallery</button>
+                    <button 
+                        id="dynamicGalleryButton" 
+                        class="glass-header p-2 rounded-lg w-full" 
+                        onclick=""
+                    >
+                        Gallery
+                    </button>
                 </div>
                 <div class="glass-header text-black mt-2 max-w-full w-full rounded-3xl text-2xl object-bottom md:mt-16 md:mb-10 flex-grow min-h-dvh md:w-full md:ml-5 md:mr-10">
                     <h2 id="displayName" class="font-bold text-3xl my-4">Loading...</h2>
