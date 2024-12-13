@@ -152,7 +152,7 @@
         </section>
     
         <!-- artists -->
-        <section id="artists" class=" flex flex-col gap-4 overflow-hidden">
+        <section id="artists" class="flex flex-col gap-4 overflow-hidden">
             <!-- title container -->
             <div class="glass-header rounded-lg p-2 mt-10 w-full text-center">
                 <h2 class="text-3xl font-bold text-black">FEATURED ARTISTS</h2>
@@ -218,10 +218,12 @@
     </script>
     <style>
         .glass-header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 1);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(19.8px);
+            -webkit-backdrop-filter: blur(19.8px);
+            border: 1px solid rgba(255, 255, 255, 0.01);
         }
 
         #artistsGrid {
@@ -289,7 +291,7 @@
 
         .EvntPage {
             position: relative;
-            background: rgba(75, 85, 99, 0.5);
+            /* background: rgba(75, 85, 99, 0.5); */
             overflow: hidden;
             display: block;
         }

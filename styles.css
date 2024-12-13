@@ -19,19 +19,35 @@ html, body {
     overflow: hidden;
 }
 
-body {
-    font-family: Arial, sans-serif;
+#landingPage {
     background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
 }
-/* global header */
-.glass-header {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+
+body {
+    font-family: Arial, sans-serif;
+    /* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
+    background: rgb(214,214,214);
+    background: linear-gradient(90deg, rgba(214,214,214,1) 0%, rgba(255,255,255,0) 51%, rgba(214,214,214,1) 100%);
 }
 
-/* nav */
+/* global header */
+.glass-header {
+    background: rgba(255, 255, 255, 1);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(19.8px);
+    -webkit-backdrop-filter: blur(19.8px);
+    border: 1px solid rgba(255, 255, 255, 0.01);
+}
+
+.glass-header2 {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.01);
+}
 
 
 .nav-item button,
@@ -269,10 +285,10 @@ section {
     gap: 2rem;
     padding: 2rem;
     width: 100%;
-    height: auto; /* changed from fixed height */
+    height: auto;
     min-height: 100vh;
-    overflow: visible; /* changed from hidden/auto */
-    margin-bottom: 2rem; /* added bottom margin */
+    overflow: visible;
+    margin-bottom: 2rem;
 }
 
 /* ensure the section containing the grid is properly sized */
@@ -280,5 +296,5 @@ section#artists {
     min-height: 100vh;
     height: auto;
     overflow: visible;
-    padding-bottom: 4rem; /* added padding at bottom */
+    padding-bottom: 4rem;
 }
