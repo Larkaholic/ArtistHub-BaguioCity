@@ -28,7 +28,7 @@ async function loadArtists() {
         artists.slice(0, 15).forEach((artist) => {
             const card = document.createElement('div');
             card.className = `
-                glass-header rounded-lg p-6 flex flex-col items-center
+                glass-header rounded-lg p-6 flex flex-col items-center border-2 border-gray-700
                 min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1
             `;
             

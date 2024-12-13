@@ -13,7 +13,7 @@
     <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
 </head>
 <body class="bg-cover">
-    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 headerR">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
         </div>
@@ -26,7 +26,7 @@
             </button>
         </div>
 
-        <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-10">
+        <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-1">
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
                     <a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a>
@@ -59,10 +59,10 @@
         </nav>
     </header>
 
-    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden  bg-gray-300">
         <div class="glass-header h-full p-6">
             <nav>
-                <ul class="flex flex-col space-y-4">
+                <ul class="flex flex-col space-y-4 mt-10">
                     <li><a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('./index.html#events')">Events</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('./Gallery/gallery.html')">Gallery</a></li>
@@ -95,10 +95,10 @@
                     <input type="password" id="loginPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
                 </div>
                 <div class="flex items-center justify-between mx-20 my-5">
-                    <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Login</button>
-                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                    <button type="submit" class="text-black border-2 border-black py-2 px-4 rounded-md hover:bg-gray-400 hover:text-black">Login</button>
+                    <button type="button" class="text-black border-2 border-black py-2 px-4 rounded-md hover:bg-gray-400 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
                 </div>
-                <div class="text-center mb-4">
+                <div class="text-center mb-4 border-2 border-red">
                     <p>Need an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">SIGN UP</a></p>
                 </div>
             </form>
@@ -123,8 +123,8 @@
                     </select>
                 </div>
                 <div class="flex items-center justify-between mx-20 my-5">
-                    <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Register</button>
-                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                    <button type="submit" class="text-black border-2 border-black py-2 px-4 rounded-md hover:bg-gray-400 hover:text-black">Register</button>
+                    <button type="button" class="text-black border-2 border-black py-2 px-4 rounded-md hover:bg-gray-400 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
                 </div>
                 <div class="text-center mb-4">
                     <p>Already have an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">LOGIN</a></p>
@@ -153,7 +153,7 @@
         <!-- artists -->
         <section id="artists" class="flex flex-col gap-4">
             <!-- title container -->
-            <div class="glass-header rounded-lg p-2 mt-10 w-full text-center">
+            <div class="header rounded-lg p-2 mt-10 w-full text-center">
                 <h2 class="text-3xl font-bold text-black">FEATURED ARTISTS</h2>
             </div>
             
@@ -169,7 +169,7 @@
         
         <!-- Events -->
         <section id="events" class="EvntPage w-full min-h-screen p-6">
-            <div class="glass-header rounded-lg p-2 mt-10 w-full text-center mb-4">
+            <div class="header rounded-lg p-2 mt-10 w-full text-center mb-4">
                 <h2 class="text-3xl font-bold text-black">UPCOMING EVENTS</h2>
             </div>
             <div class="EvntContainer max-w-7xl mx-auto">
@@ -228,6 +228,9 @@
             border: 1px solid rgba(255, 255, 255, 0.01);
         }
 
+        #events {
+            background-color: #e2e2e2;
+        }
         #artistsGrid {
             position: relative;
             z-index: 5;
@@ -239,6 +242,9 @@
             align-items: center;
             padding: 1.5rem;
             min-height: 300px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: gray;
         }
 
         #artistsGrid img {
@@ -273,20 +279,9 @@
             background: #d1d5db;
         }
 
-        .featured-artist img {
-            width: 100%;
-            height: auto;
-            max-width: 800px;
-            margin: 0 auto;
-            display: block;
-        }
-
-
-        .featured-artist {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 1rem;
+        #artists {
+            background: rgb(226,226,226);
+            background: linear-gradient(0deg, rgba(226,226,226,1) 14%, rgba(255,255,255,1) 33%, rgba(110,212,136,1) 59%, rgba(50,170,80,1) 83%, rgba(35,78,47,1) 100%);        
         }
 
         .EvntPage {
