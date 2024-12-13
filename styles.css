@@ -26,8 +26,8 @@ html, body {
 body {
     font-family: Arial, sans-serif;
     /* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-    background: rgb(214,214,214);
-    background: linear-gradient(90deg, rgba(214,214,214,1) 0%, rgba(255,255,255,0) 51%, rgba(214,214,214,1) 100%);
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 33%, rgba(3,87,0,1) 100%);
 }
 
 /* global header */
@@ -133,6 +133,16 @@ section {
 
 .swiper-pagination-bullet-active {
     background: #000000 !important;
+}
+
+.header {
+    background: rgb(181,181,181);
+    background: linear-gradient(90deg, rgba(181,181,181,0.9668242296918768) 5%, rgba(232,232,232,1) 100%);
+}
+
+.headerR {
+    background: rgb(232,232,232);
+    background: linear-gradient(90deg, rgba(232,232,232,1) 0%, rgba(181,181,181,0.9668242296918768) 97%);    
 }
 
 /* artist section container */
@@ -242,7 +252,7 @@ section#events {
     width: 100%;
     padding: 1rem;
     margin-top: 2rem;
-  
+    margin: 2px;  
 }
 
 /* Update container styles */
