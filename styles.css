@@ -6,31 +6,6 @@
     font-style: italic;
 }
 
-/* removed unnecessary styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    scroll-behavior: smooth;
-    height: 100%;
-    overflow: hidden;
-}
-
-#landingPage {
-    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
-}
-
-body {
-    font-family: Arial, sans-serif;
-    /* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-    background: rgb(255,255,255);
-    background: linear-gradient(0deg, rgba(255,255,255,1) 33%, rgba(3,87,0,1) 100%);
-}
-
-/* global header */
 .glass-header {
     background: rgba(255, 255, 255, 1);
     border-radius: 16px;
@@ -49,7 +24,41 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.01);
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+html, body {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+}
+
+main {
+    position: relative;
+    z-index: 1;
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+    padding-top: 64px;
+    overflow-y: auto;
+}
+
+/* SECTION (GLOBAL) */
+
+section {
+    position: relative;
+    z-index: 1;
+    scroll-snap-align: start;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    padding: 20px;
+}
+
+
+/* NAVIGATION */
 .nav-item button,
 .login-button button {
     font-weight: 600 !important;
@@ -62,79 +71,6 @@ nav ul li button,
     font-weight: 600 !important;
 }
 
-
-main {
-    position: relative;
-    z-index: 1;
-    scroll-snap-type: y mandatory;
-    height: 100vh;
-    overflow-y: scroll;
-    padding-top: 64px;
-}
-/* Landing Page */
-section {
-    position: relative;
-    z-index: 1;
-    scroll-snap-align: start;
-    height: 100vh;
-    display: flex;
-    padding: 20px;
-}
-
-/* .flyout {
-    display: none;
-}
-.flyout.active {
-    display: flex;
-} */
-
-.events {
-    height: 75vh;
-
-}
-
-.artist-item {
-    width: 50%;
-}
-
-.artist-item img {
-    height: 90dvh;
-}
-
-
-/* events */
-.EvntPage {
-    height: 100dvh;
-}
-
-.EvntRow:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Forum */
-.Forum {
-    height: 100dvh;
-}
-
-.swiper-wrapper {
-    width: 100%;
-    height: max-content !important;
-    padding-bottom: 64px !important;
-    -webkit-transition-timing-function: linear !important;
-    transition-timing-function: linear !important;
-    position: relative;
-}
-
-.swiper-pagination-bullet {
-    background: #000000;
-}
-
-.swiper-pagination-bullet-active {
-    background: #000000 !important;
-}
-
 .header {
     background: rgb(181,181,181);
     background: linear-gradient(90deg, rgba(181,181,181,0.9668242296918768) 5%, rgba(232,232,232,1) 100%);
@@ -145,7 +81,29 @@ section {
     background: linear-gradient(90deg, rgba(232,232,232,1) 0%, rgba(181,181,181,0.9668242296918768) 97%);    
 }
 
-/* artist section container */
+/* SECTION 1 (LANDING PAGE)*/
+
+.hero-section {
+    
+}
+
+#landingPage {
+    width: 100%;
+    height: 100dvh;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
+}
+
+
+/* SECTION 2 (ARTIST PAGE) */
+
+.artist-item {
+    width: 50%;
+}
+
+.artist-item img {
+    height: 90dvh;
+}
+
 #artists {
     display: flex;
     flex-direction: column;
@@ -213,6 +171,75 @@ section {
     transform: translateY(-5px);
 }
 
+section#landingPage {
+    height: calc(100vh - 64px); /* Subtract header height */
+    padding: 0; /* Remove padding to ensure full width/height */
+    margin-top: 64px; /* Add margin for header */
+}
+
+.artist-item img {
+    height: 100%; /* Use full height of container */
+    width: 100%;
+}
+
+/* update the artists grid container */
+.artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    margin-bottom: 2rem;
+}
+
+/* ensure the section containing the grid is properly sized */
+section#artists {
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 4rem;
+}
+
+
+
+
+
+.events {
+    height: 75vh;
+
+}
+
+.EvntPage {
+    height: 100dvh;
+}
+
+.EvntRow:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    -webkit-transition-timing-function: linear !important;
+    transition-timing-function: linear !important;
+    position: relative;
+}
+
+.swiper-pagination-bullet {
+    background: #000000;
+}
+
+.swiper-pagination-bullet-active {
+    background: #000000 !important;
+}
+
+
 /* header z-index */
 header.glass-header {
     z-index: 1000;
@@ -228,17 +255,7 @@ header.glass-header {
     z-index: 1;
 }
 
-/* Update the section styles */
-section#landingPage {
-    height: calc(100vh - 64px); /* Subtract header height */
-    padding: 0; /* Remove padding to ensure full width/height */
-    margin-top: 64px; /* Add margin for header */
-}
 
-.artist-item img {
-    height: 100%; /* Use full height of container */
-    width: 100%;
-}
 
 .important-events {
     padding: 1rem;
@@ -271,40 +288,4 @@ section#events {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-}
-
-/* Ensure proper scroll behavior */
-main {
-    scroll-snap-type: y mandatory;
-    height: 100vh;
-    overflow-y: auto;
-    padding-top: 64px;
-}
-
-/* Make sections take full height */
-section {
-    min-height: 100vh;
-    scroll-snap-align: start;
-    position: relative;
-}
-
-/* update the artists grid container */
-.artists-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    width: 100%;
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
-    margin-bottom: 2rem;
-}
-
-/* ensure the section containing the grid is properly sized */
-section#artists {
-    min-height: 100vh;
-    height: auto;
-    overflow: visible;
-    padding-bottom: 4rem;
 }
