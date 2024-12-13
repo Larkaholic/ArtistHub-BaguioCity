@@ -139,8 +139,7 @@
                 <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/logo.png" 
                      alt="Artist Hub Logo" 
                      class="w-full h-full md:h-full object-contain object-center scale-150 md:scale-100" 
-                     data-aos="flip-left" 
-                     data-aos-duration="1500">
+                     data-aos="flip-left" data-aos-duration="1500">
             </div>
             <div class="important-events w-full h-1/2 md:w-1/2 md:h-full md:mt-24 overflow-y-auto">
                 <div class="glass-header rounded-lg p-4 m-4" data-aos="fade-left">
@@ -152,7 +151,7 @@
         </section>
     
         <!-- artists -->
-        <section id="artists" class="flex flex-col gap-4 overflow-hidden">
+        <section id="artists" class="flex flex-col gap-4">
             <!-- title container -->
             <div class="glass-header rounded-lg p-2 mt-10 w-full text-center">
                 <h2 class="text-3xl font-bold text-black">FEATURED ARTISTS</h2>
@@ -182,7 +181,10 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            AOS.init();
+            AOS.init({
+                duration: 1500,
+                once:true,
+            });
         });
     </script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
