@@ -21,14 +21,14 @@ async function loadEvents() {
         if (importantEventsContainer) {
             if (featuredEvents.length === 0) {
                 importantEventsContainer.innerHTML = `
-                    <div class="glass-header rounded-lg p-4 m-4" data-aos="fade-left" style="cursor: pointer;">
+                    <div class="glass-header2 rounded-lg p-4 m-4" data-aos="fade-left" style="cursor: pointer;">
                         <h3 class="text-xl font-bold mb-2">No Featured Events</h3>
                         <p class="text-sm">Check back later for featured events!</p>
                     </div>
                 `;
             } else {
                 importantEventsContainer.innerHTML = featuredEvents.map(event => `
-                    <div class="glass-header rounded-lg p-4 m-4 event-card" 
+                    <div class="glass-header2 rounded-lg p-4 m-4 event-card" 
                         data-id="${event.id}" data-aos="fade-left" style="cursor: pointer;">
                         <h3 class="rubik-dirt-regular font-custom text-2xl font-bold mb-2">${event.title}</h3>
                         <p class="text-sm">Start: ${event.startDate}</p>
