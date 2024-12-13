@@ -59,11 +59,11 @@ async function loadEvents() {
                     <div class="glass-header rounded-lg p-4 mb-4 event-card" data-aos="fade-up" 
                     style="cursor: pointer;" data-id="${event.id}">
                         <div class="event-content" style="position: relative; z-index: 12;">
-                            <h3 class="rubik-dirt-regular text-2xl font-bold mb-2">${event.title}</h3>
-                            <p class="text-sm">Start: ${event.startDate}</p>
-                            <p class="text-sm">End: ${event.endDate}</p>
-                            <p class="text-sm">Location: ${event.location}</p>
-                            ${event.description ? `<p class="mt-2">${event.description}</p>` : ''}
+                            <h3 class="rubik-dirt-regular text-2xl font-bold mb-2 text-black">${event.title}</h3>
+                            <p class="text-sm text-black">Start: ${event.startDate}</p>
+                            <p class="text-sm text-black">End: ${event.endDate}</p>
+                            <p class="text-sm text-black">Location: ${event.location}</p>
+                            ${event.description ? `<p class="mt-2 text-black">${event.description}</p>` : ''}
                             ${event.imageUrl ? `
                                 <img src="${event.imageUrl}" alt="${event.title}" 
                                      class="mt-4 w-full h-48 object-cover rounded">
