@@ -40,6 +40,7 @@ main {
     position: relative;
     z-index: 1;
     scroll-snap-type: y mandatory;
+    overflow-x: hidden;
     height: 100vh;
     padding-top: 64px;
     overflow-y: auto;
