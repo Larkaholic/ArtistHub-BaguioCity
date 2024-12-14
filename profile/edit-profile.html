@@ -59,19 +59,19 @@
 <body>
     <div class="container mx-auto px-4 py-8">
         <form id="editProfileForm" class="glass-header rounded-lg p-6 edit-form-container">
-            <h1 class="text-2xl font-bold mb-6">Edit Artist Profile</h1>
+            <h1 class="text-2xl font-bold mb-6 text-black">Edit Artist Profile</h1>
 
             <!-- profile Image -->
             <div class="relative">
                 <img id="profileImage" 
                      src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true" 
                      alt="Profile" 
-                     class="w-32 h-32 rounded-full object-cover">
+                     class="w-32 h-32 rounded-full object-cover text-black text-center border-2 border-black">
                 
                 <input type="file" id="imageInput" accept="image/*" class="hidden">
                 <button type="button" 
                         onclick="document.getElementById('imageInput').click()" 
-                        class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-2">
+                        class="absolute bottom-0 right-0 bg-blue-500 text-black rounded-full p-2">
                     Change Photo
                 </button>
             </div>
@@ -79,12 +79,12 @@
             <!-- basic Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block font-medium mb-2">Display Name</label>
+                    <label class="block font-medium mb-2 text-black">Display Name</label>
                     <input type="text" id="displayName" class="w-full p-2 border rounded-md">
                 </div>
                 
                 <div>
-                    <label class="block font-medium mb-2">Specialization</label>
+                    <label class="block font-medium mb-2 text-black">Specialization</label>
                     <input type="text" id="specialization" class="w-full p-2 border rounded-md">
                 </div>
             </div>
@@ -97,32 +97,32 @@
 
             <!-- Social Links -->
             <div class="space-y-4">
-                <h3 class="font-medium">Social Media Links</h3>
+                <h3 class="font-medium text-black">Social Media Links</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1">Facebook</label>
+                            <label class="block text-sm mb-1 text-black">Facebook</label>
                             <input type="url" id="facebook" placeholder="Facebook URL" class="w-full p-2 border rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('facebook')">Instructions</button>
                     </div>
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1">Instagram</label>
+                            <label class="block text-sm mb-1 text-black">Instagram</label>
                             <input type="url" id="instagram" placeholder="Instagram URL" class="w-full p-2 border rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('instagram')">Instructions</button>
                     </div>
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1">YouTube</label>
+                            <label class="block text-sm mb-1 text-black">YouTube</label>
                             <input type="url" id="youtube" placeholder="YouTube URL" class="w-full p-2 border rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('youtube')">Instructions</button>
                     </div>
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1">Google</label>
+                            <label class="block text-sm mb-1 text-black">Google</label>
                             <input type="url" id="google" placeholder="Google URL" class="w-full p-2 border rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('google')">Instructions</button>
@@ -133,7 +133,7 @@
             <!-- Instructions Modal -->
             <div id="instructionsModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden" onclick="closeInstructions(event)">
                 <div class="bg-white p-6 rounded-lg w-11/12 md:w-1/2 max-w-md" onclick="event.stopPropagation()">
-                    <h4 class="text-lg font-semibold mb-2">How to Upload Your Links</h4>
+                    <h4 class="text-lg font-semibold mb-2 text-black">How to Upload Your Links</h4>
                     <p id="instructionsText" class="text-sm text-gray-600 mb-4"></p>
                 </div>
             </div>
@@ -143,12 +143,12 @@
         <div class="button-container">
             <div class="container mx-auto max-w-4xl flex justify-center gap-4 px-4">
                 <button type="submit" form="editProfileForm"
-                    class="bg-green-500 text-white px-8 py-3 rounded-md hover:bg-green-600 transition duration-300 w-full sm:w-auto text-lg">
+                    class="bg-green-500 text-black px-8 py-3 rounded-md hover:bg-green-600 transition duration-300 w-full sm:w-auto text-lg">
                     Save Changes
                 </button>
                 <button type="button" 
                     id="cancelButton" 
-                    class="bg-red-500 text-white px-8 py-3 rounded-md hover:bg-red-600 transition duration-300 w-full sm:w-auto text-lg">
+                    class="bg-red-500 text-black px-8 py-3 rounded-md hover:bg-red-600 transition duration-300 w-full sm:w-auto text-lg">
                     Cancel
                 </button>
             </div>
