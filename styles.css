@@ -58,6 +58,9 @@ section {
     padding: 20px;
 }
 
+footer {
+    scroll-snap-align: start;
+}
 
 /* NAVIGATION */
 .nav-item button,
