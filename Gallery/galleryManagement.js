@@ -1,215 +1,226 @@
-import { db, auth } from '../js/firebase-config.js';
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getBasePath } from '../js/utils.js';
+import { 
+    collection, 
+    addDoc, 
+    query, 
+    where, 
+    getDocs,
+    deleteDoc,
+    doc,
+    getDoc 
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { auth, db } from '../js/firebase-config.js';
 
-// async function navToGallery() {
-//     const artistId = getArtistIdFromProfile();
+// Get profile ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const profileId = urlParams.get('profileId') || 'default';
+const artistId = urlParams.get('artistId') || profileId;
 
-//     if (!artistId) {
-//         console.log("artist not found");
-//         return;
-//     }
+// Check if user is admin
+async function isAdmin(email) {
+    if (!email) return false;
+    const adminEmails = ['admin@artisthub.com', 'developer@artisthub.com'];
+    return adminEmails.includes(email);
+}
 
-//     try {
-//         // reference to the artist document in firestore
-//         const artistDocRef = doc(firestore, "artists", artistId);
-//         const artistDoc = await getDoc(artistDocRef);
-
-//         if (artistDoc.exists()) {
-//             // open the gallery page for the artist
-//             const galleryUrl = 'Gallery/gallery-${artistId}.html'; // make the gallery URL
-//             window.location.href = galleryUrl;
-//         } else {
-//             console.error("artist documents not found");
-//         }
-//     } catch (error){
-//         console.error("error fetching artist data:", error);
-//     }
-// }
-
-// Function to delete image from Cloudinary and localStorage
-async function deleteImageFromCloudinary(publicId) {
-    const url = "https://<your-firebase-function-url>/deleteImageFromCloudinary"; // Replace with your function URL
-  
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ publicId }),
-    });
-  
-    if (response.ok) {
-      alert('Image deleted successfully.');
-    } else {
-      alert('Failed to delete image.');
+// Show/hide upload form
+document.getElementById('showUploadForm')?.addEventListener('click', () => {
+    const uploadForm = document.getElementById('uploadForm');
+    if (uploadForm) {
+        uploadForm.style.display = uploadForm.style.display === 'none' ? 'block' : 'none';
     }
-  }
+});
 
-let swiper;
-
-// Add modal functions
-function openImageModal(imageUrl, title) {
-    const modal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
-    const modalCaption = document.getElementById('modalCaption');
+// Upload form handling
+document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
     
-    if (modal && modalImage) {
-        modalImage.src = imageUrl;
-        if (modalCaption) {
-            modalCaption.textContent = title;
-        }
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-}
-
-function closeImageModal() {
-    const modal = document.getElementById('imageModal');
-    if (modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-}
-
-// Add Swiper initialization function
-function initSwiper(slideCount) {
-    if (typeof Swiper === 'undefined') {
-        console.error('Swiper is not loaded');
+    if (!auth.currentUser) {
+        alert('Please login to upload images');
         return;
     }
 
-    // Destroy existing swiper instance if it exists
-    if (window.swiper) {
-        window.swiper.destroy(true, true);
+    const file = document.getElementById('imageFile')?.files[0];
+    const title = document.getElementById('title')?.value;
+    const description = document.getElementById('description')?.value;
+
+    if (!file || !title || !description) {
+        alert('Please fill in all fields');
+        return;
     }
 
-    // Initialize new Swiper with centered slides
-    window.swiper = new Swiper('.swiper-container', {
-        slidesPerView: 3,
-        slidesPerGroup: 1,
-        spaceBetween: 30,
-        centeredSlides: true,
-        loop: slideCount > 3,
-        watchOverflow: true,
-        observer: true,
-        observeParents: true,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-            type: 'bullets',
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        keyboard: {
-            enabled: true,
-        },
-        breakpoints: {
-            320: {
-                slidesPerView: 1,
-                spaceBetween: 10
-            },
-            640: {
-                slidesPerView: 2,
-                spaceBetween: 20
-            },
-            1024: {
-                slidesPerView: 3,
-                spaceBetween: 30
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'artist_profiles');
+
+    try {
+        const cloudinaryResponse = await fetch(
+            `https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload`,
+            {
+                method: 'POST',
+                body: formData
             }
+        );
+            
+        if (!cloudinaryResponse.ok) {
+            throw new Error('Upload failed');
         }
-    });
-}
+            
+        const cloudinaryData = await cloudinaryResponse.json();
 
-// Initialize Cloudinary Upload Widget
-var myWidget = cloudinary.createUploadWidget(
-    {
-        cloudName: 'dxeyr4pvf',
-        uploadPreset: 'artist_profiles',
-        folder: 'user_galleries',
-        sources: ['local', 'url', 'camera'],
-        maxFiles: 10,
-    },
-    (error, result) => {
-        if (!error && result && result.event === "success") {
-            // Store the uploaded image data in localStorage
-            const imageData = {
-                imageUrl: result.info.secure_url,
-                title: result.info.original_filename,
-                timestamp: new Date().toISOString(),
-                public_id: result.info.public_id
-            };
+        const galleryCollection = collection(db, 'gallery_images');
+        await addDoc(galleryCollection, {
+            artistEmail: auth.currentUser.email,
+            artistId: auth.currentUser.uid,
+            profileId: artistId,
+            imageId: `img_${Date.now()}`,
+            title,
+            description,
+            imageUrl: cloudinaryData.secure_url,
+            createdAt: new Date().toISOString(),
+            isPublic: true
+        });
 
-            // Get existing images from localStorage
-            const existingImages = JSON.parse(localStorage.getItem('galleryImages') || '[]');
-            existingImages.unshift(imageData); // Add new image at the beginning
-            localStorage.setItem('galleryImages', JSON.stringify(existingImages));
-
-            // Update gallery display
-            loadGallery();
-            alert('Image uploaded successfully!');
+        const uploadForm = document.getElementById('uploadForm');
+        if (uploadForm) {
+            uploadForm.style.display = 'none';
+            uploadForm.reset();
         }
+        loadImages();
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Failed to upload image. Please try again.');
     }
-);
+});
 
-// Load gallery images
-function loadGallery() {
-    const swiperWrapper = document.querySelector('.swiper-wrapper');
-    if (!swiperWrapper) return;
-
-    // Get images from localStorage
-    const images = JSON.parse(localStorage.getItem('galleryImages') || '[]');
-
-    if (images.length === 0) {
-        swiperWrapper.innerHTML = `
-            <div class="swiper-slide">
-                <p class="text-center text-gray-500">No images available</p>
-            </div>`;
+// Load images
+async function loadImages() {
+    const container = document.getElementById('galleryContainer');
+    if (!container) {
+        console.error('Gallery container not found');
         return;
     }
+    
+    container.innerHTML = '<p class="text-center text-gray-500">Loading gallery...</p>';
 
-    // Clear the wrapper
-    swiperWrapper.innerHTML = '';
+    try {
+        const galleryCollection = collection(db, 'gallery_images');
+        let q = query(galleryCollection, where('profileId', '==', artistId));
 
-    // Create slides with delete button
-    images.forEach((imageData, index) => {
-        const swiperSlide = document.createElement('div');
-        swiperSlide.className = 'swiper-slide';
-        swiperSlide.innerHTML = `
-            <div class="relative w-[300px] h-[300px] rounded-lg overflow-hidden bg-gray-100">
-                <div class="w-full h-full ">
-                    <img src="${imageData.imageUrl}" 
-                         alt="${imageData.title}" 
-                         class="w-full h-full rounded-lg cursor-pointer" 
-                         onclick="openImageModal('${imageData.imageUrl}', '${imageData.title}')">
-                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
-                        <p class="text-xs">${new Date(imageData.timestamp).toLocaleDateString()}</p>
-                        <button class="text-xs text-red-500 mt-2" onclick="deleteImage(${index})">Delete</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        swiperWrapper.appendChild(swiperSlide);
-    });
+        const querySnapshot = await getDocs(q);
 
-    // Initialize Swiper
-    setTimeout(() => {
-        initSwiper(images.length);
-    }, 0);
+        if (querySnapshot.empty) {
+            container.innerHTML = '<p class="text-center text-gray-500">No images found in the gallery.</p>';
+            return;
+        }
+
+        container.innerHTML = ''; // Clear loading message
+        querySnapshot.forEach(doc => {
+            const data = doc.data();
+            createImageCard(doc.id, data);
+        });
+    } catch (error) {
+        console.error('Error loading images:', error);
+        container.innerHTML = '<p class="text-center text-red-500">Error loading gallery images. Please try again later.</p>';
+    }
 }
 
-// Initialize gallery on page load
-document.addEventListener('DOMContentLoaded', loadGallery);
+// Create image card
+function createImageCard(docId, data) {
+    const container = document.getElementById('galleryContainer');
+    if (!container) return;
 
-// Add upload button click handler
-document.getElementById('upload_widget')?.addEventListener('click', function() {
-    myWidget.open();
-}, false);
+    const card = document.createElement('div');
+    card.className = 'gallery-item';
+    
+    const isOwner = auth.currentUser && auth.currentUser.email === data.artistEmail;
+    const userIsAdmin = auth.currentUser && isAdmin(auth.currentUser.email);
+    
+    card.innerHTML = `
+        <img src="${data.imageUrl}" alt="${data.title}">
+        <div class="gallery-item-content">
+            <h3>${data.title}</h3>
+            <p>${data.description}</p>
+            ${isOwner || userIsAdmin ? `
+                <div class="gallery-item-actions">
+                    <button onclick="deleteImage('${docId}')" class="text-red-500 text-sm">Delete</button>
+                </div>
+            ` : ''}
+        </div>
+    `;
+    container.appendChild(card);
+}
 
-// Make functions globally available
-window.openImageModal = openImageModal;
-window.closeImageModal = closeImageModal;
-window.myWidget = myWidget;
+// Delete image
+window.deleteImage = async (docId) => {
+    if (!auth.currentUser) return;
+    
+    if (confirm('Are you sure you want to delete this image?')) {
+        try {
+            const docRef = doc(db, 'gallery_images', docId);
+            await deleteDoc(docRef);
+            loadImages();
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            alert('Failed to delete image. Please try again.');
+        }
+    }
+};
+
+// Update UI based on user role
+async function updateUIForUserRole(user) {
+    const uploadControls = document.getElementById('uploadControls');
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadButtonContainer = document.getElementById('uploadButtonContainer');
+
+    // Hide all controls by default
+    if (uploadControls) uploadControls.style.display = 'none';
+    if (uploadButtonContainer) uploadButtonContainer.style.display = 'none';
+
+    // If user is not logged in, keep the form hidden
+    if (!user) {
+        console.log('No user is logged in.');
+        if (uploadForm) uploadForm.classList.add('hidden');
+        return; // Not logged in
+    }
+
+    // Check if user is admin
+    const userIsAdmin = await isAdmin(user.email);
+    console.log('User is admin:', userIsAdmin);
+    
+    // Check if user is owner
+    const userIsOwner = artistId === user.uid;
+    console.log('Current user:', user.email);
+    console.log('Artist ID:', artistId);
+    console.log('Is owner:', userIsOwner);
+
+    // Show upload controls for owner
+    if (userIsOwner) {
+        console.log('Displaying upload controls for owner.');
+        if (uploadControls) uploadControls.style.display = 'block';
+        if (uploadButtonContainer) uploadButtonContainer.style.display = 'block';
+        if (uploadForm) {
+            uploadForm.classList.remove('hidden'); // Show the upload form
+        }
+    } else {
+        console.log('Hiding upload controls for non-owners.');
+        // Ensure upload form stays hidden for non-owners
+        if (uploadForm) uploadForm.classList.add('hidden');
+    }
+
+    // Admin can see all images and delete buttons but not the upload form
+    if (userIsAdmin) {
+        console.log('Admin logged in, showing upload button container.');
+        if (uploadButtonContainer) uploadButtonContainer.style.display = 'block';
+    }
+}
+
+// Initialize gallery
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        console.log('User logged in:', user.email);
+        await updateUIForUserRole(user);
+    } else {
+        console.log('No user logged in');
+    }
+    loadImages();
+});
