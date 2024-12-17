@@ -6,6 +6,36 @@
     <title>Admin Dashboard - Artist Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../Gallery/imageCrawler.js"></script>
+    <script type="module" src="dashboard.js"></script>
+    <style>
+        .crawler-container {
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .crawler-form input {
+            background: rgba(55, 65, 81, 0.7);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            color: white;
+        }
+        #crawlerResults {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(31, 41, 55, 0.3);
+            border-radius: 0.375rem;
+        }
+        .search-links a {
+            color: #60A5FA;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <nav class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center">
@@ -46,6 +76,53 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Image Crawler Section -->
+        <section class="mt-8">
+            <h2 class="text-2xl font-bold mb-4">Image Crawler</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="crawler-container">
+                    <div class="crawler-form space-y-4">
+                        <div>
+                            <label for="imageId" class="block text-sm font-medium text-gray-300">Image ID</label>
+                            <input type="text" id="imageId" 
+                                class="mt-1 block w-full rounded-md border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                                placeholder="Enter image ID (e.g., AHB-20231217-123)">
+                        </div>
+                        <div class="flex gap-4">
+                            <button id="checkImage" 
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                Check Image
+                            </button>
+                            <button id="showArtList" 
+                                class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
+                                Show Art List
+                            </button>
+                        </div>
+                        <div id="crawlerResults" class="hidden">
+                            <div id="databaseResult"></div>
+                            <div id="searchLinks" class="search-links mt-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Art List Container -->
+                <div class="crawler-container">
+                    <div class="art-list-header flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-300">Art List</h3>
+                        <button id="refreshArtList" class="text-blue-400 hover:text-blue-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="artList" class="overflow-y-auto max-h-96">
+                        <!-- Art list items will be populated here -->
+                        <div class="text-gray-400 text-center">Click "Show Art List" to view uploaded artworks</div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     <!-- Event Modal -->
     <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
@@ -118,10 +195,5 @@
             </form>
         </div>
     </div>
-
-    <script type="module" src="../js/firebase-config.js"></script>
-    <script type="module" src="./eventManagement.js"></script>
-    <script type="module" src="./artistRequest.js"></script>
-    <script type="module" src="./dashboard.js"></script>
 </body>
-</html> 
+</html>
