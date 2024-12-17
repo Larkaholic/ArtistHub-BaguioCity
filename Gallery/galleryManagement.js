@@ -9,6 +9,8 @@ import {
     getDoc 
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { auth, db } from '../js/firebase-config.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getBasePath } from '../js/utils.js';
 
 // Get profile ID from URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -30,6 +32,69 @@ document.getElementById('showUploadForm')?.addEventListener('click', () => {
     }
 });
 
+// Function to generate unique image ID
+function generateImageId() {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 10000);
+    return `AHB-${timestamp}-${random}`;
+}
+
+// Function to add watermark to image
+async function addWatermark(imageFile) {
+    return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        
+        img.onload = () => {
+            // Set canvas size to match image
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            // Draw original image
+            ctx.drawImage(img, 0, 0);
+            
+            // Configure watermark text
+            const imageId = generateImageId();
+            const watermarkText = `ArtistHub Baguio | ${imageId}`;
+            
+            // Set watermark style
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.font = `${img.width * 0.05}px Arial`;
+            ctx.rotate(-Math.PI / 6); // Rotate text diagonally
+            
+            // Calculate text metrics for spacing
+            const textMetrics = ctx.measureText(watermarkText);
+            const textWidth = textMetrics.width;
+            const spacing = textWidth * 2;
+            
+            // Add multiple watermarks across the image
+            for (let y = -img.height; y < img.height * 2; y += spacing) {
+                for (let x = -img.width; x < img.width * 2; x += spacing) {
+                    ctx.fillText(watermarkText, x, y);
+                }
+            }
+            
+            // Reset rotation
+            ctx.rotate(Math.PI / 6);
+            
+            // Convert canvas to blob
+            canvas.toBlob((blob) => {
+                resolve({
+                    file: new File([blob], imageFile.name, {
+                        type: 'image/jpeg',
+                        lastModified: new Date().getTime()
+                    }),
+                    imageId: imageId
+                });
+            }, 'image/jpeg', 0.9);
+        };
+        
+        // Load image from file
+        img.src = URL.createObjectURL(imageFile);
+    });
+}
+
 // Upload form handling
 document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -48,11 +113,14 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
         return;
     }
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'artist_profiles');
-
     try {
+        // Add watermark to image before uploading
+        const { file: watermarkedFile, imageId } = await addWatermark(file);
+        
+        const formData = new FormData();
+        formData.append('file', watermarkedFile);
+        formData.append('upload_preset', 'artist_profiles');
+
         const cloudinaryResponse = await fetch(
             `https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload`,
             {
@@ -72,7 +140,7 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
             artistEmail: auth.currentUser.email,
             artistId: auth.currentUser.uid,
             profileId: artistId,
-            imageId: `img_${Date.now()}`,
+            imageId: imageId,
             title,
             description,
             imageUrl: cloudinaryData.secure_url,
@@ -82,10 +150,10 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
 
         const uploadForm = document.getElementById('uploadForm');
         if (uploadForm) {
-            uploadForm.style.display = 'none';
             uploadForm.reset();
         }
         loadImages();
+        alert('Image uploaded successfully!');
     } catch (error) {
         console.error('Error uploading image:', error);
         alert('Failed to upload image. Please try again.');
