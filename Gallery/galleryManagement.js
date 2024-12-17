@@ -6,7 +6,8 @@ import {
     getDocs,
     deleteDoc,
     doc,
-    getDoc 
+    getDoc,
+    serverTimestamp 
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { auth, db } from '../js/firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -144,7 +145,7 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
             title,
             description,
             imageUrl: cloudinaryData.secure_url,
-            createdAt: new Date().toISOString(),
+            uploadDate: serverTimestamp(),
             isPublic: true
         });
 
