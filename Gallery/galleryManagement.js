@@ -7,7 +7,8 @@ import {
     deleteDoc,
     doc,
     getDoc,
-    serverTimestamp 
+    serverTimestamp,
+    updateDoc
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { auth, db } from '../js/firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -185,7 +186,8 @@ async function loadImages() {
         container.innerHTML = ''; // Clear loading message
         querySnapshot.forEach(doc => {
             const data = doc.data();
-            createImageCard(doc.id, data);
+            const card = createImageCard(doc.id, data);
+            container.appendChild(card);
         });
     } catch (error) {
         console.error('Error loading images:', error);
@@ -195,28 +197,34 @@ async function loadImages() {
 
 // Create image card
 function createImageCard(docId, data) {
-    const container = document.getElementById('galleryContainer');
-    if (!container) return;
-
     const card = document.createElement('div');
     card.className = 'gallery-item';
-    
-    const isOwner = auth.currentUser && auth.currentUser.email === data.artistEmail;
-    const userIsAdmin = auth.currentUser && isAdmin(auth.currentUser.email);
-    
     card.innerHTML = `
-        <img src="${data.imageUrl}" alt="${data.title}">
-        <div class="gallery-item-content">
-            <h3>${data.title}</h3>
-            <p>${data.description}</p>
-            ${isOwner || userIsAdmin ? `
+        <div class="gallery-item-content glass-header2">
+            <img src="${data.imageUrl}" alt="${data.title}" class="w-full h-64 object-cover rounded-lg">
+            <div class="p-4">
+                <h3 class="text-xl font-bold mb-2 text-black">${data.title}</h3>
+                <p class="text-sm mb-2 text-white">${data.description || ''}</p>
+                <p class="text-lg font-semibold mb-4 text-white">₱${data.price || '0.00'}</p>
                 <div class="gallery-item-actions">
-                    <button onclick="deleteImage('${docId}')" class="text-red-500 text-sm">Delete</button>
+                    ${auth.currentUser ? 
+                        `<button onclick="window.addToCart('${docId}', '${data.title}', ${data.price || 0})" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full">
+                            Add to Cart
+                        </button>` : ''
+                    }
+                    ${auth.currentUser && (auth.currentUser.email === data.artistEmail || isAdmin(auth.currentUser.email)) ?
+                        `<button onclick="deleteImage('${docId}')" class="text-red-500 hover:text-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>` : ''}
                 </div>
-            ` : ''}
+            </div>
         </div>
     `;
-    container.appendChild(card);
+    
+    return card;
 }
 
 // Delete image
@@ -240,10 +248,14 @@ async function updateUIForUserRole(user) {
     const uploadControls = document.getElementById('uploadControls');
     const uploadForm = document.getElementById('uploadForm');
     const uploadButtonContainer = document.getElementById('uploadButtonContainer');
+    const cartNav = document.getElementById('cartNav');
+    const cartNavMobile = document.getElementById('cartNavMobile');
 
     // Hide all controls by default
     if (uploadControls) uploadControls.style.display = 'none';
     if (uploadButtonContainer) uploadButtonContainer.style.display = 'none';
+    if (cartNav) cartNav.classList.add('hidden');
+    if (cartNavMobile) cartNavMobile.classList.add('hidden');
 
     // If user is not logged in, keep the form hidden
     if (!user) {
@@ -261,6 +273,13 @@ async function updateUIForUserRole(user) {
     console.log('Current user:', user.email);
     console.log('Artist ID:', artistId);
     console.log('Is owner:', userIsOwner);
+
+    // Show cart for regular users (not admin and not artist)
+    if (!userIsAdmin && !userIsOwner) {
+        console.log('Showing cart for regular user');
+        if (cartNav) cartNav.classList.remove('hidden');
+        if (cartNavMobile) cartNavMobile.classList.remove('hidden');
+    }
 
     // Show upload controls for owner
     if (userIsOwner) {
@@ -283,13 +302,145 @@ async function updateUIForUserRole(user) {
     }
 }
 
+// Cart Management
+let cart = [];
+
+function initializeCart(userId) {
+    if (!userId) return;
+    
+    const cartRef = collection(db, 'carts');
+    const q = query(cartRef, where('userId', '==', userId));
+    
+    getDocs(q).then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+            const cartDoc = querySnapshot.docs[0];
+            cart = cartDoc.data().items || [];
+            updateCartUI();
+        }
+    });
+}
+
+// Make cart functions globally accessible
+window.toggleCart = function() {
+    console.log('Toggle cart called');
+    const cartModal = document.getElementById('cartModal');
+    console.log('Cart modal element:', cartModal);
+    if (cartModal) {
+        console.log('Current hidden state:', cartModal.classList.contains('hidden'));
+        cartModal.classList.toggle('hidden');
+        console.log('New hidden state:', cartModal.classList.contains('hidden'));
+    } else {
+        console.error('Cart modal not found');
+    }
+}
+
+window.addToCart = async function(artworkId, title, price) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert('Please login to add items to cart');
+        return;
+    }
+    
+    const item = { artworkId, title, price };
+    cart.push(item);
+    
+    const cartRef = collection(db, 'carts');
+    const q = query(cartRef, where('userId', '==', user.uid));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+        await addDoc(cartRef, {
+            userId: user.uid,
+            items: cart
+        });
+    } else {
+        const cartDoc = querySnapshot.docs[0];
+        await updateDoc(doc(db, 'carts', cartDoc.id), {
+            items: cart
+        });
+    }
+    
+    updateCartUI();
+}
+
+window.removeFromCart = async function(index) {
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    cart.splice(index, 1);
+    
+    const cartRef = collection(db, 'carts');
+    const q = query(cartRef, where('userId', '==', user.uid));
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+        const cartDoc = querySnapshot.docs[0];
+        await updateDoc(doc(db, 'carts', cartDoc.id), {
+            items: cart
+        });
+    }
+    
+    updateCartUI();
+}
+
+window.checkout = async function() {
+    if (cart.length === 0) {
+        alert('Your cart is empty');
+        return;
+    }
+    
+    // Here you would implement the checkout process
+    alert('Checkout functionality will be implemented soon!');
+}
+
+function updateCartUI() {
+    const cartCount = document.getElementById('cartCount');
+    const cartCountMobile = document.getElementById('cartCountMobile');
+    const cartItems = document.getElementById('cartItems');
+    const totalItems = document.getElementById('totalItems');
+    const totalPrice = document.getElementById('totalPrice');
+    
+    if (cartCount) cartCount.textContent = cart.length;
+    if (cartCountMobile) cartCountMobile.textContent = cart.length;
+    
+    if (cartItems) {
+        cartItems.innerHTML = '';
+        let total = 0;
+        
+        cart.forEach((item, index) => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'flex justify-between items-center p-2 bg-white bg-opacity-10 rounded-lg';
+            itemElement.innerHTML = `
+                <div>
+                    <h3 class="font-semibold">${item.title}</h3>
+                    <p class="text-sm">₱${item.price.toFixed(2)}</p>
+                </div>
+                <button onclick="window.removeFromCart(${index})" class="text-red-500 hover:text-red-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            `;
+            cartItems.appendChild(itemElement);
+            total += item.price;
+        });
+        
+        if (totalItems) totalItems.textContent = cart.length;
+        if (totalPrice) totalPrice.textContent = total.toFixed(2);
+    }
+}
+
 // Initialize gallery
 auth.onAuthStateChanged(async (user) => {
     if (user) {
         console.log('User logged in:', user.email);
-        await updateUIForUserRole(user);
+        const admin = await isAdmin(user.email);
+        updateUIForUserRole(user);
+        loadImages();
+        initializeCart(user.uid);
     } else {
         console.log('No user logged in');
+        updateUIForUserRole(null);
+        loadImages();
     }
-    loadImages();
 });
