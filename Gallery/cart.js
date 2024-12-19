@@ -1,5 +1,11 @@
+// Import Firebase modules
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { collection, query, where, getDocs, addDoc, updateDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { db } from "../js/firebase-config.js";
+
 // Cart Management
 let cart = [];
+const auth = getAuth();
 
 // Make cart functions globally accessible
 window.toggleCart = function() {
@@ -16,52 +22,89 @@ window.toggleCart = function() {
 }
 
 window.addToCart = async function(artworkId, title, price) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert('Please login to add items to cart');
-        return;
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('Please login to add items to cart');
+            return;
+        }
+        
+        const item = { artworkId, title, price };
+        cart.push(item);
+        
+        // Create a document reference with a custom ID (user's UID)
+        const cartDocRef = doc(db, 'carts', user.uid);
+        
+        try {
+            // Try to get the existing cart
+            const cartDoc = await getDoc(cartDocRef);
+            
+            if (cartDoc.exists()) {
+                // Update existing cart
+                const existingItems = cartDoc.data().items || [];
+                await updateDoc(cartDocRef, {
+                    items: [...existingItems, item],
+                    updatedAt: new Date(),
+                    userId: user.uid
+                });
+            } else {
+                // Create new cart
+                await setDoc(cartDocRef, {
+                    items: [item],
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    userId: user.uid
+                });
+            }
+            
+            updateCartUI();
+            alert('Item added to cart successfully!');
+        } catch (error) {
+            console.error('Error accessing cart:', error);
+            alert('Unable to add item to cart. Please try again later.');
+        }
+    } catch (error) {
+        console.error('Error in addToCart:', error);
+        alert('An error occurred while adding the item to cart.');
     }
-    
-    const item = { artworkId, title, price };
-    cart.push(item);
-    
-    const cartRef = collection(db, 'carts');
-    const q = query(cartRef, where('userId', '==', user.uid));
-    const querySnapshot = await getDocs(q);
-    
-    if (querySnapshot.empty) {
-        await addDoc(cartRef, {
-            userId: user.uid,
-            items: cart
-        });
-    } else {
-        const cartDoc = querySnapshot.docs[0];
-        await updateDoc(doc(db, 'carts', cartDoc.id), {
-            items: cart
-        });
-    }
-    
-    updateCartUI();
 }
 
 window.removeFromCart = async function(index) {
-    const user = auth.currentUser;
-    if (!user) return;
-    
-    cart.splice(index, 1);
-    
-    const cartRef = collection(db, 'carts');
-    const q = query(cartRef, where('userId', '==', user.uid));
-    const querySnapshot = await getDocs(q);
-    
-    if (!querySnapshot.empty) {
-        const cartDoc = querySnapshot.docs[0];
-        await updateDoc(doc(db, 'carts', cartDoc.id), {
-            items: cart
-        });
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('Please login to remove items from cart');
+            return;
+        }
+
+        // Remove from local cart array
+        cart.splice(index, 1);
+        
+        // Get reference to user's cart document
+        const cartDocRef = doc(db, 'carts', user.uid);
+        
+        try {
+            const cartDoc = await getDoc(cartDocRef);
+            if (cartDoc.exists()) {
+                const items = cartDoc.data().items || [];
+                items.splice(index, 1);
+                
+                await updateDoc(cartDocRef, {
+                    items: items,
+                    updatedAt: new Date()
+                });
+                
+                updateCartUI();
+                console.log('Item removed successfully');
+            }
+        } catch (error) {
+            console.error('Error removing item from cart:', error);
+            alert('Unable to remove item from cart. Please try again later.');
+        }
+    } catch (error) {
+        console.error('Error in removeFromCart:', error);
+        alert('An error occurred while removing the item from cart.');
     }
-    
-    updateCartUI();
 }
 
 window.checkout = async function() {
