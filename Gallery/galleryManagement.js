@@ -109,9 +109,10 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
     const file = document.getElementById('imageFile')?.files[0];
     const title = document.getElementById('title')?.value;
     const description = document.getElementById('description')?.value;
+    const price = parseFloat(document.getElementById('price')?.value);
 
-    if (!file || !title || !description) {
-        alert('Please fill in all fields');
+    if (!file || !title || !description || isNaN(price)) {
+        alert('Please fill in all fields, including a valid price.');
         return;
     }
 
@@ -145,6 +146,7 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
             imageId: imageId,
             title,
             description,
+            price,
             imageUrl: cloudinaryData.secure_url,
             uploadDate: serverTimestamp(),
             isPublic: true
