@@ -446,3 +446,14 @@ auth.onAuthStateChanged(async (user) => {
         loadImages();
     }
 });
+
+function onSignIn() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithRedirect(provider).then((result) => {
+        // Handle the signed-in user information
+        var user = result.user;
+        console.log('User signed in: ', user);
+    }).catch((error) => {
+        console.error('Error during sign-in: ', error);
+    });
+}
