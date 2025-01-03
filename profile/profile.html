@@ -181,53 +181,76 @@
         </div>
     </div>
 
-    <main class="">
-        <section class="flex flex-col items-center text-center p-3 h-full">
-            <div class="flex flex-col justify-items-evenly md:flex-row gap-4 md:gap-5 h-full md:justify-center">
-                <div class="profile-details flex flex-row mt-12 items-start md:flex-col flex-grow">
-                    <img id="profileImage" class="flex-col mb-1 object-cover rounded-2xl md:rounded-3xl items-center max-w-96 max-h-96" src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true" alt="Profile Image">
-
-                    <div class="flex flex-col items-center gap-4 mx-7 mt-10 md:mt-4 md:gap-6">
-                        <div class="flex gap-10 md:flex-row flex-col">
-                            <a id="facebookLink" href="#" class="fa fa-facebook hidden"></a>
-                            <a id="instagramLink" href="#" class="fa fa-instagram hidden"></a>
-                            <a id="youtubeLink" href="#" class="fa fa-youtube hidden"></a>
-                            <a id="googleLink" href="#" class="fa fa-google hidden"></a>
+    <main class="pt-20">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Left Profile Section -->
+                <div class="glass-header rounded-3xl p-8 shadow-xl h-[600px] md:h-auto flex flex-col">
+                    <h1 id="displayName" class="text-3xl font-bold mb-6">Loading...</h1>
+                    
+                    <!-- Scrollable content area -->
+                    <div class="flex-1 overflow-y-auto pr-4" style="scrollbar-width: thin;">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-2 text-black">
+                                <i class="fa fa-paint-brush flex-shrink-0"></i>
+                                <span id="specialization">Loading...</span>
+                            </div>
+                            
+                            <div class="flex items-center gap-2 text-black">
+                                <i class="fa fa-map-marker flex-shrink-0"></i>
+                                <span>Baguio City</span>
+                            </div>
+                            
+                            <div class="prose max-w-none">
+                                <p id="artistBio" class="text-black whitespace-pre-wrap max-h-96 overflow-y-auto pr-4" style="scrollbar-width: thin;">Loading...</p>
+                            </div>
                         </div>
-
-                        <div class="w-full mt-1 hidden md:flex">
-                            <button 
-                                id="dynamicGalleryButton" class="glass-header p-2 rounded-lg w-full" onclick="">
-                                Gallery
-                            </button>
+                    </div>
+                    
+                    <!-- Fixed bottom section -->
+                    <div class="mt-4 pt-4 border-t border-gray-200 flex-shrink-0">
+                        <button 
+                            id="dynamicGalleryButton"
+                            class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-300 w-full"
+                        >
+                            Gallery
+                        </button>
+                        
+                        <div class="flex gap-6 mt-4">
+                            <a id="facebookLink" href="#" class="fa fa-facebook text-black hover:text-gray-700"></a>
+                            <a id="instagramLink" href="#" class="fa fa-instagram text-black hover:text-gray-700"></a>
+                            <a id="youtubeLink" href="#" class="fa fa-youtube text-black hover:text-gray-700"></a>
+                            <a id="googleLink" href="#" class="fa fa-google text-black hover:text-gray-700"></a>
                         </div>
-
                     </div>
                 </div>
-
-                <div class="w-full mt-1 md:hidden">
-                    <button 
-                        id="dynamicGalleryButton" 
-                        class="glass-header p-2 rounded-lg w-full" 
-                        onclick=""
-                    >
-                        Gallery
-                    </button>
-                </div>
-                <div class="glass-header text-black mt-2 max-w-full w-full rounded-3xl text-2xl object-bottom md:mt-16 md:mb-10 flex-grow min-h-dvh md:w-full md:ml-5 md:mr-10">
-                    <h2 id="displayName" class="font-bold text-3xl my-4">Loading...</h2>
-                    <h3 class="text-2xl underline mb-3">Artist Details</h3>
-                    <p id="artistBio" class="mb-4">Loading...</p>
-                    <p id="specialization" class="mb-10">Loading...</p>
+    
+                <!-- Right Image Section with fixed aspect ratio -->
+                <div class="relative aspect-[4/5]">
+                    <img
+                        id="profileImage"
+                        src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true"
+                        alt="Profile Image"
+                        class="absolute inset-0 w-full h-full object-cover rounded-3xl"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
                 </div>
             </div>
-        </section>
-        
-        <section id="achievements">
-            <h2>Achievements</h2>
-            <input type="file" id="achievementImages" accept="image/*" multiple>
-            <button id="uploadAchievements">Upload Achievements</button>
-        </section>
+    
+            <!-- Achievements Section -->
+            <section id="achievements" class="glass-header rounded-3xl p-8 mt-8 max-w-6xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4">Achievements</h2>
+                <div class="flex gap-4">
+                    <input type="file" id="achievementImages" accept="image/*" multiple class="hidden">
+                    <label for="achievementImages" class="bg-green-600 text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-green-700 transition-colors">
+                        Choose Files
+                    </label>
+                    <button id="uploadAchievements" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        Upload Achievements
+                    </button>
+                </div>
+            </section>
+        </div>
     </main>
     <script type="module">
         // Import navigation function
