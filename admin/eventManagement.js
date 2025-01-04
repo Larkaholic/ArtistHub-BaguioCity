@@ -43,58 +43,58 @@ const myWidget = cloudinary.createUploadWidget(
 document.getElementById('upload_widget').addEventListener('click', () => myWidget.open(), false);
 
 // Load events
-async function loadEvents() {
-    const eventsList = document.getElementById('eventsList');
-    if (!eventsList) return;
+// async function loadEvents() {
+//     const eventsList = document.getElementById('eventsList');
+//     if (!eventsList) return;
 
-    eventsList.innerHTML = `
-        <div class="animate-pulse space-y-4">
-            <div class="h-20 bg-white/10 rounded-lg"></div>
-            <div class="h-20 bg-white/10 rounded-lg"></div>
-        </div>
-    `;
+//     eventsList.innerHTML = `
+//         <div class="animate-pulse space-y-4">
+//             <div class="h-20 bg-white/10 rounded-lg"></div>
+//             <div class="h-20 bg-white/10 rounded-lg"></div>
+//         </div>
+//     `;
 
-    try {
-        const q = query(collection(db, "events"), orderBy("startDate", "desc"));
-        const querySnapshot = await getDocs(q);
+//     try {
+//         const q = query(collection(db, "events"), orderBy("startDate", "desc"));
+//         const querySnapshot = await getDocs(q);
 
-        if (querySnapshot.empty) {
-            eventsList.innerHTML = `<p class="text-white text-center">No events found</p>`;
-            return;
-        }
+//         if (querySnapshot.empty) {
+//             eventsList.innerHTML = `<p class="text-white text-center">No events found</p>`;
+//             return;
+//         }
 
-        eventsList.innerHTML = '';
-        querySnapshot.forEach((doc) => {
-            const event = doc.data();
-            const startDate = event.startDate ? new Date(event.startDate.seconds * 1000).toLocaleDateString() : 'N/A';
-            const endDate = event.endDate ? new Date(event.endDate.seconds * 1000).toLocaleDateString() : 'N/A';
-            const imageUrl = event.imageUrl ? `<img src="${event.imageUrl}" alt="${event.title}" class="mt-4 w-full h-48 object-cover rounded">` : '';
+//         eventsList.innerHTML = '';
+//         querySnapshot.forEach((doc) => {
+//             const event = doc.data();
+//             const startDate = event.startDate ? new Date(event.startDate.seconds * 1000).toLocaleDateString() : 'N/A';
+//             const endDate = event.endDate ? new Date(event.endDate.seconds * 1000).toLocaleDateString() : 'N/A';
+//             const imageUrl = event.imageUrl ? `<img src="${event.imageUrl}" alt="${event.title}" class="mt-4 w-full h-48 object-cover rounded">` : '';
 
-            eventsList.innerHTML += `
-                <div class="bg-gray-800 rounded-lg p-4 mb-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-xl font-bold text-white">${event.title}</h3>
-                            <p class="text-gray-300">Start: ${startDate}</p>
-                            <p class="text-gray-300">End: ${endDate}</p>
-                            <p class="text-gray-300">Location: ${event.location || 'N/A'}</p>
-                            ${event.description ? `<p class="text-gray-300 mt-2">${event.description}</p>` : ''}
-                            ${event.isFeatured ? '<span class="bg-yellow-500 text-black px-2 py-1 rounded text-sm">Featured</span>' : ''}
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="editEvent('${doc.id}')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
-                            <button onclick="deleteEvent('${doc.id}')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
-                        </div>
-                    </div>
-                    ${imageUrl}
-                </div>
-            `;
-        });
-    } catch (error) {
-        console.error("Error loading events:", error);
-        eventsList.innerHTML = `<p class="text-red-500 text-center">Error loading events</p>`;
-    }
-}
+//             eventsList.innerHTML += `
+//                 <div class="bg-gray-800 rounded-lg p-4 mb-4">
+//                     <div class="flex justify-between items-start">
+//                         <div>
+//                             <h3 class="text-xl font-bold text-white">${event.title}</h3>
+//                             <p class="text-gray-300">Start: ${startDate}</p>
+//                             <p class="text-gray-300">End: ${endDate}</p>
+//                             <p class="text-gray-300">Location: ${event.location || 'N/A'}</p>
+//                             ${event.description ? `<p class="text-gray-300 mt-2">${event.description}</p>` : ''}
+//                             ${event.isFeatured ? '<span class="bg-yellow-500 text-black px-2 py-1 rounded text-sm">Featured</span>' : ''}
+//                         </div>
+//                         <div class="flex space-x-2">
+//                             <button onclick="editEvent('${doc.id}')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
+//                             <button onclick="deleteEvent('${doc.id}')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
+//                         </div>
+//                     </div>
+//                     ${imageUrl}
+//                 </div>
+//             `;
+//         });
+//     } catch (error) {
+//         console.error("Error loading events:", error);
+//         eventsList.innerHTML = `<p class="text-red-500 text-center">Error loading events</p>`;
+//     }
+// }
 
 // Form submission handler
 function handleFormSubmit(e) {
