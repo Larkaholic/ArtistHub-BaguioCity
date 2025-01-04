@@ -140,7 +140,7 @@ function displayProfile(userData) {
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold mb-2">${userData.name || 'Name not set'}</h2>
                     <p class="text-gray-600">${userData.email}</p>
-                    <p class="text-gray-700 mt-2 max-h-96 overflow-y-auto pr-4" style="scrollbar-width: thin;">${userData.bio || 'No bio available'}</p>
+                    <p class="text-gray-700 mt-2">${userData.bio || 'No bio available'}</p>
                 </div>
 
                 <!-- Gallery Link -->
