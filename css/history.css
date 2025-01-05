@@ -3,15 +3,6 @@
 	margin-bottom: 20px;
 }
 
-/* #timeline {
-    width: 100%;
-    height: 50%;
-    overflow: hidden;
-    margin: 40px auto;
-    margin-bottom: 100px;
-    position: relative;
-    background: url('http://www.csslab.cl/ejemplos/timelinr/latest/images/dot.gif') 3px top repeat-y;
-} */
 
 #dates {
     width: 100px;
@@ -107,11 +98,9 @@
     background-position:  0 0;
 }
 #next {
-    bottom: 0;
     background-image: url('http://www.csslab.cl/ejemplos/timelinr/latest/images/next_v.png');
 }
 #prev {
-    top: 0;
     background-image: url('http://www.csslab.cl/ejemplos/timelinr/latest/images/prev_v.png');
 }
 #next.disabled,
