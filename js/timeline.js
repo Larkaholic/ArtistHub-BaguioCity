@@ -11,6 +11,56 @@ $(function(){
     })
 });
 
+const cloudName = 'dxeyr4pvf';
+const uploadPreset = 'ThroughTheYears';
+
+document.getElementById('historyImage').addEventListener('click', () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.click();
+
+    fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', uploadPreset);
+
+        try {
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${dxeyr4pvf}/image/upload`,
+                {
+                    method: 'POST',
+                    body: formData
+                }
+            );
+            const data = await response.json();
+            
+            const year = document.getElementById('year').value;
+            const event = document.getElementById('event').value;
+
+            if (year && event) {
+                db.ref('events/' + year).set({
+                    event: event,
+                    imageURL: data.secure_url
+                })
+                .then(loadEvents)
+                .catch(error => console.error("Error adding event:", error));
+
+                document.getElementById('year').value = '';
+                document.getElementById('event').value = '';
+            } else {
+                alert("Please enter both year and event.");
+            }
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Error uploading image");
+        }
+    };
+});
+
 function loadEvents() {
     db.ref('events').once('value', (snapshot) => {
         const data = snapshot.val();
@@ -25,31 +75,24 @@ function loadEvents() {
             datesList.appendChild(yearItem);
 
             const eventsItem = document.createElement('li');
-            eventsItem.textContent = data[year].event;
+            eventsItem.className = 'flex flex-col items-center space-y-4';
+
+            const eventText = document.createElement('p');
+            eventText.textContent = data[year].event;
+            eventText.className = 'text-center';
+
+            if (data[year].imageURL) {
+                const eventImage = document.createElement('img');
+                eventImage.src = data[year].imageURL;
+                eventImage.className = 'rounded-lg max-w-md h-auto';
+                eventImage.alt = `Event from ${year}`;
+                eventsItem.appendChild(eventImage);
+            }
+
+            eventsItem.appendChild(eventText);
             issuesList.appendChild(eventsItem);
         }
     });
 }
 
-// Function to add event to Firebase
-document.getElementById('add-event').addEventListener('click', () => {
-    const year = document.getElementById('year').value;
-    const event = document.getElementById('event').value;
-
-    if (year && event) {
-        db.ref('events/' + year).set({ event: event })
-            .then(() => {
-                loadEvents(); // Reload events after adding
-                document.getElementById('year').value = '';
-                document.getElementById('event').value = '';
-            })
-            .catch((error) => {
-                console.error("Error adding event: ", error);
-            });
-    } else {
-        alert("Please enter both year and event.");
-    }
-});
-
-// Load events on page load
 window.onload = loadEvents;
