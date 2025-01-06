@@ -12,8 +12,10 @@
     <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="../js/auth.js"></script>
     <script type="module" src="../Gallery/imageCrawler.js"></script>
+    <script type="module" src="../js/timeline.js"></script>
     <script type="module" src="dashboard.js"></script>
     <script type="module" src="eventManagement.js"></script>
+
     <style>
         .crawler-container {
             background: rgba(31, 41, 55, 0.5);
@@ -122,6 +124,16 @@
                         <div class="text-gray-400 text-center">Click "Show Art List" to view uploaded artworks</div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Through the years section -->
+        <section>
+            <div id="admin-input" class="mt-10">
+                <h3 class="text-xl font-bold">Admin Input</h3>
+                <input type="text" id="year" placeholder="Enter Year" class="border p-2">
+                <input type="text" id="event" placeholder="Enter Event" class="border p-2">
+                <button id="add-event" class="bg-blue-500 text-white p-2">Add Event</button>
             </div>
         </section>
     </main>
