@@ -1,368 +1,327 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap');
-
-.rubik-dirt-regular {
-    font-family: "Rubik Dirt", system-ui;
-    font-weight: 400;
-    font-style: italic;
-}
-
-.glass-header {
-    background: rgba(255, 255, 255, 1);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(19.8px);
-    -webkit-backdrop-filter: blur(19.8px);
-    border: 1px solid rgba(255, 255, 255, 0.01);
-}
-
-.glass-header2 {
-    background: rgba(255, 255, 255, 0.22);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.01);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-    font-family: Arial, sans-serif;
-}
-
-main {
-    position: relative;
-    z-index: 1;
-    scroll-snap-type: y mandatory;
-    overflow-x: hidden;
-    height: 100vh;
-    padding-top: 64px;
-    overflow-y: auto;
-}
-
-/* SECTION (GLOBAL) */
-
-section {
-    position: relative;
-    z-index: 1;
-    scroll-snap-align: start;
-    height: 100vh;
-    min-height: 100vh;
-    display: flex;
-    padding: 20px;
-}
-
-footer {
-    scroll-snap-align: start;
-}
-
-/* NAVIGATION */
-.nav-item button,
-.login-button button {
-    font-weight: 600 !important;
-}
-
-nav ul li,
-nav ul li button,
-.nav-item,
-.nav-item button {
-    font-weight: 600 !important;
-}
-
-.header {
-    background: rgb(181,181,181);
-    background: linear-gradient(90deg, rgba(181,181,181,0.9668242296918768) 5%, rgba(232,232,232,1) 100%);
-}
-
-.headerR {
-    background: rgb(232,232,232);
-    background: linear-gradient(90deg, rgba(232,232,232,1) 0%, rgba(181,181,181,0.9668242296918768) 97%);    
-}
-
-/* SECTION 1 (LANDING PAGE)*/
-
-.hero-section {
-    
-}
-
-#landingPage {
-    width: 100%;
-    height: 100dvh;
-    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
-}
-
-
-/* SECTION 2 (ARTIST PAGE) */
-
-.artist-item {
-    width: 50%;
-}
-
-.artist-item img {
-    height: 90dvh;
-}
-
-#artists {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-/* artist grid */
-#artistsGrid {
-    display: grid;
-    gap: 1rem;
-    padding: 0.5rem;
-    max-height: 800px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-    
-    /* responsive grid columns */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.search-button:hover {
-    background-color: rgba(104, 254, 111, 0.8);
-}
-
-/* ensure 3 columns on larger screens */
-@media (min-width: 1024px) {
-    #artistsGrid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* adjust for medium screens */
-@media (max-width: 1023px) and (min-width: 768px) {
-    #artistsGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* adjust for mobile screens */
-@media (max-width: 767px) {
-    #artistsGrid {
-        grid-template-columns: 1fr;
-        max-height: 600px; /* smaller height for mobile */
-    }
-}
-
-/* custom scrollbar */
-#artistsGrid::-webkit-scrollbar {
-    width: 8px;
-}
-
-#artistsGrid::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-#artistsGrid::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
-}
-
-/* artist cards */
-.artist-card {
-    min-width: 200px; /* slightly smaller for better mobile fit */
-    transition: transform 0.2s;
-    padding: 1.5rem;
-}
-
-.artist-card:hover {
-    transform: translateY(-5px);
-}
-
-section#landingPage {
-    height: calc(100vh - 64px); /* Subtract header height */
-    padding: 0; /* Remove padding to ensure full width/height */
-    margin-top: 64px; /* Add margin for header */
-}
-
-.artist-item img {
-    height: 100%; /* Use full height of container */
-    width: 100%;
-}
-
-/* update the artists grid container */
-.artists-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
-    padding: 2rem;
-    width: 100%;
-    height: auto;
-    min-height: 100vh;
-    overflow: visible;
-    margin-bottom: 2rem;
-}
-
-/* ensure the section containing the grid is properly sized */
-section#artists {
-    min-height: 100vh;
-    height: auto;
-    overflow: visible;
-    padding-bottom: 4rem;
-}
-
-
-
-
-
-.events {
-    height: 75vh;
-
-}
-
-.EvntPage {
-    height: 100dvh;
-}
-
-.EvntRow:hover {
-    background-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.swiper-wrapper {
-    width: 100%;
-    height: max-content !important;
-    padding-bottom: 64px !important;
-    -webkit-transition-timing-function: linear !important;
-    transition-timing-function: linear !important;
-    position: relative;
-}
-
-.swiper-pagination-bullet {
-    background: #000000;
-}
-
-.swiper-pagination-bullet-active {
-    background: #000000 !important;
-}
-
-
-/* header z-index */
-header.glass-header {
-    z-index: 1000;
-}
-
-/* login flyout styles */
-.flyout {
-    z-index: 9999;
-}
-
-/* ensure other glass-header elements stay below */
-.glass-header:not(header) {
-    z-index: 1;
-}
-
-
-
-.important-events {
-    padding: 1rem;
-}
-
-/* Update section styles */
-section#events {
-    display: block !important;
-    height: auto !important;
-    min-height: 100vh;
-    width: 100%;
-    padding: 1rem;
-    margin-top: 2rem;
-    margin: 2px;  
-}
-
-/* Update container styles */
-.EvntContainer {
-    width: 100%;
-    height: auto !important;
-    min-height: fit-content;
-    overflow: visible !important;
-    padding: 1rem;
-}
-
-#upcomingEventsList {
-    width: 100%;
-    height: auto !important;
-    overflow: visible !important;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-/* footer */
-.lrk-footer-wrapper {
-    background-color: #3a3a3a;
-    color: white;
-    padding: 2rem 1rem;
-    font-family: Arial, sans-serif;
-    text-align: center;
-}
-
-.lrk-social-icons-container {
-    margin-bottom: 1.5rem;
-}
-
-.lrk-social-link {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    background-color: white;
-    border-radius: 50%;
-    margin: 0 0.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-}
-
-.lrk-social-link:hover {
-    transform: translateY(-3px);
-}
-
-.lrk-social-icon {
-    width: 20px;
-    height: 20px;
-    filter: brightness(0);
-}
-
-.lrk-nav-container {
-    margin: 1.5rem 0;
-}
-
-.lrk-nav-link {
-    color: white;
-    text-decoration: none;
-    margin: 0 1rem;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-}
-
-.lrk-nav-link:hover {
-    color: #999;
-}
-
-.lrk-copyright-section {
-    font-size: 0.8rem;
-    color: #666;
-    border-top: 1px solid #222;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-}
-
-.lrk-designer-link {
-    color: #999;
-    text-decoration: none;
-}
-
-.lrk-designer-link:hover {
-    color: white;
-}
+/* ==========================================================================
+   1. IMPORTS AND FONTS
+   ========================================================================== */
+   @import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap');
+
+   .rubik-dirt-regular {
+       font-family: "Rubik Dirt", system-ui;
+       font-weight: 400;
+       font-style: italic;
+   }
+   
+   /* ==========================================================================
+      2. RESET AND BASE STYLES
+      ========================================================================== */
+   * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+   }
+   
+   html, body {
+       scroll-behavior: smooth;
+       overflow-x: hidden;
+       font-family: Arial, sans-serif;
+   }
+   
+   /* ==========================================================================
+      3. LAYOUT COMPONENTS
+      ========================================================================== */
+   main {
+       position: relative;
+       z-index: 1;
+       scroll-snap-type: y mandatory;
+       overflow-x: hidden;
+       height: 100vh;
+       padding-top: 64px;
+       overflow-y: auto;
+   }
+   
+   section {
+       position: relative;
+       z-index: 1;
+       scroll-snap-align: start;
+       height: 100vh;
+       min-height: 100vh;
+       display: flex;
+       padding: 20px;
+   }
+   
+   footer {
+       scroll-snap-align: start;
+   }
+   
+   /* ==========================================================================
+      4. HEADER AND NAVIGATION
+      ========================================================================== */
+   .header {
+       background: rgb(181,181,181);
+       background: linear-gradient(90deg, rgba(181,181,181,0.9668242296918768) 5%, rgba(232,232,232,1) 100%);
+   }
+   
+   .headerR {
+       background: rgb(232,232,232);
+       background: linear-gradient(90deg, rgba(232,232,232,1) 0%, rgba(181,181,181,0.9668242296918768) 97%);    
+   }
+   
+   .nav-item button,
+   .login-button button,
+   nav ul li,
+   nav ul li button,
+   .nav-item,
+   .nav-item button {
+       font-weight: 600 !important;
+   }
+   
+   /* Glass Effect Styles */
+   .glass-header {
+       background: rgba(255, 255, 255, 1);
+       border-radius: 16px;
+       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+       backdrop-filter: blur(19.8px);
+       -webkit-backdrop-filter: blur(19.8px);
+       border: 1px solid rgba(255, 255, 255, 0.01);
+       z-index: 1000;
+   }
+   
+   .glass-header2 {
+       background: rgba(255, 255, 255, 0.22);
+       border-radius: 16px;
+       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+       backdrop-filter: blur(10px);
+       -webkit-backdrop-filter: blur(10px);
+       border: 1px solid rgba(255, 255, 255, 0.01);
+   }
+   
+   /* ==========================================================================
+      5. LANDING PAGE
+      ========================================================================== */
+   #landingPage {
+       width: 100%;
+       height: 100dvh;
+       background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
+       height: calc(100vh - 64px);
+       padding: 0;
+       margin-top: 64px;
+   }
+   
+   /* ==========================================================================
+      6. ARTISTS SECTION
+      ========================================================================== */
+   .artist-item {
+       width: 50%;
+   }
+   
+   .artist-item img {
+       height: 100%;
+       width: 100%;
+   }
+   
+   #artists {
+       display: flex;
+       flex-direction: column;
+       gap: 1rem;
+       min-height: 100vh;
+       height: auto;
+       overflow: visible;
+       padding-bottom: 4rem;
+   }
+   
+   /* Artists Grid */
+   #artistsGrid {
+       display: grid;
+       gap: 1rem;
+       padding: 0.5rem;
+       max-height: 800px;
+       overflow-y: auto;
+       scrollbar-width: thin;
+       scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+   }
+   
+   .artist-card {
+       min-width: 200px;
+       transition: transform 0.2s;
+       padding: 1.5rem;
+   }
+   
+   .artist-card:hover {
+       transform: translateY(-5px);
+   }
+   
+   .search-button:hover {
+       background-color: rgba(104, 254, 111, 0.8);
+   }
+   
+   /* ==========================================================================
+      7. EVENTS SECTION
+      ========================================================================== */
+   .events {
+       height: 75vh;
+   }
+   
+   .EvntPage {
+       height: 100dvh;
+   }
+   
+   .EvntRow:hover {
+       background-color: rgba(255, 255, 255, 0.5);
+       transform: translateY(-2px);
+       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+   }
+   
+   section#events {
+       display: block !important;
+       height: auto !important;
+       min-height: 100vh;
+       width: 100%;
+       padding: 1rem;
+       margin-top: 2rem;
+       margin: 2px;  
+   }
+   
+   .EvntContainer {
+       width: 100%;
+       height: auto !important;
+       min-height: fit-content;
+       overflow: visible !important;
+       padding: 1rem;
+   }
+   
+   #upcomingEventsList {
+       width: 100%;
+       height: auto !important;
+       overflow: visible !important;
+       display: flex;
+       flex-direction: column;
+       gap: 1rem;
+   }
+   
+   /* ==========================================================================
+      8. SWIPER STYLES
+      ========================================================================== */
+   .swiper-wrapper {
+       width: 100%;
+       height: max-content !important;
+       padding-bottom: 64px !important;
+       -webkit-transition-timing-function: linear !important;
+       transition-timing-function: linear !important;
+       position: relative;
+   }
+   
+   .swiper-pagination-bullet {
+       background: #000000;
+   }
+   
+   .swiper-pagination-bullet-active {
+       background: #000000 !important;
+   }
+   
+   /* ==========================================================================
+      9. FOOTER
+      ========================================================================== */
+   .lrk-footer-wrapper {
+       background-color: #3a3a3a;
+       color: white;
+       padding: 2rem 1rem;
+       font-family: Arial, sans-serif;
+       text-align: center;
+   }
+   
+   .lrk-social-icons-container {
+       margin-bottom: 1.5rem;
+   }
+   
+   .lrk-social-link {
+       display: inline-block;
+       width: 35px;
+       height: 35px;
+       background-color: white;
+       border-radius: 50%;
+       margin: 0 0.5rem;
+       display: inline-flex;
+       align-items: center;
+       justify-content: center;
+       transition: transform 0.3s ease;
+   }
+   
+   .lrk-social-link:hover {
+       transform: translateY(-3px);
+   }
+   
+   .lrk-social-icon {
+       width: 20px;
+       height: 20px;
+       filter: brightness(0);
+   }
+   
+   .lrk-nav-container {
+       margin: 1.5rem 0;
+   }
+   
+   .lrk-nav-link {
+       color: white;
+       text-decoration: none;
+       margin: 0 1rem;
+       font-size: 0.9rem;
+       transition: color 0.3s ease;
+   }
+   
+   .lrk-nav-link:hover {
+       color: #999;
+   }
+   
+   .lrk-copyright-section {
+       font-size: 0.8rem;
+       color: #666;
+       border-top: 1px solid #222;
+       margin-top: 1.5rem;
+       padding-top: 1.5rem;
+   }
+   
+   .lrk-designer-link {
+       color: #999;
+       text-decoration: none;
+   }
+   
+   .lrk-designer-link:hover {
+       color: white;
+   }
+   
+   /* ==========================================================================
+      10. MEDIA QUERIES
+      ========================================================================== */
+   @media (min-width: 1024px) {
+       #artistsGrid {
+           grid-template-columns: repeat(3, 1fr);
+       }
+   }
+   
+   @media (max-width: 1023px) and (min-width: 768px) {
+       #artistsGrid {
+           grid-template-columns: repeat(2, 1fr);
+       }
+   }
+   
+   @media (max-width: 767px) {
+       #artistsGrid {
+           grid-template-columns: 1fr;
+           max-height: 600px;
+       }
+   }
+   
+   /* ==========================================================================
+      11. CUSTOM SCROLLBAR
+      ========================================================================== */
+   #artistsGrid::-webkit-scrollbar {
+       width: 8px;
+   }
+   
+   #artistsGrid::-webkit-scrollbar-track {
+       background: transparent;
+   }
+   
+   #artistsGrid::-webkit-scrollbar-thumb {
+       background-color: rgba(255, 255, 255, 0.3);
+       border-radius: 20px;
+   }
