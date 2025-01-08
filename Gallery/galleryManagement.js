@@ -198,17 +198,86 @@ async function loadImages() {
 }
 
 // Create image card
+const styles = `
+.art-gallery-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.art-gallery-modal.art-modal-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.art-gallery-modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.art-gallery-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.art-gallery-card-image {
+    width: 100%;
+    height: 16rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.art-gallery-card-image:hover {
+    transform: scale(1.02);
+}
+`;
+
+// Add the styles to the document
+const styleSheet = document.createElement("style");
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
+
+// Create modal container
+const modal = document.createElement('div');
+modal.className = 'art-gallery-modal';
+modal.innerHTML = `
+    <span class="art-gallery-modal-close">&times;</span>
+    <img class="art-gallery-modal-content" id="art-gallery-modal-img">
+`;
+document.body.appendChild(modal);
+
+// Modified createImageCard function
 function createImageCard(docId, data) {
     const card = document.createElement('div');
-    card.className = 'gallery-item';
+    card.className = 'art-gallery-item';
     card.innerHTML = `
-        <div class="gallery-item-content glass-header2">
-            <img src="${data.imageUrl}" alt="${data.title}" class="w-full h-64 object-cover rounded-lg">
+        <div class="art-gallery-item-content glass-header2">
+            <img src="${data.imageUrl}" alt="${data.title}" class="art-gallery-card-image">
             <div class="p-4">
                 <h3 class="text-xl font-bold mb-2 text-black">${data.title}</h3>
                 <p class="text-sm mb-2 text-white">${data.description || ''}</p>
                 <p class="text-lg font-semibold mb-4 text-white">₱${data.price || '0.00'}</p>
-                <div class="gallery-item-actions">
+                <div class="art-gallery-item-actions">
                     ${auth.currentUser ? 
                         `<button onclick="window.addToCart('${docId}', '${data.title}', ${data.price || 0})" 
                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full">
@@ -226,8 +295,36 @@ function createImageCard(docId, data) {
         </div>
     `;
     
+    // Add click event to image
+    const img = card.querySelector('.art-gallery-card-image');
+    img.addEventListener('click', () => {
+        const modalImg = document.querySelector('#art-gallery-modal-img');
+        modalImg.src = data.imageUrl;
+        modal.classList.add('art-modal-active');
+    });
+    
     return card;
 }
+
+// Add modal close functionality
+const closeBtn = modal.querySelector('.art-gallery-modal-close');
+closeBtn.addEventListener('click', () => {
+    modal.classList.remove('art-modal-active');
+});
+
+// Close modal when clicking outside the image
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.classList.remove('art-modal-active');
+    }
+});
+
+// Close modal with escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('art-modal-active')) {
+        modal.classList.remove('art-modal-active');
+    }
+});
 
 // Delete image
 window.deleteImage = async (docId) => {
