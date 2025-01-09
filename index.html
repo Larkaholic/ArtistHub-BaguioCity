@@ -232,15 +232,16 @@
             </div>
         
             <nav class="lrk-nav-container">
-                <a href="#home" class="lrk-nav-link">Home</a>
-                <a href="#news" class="lrk-nav-link">News</a>
-                <a href="#about" class="lrk-nav-link">About</a>
+                <a href="javascript:void(0)" onclick="navToEvent('./index.html')" class="lrk-nav-link">Home</a>
+                <a href="javascript:void(0)" onclick="navToEvent('./index.html#events')" class="lrk-nav-link">Events</a>
+                <a href="javascript:void(0)" onclick="navToEvent('./Gallery/gallery.html')" class="lrk-nav-link">Gallery</a>
+                <a href="javascript:void(0)" onclick="navToEvent('./index.html#history')" class="lrk-nav-link">History</a>
                 <a href="#contact" class="lrk-nav-link">Contact Us</a>
                 <a href="#team" class="lrk-nav-link">Our Team</a>
             </nav>
         
             <div class="lrk-copyright-section">
-                Copyright ©2022, Designed and Made by <a href="#designer" class="lrk-designer-link">Orillos, Lark Dominique J.</a>
+                Copyright ©2025, Designed and Made by <a href="https://github.com/Larkaholic" class="lrk-designer-link">Orillos, Lark Dominique J.</a>
             </div>
         </footer>
     </main>
@@ -287,6 +288,20 @@
             ensureStylesLoaded(requiredStyles);
         });
     </script>
+
+    <script>
+        function toggleNav() {
+                const menu = document.getElementById('flyout-menu');
+                menu.classList.toggle('translate-x-full');
+            }
+
+        function toggleLoginFlyout(event) {
+            if (event) event.preventDefault();
+            const flyout = document.getElementById('LoginFlyout');
+            flyout.classList.toggle('hidden');
+        }
+    </script>
+
     <style>
         .glass-header {
             background: rgba(255, 255, 255, 1);
