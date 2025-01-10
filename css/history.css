@@ -1,109 +1,83 @@
-.sociales {
-	text-align: center;
-	margin-bottom: 20px;
+.vtl-main-container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 200px); /* Adjusted for admin section */
+    background-color: #f5f5f5;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
-
-#dates {
+.vtl-years-sidebar {
     width: 100px;
-    height: 600px;
-    overflow: hidden;
-    float: left;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
 }
 
-#dates li {
-    list-style: none;
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    font-size: 24px;
-    padding-left: 10px;
-    background: url('http://www.csslab.cl/ejemplos/timelinr/latest/images/biggerdot.png') left center no-repeat;
+.vtl-year-button {
+    padding: 20px 10px;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-#dates a {
-    line-height: 38px;
-    padding-bottom: 10px;
+.vtl-year-button:hover {
+    background-color: #e9ecef;
 }
-#dates .selected {
-    font-size: 38px;
+
+.vtl-year-button--active {
+    background-color: #3b82f6;
+    color: white;
 }
-    
-#issues {
-    width: 400px;
-    height: 600px;
-    overflow: hidden;
-    float: left;
-}	
-#issues li {
-    max-width: 300px;
-    width: 400px;
-    height: 600px;
-    list-style: none;
-    text-align: center;
+
+.vtl-content-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
 }
-#issues li.selected img {
-    -webkit-transform: scale(1.1,1.1);
-    -moz-transform: scale(1.1,1.1);
-    -o-transform: scale(1.1,1.1);
-    -ms-transform: scale(1.1,1.1);
-    transform: scale(1.1,1.1);
-}
-#issues li img {
-    float: left;
-    width: 200px;
-    margin: 10px 30px 10px 50px;
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)"; /* IE 8 */   
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);/* IE 6 & 7 */      
-    zoom: 1;
-    -webkit-transition: all 2s ease-in-out;
-    -moz-transition: all 2s ease-in-out;
-    -o-transition: all 2s ease-in-out;
-    -ms-transition: all 2s ease-in-out; 
-    transition: all 2s ease-in-out;
-    -webkit-transform: scale(0.7,0.7);
-    -moz-transform: scale(0.7,0.7);
-    -o-transform: scale(0.7,0.7);
-    -ms-transform: scale(0.7,0.7);
-    transform: scale(0.7,0.7);
-}
-#issues li h1 {
-    color: #ffcc00;
-    font-size: 48px;
-    text-align: center;
-    text-shadow: #000 1px 1px 2px;
-}
-#issues li p {
-    font-size: 14px;
-    margin: 10px 20px;
-    font-weight: normal;
-    line-height: 22px;
-    text-shadow: #000 1px 1px 2px;
-}
-    
-#next,
-#prev {
+
+.vtl-background {
     position: absolute;
-    left: 55%;
-    font-size: 70px;
-    width: 38px;
-    height: 22px;
-    background-position: 0 -44px;
-    background-repeat: no-repeat;
-    text-indent: -9999px;
-    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    transition: opacity 0.5s ease;
+    background-size: cover;
+    background-position: center;
 }
-#next:hover,
-#prev:hover {
-    background-position:  0 0;
+
+.vtl-content-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-width: 600px;
+    width: 100%;
+    z-index: 1;
+    transition: opacity 0.3s ease;
 }
-#next {
-    background-image: url('http://www.csslab.cl/ejemplos/timelinr/latest/images/next_v.png');
+
+.vtl-content-heading {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    transition: opacity 0.3s ease;
 }
-#prev {
-    background-image: url('http://www.csslab.cl/ejemplos/timelinr/latest/images/prev_v.png');
-}
-#next.disabled,
-#prev.disabled {
-    opacity: 0.2;
+
+.vtl-content-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: center;
+    transition: opacity 0.3s ease;
 }
