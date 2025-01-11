@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -195,15 +196,29 @@
         
         <!-- through the years -->
         
-        <section class="vtl-main-container">
-            <div class="vtl-years-sidebar" id="vtlYearsPanel">
-                <!-- Years will be dynamically inserted here -->
-            </div>
-            <div class="vtl-content-wrapper">
-                <div class="vtl-background" id="vtlBackground"></div>
-                <div class="vtl-content-box">
-                    <h2 class="vtl-content-heading" id="vtlTitle"></h2>
-                    <p class="vtl-content-text" id="vtlDetails"></p>
+        <section class="hist-timeline">
+            <div class="hist-container">
+                <!-- Year Marker -->
+                <div id="histYear" class="hist-year"></div>
+        
+                <!-- Background Images -->
+                <div id="histBackgrounds"></div>
+        
+                <!-- Content -->
+                <div class="hist-content">
+                    <!-- Timeline -->
+                    <div class="hist-sidebar">
+                        <div class="hist-line"></div>
+                        <div id="histTimeline"></div>
+                    </div>
+        
+                    <!-- Content Area -->
+                    <div class="hist-main">
+                        <div class="hist-content-wrapper">
+                            <h1 id="histTitle" class="hist-title"></h1>
+                            <p id="histDetails" class="hist-details"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
