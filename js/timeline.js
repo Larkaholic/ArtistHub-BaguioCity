@@ -3,25 +3,25 @@ const timelineData = [
         year: 2001,
         title: "PANAGBENGA 2001",
         details: "Apollo 11 becomes the first crewed mission to land on the Moon, marking one of humanity's greatest achievements. This historic moment united the world in celebration of human ingenuity and courage.",
-        imageUrl: "images/timeline/179e161304fd380a55e08f73f300064e.jpg"
+        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/5678308583_9155e72a03_b.jpg?raw=true"
     },
     {
         year: 2002,
         title: "PANAGBENGA 2002",
         details: "The Berlin Wall falls, symbolizing the end of the Cold War and the reunification of East and West Germany. This momentous event marked the beginning of a new era of freedom and democracy in Europe.",
-        imageUrl: "images/timeline/5678308583_9155e72a03_b.jpg"
+        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/madeko-kito-baguio-festival-1024x576.jpg?raw=true"
     },
     {
         year: 2003,
         title: "PANAGBENGA 2003",
         details: "The rise of the internet and digital technology transforms global communication and commerce. This unprecedented technological advancement changed how we live, work, and connect with each other.",
-        imageUrl: "images/timeline/madeko-kito-baguio-festival-1024x576.jpg"
+        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/panagbenga-festival-1024x683.jpg?raw=true"
     },
     {
         year: 204,
         title: "PANAGBENGA 2004",
         details: "COVID-19 pandemic leads to unprecedented global changes in how we live, work, and interact. This global crisis reshaped society and accelerated digital transformation across all sectors.",
-        imageUrl: "images/timeline/panagbenga-festival-1024x683.jpg"
+        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/179e161304fd380a55e08f73f300064e.jpg?raw=true"
     }
 ];
 
