@@ -1,140 +1,120 @@
-import { db } from './firebase-config.js';
-import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const timelineData = [
+    {
+        year: 2001,
+        title: "PANAGBENGA 2001",
+        details: "Apollo 11 becomes the first crewed mission to land on the Moon, marking one of humanity's greatest achievements. This historic moment united the world in celebration of human ingenuity and courage.",
+        imageUrl: "images/timeline/179e161304fd380a55e08f73f300064e.jpg"
+    },
+    {
+        year: 2002,
+        title: "PANAGBENGA 2002",
+        details: "The Berlin Wall falls, symbolizing the end of the Cold War and the reunification of East and West Germany. This momentous event marked the beginning of a new era of freedom and democracy in Europe.",
+        imageUrl: "images/timeline/5678308583_9155e72a03_b.jpg"
+    },
+    {
+        year: 2003,
+        title: "PANAGBENGA 2003",
+        details: "The rise of the internet and digital technology transforms global communication and commerce. This unprecedented technological advancement changed how we live, work, and connect with each other.",
+        imageUrl: "images/timeline/madeko-kito-baguio-festival-1024x576.jpg"
+    },
+    {
+        year: 204,
+        title: "PANAGBENGA 2004",
+        details: "COVID-19 pandemic leads to unprecedented global changes in how we live, work, and interact. This global crisis reshaped society and accelerated digital transformation across all sectors.",
+        imageUrl: "images/timeline/panagbenga-festival-1024x683.jpg"
+    }
+];
 
-let currentImageUrl = ''; // To store the uploaded image URL
+function createBackgrounds() {
+    const container = document.getElementById('histBackgrounds');
+    timelineData.forEach((event, index) => {
+        const img = document.createElement('img');
+        img.src = event.imageUrl;
+        img.className = `hist-bg-img ${index === 0 ? 'hist-bg-img--active' : ''}`;
+        img.alt = '';
+        container.appendChild(img);
+    });
+}
 
-        // DOM elements
-        const yearsPanel = document.getElementById('vtlYearsPanel');
-        const backgroundElement = document.getElementById('vtlBackground');
-        const titleElement = document.getElementById('vtlTitle');
-        const detailsElement = document.getElementById('vtlDetails');
-        const yearInput = document.getElementById('year');
-        const eventInput = document.getElementById('event');
-        const historyImageBtn = document.getElementById('historyImage');
-        const addEventBtn = document.getElementById('add-event');
-
-        // Initialize Cloudinary Upload Widget
-        const myWidget = cloudinary.createUploadWidget(
-            {
-                cloudName: 'dxeyr4pvf',
-                uploadPreset: 'Hisrtory',
-                maxFiles: 1,
-                sources: ['local', 'camera'],
-                folder: 'timeline',
-                resourceType: 'image'
-            },
-            (error, result) => {
-                if (!error && result && result.event === "success") {
-                    currentImageUrl = result.info.secure_url;
-                    alert('Image uploaded successfully!');
-                }
-                if (error) {
-                    console.error('Upload error:', error);
-                    alert('Error uploading image');
-                }
-            }
-        );
-
-        // Handle image upload
-        historyImageBtn.addEventListener('click', () => {
-            myWidget.open();
+function createTimeline() {
+    const timeline = document.getElementById('histTimeline');
+    const itemHeight = 100 / timelineData.length;
+    
+    timelineData.forEach((event, index) => {
+        const item = document.createElement('div');
+        item.className = `hist-item ${index === 0 ? 'hist-item--active' : ''}`;
+        item.style.height = `${itemHeight}%`;
+        item.style.top = `${itemHeight * index}%`;
+        
+        const dot = document.createElement('div');
+        dot.className = 'hist-dot';
+        
+        item.appendChild(dot);
+        
+        item.addEventListener('click', () => {
+            updateActive(index);
+            updateContent(event);
+            updateBackground(index);
         });
+        
+        timeline.appendChild(item);
+    });
+}
 
-        // Handle adding new event
-        addEventBtn.addEventListener('click', async () => {
-            const year = yearInput.value.trim();
-            const event = eventInput.value.trim();
-            
-            if (!year || !event || !currentImageUrl) {
-                alert('Please fill all fields and upload an image');
-                return;
-            }
+function updateActive(index) {
+    document.querySelectorAll('.hist-item').forEach(item => {
+        item.classList.remove('hist-item--active');
+    });
+    document.querySelectorAll('.hist-item')[index].classList.add('hist-item--active');
+}
 
-            try {
-                // Add to Firebase
-                await db.collection('timeline').add({
-                    year: parseInt(year),
-                    title: event,
-                    details: event,
-                    imageUrl: currentImageUrl
-                });
+function updateBackground(index) {
+    document.querySelectorAll('.hist-bg-img').forEach(img => {
+        img.classList.remove('hist-bg-img--active');
+    });
+    document.querySelectorAll('.hist-bg-img')[index].classList.add('hist-bg-img--active');
+}
 
-                // Clear inputs
-                yearInput.value = '';
-                eventInput.value = '';
-                currentImageUrl = '';
-                
-                // Refresh timeline
-                await initializeTimeline();
-                alert('Event added successfully!');
-            } catch (error) {
-                console.error('Error adding event:', error);
-                alert('Error adding event');
-            }
-        });
+function updateContent(event) {
+    const year = document.getElementById('histYear');
+    const title = document.getElementById('histTitle');
+    const details = document.getElementById('histDetails');
 
-        function updateTimelineContent(data) {
-            // Update active button
-            document.querySelectorAll('.vtl-year-button').forEach(btn => {
-                btn.classList.remove('vtl-year-button--active');
-                if (btn.textContent == data.year) {
-                    btn.classList.add('vtl-year-button--active');
-                }
-            });
+    // Reset animations
+    title.classList.remove('hist-fade-in');
+    details.classList.remove('hist-fade-up');
+    void title.offsetWidth;
+    void details.offsetWidth;
 
-            // Update content with fade effect
-            titleElement.style.opacity = 0;
-            detailsElement.style.opacity = 0;
-            backgroundElement.style.opacity = 0;
+    // Update content
+    year.textContent = event.year;
+    title.textContent = event.title;
+    details.textContent = event.details;
 
-            setTimeout(() => {
-                titleElement.textContent = data.title;
-                detailsElement.textContent = data.details;
-                backgroundElement.style.backgroundImage = `url(${data.imageUrl})`;
-                
-                titleElement.style.opacity = 1;
-                detailsElement.style.opacity = 1;
-                backgroundElement.style.opacity = 0.3;
-            }, 300);
-        }
+    // Restart animations
+    title.classList.add('hist-fade-in');
+    details.classList.add('hist-fade-up');
+}
 
-        async function fetchTimelineData() {
-            try {
-                const snapshot = await db.collection('timeline')
-                    .orderBy('year', 'desc')
-                    .get();
-                return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            } catch (error) {
-                console.error('Error fetching timeline data:', error);
-                return [];
-            }
-        }
+// Initialize
+createBackgrounds();
+createTimeline();
+updateContent(timelineData[0]);
 
-        async function initializeTimeline() {
-            try {
-                const data = await fetchTimelineData();
-                
-                // Clear existing buttons
-                yearsPanel.innerHTML = '';
-                
-                // Create new buttons
-                data.forEach(item => {
-                    const button = document.createElement('button');
-                    button.className = 'vtl-year-button';
-                    button.textContent = item.year;
-                    button.onclick = () => updateTimelineContent(item);
-                    yearsPanel.appendChild(button);
-                });
-
-                // Initialize with first item if exists
-                if (data.length > 0) {
-                    updateTimelineContent(data[0]);
-                    document.querySelector('.vtl-year-button').classList.add('vtl-year-button--active');
-                }
-            } catch (error) {
-                console.error('Error initializing timeline:', error);
-            }
-        }
-
-        // Initial load
-        initializeTimeline();
+// Scroll handling
+document.addEventListener('wheel', (e) => {
+    const items = document.querySelectorAll('.hist-item');
+    const currentIndex = Array.from(items).findIndex(item => 
+        item.classList.contains('hist-item--active')
+    );
+    
+    if (e.deltaY > 0 && currentIndex < items.length - 1) {
+        updateActive(currentIndex + 1);
+        updateContent(timelineData[currentIndex + 1]);
+        updateBackground(currentIndex + 1);
+    } else if (e.deltaY < 0 && currentIndex > 0) {
+        updateActive(currentIndex - 1);
+        updateContent(timelineData[currentIndex - 1]);
+        updateBackground(currentIndex - 1);
+    }
+});

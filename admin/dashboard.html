@@ -44,7 +44,7 @@
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
-    <nav class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center">
+    <nav class="bg-black fixed top-0 left-0 right-0 p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">Admin Dashboard</h1>
         <div class="flex items-center space-x-4">
             <a href="../index.html" class="text-white hover:text-gray-300">Home</a>
@@ -129,20 +129,7 @@
                 </div>
             </div>
         </section>
-
-        <!-- Through the years section -->
-        <section>
-            <div id="admin-input" class="mt-10">
-                <h3 class="text-xl font-bold">Admin Input</h3>
-                <input type="text" id="year" placeholder="Enter Year" class="text-black border p-2 rounded">
-                <input type="text" id="event" placeholder="Enter Event" class="text-black border p-2 rounded">
-                <button type="button" id="historyImage" 
-                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        Upload Image
-                </button>
-                <button id="add-event" class="bg-blue-500 text-white p-2 rounded">Add Event</button>
-            </div>
-        </section>
+        
     </main>
     <!-- Event Modal -->
     <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
