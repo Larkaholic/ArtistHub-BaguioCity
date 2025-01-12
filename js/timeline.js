@@ -18,7 +18,7 @@ const timelineData = [
         imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/panagbenga-festival-1024x683.jpg?raw=true"
     },
     {
-        year: 204,
+        year: 2004,
         title: "PANAGBENGA 2004",
         details: "COVID-19 pandemic leads to unprecedented global changes in how we live, work, and interact. This global crisis reshaped society and accelerated digital transformation across all sectors.",
         imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/179e161304fd380a55e08f73f300064e.jpg?raw=true"
@@ -38,18 +38,20 @@ function createBackgrounds() {
 
 function createTimeline() {
     const timeline = document.getElementById('histTimeline');
-    const itemHeight = 100 / timelineData.length;
     
     timelineData.forEach((event, index) => {
         const item = document.createElement('div');
         item.className = `hist-item ${index === 0 ? 'hist-item--active' : ''}`;
-        item.style.height = `${itemHeight}%`;
-        item.style.top = `${itemHeight * index}%`;
         
         const dot = document.createElement('div');
         dot.className = 'hist-dot';
         
+        const yearLabel = document.createElement('div');
+        yearLabel.className = 'hist-year-label';
+        yearLabel.textContent = event.year;
+        
         item.appendChild(dot);
+        item.appendChild(yearLabel);
         
         item.addEventListener('click', () => {
             updateActive(index);
@@ -61,6 +63,7 @@ function createTimeline() {
     });
 }
 
+// Rest of the JavaScript remains the same
 function updateActive(index) {
     document.querySelectorAll('.hist-item').forEach(item => {
         item.classList.remove('hist-item--active');
@@ -80,28 +83,23 @@ function updateContent(event) {
     const title = document.getElementById('histTitle');
     const details = document.getElementById('histDetails');
 
-    // Reset animations
     title.classList.remove('hist-fade-in');
     details.classList.remove('hist-fade-up');
     void title.offsetWidth;
     void details.offsetWidth;
 
-    // Update content
     year.textContent = event.year;
     title.textContent = event.title;
     details.textContent = event.details;
 
-    // Restart animations
     title.classList.add('hist-fade-in');
     details.classList.add('hist-fade-up');
 }
 
-// Initialize
 createBackgrounds();
 createTimeline();
 updateContent(timelineData[0]);
 
-// Scroll handling
 document.addEventListener('wheel', (e) => {
     const items = document.querySelectorAll('.hist-item');
     const currentIndex = Array.from(items).findIndex(item => 

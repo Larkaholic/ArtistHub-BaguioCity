@@ -1,17 +1,10 @@
-.hist-timeline {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
-    background: #000;
-    color: #fff;
-    overflow-x: hidden;
-}
-
-.hist-container {
-    min-height: 100vh;
-    position: relative;
-    overflow: hidden;
+#histBackgrounds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }
 
 .hist-bg-img {
@@ -22,148 +15,109 @@
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
-    z-index: 0;
+    transition: opacity 0.8s ease-in-out;
 }
 
 .hist-bg-img--active {
-    opacity: 0.4;
+    opacity: 1;
 }
 
-.hist-year {
-    font-size: 12vw;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.1);
-    position: fixed;
-    left: 0;
+.content-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+#histTimeline {
+    position: absolute;
+    right: 100px;
     top: 50%;
     transform: translateY(-50%);
-    writing-mode: vertical-lr;
-    transition: all 0.5s ease;
-    z-index: 3;
-}
-
-.hist-content {
-    position: relative;
-    z-index: 2;
-    min-height: 100vh;
+    height: 70vh;
     display: flex;
-    background: linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.8) 0%,
-        rgba(0, 0, 0, 0.6) 50%,
-        rgba(0, 0, 0, 0.4) 100%
-    );
-}
-
-.hist-sidebar {
-    width: 120px;
-    position: relative;
-}
-
-@media (min-width: 768px) {
-    .hist-sidebar {
-        width: 160px;
-    }
-}
-
-.hist-line {
-    width: 2px;
-    background: rgba(255, 255, 255, 0.2);
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-}
-
-.hist-dot {
-    width: 16px;
-    height: 16px;
-    background: #fff;
-    border-radius: 50%;
-    position: absolute;
-    left: -8px;
-    top: 50%;
-    transform: translateY(-50%) scale(0.8);
-    transition: all 0.3s ease;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 2;
 }
 
 .hist-item {
-    position: absolute;
-    width: 100%;
+    position: relative;
     cursor: pointer;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.hist-dot {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transition: all 0.3s ease;
 }
 
 .hist-item--active .hist-dot {
-    transform: translateY(-50%) scale(1.2);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    background: white;
+    transform: scale(1.5);
 }
 
-.hist-main {
-    flex: 1;
-    padding: 32px;
-    display: flex;
-    align-items: center;
+.hist-year-label {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+    min-width: 60px;
 }
 
-@media (min-width: 768px) {
-    .hist-main {
-        padding: 64px;
-    }
+.hist-item--active .hist-year-label {
+    color: white;
+    font-weight: bold;
+    transform: scale(1.1);
 }
 
-.hist-content-wrapper {
-    max-width: 768px;
+.hist-content {
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 600px;
+    z-index: 2;
 }
 
-.hist-title {
+#histYear {
+    font-size: 5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+#histTitle {
     font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    opacity: 0;
-    transform: translateX(-20px);
+    margin-bottom: 1rem;
 }
 
-@media (min-width: 768px) {
-    .hist-title {
-        font-size: 3.75rem;
-    }
-}
-
-.hist-details {
-    font-size: 1.125rem;
+#histDetails {
+    font-size: 1.2rem;
     line-height: 1.6;
-    color: #e0e0e0;
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-@media (min-width: 768px) {
-    .hist-details {
-        font-size: 1.25rem;
-    }
 }
 
 .hist-fade-in {
-    animation: histFadeIn 0.8s ease-out forwards;
+    animation: fadeIn 0.8s ease-out forwards;
 }
 
 .hist-fade-up {
-    animation: histFadeUp 0.8s ease-out forwards 0.3s;
+    animation: fadeUp 0.8s ease-out forwards;
 }
 
-@keyframes histFadeIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-@keyframes histFadeUp {
+@keyframes fadeUp {
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -172,4 +126,11 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@media (max-height: 800px) {
+    #histYear { font-size: 4rem; }
+    #histTitle { font-size: 2rem; }
+    #histDetails { font-size: 1rem; }
+    .hist-year-label { font-size: 1rem; }
 }
