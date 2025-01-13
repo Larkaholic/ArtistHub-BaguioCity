@@ -7,20 +7,53 @@ import { db } from "../js/firebase-config.js";
 let cart = [];
 const auth = getAuth();
 
-// Make cart functions globally accessible
+// Toggle cart visibility
 window.toggleCart = function() {
-    console.log('Toggle cart called');
     const cartModal = document.getElementById('cartModal');
-    console.log('Cart modal element:', cartModal);
     if (cartModal) {
-        console.log('Current hidden state:', cartModal.classList.contains('hidden'));
         cartModal.classList.toggle('hidden');
-        console.log('New hidden state:', cartModal.classList.contains('hidden'));
-    } else {
-        console.error('Cart modal not found');
     }
 }
 
+// Show added to cart confirmation modal
+function showAddedToCartModal(item) {
+    const modalHTML = `
+        <div id="addedToCartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+            <div class="glass-header rounded-lg p-6 max-w-sm mx-auto">
+                <div class="text-center">
+                    <h3 class="text-lg font-bold mb-2">Item Added to Cart!</h3>
+                    <div class="mb-4">
+                        <p class="font-medium">${item.title}</p>
+                        <p class="text-green-600">₱${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="closeAddedToCartModal()" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+                            Continue Shopping
+                        </button>
+                        <button onclick="viewCart()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                            View Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+// Close added to cart modal
+window.closeAddedToCartModal = function() {
+    const modal = document.getElementById('addedToCartModal');
+    if (modal) modal.remove();
+}
+
+// View cart
+window.viewCart = function() {
+    closeAddedToCartModal();
+    toggleCart();
+}
+
+// Add to cart
 window.addToCart = async function(artworkId, title, price) {
     try {
         const user = auth.currentUser;
@@ -58,7 +91,7 @@ window.addToCart = async function(artworkId, title, price) {
             }
             
             updateCartUI();
-            alert('Item added to cart successfully!');
+            showAddedToCartModal(item);
         } catch (error) {
             console.error('Error accessing cart:', error);
             alert('Unable to add item to cart. Please try again later.');
@@ -69,6 +102,7 @@ window.addToCart = async function(artworkId, title, price) {
     }
 }
 
+// Remove from cart
 window.removeFromCart = async function(index) {
     try {
         const user = auth.currentUser;
@@ -107,16 +141,72 @@ window.removeFromCart = async function(index) {
     }
 }
 
+// Checkout process
 window.checkout = async function() {
-    if (cart.length === 0) {
-        alert('Your cart is empty');
-        return;
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('Please login to checkout');
+            return;
+        }
+
+        if (cart.length === 0) {
+            alert('Your cart is empty');
+            return;
+        }
+
+        // Get the cart items with artwork details
+        const cartDocRef = doc(db, 'carts', user.uid);
+        const cartDoc = await getDoc(cartDocRef);
+        
+        if (!cartDoc.exists()) {
+            alert('Cart not found');
+            return;
+        }
+
+        const items = cartDoc.data().items;
+        
+        // Get artwork details for each item
+        for (const item of items) {
+            const artworkDoc = await getDoc(doc(db, 'artworks', item.artworkId));
+            if (artworkDoc.exists()) {
+                const artworkData = artworkDoc.data();
+                const ownerEmail = artworkData.artistEmail || 'Unknown';
+                
+                // Create mailto link
+                const subject = encodeURIComponent(`Interest in purchasing: ${item.title}`);
+                const body = encodeURIComponent(
+                    `Hello,\n\n` +
+                    `I am interested in purchasing your artwork:\n` +
+                    `Title: ${item.title}\n` +
+                    `Price: ₱${item.price.toFixed(2)}\n\n` +
+                    `Please let me know how we can proceed with the transaction.\n\n` +
+                    `Best regards,\n` +
+                    `${user.displayName || user.email}`
+                );
+                
+                window.open(`mailto:${ownerEmail}?subject=${subject}&body=${body}`);
+            }
+        }
+        
+        // Clear the cart after checkout
+        await updateDoc(cartDocRef, {
+            items: [],
+            updatedAt: new Date()
+        });
+        
+        cart = [];
+        updateCartUI();
+        toggleCart();
+        alert('Checkout complete! Emails have been prepared to contact the artists.');
+        
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        alert('An error occurred during checkout. Please try again later.');
     }
-    
-    // Here you would implement the checkout process
-    alert('Checkout functionality will be implemented soon!');
 }
 
+// Update cart UI
 function updateCartUI() {
     const cartCount = document.getElementById('cartCount');
     const cartCountMobile = document.getElementById('cartCountMobile');
@@ -154,36 +244,19 @@ function updateCartUI() {
     }
 }
 
-// Initialize cart when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    // Create cart modal
-    const cartModalHTML = `
-        <div id="cartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
-            <div class="glass-header items-center rounded-lg w-96 mx-10 p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold">Shopping Cart</h2>
-                    <button onclick="window.toggleCart()" class="text-gray-500 hover:text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div id="cartItems" class="space-y-4 max-h-96 overflow-y-auto">
-                    <!-- Cart items will be dynamically added here -->
-                </div>
-                <div class="mt-4 flex justify-between items-center">
-                    <div>
-                        <p>Total Items: <span id="totalItems">0</span></p>
-                        <p>Total Price: ₱<span id="totalPrice">0.00</span></p>
-                    </div>
-                    <button onclick="window.checkout()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
-                        Checkout
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Add cart modal to the body
-    document.body.insertAdjacentHTML('afterbegin', cartModalHTML);
+// Load cart data on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    const user = auth.currentUser;
+    if (user) {
+        try {
+            const cartDocRef = doc(db, 'carts', user.uid);
+            const cartDoc = await getDoc(cartDocRef);
+            if (cartDoc.exists()) {
+                cart = cartDoc.data().items || [];
+                updateCartUI();
+            }
+        } catch (error) {
+            console.error('Error loading cart data:', error);
+        }
+    }
 });
