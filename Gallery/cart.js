@@ -9,9 +9,15 @@ const auth = getAuth();
 
 // Toggle cart visibility
 window.toggleCart = function() {
+    console.log('Toggle cart called');
     const cartModal = document.getElementById('cartModal');
+    console.log('Cart modal element:', cartModal);
     if (cartModal) {
+        console.log('Current hidden state:', cartModal.classList.contains('hidden'));
         cartModal.classList.toggle('hidden');
+        console.log('New hidden state:', cartModal.classList.contains('hidden'));
+    } else {
+        console.error('Cart modal not found');
     }
 }
 
@@ -245,18 +251,35 @@ function updateCartUI() {
 }
 
 // Load cart data on page load
-document.addEventListener('DOMContentLoaded', async () => {
-    const user = auth.currentUser;
-    if (user) {
-        try {
-            const cartDocRef = doc(db, 'carts', user.uid);
-            const cartDoc = await getDoc(cartDocRef);
-            if (cartDoc.exists()) {
-                cart = cartDoc.data().items || [];
-                updateCartUI();
-            }
-        } catch (error) {
-            console.error('Error loading cart data:', error);
-        }
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    // Create cart modal
+    const cartModalHTML = `
+        <div id="cartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+            <div class="glass-header items-center rounded-lg w-96 mx-10 p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold">Shopping Cart</h2>
+                    <button onclick="window.toggleCart()" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="cartItems" class="space-y-4 max-h-96 overflow-y-auto">
+                    <!-- Cart items will be dynamically added here -->
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <div>
+                        <p>Total Items: <span id="totalItems">0</span></p>
+                        <p>Total Price: ₱<span id="totalPrice">0.00</span></p>
+                    </div>
+                    <button onclick="window.checkout()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                        Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add cart modal to the body
+    document.body.insertAdjacentHTML('afterbegin', cartModalHTML);
 });
