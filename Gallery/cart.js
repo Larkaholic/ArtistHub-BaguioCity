@@ -147,10 +147,106 @@ window.removeFromCart = async function(index) {
     }
 }
 
-// Checkout process
-window.checkout = async function() {
+// Show email preview modal
+function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') {
+    console.log('Showing email preview for:', artworkData);
+    const emailPreviewHTML = `
+        <div id="emailPreviewModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+            <div class="glass-header rounded-lg p-6 max-w-2xl w-full mx-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold">Email Preview</h2>
+                    <button onclick="window.closeEmailPreview()" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-lg p-4 space-y-4">
+                    <div>
+                        <p class="font-semibold">To: ${ownerEmail}</p>
+                        <p class="font-semibold">Subject: Interest in purchasing: ${artworkData.title}</p>
+                    </div>
+                    <div class="border-t border-gray-300 pt-4">
+                        <p>Hello,</p>
+                        <br/>
+                        <p>I am interested in purchasing your artwork:</p>
+                        <p>Title: ${artworkData.title}</p>
+                        <p>Price: ₱${artworkData.price.toFixed(2)}</p>
+                        <br/>
+                        <p>Please let me know how we can proceed with the transaction.</p>
+                        <br/>
+                        <p>Best regards,</p>
+                        <p>${user.displayName || user.email}</p>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-4">
+                    <button onclick="window.closeEmailPreview()" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+                        Edit
+                    </button>
+                    <button onclick="window.sendEmail('${ownerEmail}', '${artworkData.title}', ${artworkData.price}, '${user.displayName || user.email}')" 
+                            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                        Send Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', emailPreviewHTML);
+}
+
+window.closeEmailPreview = function() {
+    console.log('Closing email preview');
+    const modal = document.getElementById('emailPreviewModal');
+    if (modal) modal.remove();
+}
+
+window.sendEmail = function(ownerEmail, title, price, buyerInfo) {
+    console.log('Sending email to:', ownerEmail);
+    const subject = encodeURIComponent(`Interest in purchasing: ${title}`);
+    const body = encodeURIComponent(
+        `Hello,\n\n` +
+        `I am interested in purchasing your artwork:\n` +
+        `Title: ${title}\n` +
+        `Price: ₱${price.toFixed(2)}\n\n` +
+        `Please let me know how we can proceed with the transaction.\n\n` +
+        `Best regards,\n` +
+        `${buyerInfo}`
+    );
+    
+    window.open(`mailto:${ownerEmail}?subject=${subject}&body=${body}`);
+    closeEmailPreview();
+
+    // Clear cart after sending email
+    clearCart();
+}
+
+// Add new function to clear cart
+async function clearCart() {
     try {
         const user = auth.currentUser;
+        const cartDocRef = doc(db, 'carts', user.uid);
+        
+        await updateDoc(cartDocRef, {
+            items: [],
+            updatedAt: new Date()
+        });
+        
+        cart = [];
+        updateCartUI();
+        toggleCart();
+        alert('Checkout complete! Emails have been prepared to contact the artists.');
+    } catch (error) {
+        console.error('Error clearing cart:', error);
+    }
+}
+
+// Checkout process
+window.checkout = async function() {
+    console.log('Checkout started');
+    try {
+        const user = auth.currentUser;
+        console.log('Current user:', user);
+        
         if (!user) {
             alert('Please login to checkout');
             return;
@@ -161,7 +257,8 @@ window.checkout = async function() {
             return;
         }
 
-        // Get the cart items with artwork details
+        console.log('Cart items:', cart);
+
         const cartDocRef = doc(db, 'carts', user.uid);
         const cartDoc = await getDoc(cartDocRef);
         
@@ -171,40 +268,27 @@ window.checkout = async function() {
         }
 
         const items = cartDoc.data().items;
+        console.log('Cart items from Firestore:', items);
         
-        // Get artwork details for each item
-        for (const item of items) {
-            const artworkDoc = await getDoc(doc(db, 'artworks', item.artworkId));
-            if (artworkDoc.exists()) {
-                const artworkData = artworkDoc.data();
-                const ownerEmail = artworkData.artistEmail || 'Unknown';
+        // Show preview for first item only
+        if (items.length > 0) {
+            const item = items[0];
+            try {
+                const artworkDoc = await getDoc(doc(db, 'artworks', item.artworkId));
+                let ownerEmail = 'artist@example.com'; // Default email
                 
-                // Create mailto link
-                const subject = encodeURIComponent(`Interest in purchasing: ${item.title}`);
-                const body = encodeURIComponent(
-                    `Hello,\n\n` +
-                    `I am interested in purchasing your artwork:\n` +
-                    `Title: ${item.title}\n` +
-                    `Price: ₱${item.price.toFixed(2)}\n\n` +
-                    `Please let me know how we can proceed with the transaction.\n\n` +
-                    `Best regards,\n` +
-                    `${user.displayName || user.email}`
-                );
+                if (artworkDoc.exists()) {
+                    const artworkData = artworkDoc.data();
+                    ownerEmail = artworkData.artistEmail || ownerEmail;
+                }
                 
-                window.open(`mailto:${ownerEmail}?subject=${subject}&body=${body}`);
+                showEmailPreview(item, user, ownerEmail);
+            } catch (error) {
+                console.error('Error fetching artwork:', error);
+                // Still show preview even if artwork fetch fails
+                showEmailPreview(item, user, 'artist@example.com');
             }
         }
-        
-        // Clear the cart after checkout
-        await updateDoc(cartDocRef, {
-            items: [],
-            updatedAt: new Date()
-        });
-        
-        cart = [];
-        updateCartUI();
-        toggleCart();
-        alert('Checkout complete! Emails have been prepared to contact the artists.');
         
     } catch (error) {
         console.error('Error during checkout:', error);
