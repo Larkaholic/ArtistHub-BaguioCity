@@ -37,43 +37,44 @@ const baseUrl = window.location.hostname === '127.0.0.1' || window.location.host
     : '/ArtistHub-BaguioCity';
 
 // registration handler
-window.handleRegister = async function(e) {
-    e.preventDefault();
+window.handleRegister = async function(event) {
+    event.preventDefault();
     
     const email = document.getElementById('registerEmail').value;
     const password = document.getElementById('registerPassword').value;
     const userType = document.getElementById('userType').value;
-
+    
     try {
-        // create user account
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-
-        const artistId = `artist_${user.uid}`;
-
-        // create initial user document with pending status
-        await setDoc(doc(db, "users", user.uid), {
-            email: email,
+        
+        // Create user document in Firestore with proper status
+        await setDoc(doc(db, 'users', user.uid), {
+            email: user.email,
             userType: userType,
-            status: 'pending', // all new artists start as pending
-            createdAt: new Date().toISOString(),
-            role: userType === 'artist' ? 'artist' : 'user',
-            artistId: artistId
+            name: user.displayName || '',
+            status: userType === 'artist' ? 'pending' : 'approved', // Set initial status
+            createdAt: new Date(),
+            lastLogin: new Date()
         });
-
-        // close registration flyout
-        const loginFlyout = document.getElementById('LoginFlyout');
-        if (loginFlyout) {
-            loginFlyout.classList.add('hidden');
+        
+        if (userType === 'artist') {
+            alert('Your artist registration is pending approval. We will review your application shortly.');
         }
-
-        // redirect to profile edit page for initial setup
-        window.location.href = `${baseUrl}/profile/edit-profile.html`;
-
+        
+        toggleLoginFlyout();
+        
+        if (typeof updateLoginState === 'function') {
+            updateLoginState(user);
+        }
+        
+        return false;
     } catch (error) {
-        alert('Registration failed: ' + error.message);
+        console.error('Error registering user:', error);
+        alert(error.message);
+        return false;
     }
-};
+}
 
 // login handler
 window.handleLogin = async function(e) {
