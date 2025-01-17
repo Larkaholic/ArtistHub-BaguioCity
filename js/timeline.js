@@ -25,19 +25,56 @@ const timelineData = [
     }
 ];
 
-function createBackgrounds() {
-    const container = document.getElementById('histBackgrounds');
-    timelineData.forEach((event, index) => {
-        const img = document.createElement('img');
-        img.src = event.imageUrl;
-        img.className = `hist-bg-img ${index === 0 ? 'hist-bg-img--active' : ''}`;
-        img.alt = '';
-        container.appendChild(img);
+async function preloadImage(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
+        img.src = url;
     });
+}
+
+async function createBackgrounds() {
+    const container = document.getElementById('histBackgrounds');
+    if (!container) return;
+
+    // Show loading state
+    const loader = document.createElement('div');
+    loader.style.cssText = `
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        z-index: 3;
+    `;
+    loader.textContent = 'Loading...';
+    container.appendChild(loader);
+
+    try {
+        // Preload all images first
+        const preloadedImages = await Promise.all(
+            timelineData.map(event => preloadImage(event.imageUrl))
+        );
+
+        // Remove loader
+        loader.remove();
+
+        // Add images to container
+        preloadedImages.forEach((img, index) => {
+            img.className = `hist-bg-img ${index === 0 ? 'hist-bg-img--active' : ''}`;
+            img.alt = `${timelineData[index].title} background`;
+            container.appendChild(img);
+        });
+    } catch (error) {
+        console.error('Error loading images:', error);
+        loader.textContent = 'Error loading images. Please refresh the page.';
+    }
 }
 
 function createTimeline() {
     const timeline = document.getElementById('histTimeline');
+    if (!timeline) return;
     
     timelineData.forEach((event, index) => {
         const item = document.createElement('div');
@@ -63,19 +100,18 @@ function createTimeline() {
     });
 }
 
-// Rest of the JavaScript remains the same
 function updateActive(index) {
     document.querySelectorAll('.hist-item').forEach(item => {
         item.classList.remove('hist-item--active');
     });
-    document.querySelectorAll('.hist-item')[index].classList.add('hist-item--active');
+    document.querySelectorAll('.hist-item')[index]?.classList.add('hist-item--active');
 }
 
 function updateBackground(index) {
     document.querySelectorAll('.hist-bg-img').forEach(img => {
         img.classList.remove('hist-bg-img--active');
     });
-    document.querySelectorAll('.hist-bg-img')[index].classList.add('hist-bg-img--active');
+    document.querySelectorAll('.hist-bg-img')[index]?.classList.add('hist-bg-img--active');
 }
 
 function updateContent(event) {
@@ -83,36 +119,61 @@ function updateContent(event) {
     const title = document.getElementById('histTitle');
     const details = document.getElementById('histDetails');
 
-    title.classList.remove('hist-fade-in');
-    details.classList.remove('hist-fade-up');
-    void title.offsetWidth;
-    void details.offsetWidth;
+    // Reset animations
+    title?.classList.remove('hist-fade-in');
+    details?.classList.remove('hist-fade-up');
+    
+    // Force reflow
+    void title?.offsetWidth;
+    void details?.offsetWidth;
 
-    year.textContent = event.year;
-    title.textContent = event.title;
-    details.textContent = event.details;
+    // Update content
+    if (year) year.textContent = event.year;
+    if (title) title.textContent = event.title;
+    if (details) details.textContent = event.details;
 
-    title.classList.add('hist-fade-in');
-    details.classList.add('hist-fade-up');
+    // Add animations back
+    requestAnimationFrame(() => {
+        title?.classList.add('hist-fade-in');
+        details?.classList.add('hist-fade-up');
+    });
 }
 
-createBackgrounds();
-createTimeline();
-updateContent(timelineData[0]);
-
-document.addEventListener('wheel', (e) => {
-    const items = document.querySelectorAll('.hist-item');
-    const currentIndex = Array.from(items).findIndex(item => 
-        item.classList.contains('hist-item--active')
-    );
-    
-    if (e.deltaY > 0 && currentIndex < items.length - 1) {
-        updateActive(currentIndex + 1);
-        updateContent(timelineData[currentIndex + 1]);
-        updateBackground(currentIndex + 1);
-    } else if (e.deltaY < 0 && currentIndex > 0) {
-        updateActive(currentIndex - 1);
-        updateContent(timelineData[currentIndex - 1]);
-        updateBackground(currentIndex - 1);
+// Initialize everything
+async function initialize() {
+    try {
+        await createBackgrounds();
+        createTimeline();
+        updateContent(timelineData[0]);
+    } catch (error) {
+        console.error('Error initializing timeline:', error);
     }
+}
+
+// Add wheel event listener with debounce
+let wheelTimeout;
+document.addEventListener('wheel', (e) => {
+    if (wheelTimeout) return;
+    
+    wheelTimeout = setTimeout(() => {
+        const items = document.querySelectorAll('.hist-item');
+        const currentIndex = Array.from(items).findIndex(item => 
+            item.classList.contains('hist-item--active')
+        );
+        
+        if (e.deltaY > 0 && currentIndex < items.length - 1) {
+            updateActive(currentIndex + 1);
+            updateContent(timelineData[currentIndex + 1]);
+            updateBackground(currentIndex + 1);
+        } else if (e.deltaY < 0 && currentIndex > 0) {
+            updateActive(currentIndex - 1);
+            updateContent(timelineData[currentIndex - 1]);
+            updateBackground(currentIndex - 1);
+        }
+        
+        wheelTimeout = null;
+    }, 100); // Debounce time in milliseconds
 });
+
+// Start initialization when DOM is ready
+document.addEventListener('DOMContentLoaded', initialize);
