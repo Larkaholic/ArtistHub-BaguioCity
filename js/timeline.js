@@ -3,7 +3,7 @@ const timelineData = [
         year: 2001,
         title: "PANAGBENGA 2001",
         details: "Apollo 11 becomes the first crewed mission to land on the Moon, marking one of humanity's greatest achievements. This historic moment united the world in celebration of human ingenuity and courage.",
-        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/5678308583_9155e72a03_b.jpg?raw=true"
+        imageUrl: "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/timeline/179e161304fd380a55e08f73f300064e.jpg"
     },
     {
         year: 2002,
