@@ -9,19 +9,19 @@ const timelineData = [
         year: 2002,
         title: "PANAGBENGA 2002",
         details: "The Berlin Wall falls, symbolizing the end of the Cold War and the reunification of East and West Germany. This momentous event marked the beginning of a new era of freedom and democracy in Europe.",
-        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/madeko-kito-baguio-festival-1024x576.jpg?raw=true"
+        imageUrl: "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/timeline/madeko-kito-baguio-festival-1024x576.jpg"
     },
     {
         year: 2003,
         title: "PANAGBENGA 2003",
         details: "The rise of the internet and digital technology transforms global communication and commerce. This unprecedented technological advancement changed how we live, work, and connect with each other.",
-        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/panagbenga-festival-1024x683.jpg?raw=true"
+        imageUrl: "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/timeline/panagbenga-festival-1024x683.jpg"
     },
     {
         year: 2004,
         title: "PANAGBENGA 2004",
         details: "COVID-19 pandemic leads to unprecedented global changes in how we live, work, and interact. This global crisis reshaped society and accelerated digital transformation across all sectors.",
-        imageUrl: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/179e161304fd380a55e08f73f300064e.jpg?raw=true"
+        imageUrl: "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/timeline/179e161304fd380a55e08f73f300064e.jpg"
     }
 ];
 
