@@ -49,27 +49,33 @@ async function loadEvents() {
         if (eventsContainer) {
             if (nonFeaturedEvents.length === 0) {
                 eventsContainer.innerHTML = `
-                    <div class="glass-header2 rounded-lg p-4 m-4" style="cursor: pointer;">
-                        <h3 class="text-xl font-bold mb-2">No Featured Events</h3>
-                        <p class="text-sm">Check back later for featured events!</p>
+                    <div class="glass-header2 rounded-lg p-4 m-2 sm:m-4 col-span-1 md:col-span-2 lg:col-span-3" style="cursor: pointer;">
+                        <h3 class="text-lg sm:text-xl font-bold mb-2">No Featured Events</h3>
+                        <p class="text-xs sm:text-sm">Check back later for featured events!</p>
                     </div>
                 `;
             } else {
                 eventsContainer.innerHTML = nonFeaturedEvents.map(event => `
-                        <div class="border-2 border-black rounded-lg p-4 mb-4 event-card"
+                    <div class="border-2 border-black rounded-lg p-3 sm:p-4 event-card transition-transform hover:scale-105"
                         style="cursor: pointer;" data-id="${event.id}" data-aos="fade-left">
-                            <div class="event-content" style="position: relative; z-index: 12;">
-                                <h3 class="rubik-dirt-regular text-2xl font-bold mb-2 text-black">${event.title}</h3>
-                                <p class="text-sm text-black">Start: ${event.startDate}</p>
-                                <p class="text-sm text-black">End: ${event.endDate}</p>
-                                <p class="text-sm text-black">Location: ${event.location}</p>
-                                ${event.description ? `<p class="mt-2 text-black">${event.description}</p>` : ''}
-                                ${event.imageUrl ? `
-                                    <img src="${event.imageUrl}" alt="${event.title}" 
-                                        class="mt-4 w-full h-48 object-cover rounded">
-                                ` : ''}
+                        <div class="event-content relative z-12">
+                            <h3 class="rubik-dirt-regular text-xl sm:text-2xl font-bold mb-2 text-black line-clamp-2">${event.title}</h3>
+                            <div class="space-y-1">
+                                <p class="text-xs sm:text-sm text-black">Start: ${event.startDate}</p>
+                                <p class="text-xs sm:text-sm text-black">End: ${event.endDate}</p>
+                                <p class="text-xs sm:text-sm text-black">Location: ${event.location}</p>
                             </div>
+                            ${event.description ? `
+                                <p class="mt-2 text-xs sm:text-sm text-black line-clamp-3">${event.description}</p>
+                            ` : ''}
+                            ${event.imageUrl ? `
+                                <div class="mt-3 sm:mt-4 aspect-video w-full overflow-hidden rounded">
+                                    <img src="${event.imageUrl}" alt="${event.title}" 
+                                        class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300">
+                                </div>
+                            ` : ''}
                         </div>
+                    </div>
                 `).join('');
                 AOS.refresh();
             }
