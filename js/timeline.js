@@ -86,6 +86,10 @@ function createTimeline() {
         const yearLabel = document.createElement('div');
         yearLabel.className = 'hist-year-label';
         yearLabel.textContent = event.year;
+
+        const image = document.createElement('img');
+        image.className = 'hist-image';
+        image.src = event.imageUrl;
         
         item.appendChild(dot);
         item.appendChild(yearLabel);
