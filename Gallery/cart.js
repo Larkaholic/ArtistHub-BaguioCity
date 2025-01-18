@@ -33,10 +33,10 @@ function showAddedToCartModal(item) {
                         <p class="text-green-600">₱${item.price.toFixed(2)}</p>
                     </div>
                     <div class="flex justify-center space-x-4">
-                        <button onclick="closeAddedToCartModal()" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+                        <button onclick="closeAddedToCartModal()" class="text-black bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
                             Continue Shopping
                         </button>
-                        <button onclick="viewCart()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                        <button onclick="viewCart()" class="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600">
                             View Cart
                         </button>
                     </div>
@@ -180,7 +180,7 @@ function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') 
                     </div>
                 </div>
                 <div class="mt-6 flex justify-end space-x-4">
-                    <button onclick="window.closeEmailPreview()" class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+                    <button onclick="window.closeEmailPreview()" class="text-black bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
                         Edit
                     </button>
                     <button onclick="window.sendEmail('${ownerEmail}', '${artworkData.title}', ${artworkData.price}, '${user.displayName || user.email}')" 
@@ -334,6 +334,23 @@ function updateCartUI() {
     }
 }
 
+async function loadCartData() {
+    try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const cartDocRef = doc(db, 'carts', user.uid);
+        const cartDoc = await getDoc(cartDocRef);
+        
+        if (cartDoc.exists()) {
+            cart = cartDoc.data().items || [];
+            updateCartUI();
+        }
+    } catch (error) {
+        console.error('Error loading cart data:', error);
+    }
+}
+
 // Load cart data on page load
 document.addEventListener('DOMContentLoaded', () => {
     // Create cart modal
@@ -366,4 +383,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add cart modal to the body
     document.body.insertAdjacentHTML('afterbegin', cartModalHTML);
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            loadCartData();
+        } else {
+            cart = [];
+            updateCartUI();
+        }
+    });
 });
