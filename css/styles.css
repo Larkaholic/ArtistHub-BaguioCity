@@ -177,7 +177,6 @@
    }
    
    .EvntContainer {
-       width: 100%;
        height: auto !important;
        min-height: fit-content;
        overflow: visible !important;
@@ -207,7 +206,7 @@
     @media (min-width: 641px) and (max-width: 1024px) {
         .EvntContainer {
             margin: 0 auto;
-            width: 90%;
+            width: 100%;
         }
     }
 
