@@ -1,239 +1,212 @@
-#histBackgrounds {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.hist-bg-img {
+.baguio-timeline-section {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.baguio-timeline-backgrounds {
+    position: absolute;
+    inset: 0;
+}
+
+.baguio-timeline-bg-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    transition: opacity 1s ease;
 }
 
-.hist-bg-img--active {
+.baguio-timeline-bg-image.baguio-timeline-active {
     opacity: 1;
 }
 
-.content-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    color: white;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-    overflow: hidden;
+.baguio-timeline-bg-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
 }
 
-/* Timeline Styles */
-#histTimeline {
-    position: absolute;
-    right: max(20px, 5%);
-    top: 50%;
-    transform: translateY(-50%);
-    height: 70vh;
+.baguio-timeline-content-wrapper {
+    position: relative;
+    z-index: 1;
+    height: calc(100vh - 80px);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.baguio-timeline-content-box {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 6px rgba(0, 0, 0, 0.1),
+        0 10px 20px rgba(0, 0, 0, 0.05);
+    transform: translateX(100%);
+    animation: baguioTimelineSlideIn 0.8s ease forwards;
+    color: white;
+    min-height: 200px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    z-index: 2;
-}
-
-.hist-item {
-    position: relative;
-    cursor: pointer;
-    padding: 15px 0;
-    display: flex;
+    gap: 1rem;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
+    text-align: center;
 }
 
-.hist-dot {
-    width: 15px;
-    height: 15px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    transition: all 0.3s ease;
+.baguio-timeline-year {
+    font-size: 2.5rem;
+    font-weight: bold;
 }
 
-.hist-item--active .hist-dot {
-    background: white;
-    transform: scale(1.3);
+.baguio-timeline-title {
+    font-size: 1.5rem;
+    font-weight: 500;
 }
 
-.hist-year-label {
+.baguio-timeline-details {
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.7);
-    transition: all 0.3s ease;
-    min-width: 45px;
-}
-
-.hist-item--active .hist-year-label {
-    color: white;
-    font-weight: bold;
-    transform: scale(1.1);
-}
-
-/* Content Styles */
-.hist-content {
-    position: absolute;
-    left: max(20px, 10%);
-    top: 50%;
-    transform: translateY(-50%);
-    max-width: min(600px, 60%);
-    z-index: 2;
-    padding: 20px;
-}
-
-#histYear {
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    font-weight: bold;
-    margin-bottom: 0.5em;
-}
-
-#histTitle {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    margin-bottom: 0.5em;
-}
-
-#histDetails {
-    font-size: clamp(1rem, 2vw, 1.2rem);
     line-height: 1.6;
 }
 
-/* Animations */
-.hist-fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
+.baguio-timeline-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 
+        0 4px 6px rgba(0, 0, 0, 0.1),
+        0 10px 20px rgba(0, 0, 0, 0.05);
+    height: 100px;
+    margin-top: 1rem;
+    gap: 0.5rem;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: 1rem;
 }
 
-.hist-fade-up {
-    animation: fadeUp 0.8s ease-out forwards;
+.baguio-timeline-nav-btn {
+    width: 90px;
+    height: 35px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+.baguio-timeline-nav-btn:hover {
+    background: rgba(59, 131, 246, 0.77);
+    transform: translateX(5px);
 }
 
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+.baguio-timeline-nav-btn.baguio-timeline-active {
+    background: #3b82f6;
+    color: white;
+    transform: translateX(10px) scale(1.1);
+    box-shadow: 
+        0 4px 12px rgba(59, 130, 246, 0.3),
+        0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.baguio-timeline-fade-in {
+    opacity: 0;
+    animation: baguioTimelineFadeIn 0.5s ease forwards;
+}
+
+.baguio-timeline-fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: baguioTimelineFadeUp 0.5s ease forwards;
+}
+
+@keyframes baguioTimelineSlideIn {
+    to {
+        transform: translateX(0);
     }
+}
+
+@keyframes baguioTimelineFadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes baguioTimelineFadeUp {
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Media Queries */
-@media (max-width: 768px) {
-    .content-wrapper {
-        flex-direction: column;
-        justify-content: center;
+@media (max-width: 1024px) {
+    .baguio-timeline-content-wrapper {
+        padding: 1rem;
     }
 
-    #histTimeline {
-        position: relative;
-        right: auto;
-        top: auto;
-        transform: none;
-        height: auto;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 90%;
-        margin: 20px auto;
-        padding: 10px 0;
-    }
-
-    .hist-content {
-        position: relative;
-        left: auto;
-        top: auto;
-        transform: none;
-        max-width: 90%;
+    .baguio-timeline-content-box {
         margin: 0 auto;
-        text-align: center;
+        width: 100%;
     }
 
-    .hist-item {
-        flex-direction: column;
-        gap: 5px;
-        padding: 10px;
+    .baguio-timeline-navigation {
+        flex-wrap: wrap;
+        padding: 0.75rem;
     }
 
-    .hist-year-label {
-        font-size: 0.9rem;
-        min-width: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    #histYear {
-        font-size: 2.5rem;
-    }
-
-    #histTitle {
-        font-size: 1.5rem;
-    }
-
-    #histDetails {
-        font-size: 1rem;
-        line-height: 1.4;
-    }
-
-    .hist-dot {
-        width: 12px;
-        height: 12px;
-    }
-
-    .hist-year-label {
-        font-size: 0.8rem;
+    .baguio-timeline-nav-btn {
+        width: 60px;
+        height: 35px;
     }
 }
 
-/* Touch Device Optimizations */
-@media (hover: none) {
-    .hist-item {
-        padding: 15px 10px;
+@media (max-width: 768px) {
+    .baguio-timeline-content-wrapper {
+        padding: 1rem;
     }
 
-    .hist-dot {
-        transform: scale(1.2);
-    }
-}
-
-/* Landscape Mode Optimizations */
-@media (max-height: 500px) and (orientation: landscape) {
-    .content-wrapper {
-        height: auto;
-        min-height: 100vh;
-        padding: 40px 20px;
+    .baguio-timeline-content-box {
+        padding: 1.5rem;
+        margin-top: 1rem;
     }
 
-    .hist-content {
-        position: relative;
-        transform: none;
-        margin: 20px auto;
-    }
-
-    #histTimeline {
-        position: relative;
-        transform: none;
-        margin: 20px auto;
-    }
-
-    #histYear {
+    .baguio-timeline-year {
         font-size: 2rem;
     }
 
-    #histTitle {
-        font-size: 1.5rem;
+    .baguio-timeline-title {
+        font-size: 1.25rem;
+    }
+
+    .baguio-timeline-details {
+        font-size: 0.9rem;
+    }
+
+    .baguio-timeline-navigation {
+        margin-top: auto;
+        margin-bottom: 1rem;
     }
 }
