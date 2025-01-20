@@ -43,7 +43,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function createBackgrounds() {
         const container = document.getElementById('histBackgrounds');
-        if (!container) return;
+        if (!container) {
+            console.error('histBackgrounds container not found');
+            return;
+        }
 
         // Show loading state
         const loader = document.createElement('div');
@@ -73,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 img.alt = `${timelineData[index].title} background`;
                 container.appendChild(img);
             });
+            console.log('Backgrounds created successfully');
         } catch (error) {
             console.error('Error loading images:', error);
             loader.textContent = 'Error loading images. Please refresh the page.';
@@ -94,10 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
             yearLabel.className = 'hist-year-label';
             yearLabel.textContent = event.year;
 
-            const image = document.createElement('img');
-            image.className = 'hist-image';
-            image.src = event.imageUrl;
-            
             item.appendChild(dot);
             item.appendChild(yearLabel);
             
