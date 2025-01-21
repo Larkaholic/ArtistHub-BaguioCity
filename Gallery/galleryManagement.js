@@ -250,6 +250,22 @@ const styles = `
 .art-gallery-card-image:hover {
     transform: scale(1.02);
 }
+
+.art-gallery-protective-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 16rem;
+    z-index: 2;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.art-gallery-item-content {
+    position: relative;
+}
 `;
 
 // Add the styles to the document
@@ -272,6 +288,7 @@ function createImageCard(docId, data) {
     card.className = 'art-gallery-item';
     card.innerHTML = `
         <div class="art-gallery-item-content glass-header2">
+            <div class="art-gallery-protective-layer"></div>
             <img src="${data.imageUrl}" alt="${data.title}" class="art-gallery-card-image">
             <div class="p-4">
                 <h3 class="text-xl font-bold mb-2 text-black">${data.title}</h3>
@@ -298,6 +315,18 @@ function createImageCard(docId, data) {
     // Add click event to image
     const img = card.querySelector('.art-gallery-card-image');
     img.addEventListener('click', () => {
+        const modalImg = document.querySelector('#art-gallery-modal-img');
+        modalImg.src = data.imageUrl;
+        modal.classList.add('art-modal-active');
+    });
+
+    // Add event listeners to prevent right-click and drag
+    const protectiveLayer = card.querySelector('.art-gallery-protective-layer');
+    protectiveLayer.addEventListener('contextmenu', (e) => e.preventDefault());
+    protectiveLayer.addEventListener('dragstart', (e) => e.preventDefault());
+    
+    // Maintain click functionality for modal
+    protectiveLayer.addEventListener('click', () => {
         const modalImg = document.querySelector('#art-gallery-modal-img');
         modalImg.src = data.imageUrl;
         modal.classList.add('art-modal-active');
