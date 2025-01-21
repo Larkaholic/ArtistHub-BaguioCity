@@ -96,10 +96,11 @@ async function loadEvents() {
     }
 }
 
-const isGitHubPages = window.location.hostname.includes('github.io');
-const baseUrl = isGitHubPages 
-    ? '/Larkaholic'
-    : '';
+function getBasePath() {
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const repoName = 'ArtistHub-BaguioCity';
+    return isGitHubPages ? `/${repoName}` : '';
+}
 
 function addEventClickHandlers() {
     const eventCards = document.querySelectorAll('.event-card');
@@ -107,7 +108,8 @@ function addEventClickHandlers() {
         card.addEventListener('click', () => {
             const eventId = card.getAttribute('data-id');
             if (eventId) {
-                window.location.href = `events/events.html?id=${eventId}`;
+                const basePath = getBasePath();
+                window.location.href = `${basePath}/events/events.html?id=${eventId}`;
             }
         });
     });
