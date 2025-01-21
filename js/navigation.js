@@ -6,7 +6,7 @@ function navToEvent(path) {
     const basePath = window.location.hostname === "127.0.0.1" || 
                     window.location.hostname === "localhost"
         ? ''  // Local development
-        : ''; // GitHub Pages (add your repo name if needed)
+        : 'ArtistHub-BaguioCity'; // GitHub Pages (add your repo name if needed)
     
     window.location.href = basePath + cleanPath;
 } 

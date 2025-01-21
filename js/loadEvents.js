@@ -102,7 +102,7 @@ function addEventClickHandlers() {
         card.addEventListener('click', () => {
             const eventId = card.getAttribute('data-id');
             if (eventId) {
-                window.location.href = `/events/events.html?id=${eventId}`;
+                window.location.href = `${baseUrl}/events/events.html?id=${eventId}`;
             }
         });
     });
