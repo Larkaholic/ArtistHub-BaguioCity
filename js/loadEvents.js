@@ -96,13 +96,18 @@ async function loadEvents() {
     }
 }
 
+const isGitHubPages = window.location.hostname.includes('github.io');
+const baseUrl = isGitHubPages 
+    ? '/Larkaholic'
+    : '';
+
 function addEventClickHandlers() {
     const eventCards = document.querySelectorAll('.event-card');
     eventCards.forEach(card => {
         card.addEventListener('click', () => {
             const eventId = card.getAttribute('data-id');
             if (eventId) {
-                window.location.href = `${baseUrl}/events/events.html?id=${eventId}`;
+                window.location.href = `events/events.html?id=${eventId}`;
             }
         });
     });
