@@ -2,20 +2,29 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 1);
 }
 
 html, body {
     scroll-behavior: smooth;
     height: 100%;
-    /* overflow-y: hidden; */
+    min-height: 100vh;
+    background-color: #1B1B1B; /* Fallback color */
 }
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url("../images/bg.jpg");
+    background: url("../images/bg.jpg") no-repeat center top;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-attachment: scroll; /* Added scroll attachment */
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
     min-height: 100vh;
 }
 /* global header */
@@ -35,6 +44,9 @@ nav ul li button,
 }
 
 main {
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
     scroll-snap-type: y mandatory;
     height: 100vh;
 }
