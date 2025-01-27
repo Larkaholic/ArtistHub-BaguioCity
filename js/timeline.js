@@ -6,28 +6,46 @@ const timelineData = [
         background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Feb%206%20Press%20Con.jpg?raw=true"
     },
     {
-        year: 2018,
-        title: "Unveiling Creative Baguio Logo by BenCab February 11, 2018",
-        details: "Official logo designed by National Artist for Painting Benedicto Cabrera has been revealed in the presence of #UNESCO, #NCCA, Department of Tourism and local officials from Baguio and Benguet.",
+        year: 2019,
+        title: "LuzViMinda Tapestry",
+        details: "An exposition of ancestry, traditions, creativity and innovation. An event at the Forest Lodge in Baguio this August 2019 proves our Filipino distinction among Asians",
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
+    },
+    {
+        year: 2020,
+        title: "Ibagiw 2021 Opening",
+        details: "Ibagiw 2020 opens with a big splash",
         background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/CBCC%20Logo.jpg?raw=true"
     },
     {
-        year: 2019,
-        title: "The Banga February 11, 2018",
+        year: 2021,
+        title: "Ibagiw 2021",
+        details: "Cultural and creative activities begin with prayers and rituals seeking the Almighty Kabunyan’s blessings.",
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
+    },
+    {
+        year: 2022,
+        title: "Ibagiw 2022",
+        details: "Session Road became a fashion runway for CULTURE COUTURE: a showcase of fashion pieces to celebrate our stories, heritage and culture toward a greener future, featuring new weaving techniques and patterns by local weavers mentored at the HARVEST creative commUNITY hub",
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
+    },
+    {
+        year: 2023,
+        title: "Arts and Crafts at Mandeko Kito 2023",
         details: "Banga Dance is a dance interpretation of the Kalinga women's daily routine of carrying clay pots on their heads to fetch water from the mountains.",
         background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
     },
     {
-        year: 1990,
-        title: "Cultural Renaissance",
-        details: "The emergence of Baguio as a cultural and artistic hub in the Philippines.",
+        year: 2024,
+        title: "“Breathe Love” Alliance Building: a Partnership beyond borders.",
+        details: "Baguio City Mayor Benjamin Magalong, members of the Creative Baguio City Council, Baguio Tourism Council and the city’s Tourism Office motored the San Fernando City for a joint signing of MOU with LGU La Union led by Gov. Raphaelle Victoria Ortega-David. ",
         background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/madeko-kito-baguio-festival-1024x576.jpg?raw=true"
     },
     {
-        year: 2020,
-        title: "Modern Baguio",
-        details: "Baguio City's transformation into a modern cultural and tourist destination.",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/panagbenga-festival-1024x683.jpg?raw=true"
+        year: 2025,
+        title: "Panagbenga 2025",
+        details: "",
+        background: ""
     }
 ];
 
