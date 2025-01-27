@@ -7,39 +7,39 @@ const timelineData = [
     },
     {
         year: 2019,
-        title: "LuzViMinda Tapestry",
+        title: "LuzViMinda Tapestry 2019",
         details: "An exposition of ancestry, traditions, creativity and innovation. An event at the Forest Lodge in Baguio this August 2019 proves our Filipino distinction among Asians",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/LuzViMinda%20Tapestry.jpg?raw=true"
     },
     {
         year: 2020,
-        title: "Ibagiw 2021 Opening",
+        title: "Ibagiw 2020 Opening",
         details: "Ibagiw 2020 opens with a big splash",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/CBCC%20Logo.jpg?raw=true"
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Ibagiw%202020%20SPLash.jpg?raw=true"
     },
     {
         year: 2021,
         title: "Ibagiw 2021",
         details: "Cultural and creative activities begin with prayers and rituals seeking the Almighty Kabunyan’s blessings.",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/ibagiw%202021.jpg?raw=true"
     },
     {
         year: 2022,
         title: "Ibagiw 2022",
         details: "Session Road became a fashion runway for CULTURE COUTURE: a showcase of fashion pieces to celebrate our stories, heritage and culture toward a greener future, featuring new weaving techniques and patterns by local weavers mentored at the HARVEST creative commUNITY hub",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Ibagiw%202022.jpg?raw=true"
     },
     {
         year: 2023,
         title: "Arts and Crafts at Mandeko Kito 2023",
-        details: "Banga Dance is a dance interpretation of the Kalinga women's daily routine of carrying clay pots on their heads to fetch water from the mountains.",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
+        details: "",
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Arts%20and%20Crafts%20at%20Mandeko%20Kito%202023.jpg?raw=true"
     },
     {
         year: 2024,
         title: "“Breathe Love” Alliance Building: a Partnership beyond borders.",
         details: "Baguio City Mayor Benjamin Magalong, members of the Creative Baguio City Council, Baguio Tourism Council and the city’s Tourism Office motored the San Fernando City for a joint signing of MOU with LGU La Union led by Gov. Raphaelle Victoria Ortega-David. ",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/madeko-kito-baguio-festival-1024x576.jpg?raw=true"
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Ceremonial.jpg?raw=true"
     },
     {
         year: 2025,
