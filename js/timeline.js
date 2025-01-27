@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const timelineData = [
         {
-            year: 2001,
-            title: "PANAGBENGA 2001",
-            details: "Apollo 11 becomes the first crewed mission to land on the Moon, marking one of humanity's greatest achievements. This historic moment united the world in celebration of human ingenuity and courage.",
-            imageUrl: "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/timeline/179e161304fd380a55e08f73f300064e.jpg"
+            year: 2018,
+            title: "Unveiling of Creative Baguio’s Logo in 2018",
+            details: "The Unveiling of Creative Baguio's Official Logo by BenCab",
+            imageUrl: "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/timeline/CBCC Logo.jpg"
         },
         {
             year: 2002,
