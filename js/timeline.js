@@ -1,15 +1,21 @@
 const timelineData = [
     {
-        year: 2017,
-        title: "2017 test",
-        details: "this is a test",
-        background: "https://www.facebook.com/photo/?fbid=163395664443057&set=a.163395477776409"
+        year: 2018,
+        title: "Opening of CBCC",
+        details: "The emergence of Baguio as a cultural and artistic hub in the Philippines.",
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/madeko-kito-baguio-festival-1024x576.jpg?raw=true"
     },
     {
-        year: 1945,
-        title: "Post-War Recovery",
-        details: "Baguio City's rebuilding and recovery efforts after World War II.",
-        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/timeline/5678308583_9155e72a03_b.jpg?raw=true"
+        year: 2018,
+        title: "Unveiling Creative Baguio Logo by BenCab February 11, 2018",
+        details: "Official logo designed by National Artist for Painting Benedicto Cabrera has been revealed in the presence of #UNESCO, #NCCA, Department of Tourism and local officials from Baguio and Benguet.",
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/CBCC%20Logo.jpg?raw=true"
+    },
+    {
+        year: 2018,
+        title: "The Banga February 11, 2018",
+        details: "Banga Dance is a dance interpretation of the Kalinga women's daily routine of carrying clay pots on their heads to fetch water from the mountains.",
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Banga.jpg?raw=true"
     },
     {
         year: 1990,
