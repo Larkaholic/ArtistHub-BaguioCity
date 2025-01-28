@@ -2,18 +2,14 @@ import { db } from './firebase-config.js';
 import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 export function getBasePath() {
-    // Ensure consistent trailing slash handling
-    return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity' : '';
+    return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity/' : '/';
 }
 
 export function navToEvent(url) {
     const basePath = getBasePath();
-    // Remove leading and trailing slashes
-    url = url.replace(/^\/|\/$/g, '');
-    
-    // Construct final URL ensuring no double slashes
-    const finalUrl = basePath ? `${basePath}/${url}` : `/${url}`;
-    window.location.href = finalUrl;
+    // Remove leading slash if present
+    url = url.startsWith('/') ? url.substring(1) : url;
+    window.location.href = basePath + url;
 }
 
 export function ensureStylesLoaded(requiredStyles) {
