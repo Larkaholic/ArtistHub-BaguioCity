@@ -1,3 +1,4 @@
+/* Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +16,7 @@ body {
     color: white;
 }
 
-/* global header */
+/* Header */
 header {
     display: flex;
     justify-content: space-between;
@@ -30,13 +31,13 @@ header {
     transition: background-color 0.3s ease;
 }
 
-
 .logo img {
     width: 120px;
     display: flex;
     margin-left: 20px;
 }
-/* nav */
+
+/* Navigation */
 nav ul {
     list-style: none;
     display: flex;
@@ -44,10 +45,7 @@ nav ul {
 }
 
 .nav-item button,
-.login-button button {
-    font-weight: 600 !important;
-}
-
+.login-button button,
 nav ul li,
 nav ul li button,
 .nav-item,
@@ -55,49 +53,7 @@ nav ul li button,
     font-weight: 600 !important;
 }
 
-/* .flyout {
-    display: none;
-}
-.flyout.active {
-    display: flex;
-}*/
-
-/* CSS Code */
-.swiper-wrapper {
-    width: 100%;
-    height: max-content !important;
-    padding-bottom: 64px !important;
-    -webkit-transition-timing-function: linear !important;
-    transition-timing-function: linear !important;
-    position: relative;
-}
-
-.swiper-pagination-bullet {
-    background: #000000;
-}
-
-.swiper-pagination-bullet-active {
-    background: #000000 !important;
-}
-
-.glass-header {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.glass-header2 {
-    background: rgba(255, 255, 255, 0.22);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.01);
-}
-
-/* Mobile navigation */
+/* Mobile Navigation */
 #flyout-menu {
     transition: transform 0.3s ease-in-out;
 }
@@ -122,99 +78,36 @@ nav ul li button,
     pointer-events: auto;
 }
 
-/* Ensure proper glass effect on mobile menu */
-.glass-header {
-    background: rgba(255, 255, 255, 0.1);
+/* Glass Header Styles */
+.glass-header,
+.glass-header2 {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Navigation buttons */
-.swiper-button-next,
-.swiper-button-prev {
-    position: static !important;
-    width: 40px !important;
-    height: 40px !important;
-    margin: 0 10px !important;
-    background: rgba(0, 0, 0, 0.7) !important;
-    border-radius: 50%;
-    color: #fff !important;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer !important;
-    z-index: 10 !important;
+.glass-header2 {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.01);
 }
 
-.swiper-button-next:after,
-.swiper-button-prev:after {
-    font-size: 18px !important;
-    font-weight: bold;
-}
-
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-    background: rgba(0, 0, 0, 0.9) !important;
-    transform: scale(1.1);
-}
-
-/* Make sure controls are clickable */
-.swiper-controls {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    z-index: 20 !important;
-    pointer-events: auto !important;
-}
-
-/* Ensure slides are grabbable */
-.swiper-slide {
-    cursor: grab !important;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.swiper-slide:active {
-    cursor: grabbing !important;
-}
-
-/* Pagination */
-.swiper-pagination {
-    position: static !important;
-    width: auto !important;
-    display: inline-flex !important;
-    align-items: center;
-    pointer-events: auto !important;
-}
-
-.swiper-pagination-bullet {
-    width: 12px !important;
-    height: 12px !important;
-    background: #000 !important;
-    opacity: 0.5 !important;
-    margin: 0 8px !important;
-    cursor: pointer !important;
-}
-
-.swiper-pagination-bullet-active {
-    opacity: 1 !important;
-    transform: scale(1.2);
-}
-
+/* Swiper Carousel */
 .swiper-container {
     width: 100%;
     height: 500px !important;
     padding: 20px 0 40px !important;
     overflow: visible !important;
+}
+
+.swiper-wrapper {
+    width: 100%;
+    height: max-content !important;
+    padding-bottom: 64px !important;
+    transition-timing-function: linear !important;
+    position: relative;
 }
 
 .swiper-slide {
@@ -227,6 +120,11 @@ nav ul li button,
     transition: all 0.3s ease;
     opacity: 0.4;
     transform: scale(0.8);
+    cursor: grab !important;
+    user-select: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .swiper-slide-active {
@@ -250,23 +148,6 @@ nav ul li button,
     transition: all 0.3s ease;
 }
 
-.carousel-section {
-    overflow: hidden;
-    padding: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Container for pagination and navigation */
-.swiper-controls {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
 /* Pagination */
 .swiper-pagination {
     position: static !important;
@@ -281,6 +162,7 @@ nav ul li button,
     background: #000 !important;
     opacity: 0.5 !important;
     margin: 0 8px !important;
+    cursor: pointer !important;
 }
 
 .swiper-pagination-bullet-active {
@@ -288,105 +170,27 @@ nav ul li button,
     transform: scale(1.2);
 }
 
-/* Navigation buttons */
+/* Navigation Buttons */
 .swiper-button-next,
 .swiper-button-prev {
     position: static !important;
     width: 40px !important;
     height: 40px !important;
     margin: 0 10px !important;
-    background: rgba(0, 0, 0, 0.5) !important;
+    background: rgba(0, 0, 0, 0.7) !important;
     border-radius: 50%;
     color: #fff !important;
     display: flex !important;
     justify-content: center;
     align-items: center;
+    cursor: pointer !important;
+    z-index: 10 !important;
 }
 
 .swiper-button-next:after,
 .swiper-button-prev:after {
     font-size: 18px !important;
-}
-
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-    background: rgba(0, 0, 0, 0.7) !important;
-}
-
-/* Delete button hover effects */
-.swiper-slide .group:hover .bg-opacity-30 {
-    backdrop-filter: blur(2px);
-}
-
-/* Success message animation */
-@keyframes fadeInOut {
-    0% { opacity: 0; transform: translateY(-20px); }
-    10% { opacity: 1; transform: translateY(0); }
-    90% { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(-20px); }
-}
-
-.success-message {
-    animation: fadeInOut 3.5s ease-in-out forwards;
-}
-
-/* Delete confirmation dialog styling */
-.delete-confirm {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-.cartModal {
-    height: 500px;
-    width: 300px;
-    /* position: fixed; */
-    top: 0;
-    right: 0;
-    bottom: 0;
-    inset: 0 0 0 auto;
-    grid-template-rows: 70px 1fr 70px;
-}
-
-.closeCheckout {
-    margin-top: 410px;
-}
-
-/* Cart Styles */
-#cartModal {
-    backdrop-filter: blur(8px);
-}
-
-#cartItems {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
-}
-
-#cartItems::-webkit-scrollbar {
-    width: 6px;
-}
-
-#cartItems::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-#cartItems::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 3px;
-}
-
-.cart-item {
-    transition: all 0.3s ease;
-}
-
-.cart-item:hover {
-    transform: translateX(5px);
+    font-weight: bold;
 }
 
 /* Gallery Grid Layout */
@@ -398,7 +202,6 @@ nav ul li button,
     margin-top: 4rem;
 }
 
-/* Gallery Item Styles */
 .gallery-item {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
@@ -411,37 +214,8 @@ nav ul li button,
     transform: translateY(-5px);
 }
 
-.gallery-item-content {
-    padding: 1rem;
-}
-
-.gallery-item-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.gallery-item button {
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.gallery-item button:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.3);
-}
-
 .gallery-item img {
     pointer-events: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     width: 100%;
     height: 200px;
@@ -451,4 +225,16 @@ nav ul li button,
 .gallery-item h3,
 .gallery-item p {
     color: white;
+}
+
+/* Success Message Animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+.success-message {
+    animation: fadeInOut 3.5s ease-in-out forwards;
 }
