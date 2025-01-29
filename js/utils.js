@@ -5,10 +5,10 @@ export function getBasePath() {
     return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity/' : '/';
 }
 
-function navToEvent(path) {
+export function navToEvent(path) {
     const baseUrl = window.location.hostname.includes('github.io') 
         ? '/ArtistHub-BaguioCity'
-    : '';   
+        : '';   
     window.location.href = baseUrl + '/' + path;
 }
 
