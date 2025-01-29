@@ -321,13 +321,6 @@
     </script>
 
     <script>
-        function navToEvent(path) {
-            const baseUrl = window.location.hostname.includes('github.io') 
-                ? '/ArtistHub-BaguioCity'
-            : '';   
-            window.location.href = baseUrl + '/' + path;
-        }
-
         function toggleLoginFlyout(event) {
             if (event) event.preventDefault();
             const flyout = document.getElementById('LoginFlyout');
