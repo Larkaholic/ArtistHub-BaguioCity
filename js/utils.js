@@ -5,12 +5,12 @@ export function getBasePath() {
     return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity/' : '/';
 }
 
-// export function navToEvent(url) {
-//     const basePath = getBasePath();
-//     // Remove leading slash if present
-//     url = url.startsWith('/') ? url.substring(1) : url;
-//     window.location.href = basePath + url;
-// }
+function navToEvent(path) {
+    const baseUrl = window.location.hostname.includes('github.io') 
+        ? '/ArtistHub-BaguioCity'
+    : '';   
+    window.location.href = baseUrl + '/' + path;
+}
 
 export function ensureStylesLoaded(requiredStyles) {
     requiredStyles.forEach(style => {
