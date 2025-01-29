@@ -25,12 +25,12 @@ export function ensureStylesLoaded(requiredStyles) {
     });
 }
 
-export function navToEvent(url) {
-    const basePath = getBasePath();
-    // Remove leading slash if present
-    url = url.replace(/^\//, '');
-    window.location.href = `${basePath}/${url}`;
-}
+// export function navToEvent(url) {
+//     const basePath = getBasePath();
+//     // Remove leading slash if present
+//     url = url.replace(/^\//, '');
+//     window.location.href = `${basePath}/${url}`;
+// }
 
 // function to check if user is admin
 export async function isUserAdmin(userId) {
