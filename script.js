@@ -12,9 +12,9 @@ window.onclick = function(event) {
     }
 }
 
-function navigateToEvent (){
-    window.location.href("events/events.html");
-}
+// function navigateToEvent (){
+//     window.location.href("events/events.html");
+// }
 
 function toggleNav() {
     const flyoutMenu = document.getElementById('flyout-menu');
@@ -35,9 +35,9 @@ function toggleForms() {
     }
 }
 
-function navToEvent(url) {
-    window.location.href = url;
-}
+// function navToEvent(url) {
+//     window.location.href = url;
+// }
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
