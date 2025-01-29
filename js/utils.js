@@ -2,14 +2,13 @@ import { db } from './firebase-config.js';
 import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 export function getBasePath() {
-    return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity/' : '/';
+    return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity' : '';
 }
 
 export function navToEvent(path) {
-    const baseUrl = window.location.hostname.includes('github.io') 
-        ? '/ArtistHub-BaguioCity'
-        : '';   
-    window.location.href = baseUrl + '/' + path;
+    const baseUrl = getBasePath();
+    const cleanPath = path.replace(/^\/+|\/+$/g, '');
+    window.location.href = `${baseUrl}/${cleanPath}`;
 }
 
 export function ensureStylesLoaded(requiredStyles) {
