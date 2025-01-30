@@ -1,23 +1,34 @@
-function navToEvent(path) {
-    // Remove any double slashes that might occur
-    const cleanPath = path.replace(/\/\//g, '/');
-    
-    // Handle both local and GitHub Pages paths
-    const basePath = window.location.hostname === "127.0.0.1" || 
-                    window.location.hostname === "localhost"
-        ? ''  // Local development
-        : 'ArtistHub-BaguioCity';  // GitHub Pages
-    
-    window.location.href = basePath + cleanPath;
-} 
-
-// export function getBasePath() {
-//     return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity' : '';
-// }
-
-// export function navToEvent(url) {
-//     const basePath = getBasePath();
-//     // Remove leading slash if present
-//     url = url.replace(/^\//, '');
-//     window.location.href = `${basePath}/${url}`;
-// }
+(function() {
+    window.navToEvent = function(path) {
+        try {
+            // Get the base URL for GitHub Pages or local development
+            const baseUrl = window.location.hostname === 'Larkaholic.github.io' 
+                ? '/ArtistHub-BaguioCity'
+                : '';
+            
+            // Check if the path contains an anchor
+            const hasAnchor = path.includes('#');
+            
+            if (hasAnchor) {
+                const [pagePath, anchor] = path.split('#');
+                
+                // If we're already on the correct page, just scroll to anchor
+                if (pagePath === '.' || pagePath === './index.html' || pagePath === window.location.pathname) {
+                    const element = document.getElementById(anchor);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        return;
+                    }
+                }
+                
+                // Navigate to new page with anchor
+                window.location.href = baseUrl + path;
+            } else {
+                // Regular page navigation
+                window.location.href = baseUrl + path;
+            }
+        } catch (error) {
+            console.error('Navigation error:', error);
+        }
+    };
+})();

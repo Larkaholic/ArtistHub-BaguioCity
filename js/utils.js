@@ -1,17 +1,6 @@
 import { db } from './firebase-config.js';
 import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-export function getBasePath() {
-    return window.location.hostname.includes('github.io') ? '/ArtistHub-BaguioCity' : '';
-}
-
-export function navToEvent(url) {
-    const basePath = getBasePath();
-    // Remove leading slash if present
-    url = url.replace(/^\//, '');
-    window.location.href = `${basePath}/${url}`;
-}
-
 export function ensureStylesLoaded(requiredStyles) {
     requiredStyles.forEach(style => {
         const existingLink = document.querySelector(`link[href$="${style}"]`);
@@ -25,12 +14,6 @@ export function ensureStylesLoaded(requiredStyles) {
     });
 }
 
-// export function navToEvent(url) {
-//     const basePath = getBasePath();
-//     // Remove leading slash if present
-//     url = url.replace(/^\//, '');
-//     window.location.href = `${basePath}/${url}`;
-// }
 
 // function to check if user is admin
 export async function isUserAdmin(userId) {
