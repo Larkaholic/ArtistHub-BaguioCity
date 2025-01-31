@@ -12,14 +12,23 @@ async function loadEvents() {
             events.push({ id: doc.id, ...doc.data() });
         });
 
+        const currentDate = new Date();
+
         // Split events into featured and non-featured
         const featuredEvents = events.filter(event => event.isFeatured);
         const nonFeaturedEvents = events.filter(event => !event.isFeatured);
 
-        // Display featured events in landing page
+        // Separate finished and upcoming featured events
+        const finishedFeaturedEvents = featuredEvents.filter(event => new Date(event.endDate) < currentDate);
+        const upcomingFeaturedEvents = featuredEvents.filter(event => new Date(event.endDate) >= currentDate);
+
+        // Combine non-featured events with finished featured events
+        const updatedNonFeaturedEvents = [...nonFeaturedEvents, ...finishedFeaturedEvents];
+
+        // Display upcoming featured events in landing page
         const importantEventsContainer = document.querySelector('.important-events');
         if (importantEventsContainer) {
-            if (featuredEvents.length === 0) {
+            if (upcomingFeaturedEvents.length === 0) {
                 importantEventsContainer.innerHTML = `
                     <div class="glass-header2 rounded-lg p-4 m-4" data-aos="fade-left" style="cursor: pointer;">
                         <h3 class="text-xl font-bold mb-2">No Featured Events</h3>
@@ -27,7 +36,7 @@ async function loadEvents() {
                     </div>
                 `;
             } else {
-                importantEventsContainer.innerHTML = featuredEvents.map(event => `
+                importantEventsContainer.innerHTML = upcomingFeaturedEvents.map(event => `
                     <div class="glass-header2 rounded-lg p-4 m-4 event-card" 
                         data-id="${event.id}" data-aos="fade-left" style="cursor: pointer;">
                         <h3 class="rubik-dirt-regular font-custom text-2xl font-bold mb-2">${event.title}</h3>
@@ -47,15 +56,15 @@ async function loadEvents() {
         // Display non-featured events in upcoming events section
         const eventsContainer = document.querySelector('.EvntContainer');
         if (eventsContainer) {
-            if (nonFeaturedEvents.length === 0) {
+            if (updatedNonFeaturedEvents.length === 0) {
                 eventsContainer.innerHTML = `
                     <div class="glass-header2 rounded-lg p-4 m-4" style="cursor: pointer;">
-                        <h3 class="text-xl font-bold mb-2">No Featured Events</h3>
-                        <p class="text-sm">Check back later for featured events!</p>
+                        <h3 class="text-xl font-bold mb-2">No Upcoming Events</h3>
+                        <p class="text-sm">Check back later for upcoming events!</p>
                     </div>
                 `;
             } else {
-                eventsContainer.innerHTML = nonFeaturedEvents.map(event => `
+                eventsContainer.innerHTML = updatedNonFeaturedEvents.map(event => `
                         <div class="border-2 border-black rounded-lg p-4 mb-4 event-card"
                         style="cursor: pointer;" data-id="${event.id}">
                             <div class="event-content" style="position: relative; z-index: 12;">
