@@ -88,6 +88,16 @@
        -webkit-backdrop-filter: blur(10px);
        border: 1px solid rgba(255, 255, 255, 0.01);
    }
+
+   .transparent-header {
+       background: transparent;
+       transition: background 0.3s ease;
+   }
+
+   .solid-header {
+       background: rgba(232, 232, 232, 1);
+       transition: background 0.3s ease;
+   }
    
    /* ==========================================================================
       5. LANDING PAGE
@@ -95,7 +105,7 @@
    #landingPage {
        width: 100%;
        height: 100dvh;
-       background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/newbg.jpg?raw=true");
+       background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
        background-size: cover;
        height: calc(100vh - 64px);
        padding: 0;
