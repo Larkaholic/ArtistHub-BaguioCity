@@ -45,7 +45,7 @@ const timelineData = [
         year: 2025,
         title: "Panagbenga February 1, 2025",
         details: "Grand Opening Parade",
-        background: "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/refs/heads/Kyle-New-Branch/images/timeline/2025.avif?raw=true"
+        background: "https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/timeline/Panagbenga%202025.jpg?raw=true"
     }
 ];
 

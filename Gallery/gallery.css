@@ -6,14 +6,16 @@
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 1);
+    
 }
 
 body {
     font-family: Arial, sans-serif;
-    background: url("../images/bg.jpg") no-repeat center center fixed;
+    background: url("../images/Testback.jpg") no-repeat center center fixed;
     background-size: cover;
     min-height: 100vh;
     color: white;
+    
 }
 
 /* Header */
@@ -29,12 +31,14 @@ header {
     z-index: 1000;
     padding: 10px 20px;
     transition: background-color 0.3s ease;
+    
 }
 
 .logo img {
     width: 120px;
     display: flex;
     margin-left: 20px;
+    
 }
 
 /* Navigation */
