@@ -15,7 +15,7 @@
     <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
 </head>
 <body class="bg-cover">
-    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 headerR">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 headerR transparent-header">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
         </div>
@@ -326,6 +326,19 @@
             const flyout = document.getElementById('LoginFlyout');
             flyout.classList.toggle('hidden');
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.remove('transparent-header');
+                    header.classList.add('solid-header');
+                } else {
+                    header.classList.remove('solid-header');
+                    header.classList.add('transparent-header');
+                }
+            });
+        });
     </script>
 
     <style>
@@ -338,8 +351,8 @@
             border: 1px solid rgba(255, 255, 255, 0.01);
         }
 
-        #events, #history {
-            background-color: #e2e2e2;
+        #events {
+            background-color: #F4F8FF;
         }
 
         #artistsGrid {
@@ -391,9 +404,9 @@
         }
 
         #artists {
-            background: rgb(226,226,226);
-            background: linear-gradient(0deg, rgba(226,226,226,1) 15%, rgba(255,255,255,1) 40%,
-            rgba(110,212,136,1) 59%, rgba(50,170,80,1) 83%, rgba(35,78,47,1) 100%);       
+            background: #F4F8FF;
+            /* background: linear-gradient(0deg, rgba(226,226,226,1) 15%, rgba(255,255,255,1) 40%,
+            rgba(110,212,136,1) 59%, rgba(50,170,80,1) 83%, rgba(35,78,47,1) 100%);        */
         } 
 
         .EvntPage {
@@ -440,6 +453,16 @@
             -webkit-transform: translateZ(0);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+        }
+
+        .transparent-header {
+            background: rgba(255, 255, 255, 0.5);
+            transition: background 0.3s ease;
+        }
+
+        .solid-header {
+            background: rgba(255, 255, 255, 1);
+            transition: background 0.3s ease;
         }
     </style>
     <script type="module" src="./js/loadEvents.js"></script>
