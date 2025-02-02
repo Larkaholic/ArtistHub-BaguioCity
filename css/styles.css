@@ -95,7 +95,7 @@
    #landingPage {
        width: 100%;
        height: 100dvh;
-       background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
+       background-image: url("https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/refs/heads/Kyle-New-Branch/images/Testback.jfif?raw=true");
        height: calc(100vh - 64px);
        padding: 0;
        margin-top: 64px;
