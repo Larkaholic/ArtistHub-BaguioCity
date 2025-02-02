@@ -40,7 +40,7 @@ async function loadArtists() {
                 <h3 class="text-3xl font-bold mb-2 text-black">${artist.displayName}</h3>
                 <p class="text-center mb-4 text-black text-lg">${specialization}</p>
                 <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2 border-black">
-                    view profile
+                    View Profile
                 </button>
             `;
 

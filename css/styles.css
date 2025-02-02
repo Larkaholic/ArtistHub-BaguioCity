@@ -95,7 +95,7 @@
    #landingPage {
        width: 100%;
        height: 100dvh;
-       background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true");
+       background-image: url("images\newbg.jpg");
        height: calc(100vh - 64px);
        padding: 0;
        margin-top: 64px;
