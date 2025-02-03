@@ -12,7 +12,7 @@
   <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
   <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-  <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
+  <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
 
   <!-- scripts -->
   <script src="carousel.js"></script>
@@ -217,5 +217,50 @@
 
     <script src="../js/navigation.js"></script>
     <script src="./test-gallery-honeypot.js"></script>
+    <script>
+        // Handle login functionality
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                console.log('Login successful:', userCredential);
+                // Redirect to profile page or show success message
+                window.location.href = 'profile/profile.html';
+            } catch (error) {
+                console.error('Login failed:', error);
+                alert('Login failed: ' + error.message);
+            }
+        }
+
+        // Handle logout functionality
+        async function handleLogout() {
+            try {
+                await firebase.auth().signOut();
+                console.log('Logout successful');
+                // Redirect to home page or show success message
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Logout failed:', error);
+                alert('Logout failed: ' + error.message);
+            }
+        }
+
+        // Toggle login flyout visibility
+        function toggleLoginFlyout(event) {
+            const flyout = document.getElementById('LoginFlyout');
+            flyout.classList.toggle('hidden');
+        }
+
+        // Toggle between login and register forms
+        function toggleForms() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            loginForm.classList.toggle('hidden');
+            registerForm.classList.toggle('hidden');
+        }
+    </script>
 </body>
 </html>

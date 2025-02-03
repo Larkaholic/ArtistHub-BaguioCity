@@ -106,6 +106,7 @@
        width: 100%;
        height: 100dvh;
        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
+       background-attachment: fixed;
        background-size: cover;
        height: calc(100vh - 64px);
        padding: 0;

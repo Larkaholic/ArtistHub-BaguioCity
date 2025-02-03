@@ -7,7 +7,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <link rel="stylesheet" href="events.css">
-        <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
+        <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
     </head>
     <body class="bg-cover">
         <!-- Header/Navbar -->
@@ -182,10 +182,45 @@
                 menu.classList.toggle('translate-x-full');
             }
 
+            async function handleLogin(event) {
+                event.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                try {
+                    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                    console.log('Login successful:', userCredential);
+                    // Redirect to profile page or show success message
+                    window.location.href = 'profile/profile.html';
+                } catch (error) {
+                    console.error('Login failed:', error);
+                    alert('Login failed: ' + error.message);
+                }
+            }
+
+            async function handleLogout() {
+                try {
+                    await firebase.auth().signOut();
+                    console.log('Logout successful');
+                    // Redirect to home page or show success message
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                    alert('Logout failed: ' + error.message);
+                }
+            }
+
             function toggleLoginFlyout(event) {
                 if (event) event.preventDefault();
                 const flyout = document.getElementById('LoginFlyout');
                 flyout.classList.toggle('hidden');
+            }
+
+            function toggleForms() {
+                const loginForm = document.getElementById('loginForm');
+                const registerForm = document.getElementById('registerForm');
+                loginForm.classList.toggle('hidden');
+                registerForm.classList.toggle('hidden');
             }
 
             function navToEvent(path) {
