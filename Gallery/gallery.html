@@ -43,6 +43,9 @@
 </head>
 
 <body class="overflow-hidden">
+    <div id="loader">
+        <span class="loader"></span>
+    </div>
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 glass-header">
         <div class="flex w-24 ml-16">
             <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/NavLogo.png?raw=true" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer">
@@ -217,5 +220,12 @@
 
     <script src="../js/navigation.js"></script>
     <script src="./test-gallery-honeypot.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }, 5000);
+    });
+     </script>
 </body>
 </html>

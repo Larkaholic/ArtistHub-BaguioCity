@@ -9,6 +9,9 @@
 
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
+    <div id="loader">
+        <span class="loader"></span>
+    </div>
     <nav class="glass-header fixed top-0 left-0 right-0 p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">Test Dashboard</h1>
         <div class="flex items-center space-x-4">
@@ -39,5 +42,12 @@
     </main>
 
     <script type="module" src="./admin/artistRequest.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }, 5000);
+    });
+     </script>
 </body>
 </html> 
