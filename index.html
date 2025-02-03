@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artist Hub</title>
+    <title>ARTISTHUB-CAR</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -15,7 +15,11 @@
     <link rel="icon" href="../images/artisthubLogo.png" type="image/x-icon">
 </head>
 <body class="bg-cover">
-    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 headerR">
+    <div id="loader">
+        <span class="loader"></span>
+    </div>
+    <div id="content" style="display: none;">
+        <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 headerR">
         <div class="flex w-24 ml-16">
             <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/NavLogo.png?raw=true" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
         </div>
@@ -27,6 +31,7 @@
                 </svg>
             </button>
         </div>
+        
 
         <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-1">
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
@@ -171,7 +176,7 @@
             </form>
         </div>
     </div>
-
+    
     <main class="hero-section max-w-full h-screen">
         <!-- hero section -->
         <section id="landingPage" class="flex flex-col md:flex-row w-full h-full items-center">
@@ -396,8 +401,7 @@
 
         #artists {
             background: rgb(226,226,226);
-            background: linear-gradient(0deg, rgba(226,226,226,1) 15%, rgba(255,255,255,1) 40%,
-            rgba(110,212,136,1) 59%, rgba(50,170,80,1) 83%, rgba(35,78,47,1) 100%);       
+               
         } 
 
         .EvntPage {
@@ -448,5 +452,12 @@
     </style>
     <script type="module" src="./js/loadEvents.js"></script>
     <script src="./js/navigation.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("content").style.display = "block";
+        }, 5000);
+    });
+     </script>
 </body>
 </html>

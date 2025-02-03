@@ -71,7 +71,7 @@
    
    /* Glass Effect Styles */
    .glass-header {
-       background: rgba(255, 255, 255, 1);
+       background: rgba(255, 255, 255, 0.185);
        border-radius: 16px;
        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
        backdrop-filter: blur(19.8px);
@@ -81,7 +81,7 @@
    }
    
    .glass-header2 {
-       background: rgba(255, 255, 255, 0.352);
+       background: rgba(185, 171, 171, 0.637);
        border-radius: 16px;
        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
        backdrop-filter: blur(10px);
@@ -96,7 +96,8 @@
        width: 100%;
        height: 100dvh;
        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/Kyle-New-Branch/images/Testback.jpg?raw=true");
-       height: calc(100vh - 64px);
+       background-attachment: fixed;
+       height: calc(10vh - 24px);
        padding: 0;
        margin-top: 64px;
    }
@@ -146,14 +147,14 @@
    }
    
    .search-button:hover {
-       background-color: rgba(104, 254, 111, 0.8);
+       background-color: rgba(14, 24, 168, 0.8);
    }
    
    /* ==========================================================================
       7. EVENTS SECTION
       ========================================================================== */
    .events {
-       height: 75vh;
+       height: 95vh;
    }
    
    .EvntPage {
@@ -367,3 +368,103 @@
        background-color: rgba(255, 255, 255, 0.3);
        border-radius: 20px;
    }
+
+   /* ============================================================================
+   12. Loader
+   ============================================================================== */
+
+#loader {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8); 
+    z-index: 1000;
+}
+
+/* Loader animation */
+.loader {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 50px;
+    height: 80px;
+    border-top: 5px solid #fff;
+    border-bottom: 5px solid #fff;
+    position: relative;
+    background: linear-gradient(#FF3D00 30px, transparent 0) no-repeat;
+    background-size: 2px 40px;
+    background-position: 50% 0px;
+    animation: spinx 5s linear infinite;
+}
+
+.loader:before, .loader:after {
+    content: "";
+    width: 40px;
+    left: 50%;
+    height: 35px;
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 0 0 20px 20px;
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: 0 0px;
+    animation: lqt 5s linear infinite;
+}
+
+.loader:after {
+    top: auto;
+    bottom: 0;
+    border-radius: 20px 20px 0 0;
+    animation: lqb 5s linear infinite;
+}
+
+/* Animations */
+@keyframes lqt {
+    0%, 100% {
+        background-image: linear-gradient(#FF3D00 40px, transparent 0);
+        background-position: 0% 0px;
+    }
+    50% {
+        background-image: linear-gradient(#FF3D00 40px, transparent 0);
+        background-position: 0% 40px;
+    }
+    50.1% {
+        background-image: linear-gradient(#FF3D00 40px, transparent 0);
+        background-position: 0% -40px;
+    }
+}
+
+@keyframes lqb {
+    0% {
+        background-image: linear-gradient(#FF3D00 40px, transparent 0);
+        background-position: 0 40px;
+    }
+    100% {
+        background-image: linear-gradient(#FF3D00 40px, transparent 0);
+        background-position: 0 -40px;
+    }
+}
+
+@keyframes spinx {
+    0%, 49% {
+        transform: rotate(0deg);
+        background-position: 50% 36px;
+    }
+    51%, 98% {
+        transform: rotate(180deg);
+        background-position: 50% 4px;
+    }
+    100% {
+        transform: rotate(360deg);
+        background-position: 50% 36px;
+    }
+}
+
+      
+
