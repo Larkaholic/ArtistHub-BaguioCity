@@ -42,7 +42,7 @@ async function loadEvents() {
                         <h3 class="rubik-dirt-regular font-custom text-2xl font-bold mb-2">${event.title}</h3>
                         <p class="text-sm font-bold">Start: ${event.startDate}</p>
                         <p class="text-sm font-bold">Location: ${event.location}</p>
-                        ${event.description ? `<p class="mt-2">${event.description}</p>` : ''}
+                        ${event.description ? `<p class="mt-2">${event.description.substring(0, 100)}...</p>` : ''}
                         ${event.imageUrl ? `
                             <img src="${event.imageUrl}" alt="${event.title}" 
                                 class="mt-4 w-full h-48 object-cover rounded">
@@ -63,22 +63,26 @@ async function loadEvents() {
                     </div>
                 `;
             } else {
-                eventsContainer.innerHTML = updatedNonFeaturedEvents.map(event => `
-                        <div class="border-2 border-black rounded-lg p-4 mb-4 event-card"
-                        style="cursor: pointer;" data-id="${event.id}">
-                            <div class="event-content" style="position: relative; z-index: 12;">
-                                <h3 class="rubik-dirt-regular text-2xl font-bold mb-2 text-black">${event.title}</h3>
-                                <p class="text-sm text-black">Start: ${event.startDate}</p>
-                                <p class="text-sm text-black">End: ${event.endDate}</p>
-                                <p class="text-sm text-black">Location: ${event.location}</p>
-                                ${event.description ? `<p class="mt-2 text-black">${event.description}</p>` : ''}
-                                ${event.imageUrl ? `
-                                    <img src="${event.imageUrl}" alt="${event.title}" 
-                                        class="mt-4 w-full h-48 object-cover rounded">
-                                ` : ''}
+                eventsContainer.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto" style="max-height: 100%;">
+                        ${updatedNonFeaturedEvents.map(event => `
+                            <div class="artist-card border-2 border-black rounded-lg p-4 mb-4 event-card"
+                            style="cursor: pointer;" data-id="${event.id}">
+                                <div class="event-content" style="position: relative; z-index: 12;">
+                                    <h3 class="rubik-dirt-regular text-2xl font-bold mb-2 text-black">${event.title}</h3>
+                                    <p class="text-sm text-black">Start: ${event.startDate}</p>
+                                    <p class="text-sm text-black">End: ${event.endDate}</p>
+                                    <p class="text-sm text-black">Location: ${event.location}</p>
+                                    ${event.description ? `<p class="mt-2 text-black">${event.description.substring(0, 100)}...</p>` : ''}
+                                    ${event.imageUrl ? `
+                                        <img src="${event.imageUrl}" alt="${event.title}" 
+                                            class="mt-4 w-full h-48 object-cover rounded">
+                                    ` : ''}
+                                </div>
                             </div>
-                        </div>
-                `).join('');
+                        `).join('')}
+                    </div>
+                `;
                 AOS.refresh();
             }
         }

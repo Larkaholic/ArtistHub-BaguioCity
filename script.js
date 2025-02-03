@@ -32,17 +32,29 @@ function toggleForms() {
     }
 }
 
+function loadTailwindCSS() {
+    const link = document.createElement('link');
+    link.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+}
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    loadTailwindCSS();
+    showSpinner();
+    // Hide spinner after all components have loaded
+    window.addEventListener('load', hideSpinner);
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
     });
 });
 
