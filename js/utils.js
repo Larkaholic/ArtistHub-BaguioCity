@@ -174,4 +174,12 @@ export async function handleAdminAction(profileId) {
         console.error('Error in admin action:', error);
         alert('Error performing admin action');
     }
-} 
+}
+
+export function navToEvent(url) {
+    window.location.href = url;
+}
+
+export function getBasePath() {
+    return window.location.origin;
+}
