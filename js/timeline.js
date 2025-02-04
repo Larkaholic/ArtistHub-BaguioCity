@@ -1,11 +1,7 @@
 import { db } from './firebase-config.js';
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const backgrounds = document.querySelector('.baguio-timeline-backgrounds');
-const yearElement = document.querySelector('.baguio-timeline-year');
-const titleElement = document.querySelector('.baguio-timeline-title');
-const detailsElement = document.querySelector('.baguio-timeline-details');
-const navigation = document.querySelector('.baguio-timeline-navigation');
+let backgrounds, yearElement, titleElement, detailsElement, navigation;
 
 async function fetchTimelineData() {
     const querySnapshot = await getDocs(collection(db, "timelineEvents"));
@@ -13,7 +9,7 @@ async function fetchTimelineData() {
     querySnapshot.forEach((doc) => {
         data.push(doc.data());
     });
-    return data;
+    return data.sort((a, b) => a.year - b.year); // Sort by year
 }
 
 async function initializeTimeline() {
@@ -89,4 +85,11 @@ function updateContent(data) {
     });
 }
 
-initializeTimeline();
+document.addEventListener('DOMContentLoaded', () => {
+    backgrounds = document.querySelector('.baguio-timeline-backgrounds');
+    yearElement = document.querySelector('.baguio-timeline-year');
+    titleElement = document.querySelector('.baguio-timeline-title');
+    detailsElement = document.querySelector('.baguio-timeline-details');
+    navigation = document.querySelector('.baguio-timeline-navigation');
+    initializeTimeline();
+});
