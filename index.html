@@ -229,12 +229,12 @@
         <section class="baguio-timeline-section">
             <div class="baguio-timeline-backgrounds"></div>
             <div class="baguio-timeline-content-wrapper">
+                <div class="baguio-timeline-navigation"></div>
                 <div class="baguio-timeline-content-box">
                     <div class="baguio-timeline-year baguio-timeline-fade-in"></div>
                     <h2 class="baguio-timeline-title baguio-timeline-fade-in"></h2>
                     <p class="baguio-timeline-details baguio-timeline-fade-up"></p>
                 </div>
-                <div class="baguio-timeline-navigation"></div>
             </div>
         </section>
         
@@ -490,7 +490,7 @@
             querySnapshot.forEach((doc) => {
                 data.push(doc.data());
             });
-            return data;
+            return data.sort((a, b) => a.year - b.year); // Sort by year
         }
 
         async function initializeTimeline() {
@@ -525,7 +525,9 @@
                 if (timelineData.length > 0) {
                     updateContent(timelineData[0]);
                 } else {
-                    updateContent(null);
+                    yearElement.textContent = '';
+                    titleElement.textContent = '';
+                    detailsElement.textContent = '';
                 }
             } catch (error) {
                 console.error("Error loading timeline data: ", error);
@@ -533,10 +535,6 @@
         }
 
         function updateContent(data) {
-            const yearElement = document.querySelector('.baguio-timeline-year');
-            const titleElement = document.querySelector('.baguio-timeline-title');
-            const detailsElement = document.querySelector('.baguio-timeline-details');
-
             if (!data) {
                 yearElement.textContent = '';
                 titleElement.textContent = '';

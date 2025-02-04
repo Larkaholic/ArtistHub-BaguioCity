@@ -8,7 +8,7 @@ async function fetchTimelineEvents() {
     querySnapshot.forEach((doc) => {
         events.push({ id: doc.id, ...doc.data() });
     });
-    return events;
+    return events.sort((a, b) => a.year - b.year); // Sort by year
 }
 
 async function loadTimelineEvents() {
