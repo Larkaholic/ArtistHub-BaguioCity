@@ -57,8 +57,9 @@
     box-shadow: 
         0 4px 6px rgba(0, 0, 0, 0.1),
         0 10px 20px rgba(0, 0, 0, 0.05);
-    transform: translateX(100%);
-    animation: baguioTimelineSlideIn 0.8s ease forwards;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
     color: white;
     min-height: 200px;
     display: flex;
@@ -67,6 +68,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    z-index: 2;
 }
 
 .baguio-timeline-year {

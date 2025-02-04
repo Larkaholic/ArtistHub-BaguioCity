@@ -490,7 +490,7 @@
             querySnapshot.forEach((doc) => {
                 data.push(doc.data());
             });
-            return data;
+            return data.sort((a, b) => a.year - b.year); // Sort by year
         }
 
         async function initializeTimeline() {
@@ -525,7 +525,9 @@
                 if (timelineData.length > 0) {
                     updateContent(timelineData[0]);
                 } else {
-                    updateContent(null);
+                    yearElement.textContent = '';
+                    titleElement.textContent = '';
+                    detailsElement.textContent = '';
                 }
             } catch (error) {
                 console.error("Error loading timeline data: ", error);
@@ -533,10 +535,6 @@
         }
 
         function updateContent(data) {
-            const yearElement = document.querySelector('.baguio-timeline-year');
-            const titleElement = document.querySelector('.baguio-timeline-title');
-            const detailsElement = document.querySelector('.baguio-timeline-details');
-
             if (!data) {
                 yearElement.textContent = '';
                 titleElement.textContent = '';
