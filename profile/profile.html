@@ -243,7 +243,7 @@
                 <h2 class="text-2xl font-bold mb-4">Achievements</h2>
                 <div class="flex gap-4">
                     <input type="file" id="achievementImages" accept="image/*" multiple class="hidden">
-                    <label for="achievementImages" class="bg-green-600 text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-green-700 transition-colors">
+                    <label id="chooseFilesLabel" for="achievementImages" class="bg-green-600 text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-green-700 transition-colors hidden">
                         Choose Files
                     </label>
                 </div>
@@ -270,6 +270,40 @@
         window.submitLogin = submitLogin;
         window.toggleNav = toggleNav;
         window.toggleForms = toggleForms;
+
+        // Import auth and Firestore functions from firebase-config
+        import { auth, db } from '../js/firebase-config.js';
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Ensure auth is available globally
+        window.auth = auth;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            auth.onAuthStateChanged(async (user) => {
+                const chooseFilesLabel = document.getElementById('chooseFilesLabel');
+                if (!chooseFilesLabel) return;
+
+                if (!user) {
+                    chooseFilesLabel.classList.add('hidden');
+                    return;
+                }
+
+                try {
+                    const currentUserDoc = await getDoc(doc(db, "users", user.uid));
+                    const isAdmin = currentUserDoc.exists() && currentUserDoc.data().isAdmin === true;
+                    const profileUserId = new URLSearchParams(window.location.search).get('id');
+
+                    if (isAdmin || user.uid === profileUserId) {
+                        chooseFilesLabel.classList.remove('hidden');
+                    } else {
+                        chooseFilesLabel.classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error("Error checking user status:", error);
+                    chooseFilesLabel.classList.add('hidden');
+                }
+            });
+        });
     </script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
@@ -344,6 +378,19 @@
             loginForm.classList.toggle('hidden');
             registerForm.classList.toggle('hidden');
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    const userId = user.uid;
+                    const profileUserId = new URLSearchParams(window.location.search).get('artistId');
+                    
+                    if (userId === profileUserId) {
+                        document.getElementById('chooseFilesLabel').classList.remove('hidden');
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
