@@ -16,10 +16,8 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
-    background: url("../images/bg.jpg") no-repeat center top;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
+    background-attachment: fixed;
     background-size: cover;
     background-attachment: scroll; /* Added scroll attachment */
     min-height: 100vh;

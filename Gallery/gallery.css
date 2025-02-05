@@ -10,7 +10,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: url("../images/bg.jpg") no-repeat center center fixed;
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
+    background-attachment: fixed;
     background-size: cover;
     min-height: 100vh;
     color: white;
