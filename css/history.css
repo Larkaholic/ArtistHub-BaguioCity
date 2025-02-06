@@ -62,12 +62,16 @@
     right: 20px;
     color: white;
     min-height: 200px;
+    max-height: 200px;
+    max-width: 900px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding: 20px;
     z-index: 2;
 }
 

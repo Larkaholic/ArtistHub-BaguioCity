@@ -56,9 +56,9 @@ document.getElementById('timelineEventForm').addEventListener('submit', async (e
     const year = document.getElementById('timelineEventYear').value;
     const title = document.getElementById('timelineEventTitle').value;
     const details = document.getElementById('timelineEventDetails').value;
-    const imageUrl = document.getElementById('timelineEventImageUrl').value;
+    const imageUrls = document.getElementById('timelineEventImageUrl').value.split(',');
 
-    const event = { year, title, details, background: imageUrl };
+    const event = { year, title, details, backgrounds: imageUrls };
 
     if (id) {
         await updateDoc(doc(db, "timelineEvents", id), event);
@@ -80,10 +80,10 @@ async function editTimelineEvent(id) {
         document.getElementById('timelineEventYear').value = event.year;
         document.getElementById('timelineEventTitle').value = event.title;
         document.getElementById('timelineEventDetails').value = event.details;
-        document.getElementById('timelineEventImageUrl').value = event.background;
+        document.getElementById('timelineEventImageUrl').value = event.backgrounds.join(',');
 
-        if (event.background) {
-            document.getElementById('timelinePreviewImg').src = event.background;
+        if (event.backgrounds.length > 0) {
+            document.getElementById('timelinePreviewImg').src = event.backgrounds[0];
             document.getElementById('timelineImagePreview').classList.remove('hidden');
         } else {
             document.getElementById('timelineImagePreview').classList.add('hidden');
@@ -106,7 +106,10 @@ document.getElementById('upload_timeline_widget').addEventListener('click', () =
     }, (error, result) => {
         if (!error && result && result.event === "success") {
             const imageUrl = result.info.secure_url;
-            document.getElementById('timelineEventImageUrl').value = imageUrl;
+            const imageUrlInput = document.getElementById('timelineEventImageUrl');
+            const currentUrls = imageUrlInput.value ? imageUrlInput.value.split(',') : [];
+            currentUrls.push(imageUrl);
+            imageUrlInput.value = currentUrls.join(',');
             document.getElementById('timelinePreviewImg').src = imageUrl;
             document.getElementById('timelineImagePreview').classList.remove('hidden');
         }

@@ -2,6 +2,8 @@ import { db } from './firebase-config.js';
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 let backgrounds, yearElement, titleElement, detailsElement, navigation;
+let timelineData = [];
+let backgroundIntervals = {};
 
 async function fetchTimelineData() {
     const querySnapshot = await getDocs(collection(db, "timelineEvents"));
@@ -9,7 +11,7 @@ async function fetchTimelineData() {
     querySnapshot.forEach((doc) => {
         data.push(doc.data());
     });
-    return data.sort((a, b) => a.year - b.year);
+    return data.sort((a, b) => a.year - b.year); // Sort by year
 }
 
 function initializeElements() {
@@ -30,17 +32,24 @@ async function initializeTimeline() {
         // Initialize elements first
         initializeElements();
 
-        const timelineData = await fetchTimelineData();
+        timelineData = await fetchTimelineData();
 
         backgrounds.innerHTML = '';
         navigation.innerHTML = '';
 
         timelineData.forEach(data => {
-            const bgDiv = document.createElement('div');
-            bgDiv.classList.add('baguio-timeline-bg-image');
-            bgDiv.style.backgroundImage = `url(${data.background})`;
-            bgDiv.dataset.year = data.year;
-            backgrounds.appendChild(bgDiv);
+            if (Array.isArray(data.backgrounds)) {
+                data.backgrounds.forEach((background, index) => {
+                    const bgDiv = document.createElement('div');
+                    bgDiv.classList.add('baguio-timeline-bg-image');
+                    bgDiv.style.backgroundImage = `url(${background})`;
+                    bgDiv.dataset.year = data.year;
+                    bgDiv.dataset.index = index;
+                    backgrounds.appendChild(bgDiv);
+                });
+            } else {
+                console.warn(`No backgrounds found for year ${data.year}`);
+            }
         });
 
         timelineData.forEach(data => {
@@ -78,7 +87,7 @@ function updateContent(data) {
 
     document.querySelectorAll('.baguio-timeline-bg-image').forEach(bg => {
         bg.classList.remove('baguio-timeline-active');
-        if (bg.dataset.year === data.year.toString()) {
+        if (bg.dataset.year === data.year.toString() && bg.dataset.index === '0') {
             bg.classList.add('baguio-timeline-active');
         }
     });
@@ -103,6 +112,34 @@ function updateContent(data) {
             btn.classList.add('baguio-timeline-active');
         }
     });
+
+    // Start carousel for the selected year
+    if (Array.isArray(data.backgrounds)) {
+        startBackgroundCarousel(data.year, data.backgrounds);
+    } else {
+        console.warn(`No backgrounds found for year ${data.year}`);
+    }
+}
+
+function startBackgroundCarousel(year, backgrounds) {
+    if (backgroundIntervals[year]) {
+        clearInterval(backgroundIntervals[year]);
+    }
+
+    let currentBackgroundIndex = 0;
+    backgroundIntervals[year] = setInterval(() => {
+        if (backgrounds.length === 0) {
+            console.warn(`No backgrounds to cycle for year ${year}`);
+            return;
+        }
+        currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
+        document.querySelectorAll(`.baguio-timeline-bg-image[data-year="${year}"]`).forEach(bg => {
+            bg.classList.remove('baguio-timeline-active');
+            if (bg.dataset.index === currentBackgroundIndex.toString()) {
+                bg.classList.add('baguio-timeline-active');
+            }
+        });
+    }, 5000); // Change background every 5 seconds
 }
 
 document.addEventListener('DOMContentLoaded', initializeTimeline);
