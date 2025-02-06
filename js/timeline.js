@@ -9,11 +9,27 @@ async function fetchTimelineData() {
     querySnapshot.forEach((doc) => {
         data.push(doc.data());
     });
-    return data.sort((a, b) => a.year - b.year); // Sort by year
+    return data.sort((a, b) => a.year - b.year);
+}
+
+function initializeElements() {
+    backgrounds = document.querySelector('.baguio-timeline-backgrounds');
+    yearElement = document.querySelector('.baguio-timeline-year');
+    titleElement = document.querySelector('.baguio-timeline-title');
+    detailsElement = document.querySelector('.baguio-timeline-details');
+    navigation = document.querySelector('.baguio-timeline-navigation');
+
+    // Check if all elements are found
+    if (!backgrounds || !yearElement || !titleElement || !detailsElement || !navigation) {
+        throw new Error('Required timeline elements not found in the DOM');
+    }
 }
 
 async function initializeTimeline() {
     try {
+        // Initialize elements first
+        initializeElements();
+
         const timelineData = await fetchTimelineData();
 
         backgrounds.innerHTML = '';
@@ -39,9 +55,7 @@ async function initializeTimeline() {
         if (timelineData.length > 0) {
             updateContent(timelineData[0]);
         } else {
-            yearElement.textContent = '';
-            titleElement.textContent = '';
-            detailsElement.textContent = '';
+            updateContent(null);
         }
     } catch (error) {
         console.error("Error loading timeline data: ", error);
@@ -49,6 +63,12 @@ async function initializeTimeline() {
 }
 
 function updateContent(data) {
+    // Check if elements exist before using them
+    if (!yearElement || !titleElement || !detailsElement) {
+        console.error('Timeline elements not initialized');
+        return;
+    }
+
     if (!data) {
         yearElement.textContent = '';
         titleElement.textContent = '';
@@ -85,11 +105,4 @@ function updateContent(data) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    backgrounds = document.querySelector('.baguio-timeline-backgrounds');
-    yearElement = document.querySelector('.baguio-timeline-year');
-    titleElement = document.querySelector('.baguio-timeline-title');
-    detailsElement = document.querySelector('.baguio-timeline-details');
-    navigation = document.querySelector('.baguio-timeline-navigation');
-    initializeTimeline();
-});
+document.addEventListener('DOMContentLoaded', initializeTimeline);
