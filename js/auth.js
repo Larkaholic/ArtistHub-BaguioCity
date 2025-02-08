@@ -243,12 +243,12 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// logout handler
+// Update the logout handler
 window.handleLogout = async function() {
     try {
         await signOut(auth);
-        const basePath = getBasePath();
-        window.location.href = `${basePath}/index.html`;
+        // Use the navigation helper
+        navigateTo('/index.html');
     } catch (error) {
         console.error("Error signing out:", error);
         alert("Error signing out");

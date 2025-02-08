@@ -181,5 +181,14 @@ export function navToEvent(url) {
 }
 
 export function getBasePath() {
-    return window.location.origin;
+    // For GitHub Pages, we need to include the repository name in the path
+    return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? ''
+        : '/ArtistHub-BaguioCity';
+}
+
+// Add a navigation helper that uses the base path
+export function navigateTo(path) {
+    const basePath = getBasePath();
+    window.location.href = `${basePath}${path}`;
 }
