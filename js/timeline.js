@@ -6,12 +6,24 @@ let timelineData = [];
 let backgroundIntervals = {};
 
 async function fetchTimelineData() {
-    const querySnapshot = await getDocs(collection(db, "timelineEvents"));
-    const data = [];
-    querySnapshot.forEach((doc) => {
-        data.push(doc.data());
-    });
-    return data.sort((a, b) => a.year - b.year); // Sort by year
+    try {
+        const querySnapshot = await getDocs(collection(db, "timelineEvents"));
+        const data = [];
+        querySnapshot.forEach((doc) => {
+            data.push({ id: doc.id, ...doc.data() });
+        });
+        return data.sort((a, b) => a.year - b.year);
+    } catch (error) {
+        console.error("Error fetching timeline data:", error);
+        const timelineSection = document.querySelector('.baguio-timeline-section');
+        if (timelineSection) {
+            timelineSection.innerHTML = `
+                <div class="error-message">
+                    <p class="text-center text-gray-600">Timeline content is temporarily unavailable.</p>
+                </div>`;
+        }
+        return [];
+    }
 }
 
 function initializeElements() {
@@ -32,7 +44,11 @@ async function initializeTimeline() {
         // Initialize elements first
         initializeElements();
 
+        // Fetch data with error handling
         timelineData = await fetchTimelineData();
+        if (timelineData.length === 0) {
+            return; // Exit if no data
+        }
 
         backgrounds.innerHTML = '';
         navigation.innerHTML = '';
@@ -67,7 +83,14 @@ async function initializeTimeline() {
             updateContent(null);
         }
     } catch (error) {
-        console.error("Error loading timeline data: ", error);
+        console.error("Error initializing timeline:", error);
+        const timelineSection = document.querySelector('.baguio-timeline-section');
+        if (timelineSection) {
+            timelineSection.innerHTML = `
+                <div class="error-message">
+                    <p class="text-center text-gray-600">Timeline content is temporarily unavailable.</p>
+                </div>`;
+        }
     }
 }
 
