@@ -244,16 +244,19 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // Update the logout handler
-window.handleLogout = async function() {
+export async function handleLogout() {
     try {
         await signOut(auth);
-        // Use the navigation helper
-        navigateTo('/index.html');
+        const basePath = getBasePath();
+        window.location.href = `${basePath}/index.html`;
     } catch (error) {
         console.error("Error signing out:", error);
         alert("Error signing out");
     }
-};
+}
+
+// Make it available to window object
+window.handleLogout = handleLogout;
 
 // toggle login flyout
 window.toggleLoginFlyout = function(event) {
@@ -438,34 +441,6 @@ window.handleAdminAction = async function() {
 }
 
 // Add this if not already present
-async function handleLogout() {
-    try {
-        await signOut(auth);
-        const basePath = getBasePath();
-        window.location.href = `${basePath}/index.html`;
-    } catch (error) {
-        console.error("Error signing out:", error);
-        alert("Error signing out");
-    }
-}
-
-// Make it globally available
-window.handleLogout = handleLogout;
-
-// Make sure your auth state observer updates the buttons
-auth.onAuthStateChanged((user) => {
-    const loginButton = document.querySelector('.login-button');
-    const logoutButton = document.querySelector('.logout-button');
-    
-    if (user) {
-        if (loginButton) loginButton.style.display = 'none';
-        if (logoutButton) logoutButton.style.display = 'block';
-    } else {
-        if (loginButton) loginButton.style.display = 'block';
-        if (logoutButton) logoutButton.style.display = 'none';
-    }
-}); 
-
 async function registerUser(email, password, userType) {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
