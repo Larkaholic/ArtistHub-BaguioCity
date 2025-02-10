@@ -17,7 +17,7 @@ function searchArtists() {
 
 async function fetchArtistsFromDatabase() {
     try {
-        const response = await fetch('http://your-api-endpoint.com/api/artists'); // Replace with your actual API endpoint
+        const response = await fetch('../artists.json'); // Replace with your local JSON file
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
