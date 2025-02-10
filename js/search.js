@@ -17,7 +17,7 @@ function searchArtists() {
 
 async function fetchArtistsFromDatabase() {
     try {
-        const response = await fetch('../artists.json'); // Replace with your local JSON file
+        const response = await fetch('../artists.json');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -33,13 +33,20 @@ async function searchArtistsInDatabase() {
     const searchTerm = searchInput.value.toLowerCase();
     const artists = await fetchArtistsFromDatabase();
     
-    artistCards.forEach(card => {
-        const artistId = card.dataset.artistId;
-        const artist = artists.find(artist => artist.id === artistId);
-        if (artist && artist.name.toLowerCase().includes(searchTerm)) {
-            card.style.display = '';
-        } else {
-            card.style.display = 'none';
+    // Display close or exact search results
+    const resultsContainer = document.getElementById('artistsGrid');
+    resultsContainer.innerHTML = ''; // Clear previous results
+
+    artists.forEach(artist => {
+        if (artist.name.toLowerCase().includes(searchTerm)) {
+            const artistCard = document.createElement('div');
+            artistCard.classList.add('artist-card');
+            artistCard.dataset.artistId = artist.id;
+            artistCard.innerHTML = `
+                <h3>${artist.name}</h3>
+                <p>Artist ID: ${artist.id}</p>
+            `;
+            resultsContainer.appendChild(artistCard);
         }
     });
 }
