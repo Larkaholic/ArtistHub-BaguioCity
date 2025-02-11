@@ -24,7 +24,10 @@
     <script type="module" src="featuredArtists.js"></script>
     <script type="module">
         import { openAddTimelineEventModal } from './timeline.js';
+        import { pickFeaturedArtists, searchArtistsInDatabase } from './featuredArtists.js';
         window.openAddTimelineEventModal = openAddTimelineEventModal;
+        window.pickFeaturedArtists = pickFeaturedArtists;
+        window.searchArtistsInDatabase = searchArtistsInDatabase;
     </script>
 
     <style>
@@ -65,6 +68,15 @@
 
         <!-- Featured Artists Section -->
         <h2 class="text-2xl font-bold mb-4">Featured Artists</h2>
+        <div class="flex items-center mb-6">
+            <input type="text" id="artistSearchInput" placeholder="Search artist by display name" 
+                   class="bg-gray-700 text-white rounded-lg px-4 py-2 mr-4">
+            <button onclick="searchArtistsInDatabase()" 
+                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                    id="searchBtn">
+                Search
+            </button>
+        </div>
         <button onclick="pickFeaturedArtists()" 
                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
             Pick Featured Artists
