@@ -14,14 +14,21 @@ async function displayFeaturedArtists() {
             const featuredArtistsGrid = document.getElementById("featuredArtistsGrid");
             featuredArtistsGrid.innerHTML = "";
 
-            featuredArtists.slice(0, 6).forEach((artist) => {
+            for (const artist of featuredArtists.slice(0, 6)) {
+                if (!artist.id) {
+                    console.error("Artist ID is missing:", artist);
+                    continue;
+                }
+
+                const artistDetailsRef = doc(db, "users", artist.id);
+                const artistDetailsSnap = await getDoc(artistDetailsRef);
+                const specialization = artistDetailsSnap.exists() ? artistDetailsSnap.data().artistDetails?.specialization : 'artist';
+
                 const card = document.createElement('div');
                 card.className = `
                     glass-header rounded-lg p-6 flex flex-col items-center border-2 border-gray-700
                     min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1 border-4 border-black
                 `;
-                
-                const specialization = artist.specialization ?? 'artist';
                 
                 card.innerHTML = `
                     <img src="${artist.image}" alt="${artist.name}" 
@@ -38,7 +45,7 @@ async function displayFeaturedArtists() {
                 };
 
                 featuredArtistsGrid.appendChild(card);
-            });
+            }
         } else {
             console.log("No featured artists found.");
         }

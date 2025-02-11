@@ -25,6 +25,7 @@ async function pickFeaturedArtists() {
             </div>
         `;
 
+        artistElement.dataset.artistId = doc.id;
         featuredArtistsList.appendChild(artistElement);
     });
 }
@@ -44,16 +45,17 @@ async function searchArtistsInDatabase() {
         artists.push({ id: doc.id, ...doc.data() });
     });
 
-    artists.forEach(artist => {
+    for (const artist of artists) {
         if (artist.displayName && artist.displayName.toLowerCase().includes(searchInput)) {
-            console.log('Matching Artist:', artist); // Debug log
+            const artistDetailsRef = doc(db, "users", artist.id);
+            const artistDetailsSnap = await getDoc(artistDetailsRef);
+            const specialization = artistDetailsSnap.exists() ? artistDetailsSnap.data().artistDetails?.specialization : 'artist';
+
             const artistCard = document.createElement('div');
             artistCard.className = `
                 glass-header rounded-lg p-4 flex flex-col items-center border-2 border-gray-700
                 min-w-[150px] transform transition-transform duration-200 hover:-translate-y-1 relative
             `;
-            
-            const specialization = artist.artistDetails?.specialization ?? 'artist';
             
             artistCard.innerHTML = `
                 <input type="checkbox" class="absolute top-2 right-2 w-6 h-6">
@@ -66,27 +68,29 @@ async function searchArtistsInDatabase() {
                 </button>
             `;
 
+            artistCard.dataset.artistId = artist.id;
             artistCard.querySelector('button').onclick = () => {
                 window.location.href = `./profile/profile.html?id=${artist.id}`;
             };
 
             resultsContainer.appendChild(artistCard);
         }
-    });
+    }
 }
 
 async function featureSelectedArtists() {
     const checkboxes = document.querySelectorAll("#featuredArtistsList input[type='checkbox']:checked");
     const selectedArtists = [];
 
-    checkboxes.forEach(checkbox => {
+    for (const checkbox of checkboxes) {
         const artistCard = checkbox.closest('div');
+        const artistId = artistCard.dataset.artistId;
         const artistName = artistCard.querySelector('h3').innerText;
         const artistBio = artistCard.querySelector('p').innerText;
         const artistImage = artistCard.querySelector('img').src;
 
-        selectedArtists.push({ name: artistName, bio: artistBio, image: artistImage });
-    });
+        selectedArtists.push({ id: artistId, name: artistName, bio: artistBio, image: artistImage });
+    }
 
     const featuredArtistsRef = doc(db, "featured", "artists");
     const docSnap = await getDoc(featuredArtistsRef);
@@ -105,6 +109,66 @@ async function featureSelectedArtists() {
     }
 
     alert("Selected artists have been featured!");
+    displayCurrentlyFeaturedArtists();
 }
 
-export { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists };
+async function removeFeaturedArtist(artistId) {
+    const featuredArtistsRef = doc(db, "featured", "artists");
+    const docSnap = await getDoc(featuredArtistsRef);
+
+    if (docSnap.exists()) {
+        const existingFeaturedArtists = docSnap.data().artists;
+        const updatedFeaturedArtists = existingFeaturedArtists.filter(artist => artist.id !== artistId);
+
+        await updateDoc(featuredArtistsRef, { artists: updatedFeaturedArtists });
+        alert("Artist has been removed from featured list!");
+        displayCurrentlyFeaturedArtists();
+    } else {
+        console.log("No featured artists found.");
+    }
+}
+
+async function displayCurrentlyFeaturedArtists() {
+    const currentlyFeaturedContainer = document.getElementById("currentlyFeaturedArtists");
+    if (!currentlyFeaturedContainer) {
+        console.error("Currently featured artists container not found.");
+        return;
+    }
+
+    const featuredArtistsRef = doc(db, "featured", "artists");
+    const docSnap = await getDoc(featuredArtistsRef);
+
+    currentlyFeaturedContainer.innerHTML = "";
+
+    if (docSnap.exists()) {
+        const featuredArtists = docSnap.data().artists;
+
+        for (const artist of featuredArtists) {
+            const artistCard = document.createElement('div');
+            artistCard.className = `
+                glass-header rounded-lg p-4 flex flex-col items-center border-2 border-gray-700
+                min-w-[150px] transform transition-transform duration-200 hover:-translate-y-1 relative
+            `;
+            
+            artistCard.innerHTML = `
+                <img src="${artist.image}" alt="${artist.name}" 
+                    class="w-24 h-24 rounded-full object-cover mb-2 border-4 border-black text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                <h3 class="text-xl font-bold mb-1 text-white">${artist.name}</h3>
+                <p class="text-center mb-2 text-white text-sm">${artist.bio}</p>
+                <button class="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition duration-300 font-semibold border-2 border-black mt-2">
+                    Remove
+                </button>
+            `;
+
+            artistCard.querySelector('button').onclick = () => {
+                removeFeaturedArtist(artist.id);
+            };
+
+            currentlyFeaturedContainer.appendChild(artistCard);
+        }
+    } else {
+        currentlyFeaturedContainer.innerHTML = '<p class="text-white text-center">No featured artists found.</p>';
+    }
+}
+
+export { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists, removeFeaturedArtist, displayCurrentlyFeaturedArtists };
