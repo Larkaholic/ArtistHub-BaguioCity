@@ -21,6 +21,7 @@
     <script type="module" src="eventManagement.js"></script>
     <script type="module" src="artistRequest.js"></script>
     <script type="module" src="./timeline.js"></script>
+    <script type="module" src="featuredArtists.js"></script>
     <script type="module">
         import { openAddTimelineEventModal } from './timeline.js';
         window.openAddTimelineEventModal = openAddTimelineEventModal;
@@ -61,6 +62,17 @@
         </div>
     </nav>
     <main class="container mx-auto mt-24 p-4 space-y-6">
+
+        <!-- Featured Artists Section -->
+        <h2 class="text-2xl font-bold mb-4">Featured Artists</h2>
+        <button onclick="pickFeaturedArtists()" 
+                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
+            Pick Featured Artists
+        </button>
+        <div id="featuredArtistsList" class="space-y-4">
+            <!-- Featured artists will be loaded here -->
+        </div>
+
         <h2 class="text-xl font-bold mb-6">Manage Events</h2>
         <button onclick="openAddEventModal()" 
                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
