@@ -144,27 +144,25 @@ async function displayCurrentlyFeaturedArtists() {
         const featuredArtists = docSnap.data().artists;
 
         for (const artist of featuredArtists) {
-            const artistCard = document.createElement('div');
-            artistCard.className = `
-                glass-header rounded-lg p-4 flex flex-col items-center border-2 border-gray-700
-                min-w-[150px] transform transition-transform duration-200 hover:-translate-y-1 relative
-            `;
-            
-            artistCard.innerHTML = `
-                <img src="${artist.image}" alt="${artist.name}" 
-                    class="w-24 h-24 rounded-full object-cover mb-2 border-4 border-black text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                <h3 class="text-xl font-bold mb-1 text-white">${artist.name}</h3>
-                <p class="text-center mb-2 text-white text-sm">${artist.bio}</p>
-                <button class="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition duration-300 font-semibold border-2 border-black mt-2">
+            const artistItem = document.createElement('div');
+            artistItem.className = "flex items-center space-x-4 p-2 bg-gray-800 rounded-lg";
+
+            artistItem.innerHTML = `
+                <img src="${artist.image}" alt="${artist.name}" class="w-12 h-12 rounded-full object-cover">
+                <div class="flex-1">
+                    <h3 class="text-md font-semibold text-white">${artist.name}</h3>
+                    <p class="text-sm text-gray-400">${artist.bio}</p>
+                </div>
+                <button class="bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition duration-300 font-semibold border-2 border-black">
                     Remove
                 </button>
             `;
 
-            artistCard.querySelector('button').onclick = () => {
+            artistItem.querySelector('button').onclick = () => {
                 removeFeaturedArtist(artist.id);
             };
 
-            currentlyFeaturedContainer.appendChild(artistCard);
+            currentlyFeaturedContainer.appendChild(artistItem);
         }
     } else {
         currentlyFeaturedContainer.innerHTML = '<p class="text-white text-center">No featured artists found.</p>';
