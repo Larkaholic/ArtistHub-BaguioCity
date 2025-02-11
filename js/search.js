@@ -3,7 +3,7 @@ import { app } from "./firebase-config.js";
 
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
-const resultsContainer = document.getElementById('artistsGrid'); // Container for artist cards
+const resultsContainer = document.getElementById('artistsGrid');
 
 const db = getFirestore(app);
 

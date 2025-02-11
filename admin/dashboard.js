@@ -14,6 +14,7 @@ import {
     addDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { ImageCrawler } from '../Gallery/imageCrawler.js';
+import { removeFeaturedArtist, displayCurrentlyFeaturedArtists } from './featuredArtists.js';
 
 // Initialize the image crawler
 const crawler = new ImageCrawler();
@@ -181,7 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeImageCrawler();
     initializeArtList();
     loadEvents();
+    displayCurrentlyFeaturedArtists();
     document.getElementById('eventForm').addEventListener('submit', handleFormSubmit);
+    addRemoveButtonToFeaturedArtists();
 });
 
 function initializeImageCrawler() {
@@ -338,4 +341,21 @@ function showCrawlerError(message) {
         <div class="text-red-400">${message}</div>
     `;
     document.getElementById('searchLinks').innerHTML = '';
+}
+
+function addRemoveButtonToFeaturedArtists() {
+    const featuredArtistsList = document.getElementById("featuredArtistsList");
+    const artistCards = featuredArtistsList.querySelectorAll("div[data-artist-id]");
+
+    artistCards.forEach(card => {
+        const artistId = card.dataset.artistId;
+        const removeButton = document.createElement("button");
+        removeButton.className = "bg-red-500 text-white py-1 px-4 rounded-md hover:bg-red-600 transition duration-300 font-semibold border-2 border-black mt-2";
+        removeButton.innerText = "Remove";
+        removeButton.onclick = () => {
+            removeFeaturedArtist(artistId);
+            card.remove();
+        };
+        card.appendChild(removeButton);
+    });
 }

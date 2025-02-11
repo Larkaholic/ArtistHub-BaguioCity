@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/history.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
+    
 </head>
 <body class="bg-cover">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 headerR transparent-header">
@@ -192,7 +193,7 @@
         </section>
     
         <!-- artists section -->
-        <section id="artists" class="flex flex-col gap-4">
+        <section id="featuredArtistsSection" class="flex flex-col gap-4">
             <!-- title container -->
             <div class="header flex rounded-lg p-1 mt-10 w-full text-center justify-between items-center">
                 <h2 class="text-3xl font-bold text-black mx-auto">FEATURED ARTISTS</h2>
@@ -205,12 +206,12 @@
             
             <!-- artist grid container -->
             <div class="gridContainer rounded-lg p-2">
-                <div id="artistsGrid" class="artist-grid grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div id="featuredArtistsGrid" class="artist-grid grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- artists will dynamically load here -->
                 </div>
             </div>
         </section>
-        
+
         <!-- Events Seciton-->
         <section id="events" class="EvntPage w-full min-h-screen p-6">
             <div class="header rounded-lg p-2 mt-10 w-full text-center mb-4">
@@ -298,7 +299,8 @@
     <script type="module" src="./js/ggl.js"></script>
     <script type="module" src="./js/firebase-config.js"></script>
     <script type="module" src="./js/auth.js"></script>
-    <script type="module" src="./js/loadArtists.js"></script>
+    <script type="module" src="./js/featuredArtistsDisplay.js"></script>
+    <!-- <script type="module" src="./js/loadArtists.js"></script> -->
     <script type="module" src="./js/timeline.js"></script>
     <script type="module" src="./js/search.js"></script>
     <script type="module" src="./js/navigation.js"></script>
