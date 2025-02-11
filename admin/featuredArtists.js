@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, limit, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { app } from "../js/firebase-config.js";
 
 const db = getFirestore(app);
@@ -14,9 +14,10 @@ async function pickFeaturedArtists() {
     querySnapshot.forEach((doc) => {
         const artist = doc.data();
         const artistElement = document.createElement("div");
-        artistElement.classList.add("bg-gray-800", "p-4", "rounded-lg", "flex", "items-center", "space-x-4");
+        artistElement.classList.add("bg-gray-800", "p-4", "rounded-lg", "flex", "items-center", "space-x-4", "relative");
 
         artistElement.innerHTML = `
+            <input type="checkbox" class="absolute top-2 right-2 w-6 h-6">
             <img src="${artist.profileImageUrl || 'https://via.placeholder.com/150'}" alt="${artist.name}" class="w-12 h-12 rounded-full">
             <div>
                 <h3 class="text-md font-semibold">${artist.name}</h3>
@@ -49,12 +50,13 @@ async function searchArtistsInDatabase() {
             const artistCard = document.createElement('div');
             artistCard.className = `
                 glass-header rounded-lg p-4 flex flex-col items-center border-2 border-gray-700
-                min-w-[150px] transform transition-transform duration-200 hover:-translate-y-1
+                min-w-[150px] transform transition-transform duration-200 hover:-translate-y-1 relative
             `;
             
             const specialization = artist.artistDetails?.specialization ?? 'artist';
             
             artistCard.innerHTML = `
+                <input type="checkbox" class="absolute top-2 right-2 w-6 h-6">
                 <img src="${artist.photoURL || 'https://via.placeholder.com/150'}" alt="${artist.displayName}" 
                     class="w-24 h-24 rounded-full object-cover mb-2 border-4 border-black text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                 <h3 class="text-xl font-bold mb-1 text-white">${artist.displayName}</h3>
@@ -73,5 +75,36 @@ async function searchArtistsInDatabase() {
     });
 }
 
-window.pickFeaturedArtists = pickFeaturedArtists;
-window.searchArtistsInDatabase = searchArtistsInDatabase;
+async function featureSelectedArtists() {
+    const checkboxes = document.querySelectorAll("#featuredArtistsList input[type='checkbox']:checked");
+    const selectedArtists = [];
+
+    checkboxes.forEach(checkbox => {
+        const artistCard = checkbox.closest('div');
+        const artistName = artistCard.querySelector('h3').innerText;
+        const artistBio = artistCard.querySelector('p').innerText;
+        const artistImage = artistCard.querySelector('img').src;
+
+        selectedArtists.push({ name: artistName, bio: artistBio, image: artistImage });
+    });
+
+    const featuredArtistsRef = doc(db, "featured", "artists");
+    const docSnap = await getDoc(featuredArtistsRef);
+
+    let existingFeaturedArtists = [];
+    if (docSnap.exists()) {
+        existingFeaturedArtists = docSnap.data().artists;
+    }
+
+    const updatedFeaturedArtists = [...existingFeaturedArtists, ...selectedArtists].slice(0, 6);
+
+    if (docSnap.exists()) {
+        await updateDoc(featuredArtistsRef, { artists: updatedFeaturedArtists });
+    } else {
+        await setDoc(featuredArtistsRef, { artists: updatedFeaturedArtists });
+    }
+
+    alert("Selected artists have been featured!");
+}
+
+export { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists };

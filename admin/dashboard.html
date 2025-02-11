@@ -24,10 +24,11 @@
     <script type="module" src="featuredArtists.js"></script>
     <script type="module">
         import { openAddTimelineEventModal } from './timeline.js';
-        import { pickFeaturedArtists, searchArtistsInDatabase } from './featuredArtists.js';
+        import { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists } from './featuredArtists.js';
         window.openAddTimelineEventModal = openAddTimelineEventModal;
         window.pickFeaturedArtists = pickFeaturedArtists;
         window.searchArtistsInDatabase = searchArtistsInDatabase;
+        window.featureSelectedArtists = featureSelectedArtists;
     </script>
 
     <style>
@@ -77,9 +78,9 @@
                 Search
             </button>
         </div>
-        <button onclick="pickFeaturedArtists()" 
+        <button onclick="featureSelectedArtists()" 
                 class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-6">
-            Pick Featured Artists
+            Feature This Artist
         </button>
         <div id="featuredArtistsList" class="space-y-4">
             <!-- Featured artists will be loaded here -->
