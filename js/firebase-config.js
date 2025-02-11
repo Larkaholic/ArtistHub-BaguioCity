@@ -3,8 +3,8 @@ import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAyIfQ9879WmJ50X0-RODrLR7E_XMIZuDo",
-  authDomain: "artisthub-baguiocity-9213d.firebaseapp.com",
+apiKey: "AIzaSyAyIfQ9879WmJ50X0-RODrLR7E_XMIZuDo",
+authDomain: "artisthub-baguiocity-9213d.firebaseapp.com",
   databaseURL: "https://artisthub-baguiocity-9213d-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "artisthub-baguiocity-9213d",
   storageBucket: "artisthub-baguiocity-9213d.firebasestorage.app",
