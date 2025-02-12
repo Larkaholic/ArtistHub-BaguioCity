@@ -9,14 +9,14 @@ const db = getFirestore(app);
 
 async function fetchArtistsFromDatabase() {
     try {
-        console.log('Fetching artists from Firestore...'); // Debug log
+        // console.log('Fetching artists from Firestore...'); // Debug log
         const querySnapshot = await getDocs(collection(db, "users"));
         const artists = [];
         querySnapshot.forEach((doc) => {
-            console.log('Fetched artist:', doc.data()); // Debug log
+            // console.log('Fetched artist:', doc.data()); // Debug log
             artists.push({ id: doc.id, ...doc.data() });
         });
-        console.log('Fetched Artists:', artists); // Debug log
+        // console.log('Fetched Artists:', artists); // Debug log
         return artists;
     } catch (error) {
         console.error('Error fetching artists:', error);
@@ -26,7 +26,7 @@ async function fetchArtistsFromDatabase() {
 
 async function searchArtistsInDatabase() {
     const searchTerm = searchInput.value.toLowerCase();
-    console.log('Search Term:', searchTerm); // Debug log
+    // console.log('Search Term:', searchTerm); // Debug log
     const artists = await fetchArtistsFromDatabase();
     
     // Clear previous results
@@ -40,7 +40,7 @@ async function searchArtistsInDatabase() {
     // Display search results
     artists.forEach(artist => {
         if (artist.displayName && artist.displayName.toLowerCase().includes(searchTerm)) {
-            console.log('Matching Artist:', artist); // Debug log
+            // console.log('Matching Artist:', artist); // Debug log
             const artistCard = document.createElement('div');
             artistCard.className = `
                 rounded-lg p-6 flex flex-col items-center border-2 border-gray-700
