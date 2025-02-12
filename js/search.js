@@ -3,7 +3,7 @@ import { app } from "./firebase-config.js";
 
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
-const resultsContainer = document.getElementById('artistsGrid');
+const resultsContainer = document.getElementById('featuredArtistsGrid');
 
 const db = getFirestore(app);
 
@@ -30,7 +30,12 @@ async function searchArtistsInDatabase() {
     const artists = await fetchArtistsFromDatabase();
     
     // Clear previous results
-    resultsContainer.innerHTML = '';
+    if (resultsContainer) {
+        resultsContainer.innerHTML = '';
+    } else {
+        console.error('resultsContainer is null');
+        return;
+    }
 
     // Display search results
     artists.forEach(artist => {
@@ -38,8 +43,8 @@ async function searchArtistsInDatabase() {
             console.log('Matching Artist:', artist); // Debug log
             const artistCard = document.createElement('div');
             artistCard.className = `
-                glass-header rounded-lg p-6 flex flex-col items-center border-2 border-gray-700
-                min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1
+                rounded-lg p-6 flex flex-col items-center border-2 border-gray-700
+                min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1 border-4 border-black
             `;
             
             const specialization = artist.artistDetails?.specialization ?? 'artist';
