@@ -63,6 +63,7 @@
     color: white;
     min-height: 200px;
     max-height: 200px;
+    width: 900px;
     max-width: 900px;
     overflow-y: auto;
     display: flex;
@@ -198,6 +199,7 @@
     .baguio-timeline-content-box {
         padding: 1.5rem;
         margin-top: 1rem;
+        max-width: 90%;
     }
 
     .baguio-timeline-year {
