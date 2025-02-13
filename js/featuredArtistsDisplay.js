@@ -54,4 +54,14 @@ async function displayFeaturedArtists() {
     }
 }
 
-window.onload = displayFeaturedArtists;
+async function resetFeaturedArtists() {
+    await displayFeaturedArtists();
+}
+
+window.onload = async () => {
+    await displayFeaturedArtists();
+    const resetSearchBtn = document.getElementById('resetSearchBtn');
+    if (resetSearchBtn) {
+        resetSearchBtn.onclick = resetFeaturedArtists;
+    }
+};
