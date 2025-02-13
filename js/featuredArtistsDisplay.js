@@ -26,7 +26,7 @@ async function displayFeaturedArtists() {
 
                 const card = document.createElement('div');
                 card.className = `
-                    rounded-lg p-6 flex flex-col items-center border-gray-700
+                    rounded-lg p-6 flex flex-col items-center border-gray-700 shadow-2xl
                     min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1 border-2 border-black
                 `;
                 
