@@ -33,8 +33,7 @@ async function pickFeaturedArtists() {
 async function searchArtistsInDatabase() {
     const searchInput = document.getElementById("artistSearchInput").value.toLowerCase();
     const artistsRef = collection(db, "users");
-    const q = query(artistsRef, where("displayName", "==", searchInput));
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(artistsRef);
 
     const resultsContainer = document.getElementById("featuredArtistsList");
     resultsContainer.innerHTML = "";
@@ -42,39 +41,40 @@ async function searchArtistsInDatabase() {
 
     const artists = [];
     querySnapshot.forEach((doc) => {
-        artists.push({ id: doc.id, ...doc.data() });
+        const artist = doc.data();
+        if (artist.displayName && artist.displayName.toLowerCase().includes(searchInput)) {
+            artists.push({ id: doc.id, ...artist });
+        }
     });
 
     for (const artist of artists) {
-        if (artist.displayName && artist.displayName.toLowerCase().includes(searchInput)) {
-            const artistDetailsRef = doc(db, "users", artist.id);
-            const artistDetailsSnap = await getDoc(artistDetailsRef);
-            const specialization = artistDetailsSnap.exists() ? artistDetailsSnap.data().artistDetails?.specialization : 'artist';
+        const artistDetailsRef = doc(db, "users", artist.id);
+        const artistDetailsSnap = await getDoc(artistDetailsRef);
+        const specialization = artistDetailsSnap.exists() ? artistDetailsSnap.data().artistDetails?.specialization : 'artist';
 
-            const artistCard = document.createElement('div');
-            artistCard.className = `
-                glass-header rounded-lg p-4 flex flex-col items-center border-2 border-gray-700
-                min-w-[150px] transform transition-transform duration-200 hover:-translate-y-1 relative
-            `;
-            
-            artistCard.innerHTML = `
-                <input type="checkbox" class="absolute top-2 right-2 w-6 h-6">
-                <img src="${artist.photoURL || 'https://via.placeholder.com/150'}" alt="${artist.displayName}" 
-                    class="w-24 h-24 rounded-full object-cover mb-2 border-4 border-black text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                <h3 class="text-xl font-bold mb-1 text-white">${artist.displayName}</h3>
-                <p class="text-center mb-2 text-white text-sm">${specialization}</p>
-                <button class="bg-white text-black py-1 px-4 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2 border-black">
-                    View Profile
-                </button>
-            `;
+        const artistCard = document.createElement('div');
+        artistCard.className = `
+            glass-header rounded-lg p-4 flex flex-col items-center border-2 border-gray-700
+            min-w-[150px] transform transition-transform duration-200 hover:-translate-y-1 relative
+        `;
+        
+        artistCard.innerHTML = `
+            <input type="checkbox" class="absolute top-2 right-2 w-6 h-6">
+            <img src="${artist.photoURL || 'https://via.placeholder.com/150'}" alt="${artist.displayName}" 
+                class="w-24 h-24 rounded-full object-cover mb-2 border-4 border-black text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            <h3 class="text-xl font-bold mb-1 text-white">${artist.displayName}</h3>
+            <p class="text-center mb-2 text-white text-sm">${specialization}</p>
+            <button class="bg-white text-black py-1 px-4 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2 border-black">
+                View Profile
+            </button>
+        `;
 
-            artistCard.dataset.artistId = artist.id;
-            artistCard.querySelector('button').onclick = () => {
-                window.location.href = `./profile/profile.html?id=${artist.id}`;
-            };
+        artistCard.dataset.artistId = artist.id;
+        artistCard.querySelector('button').onclick = () => {
+            window.location.href = `./profile/profile.html?id=${artist.id}`;
+        };
 
-            resultsContainer.appendChild(artistCard);
-        }
+        resultsContainer.appendChild(artistCard);
     }
 }
 
