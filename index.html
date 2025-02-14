@@ -15,11 +15,11 @@
     
 </head>
 <body class="bg-cover">
-    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 headerR transparent-header">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
         </div>
-
+    
         <div class="sm:hidden flex items-center mr-5">
             <button onclick="toggleNav()" class="burger-icon">
                 <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,9 +27,9 @@
                 </svg>
             </button>
         </div>
-
+    
         <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-5">
-            <ul class="text-black text-md flex space-x-5 text-xl font-semibold" style="margin-left: auto; margin-right: auto;">
+            <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
                     <a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a>
                 </li>
@@ -43,21 +43,15 @@
                     <a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')" id="profileLink">Profile</a>
                 </li>
             </ul>
-            <ul class="text-black text-md flex space-x-5 text-xl font-semibold" style="margin-left: 10px;">
+            <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
                     <a href="./admin/dashboard.html">Admin</a>
                 </li>
-                <li class="login-button" style="margin-right: 20px;">
-                    <button onclick="toggleLoginFlyout(event)" 
-                            class="nav-item bg-blue-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-blue-600">
-                        Login
-                    </button>
+                <li class="login-button">
+                    <button onclick="toggleLoginFlyout(event)" class="nav-item bg-blue-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-blue-600">Login</button>
                 </li>
-                <li class="logout-button" style="display: none; margin-right: 20px;">
-                    <button onclick="handleLogout()" 
-                            class="nav-item bg-red-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-red-600">
-                        Logout
-                    </button>
+                <li class="logout-button" style="display: none;">
+                    <button onclick="handleLogout()" class="nav-item bg-red-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-red-600">Logout</button>
                 </li>
             </ul>
         </nav>
@@ -306,6 +300,8 @@
     <script type="module" src="./js/timeline.js"></script>
     <script type="module" src="./js/search.js"></script>
     <script type="module" src="./js/navigation.js"></script>
+    <script src="./script.js" defer></script>
+
 
     <div id="userMenu" class="hidden">
         <div class="glass-header rounded-lg p-4">
@@ -338,21 +334,23 @@
             const flyout = document.getElementById('LoginFlyout');
             flyout.classList.toggle('hidden');
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const header = document.querySelector('header');
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    header.classList.remove('transparent-header');
-                    header.classList.add('solid-header');
-                } else {
-                    header.classList.remove('solid-header');
-                    header.classList.add('transparent-header');
-                }
-            });
-        });
-
     </script>
+
+    <!-- <script>
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('main-header');
+            console.log("Scroll position:", window.scrollY);
+            if (window.scrollY > 0) {
+                header.classList.add('solid-header');
+                header.classList.remove('transparent-header');
+                console.log("Header changed to solid");
+            } else {
+                header.classList.add('transparent-header');
+                header.classList.remove('solid-header');
+                console.log("Header changed to transparent");
+            }
+        });
+    </script> -->
 
     <style>
         .glass-header {
@@ -469,13 +467,14 @@
         }
 
         .transparent-header {
-            background: rgba(255, 255, 255, 0.5);
-            transition: background 0.3s ease;
+            background: rgba(51, 51, 51, 0) !important;
+            transition: background 0.3s ease !important;
         }
 
         .solid-header {
-            background: rgba(255, 255, 255, 1);
-            transition: background 0.3s ease;
+            background: rgba(255, 255, 255, 0.9) !important;
+            transition: background 0.3s ease !important;
+
         }
 
         .spinner .loader {
