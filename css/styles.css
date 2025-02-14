@@ -20,9 +20,8 @@
     
     html, body {
         scroll-behavior: smooth;
-        overflow-x: hidden;
-        overflow-y: scroll !important;
         font-family: Arial, sans-serif;
+        scroll-snap-type: y mandatory; /* Ensure this line is present */
     }
     
     /* ==========================================================================
@@ -34,10 +33,8 @@
         scroll-snap-type: y mandatory; /* Ensure this line is present */
         overflow-x: hidden;
         height: auto !important;
-        overflow-y: auto;
     }
         
-    
     section {
         position: relative;
         z-index: 1;
