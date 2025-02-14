@@ -20,9 +20,8 @@
     
     html, body {
         scroll-behavior: smooth;
-        overflow-x: hidden;
-        overflow-y: scroll !important;
         font-family: Arial, sans-serif;
+        scroll-snap-type: y mandatory; /* Ensure this line is present */
     }
     
     /* ==========================================================================
@@ -31,18 +30,15 @@
     main {
         position: relative;
         z-index: 1;
-        scroll-snap-type: y mandatory;
+        scroll-snap-type: y mandatory; /* Ensure this line is present */
         overflow-x: hidden;
         height: auto !important;
-        /* padding-top: 64px; */ /* Remove this line */
-        overflow-y: auto;
     }
         
-    
     section {
         position: relative;
         z-index: 1;
-        scroll-snap-align: start;
+        scroll-snap-align: start; /* Ensure this line is present */
         height: 100vh;
         min-height: 100vh;
         display: flex;
@@ -127,7 +123,7 @@
         ========================================================================== */
     #landingPage {
         width: 100%;
-        height: 100dvh;
+        height: 100vh; /* Ensure this line is present */
         background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
         background-attachment: fixed;
         background-size: cover;
