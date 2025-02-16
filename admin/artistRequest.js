@@ -31,6 +31,7 @@ async function loadPendingArtistRequests() {
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const registeredAt = data.registeredAt ? new Date(data.registeredAt.seconds * 1000) : new Date();
+                const isGoogleSignup = data.providerData && data.providerData.some(provider => provider.providerId === 'google.com');
                 pendingHTML += `
                     <tr class="hover:bg-gray-700">
                         <td class="px-6 py-4">${data.name || 'N/A'}</td>
@@ -39,6 +40,7 @@ async function loadPendingArtistRequests() {
                         <td class="px-6 py-4">${data.address || 'N/A'}</td>
                         <td class="px-6 py-4">${registeredAt.toLocaleDateString()}</td>
                         <td class="px-6 py-4">
+                            ${isGoogleSignup ? '<span class="text-green-500">Google Signup</span>' : ''}
                             <button onclick="approveArtist('${doc.id}')" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2">
                                 Approve
                             </button>
@@ -87,4 +89,4 @@ async function rejectArtist(userId) {
 }
 
 // Call the function to load pending artist requests when the page loads
-document.addEventListener('DOMContentLoaded', loadPendingArtistRequests); 
+document.addEventListener('DOMContentLoaded', loadPendingArtistRequests);
