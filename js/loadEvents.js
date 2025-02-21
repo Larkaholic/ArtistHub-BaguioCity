@@ -64,7 +64,7 @@ async function loadEvents() {
                 `;
             } else {
                 eventsContainer.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-y-auto" style="max-height: 100%;">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" style="max-height: 100%;">
                         ${updatedNonFeaturedEvents.map(event => `
                             <div class="artist-card border-2 border-black rounded-lg p-4 mb-4 event-card"
                             style="cursor: pointer;" data-id="${event.id}">
