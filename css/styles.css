@@ -222,7 +222,8 @@
     }
 
     .important-events {
-        margin-top: -100px;
+        margin-top: -50px;
+        overflow-x: auto;
     }
 
     @media (max-width: 640px) {
