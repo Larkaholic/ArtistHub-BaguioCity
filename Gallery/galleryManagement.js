@@ -109,9 +109,11 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
     const file = document.getElementById('imageFile')?.files[0];
     const title = document.getElementById('title')?.value;
     const description = document.getElementById('description')?.value;
-    const price = parseFloat(document.getElementById('price')?.value);
+    // Store price with two decimal places
+    const rawPrice = document.getElementById('price')?.value || 0;
+    const price = parseFloat(rawPrice).toFixed(2);
 
-    if (!file || !title || !description || isNaN(price)) {
+    if (!file || !title || !description || isNaN(parseFloat(price))) {
         alert('Please fill in all fields, including a valid price.');
         return;
     }
@@ -146,7 +148,7 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
             imageId: imageId,
             title,
             description,
-            price,
+            price: parseFloat(price), // Store as number but formatted
             imageUrl: cloudinaryData.secure_url,
             uploadDate: serverTimestamp(),
             isPublic: true
@@ -293,10 +295,10 @@ function createImageCard(docId, data) {
             <div class="p-4">
                 <h3 class="text-xl font-bold mb-2 text-black">${data.title}</h3>
                 <p class="text-sm mb-2 text-white">${data.description || ''}</p>
-                <p class="text-lg font-semibold mb-4 text-white">₱${data.price || '0.00'}</p>
+                <p class="text-lg font-semibold mb-4 text-white">₱${parseFloat(data.price || 0).toFixed(2)}</p>
                 <div class="art-gallery-item-actions">
                     ${auth.currentUser ? 
-                        `<button onclick="window.addToCart('${docId}', '${data.title}', ${data.price || 0})" 
+                        `<button onclick="window.addToCart('${docId}', '${data.title}', ${parseFloat(data.price || 0).toFixed(2)})" 
                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full">
                             Add to Cart
                         </button>` : ''

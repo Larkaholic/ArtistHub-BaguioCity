@@ -68,7 +68,9 @@ window.addToCart = async function(artworkId, title, price) {
             return;
         }
         
-        const item = { artworkId, title, price };
+        // Ensure price has two decimal places
+        const formattedPrice = parseFloat(price).toFixed(2);
+        const item = { artworkId, title, price: formattedPrice };
         cart.push(item);
         
         // Create a document reference with a custom ID (user's UID)
@@ -317,7 +319,7 @@ function updateCartUI() {
             itemElement.innerHTML = `
                 <div>
                     <h3 class="font-semibold">${item.title}</h3>
-                    <p class="text-sm">₱${item.price.toFixed(2)}</p>
+                    <p class="text-sm">₱${parseFloat(item.price).toFixed(2)}</p>
                 </div>
                 <button onclick="window.removeFromCart(${index})" class="text-red-500 hover:text-red-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -326,7 +328,7 @@ function updateCartUI() {
                 </button>
             `;
             cartItems.appendChild(itemElement);
-            total += item.price;
+            total += parseFloat(item.price);
         });
         
         if (totalItems) totalItems.textContent = cart.length;
