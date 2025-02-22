@@ -221,7 +221,20 @@
         </section>
         
         <!-- through the years -->
-        <section class="baguio-timeline-section">
+        <section class="baguio-timeline-section my-8">
+            <button class="timeline-search-btn" onclick="toggleTimelineSearch()">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="search-input-container">
+                <input type="text" 
+                       id="timelineSearch" 
+                       placeholder="Search through history..." 
+                       class="timeline-search-input">
+                <button class="search-close-btn" onclick="toggleTimelineSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
             <div class="baguio-timeline-backgrounds"></div>
             <div class="baguio-timeline-content-wrapper">
                 <div class="baguio-timeline-navigation"></div>
@@ -501,7 +514,211 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .search-bar-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-bar-container input {
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar-container input:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .collapsible-search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .timeline-search-btn {
+            width: 45px;
+            height: 45px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 2;
+            border: none;
+        }
+
+        .timeline-search-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .search-input-container {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            border-radius: 25px;
+            background: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-container.expanded {
+            width: 100%;
+            opacity: 1;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-search-input {
+            width: calc(100% - 90px);
+            height: 100%;
+            padding: 0 45px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .search-close-btn {
+            width: 45px;
+            height: 45px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-close-btn:hover {
+            color: #333;
+        }
+
+        .baguio-timeline-section {
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .timeline-search-btn {
+            position: absolute; /* Changed from fixed */
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-search-btn:hover {
+            background: #45a049;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-input-container {
+            position: absolute; /* Changed from fixed */
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .search-input-container.expanded {
+            width: 300px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .timeline-search-input {
+            width: calc(100% - 50px);
+            height: 100%;
+            padding: 0 20px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .search-close-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        .search-close-btn:hover {
+            color: #333;
+        }
+
+        @media (max-width: 640px) {
+            .search-input-container.expanded {
+                width: calc(100% - 40px);
+                right: 20px;
+            }
+        }
     </style>
+    <script>
+        function toggleTimelineSearch() {
+            const searchContainer = document.querySelector('.search-input-container');
+            const searchInput = document.getElementById('timelineSearch');
+            const searchBtn = document.querySelector('.timeline-search-btn');
+            
+            searchContainer.classList.toggle('expanded');
+            
+            if (searchContainer.classList.contains('expanded')) {
+                searchBtn.style.opacity = '0';
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            } else {
+                searchBtn.style.opacity = '1';
+                searchInput.value = '';
+                // Trigger search reset
+                if (window.filterTimelineEvents) {
+                    window.filterTimelineEvents('');
+                }
+            }
+        }
+    </script>
     <script type="module" src="./js/loadEvents.js"></script>
 </body>
 </html>
