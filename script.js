@@ -57,11 +57,7 @@
 //         });
 //     });
 // });
-console.log("Script is running!");
-
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM fully loaded and parsed");
-
     const header = document.getElementById('main-header');
     
     if (!header) {
@@ -72,8 +68,6 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("Header found:", header);
 
     window.addEventListener('scroll', function() {
-        console.log("Scroll event detected. ScrollY:", window.scrollY);
-
         if (window.scrollY > 0) {
             header.classList.add('solid-header');
             header.classList.remove('transparent-header');

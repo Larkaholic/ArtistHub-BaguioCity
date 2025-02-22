@@ -190,21 +190,30 @@
         </section>
     
         <!-- artists section -->
-        <section id="featuredArtistsSection" class="flex flex-col gap-4">
+        <section id="featuredArtistsSection" class="flex flex-col gap-4 p-4">
             <!-- title container -->
-            <div class="header flex rounded-lg p-1 mt-10 w-full text-center justify-between items-center">
-                <h2 class="text-3xl font-bold text-black mx-auto">FEATURED ARTISTS</h2>
+            <div class="header text-center py-1 mt-10 w-full flex justify-center items-center">
+                <h2 class="text-3xl font-bold text-black">FEATURED ARTISTS</h2>
             </div>
 
-            <div class="search-container border border-black rounded-lg ml-auto w-fit">
-                <input type="text" id="searchInput" placeholder="Search Artists..." class="p-2 border rounded rounded-lg" />
-                <button id="searchBtn" class="search-button p-2 bg-green-900 text-white rounded rounded-lg">Search</button>
-                <button id="resetSearchBtn" class="reset-button px-4 py-2 bg-red-500 text-white rounded rounded-lg">x</button>
+            <div class="relative w-full flex justify-end pr-5">
+                <button class="artist-search-btn border-2 border-black" onclick="toggleArtistSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="artist-search-container border-2 border-black">
+                    <input type="text" 
+                           id="searchInput" 
+                           placeholder="Search artists..." 
+                           class="artist-search-input">
+                    <button class="artist-close-btn" onclick="toggleArtistSearch()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
                        
             <!-- artist grid container -->
-            <div class="gridContainer rounded-lg p-2">
-                <div id="featuredArtistsGrid" class="artist-grid grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="rounded-lg p-2">
+                <div id="featuredArtistsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- artists will dynamically load here -->
                 </div>
             </div>
@@ -221,7 +230,20 @@
         </section>
         
         <!-- through the years -->
-        <section class="baguio-timeline-section">
+        <section class="baguio-timeline-section my-8">
+            <button class="timeline-search-btn border-2 border-green-600" onclick="toggleTimelineSearch()">
+                <i class="fas fa-search"></i>
+            </button>
+            <div class="search-input-container">
+                <input type="text" 
+                       id="timelineSearch" 
+                       placeholder="Search through history..." 
+                       class="timeline-search-input border-2 border-green-600">
+                <button class="search-close-btn" onclick="toggleTimelineSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
             <div class="baguio-timeline-backgrounds"></div>
             <div class="baguio-timeline-content-wrapper">
                 <div class="baguio-timeline-navigation"></div>
@@ -306,8 +328,8 @@
     <script type="module" src="./js/ggl.js"></script>
     <script type="module" src="./js/firebase-config.js"></script>
     <script type="module" src="./js/auth.js"></script>
-    <script type="module" src="./js/featuredArtistsDisplay.js"></script>
-    <!-- <script type="module" src="./js/loadArtists.js"></script> -->
+    <!-- <script type="module" src="./js/featuredArtistsDisplay.js"></script> --> <!-- Remove this line -->
+    <script type="module" src="./js/loadArtists.js"></script>
     <script type="module" src="./js/timeline.js"></script>
     <script type="module" src="./js/search.js"></script>
     <script type="module" src="./js/navigation.js"></script>
@@ -346,22 +368,6 @@
             flyout.classList.toggle('hidden');
         }
     </script>
-
-    <!-- <script>
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('main-header');
-            console.log("Scroll position:", window.scrollY);
-            if (window.scrollY > 0) {
-                header.classList.add('solid-header');
-                header.classList.remove('transparent-header');
-                console.log("Header changed to solid");
-            } else {
-                header.classList.add('transparent-header');
-                header.classList.remove('solid-header');
-                console.log("Header changed to transparent");
-            }
-        });
-    </script> -->
 
     <style>
         .glass-header {
@@ -501,7 +507,364 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .search-bar-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-bar-container input {
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar-container input:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .collapsible-search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .timeline-search-btn {
+            width: 45px;
+            height: 45px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 2;
+            border: none;
+        }
+
+        .timeline-search-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .search-input-container {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            border-radius: 25px;
+            background: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input-container.expanded {
+            width: 100%;
+            opacity: 1;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-search-input {
+            width: calc(100% - 90px);
+            height: 100%;
+            padding: 0 45px;
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .search-close-btn {
+            width: 45px;
+            height: 45px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-close-btn:hover {
+            color: #333;
+        }
+
+        .baguio-timeline-section {
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .timeline-search-btn {
+            position: absolute; /* Changed from fixed */
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-search-btn:hover {
+            background: #45a049;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-input-container {
+            position: absolute; /* Changed from fixed */
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .search-input-container.expanded {
+            width: 300px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .timeline-search-input {
+            width: calc(100% - 50px);
+            height: 100%;
+            padding: 0 20px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .search-close-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        .search-close-btn:hover {
+            color: #333;
+        }
+
+        @media (max-width: 640px) {
+            .search-input-container.expanded {
+                width: calc(100% - 40px);
+                right: 20px;
+            }
+        }
+
+        .artist-search-btn {
+            position: absolute;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .artist-search-btn:hover {
+            background: #45a049;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .artist-search-container {
+            position: absolute;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .artist-search-container.expanded {
+            width: 300px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .artist-search-input {
+            width: calc(100% - 50px);
+            height: 100%;
+            padding: 0 20px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .artist-close-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s ease;
+        }
+
+        .artist-close-btn:hover {
+            color: #333;
+        }
+
+        @media (max-width: 640px) {
+            .artist-search-container.expanded {
+                width: calc(100% - 40px);
+                right: 20px;
+            }
+        }
+
+        #featuredArtistsSection {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .section-header {
+            text-align: center;
+            padding: 0.25rem;
+            margin-top: 2.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h2 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: black;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 20px;
+        }
+
+        .grid-container {
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .artist-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .artist-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
     </style>
+    <script>
+        function toggleTimelineSearch() {
+            const searchContainer = document.querySelector('.search-input-container');
+            const searchInput = document.getElementById('timelineSearch');
+            const searchBtn = document.querySelector('.timeline-search-btn');
+            
+            searchContainer.classList.toggle('expanded');
+            
+            if (searchContainer.classList.contains('expanded')) {
+                searchBtn.style.opacity = '0';
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            } else {
+                searchBtn.style.opacity = '1';
+                searchInput.value = '';
+                // Trigger search reset
+                if (window.filterTimelineEvents) {
+                    window.filterTimelineEvents('');
+                }
+            }
+        }
+
+        function toggleArtistSearch() {
+            const searchContainer = document.querySelector('.artist-search-container');
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.querySelector('.artist-search-btn');
+            
+            searchContainer.classList.toggle('expanded');
+            
+            if (searchContainer.classList.contains('expanded')) {
+                searchBtn.style.opacity = '0';
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300);
+            } else {
+                searchBtn.style.opacity = '1';
+                searchInput.value = '';
+                // Reset search results if needed
+                if (window.resetArtistSearch) {
+                    window.resetArtistSearch();
+                }
+            }
+        }
+    </script>
     <script type="module" src="./js/loadEvents.js"></script>
 </body>
 </html>

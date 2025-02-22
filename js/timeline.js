@@ -4,6 +4,7 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/f
 let backgrounds, yearElement, titleElement, detailsElement, navigation;
 let timelineData = [];
 let backgroundIntervals = {};
+let searchTimeout = null;
 
 async function fetchTimelineData() {
     try {
@@ -76,6 +77,9 @@ async function initializeTimeline() {
             button.addEventListener('click', () => updateContent(data));
             navigation.appendChild(button);
         });
+
+        // Setup search functionality
+        setupTimelineSearch();
 
         if (timelineData.length > 0) {
             updateContent(timelineData[0]);
@@ -163,6 +167,70 @@ function startBackgroundCarousel(year, backgrounds) {
             }
         });
     }, 5000); // Change background every 5 seconds
+}
+
+function setupTimelineSearch() {
+    const searchInput = document.getElementById('timelineSearch');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', (e) => {
+        // Clear previous timeout
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        // Set new timeout to debounce search
+        searchTimeout = setTimeout(() => {
+            const searchTerm = e.target.value.toLowerCase();
+            filterTimelineEvents(searchTerm);
+        }, 300);
+    });
+}
+
+function filterTimelineEvents(searchTerm) {
+    const navigationButtons = document.querySelectorAll('.baguio-timeline-nav-btn');
+    
+    if (!searchTerm) {
+        // Show all events if search is empty
+        navigationButtons.forEach(btn => {
+            btn.style.display = 'block';
+        });
+        // Show first event
+        if (timelineData.length > 0) {
+            updateContent(timelineData[0]);
+        }
+        return;
+    }
+
+    let firstMatch = null;
+
+    timelineData.forEach(data => {
+        const year = data.year.toString();
+        const title = data.title.toLowerCase();
+        const details = data.details.toLowerCase();
+        const matches = year.includes(searchTerm) || 
+                       title.includes(searchTerm) || 
+                       details.includes(searchTerm);
+
+        // Find corresponding button
+        const button = Array.from(navigationButtons).find(
+            btn => btn.dataset.year === year
+        );
+
+        if (button) {
+            button.style.display = matches ? 'block' : 'none';
+        }
+
+        // Store first matching event for display
+        if (matches && !firstMatch) {
+            firstMatch = data;
+        }
+    });
+
+    // Show first matching event
+    if (firstMatch) {
+        updateContent(firstMatch);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initializeTimeline);
