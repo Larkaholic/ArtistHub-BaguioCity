@@ -25,7 +25,7 @@ window.toggleCart = function() {
 function showAddedToCartModal(item) {
     const modalHTML = `
         <div id="addedToCartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div class="glass-header rounded-lg p-6 max-w-sm mx-auto">
+            <div class="rounded-lg p-6 max-w-sm mx-auto">
                 <div class="text-center">
                     <h3 class="text-lg font-bold mb-2">Item Added to Cart!</h3>
                     <div class="mb-4">
@@ -154,7 +154,7 @@ function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') 
     console.log('Showing email preview for:', artworkData);
     const emailPreviewHTML = `
         <div id="emailPreviewModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div class="glass-header rounded-lg p-6 max-w-2xl w-full mx-4">
+            <div class="rounded-lg p-6 max-w-2xl w-full mx-4">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-bold">Email Preview</h2>
                     <button onclick="window.closeEmailPreview()" class="text-gray-500 hover:text-gray-700">
@@ -315,7 +315,7 @@ function updateCartUI() {
         
         cart.forEach((item, index) => {
             const itemElement = document.createElement('div');
-            itemElement.className = 'flex justify-between items-center p-2 bg-white bg-opacity-10 rounded-lg';
+            itemElement.className = 'flex justify-between items-center p-2 bg-white bg-opacity-10 rounded-lg border-2 border-gray-800';
             itemElement.innerHTML = `
                 <div>
                     <h3 class="font-semibold">${item.title}</h3>
@@ -358,24 +358,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create cart modal
     const cartModalHTML = `
         <div id="cartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
-            <div class="glass-header items-center rounded-lg w-96 mx-10 p-6">
+            <div class="items-center rounded-lg w-96 mx-10 p-6 bg-white border-2 border-black">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-bold">Shopping Cart</h2>
-                    <button onclick="window.toggleCart()" class="text-gray-500 hover:text-gray-700">
+                    <button onclick="window.toggleCart()" class="text-black hover:text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
-                <div id="cartItems" class="space-y-4 max-h-96 overflow-y-auto">
+                <div id="cartItems" class="space-y-4 max-h-96 overflow-y-auto text-black">
                     <!-- Cart items will be dynamically added here -->
                 </div>
-                <div class="mt-4 flex justify-between items-center">
+                <div class="mt-4 flex justify-between items-center text-black">
                     <div>
                         <p>Total Items: <span id="totalItems">0</span></p>
                         <p>Total Price: ₱<span id="totalPrice">0.00</span></p>
                     </div>
-                    <button onclick="window.checkout()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                    <button onclick="window.checkout()" class="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600">
                         Checkout
                     </button>
                 </div>

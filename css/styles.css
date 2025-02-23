@@ -208,14 +208,12 @@
     .EvntContainer {
         height: auto !important;
         min-height: fit-content;
-        overflow: visible !important;
         padding: 1rem;
     }
     
     #upcomingEventsList {
         width: 100%;
         height: auto !important;
-        overflow: visible !important;
         display: flex;
         flex-direction: column;
         gap: 1rem;

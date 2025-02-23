@@ -212,7 +212,7 @@
             </div>
                        
             <!-- artist grid container -->
-            <div class="rounded-lg p-2">
+            <div class="rounded-lg p-2 overflow-y-auto" style="max-height: 100vh;">
                 <div id="featuredArtistsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- artists will dynamically load here -->
                 </div>
@@ -220,11 +220,11 @@
         </section>
 
         <!-- Events Seciton-->
-        <section id="events" class="EvntPage w-full min-h-screen p-6">
+        <section id="events" class="EvntPage max-h-screen w-full min-h-screen p-6 ">
             <div class="header rounded-lg p-2 mt-10 w-full text-center mb-4">
                 <h2 class="text-3xl font-bold text-black">UPCOMING EVENTS</h2>
             </div>
-            <div class="EvntContainer max-w-full mx-auto">
+            <div class="EvntContainer max-w-full mx-auto overflow-y-auto" style="max-height: 100vh;">
                 <!-- events will load here -->
             </div>
         </section>
