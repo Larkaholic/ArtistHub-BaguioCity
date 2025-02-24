@@ -9,13 +9,9 @@ const auth = getAuth();
 
 // Toggle cart visibility
 window.toggleCart = function() {
-    console.log('Toggle cart called');
     const cartModal = document.getElementById('cartModal');
-    console.log('Cart modal element:', cartModal);
     if (cartModal) {
-        console.log('Current hidden state:', cartModal.classList.contains('hidden'));
         cartModal.classList.toggle('hidden');
-        console.log('New hidden state:', cartModal.classList.contains('hidden'));
     } else {
         console.error('Cart modal not found');
     }

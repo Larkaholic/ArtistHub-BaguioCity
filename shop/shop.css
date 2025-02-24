@@ -1,0 +1,204 @@
+/* ==========================================================================
+    1. IMPORTS AND FONTS
+    ========================================================================== */
+    @import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap');
+    @import url('../css/styles.css');
+
+    .rubik-dirt-regular {
+        font-family: "Rubik Dirt", system-ui;
+        font-weight: 400;
+        font-style: italic;
+    }
+    
+    /* ==========================================================================
+        2. RESET AND BASE STYLES
+        ========================================================================== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    html, body {
+        scroll-behavior: smooth;
+        font-family: Arial, sans-serif;
+        scroll-snap-type: y mandatory; 
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        min-height: 100vh;
+        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
+    }
+    
+    /* ==========================================================================
+        3. LAYOUT COMPONENTS
+        ========================================================================== */
+    main {
+        position: relative;
+        z-index: 1;
+        scroll-snap-type: y mandatory; 
+        overflow-x: hidden;
+        height: auto !important;
+    }
+        
+    section {
+        position: relative;
+        z-index: 1;
+        scroll-snap-align: start; 
+        height: 100vh;
+        min-height: 100vh;
+        display: flex;
+        padding: 20px;
+    }
+    
+    /* ==========================================================================
+        4. HEADER AND NAVIGATION
+        ========================================================================== */
+        .header {
+            background: linear-gradient(90deg, rgba(181,181,181,0.9668) 5%, rgba(232,232,232,1) 100%);
+            color: white;
+            padding: 10px 0;
+            box-shadow: 0 4px 2px -2px gray;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+        
+        .headerR {
+            background: linear-gradient(90deg, rgba(232,232,232,1) 0%, rgba(181,181,181,0.9668) 97%);
+        }
+        
+        .nav-item button,
+        .login-button button,
+        nav ul li,
+        nav ul li button,
+        .nav-item,
+        .nav-item button {
+            font-weight: 600 !important;
+        }
+        
+        /* Glass Effect Styles */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.01);
+            z-index: 1000;
+        }
+        
+        .glass-header2 {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.01);
+        }
+
+        nav.hidden.sm\\:flex.sm\\:items-center.sm\\:space-x-5.mr-1 {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        nav ul li {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .login-button {
+            margin-right: 10px; /* Adjusted margin */
+        }
+        
+        .burger-icon {
+            cursor: pointer;
+        }
+        
+        .burger-icon svg {
+            fill: white;
+        }
+
+/* Shop items grid */
+#galleryContainer {
+    display: grid;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Product cards */
+.art-gallery-item {
+    transition: transform 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.art-gallery-item:hover {
+    transform: translateY(-5px);
+}
+
+.art-gallery-item-content {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Search and sort controls */
+#searchArtworks, #sortArtworks {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#searchArtworks:focus,
+#sortArtworks:focus {
+    border-color: #48bb78;
+    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
+}
+
+/* Cart modal */
+#cartModal {
+    backdrop-filter: blur(8px);
+}
+
+.cart-item {
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.cart-item:hover {
+    transform: translateX(5px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #galleryContainer {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) {
+    #galleryContainer {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Loading animation */
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .5;
+    }
+}

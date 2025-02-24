@@ -298,7 +298,7 @@ function createImageCard(docId, data) {
                 <p class="text-lg font-semibold mb-4 text-white">₱${parseFloat(data.price || 0).toFixed(2)}</p>
                 <div class="art-gallery-item-actions">
                     ${auth.currentUser ? 
-                        `<button onclick="window.addToCart('${docId}', '${data.title}', ${parseFloat(data.price || 0).toFixed(2)})" 
+                        `<button onclick="window.addToCart('${docId}', '${data.title}', ${parseFloat(data.price)})" 
                             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full">
                             Add to Cart
                         </button>` : ''
@@ -396,17 +396,12 @@ async function updateUIForUserRole(user) {
 
     // Check if user is admin
     const userIsAdmin = await isAdmin(user.email);
-    console.log('User is admin:', userIsAdmin);
     
     // Check if user is owner
     const userIsOwner = artistId === user.uid;
-    console.log('Current user:', user.email);
-    console.log('Artist ID:', artistId);
-    console.log('Is owner:', userIsOwner);
 
     // Show cart for regular users (not admin and not artist)
     if (!userIsAdmin && !userIsOwner) {
-        console.log('Showing cart for regular user');
         if (cartNav) cartNav.classList.remove('hidden');
         if (cartNavMobile) cartNavMobile.classList.remove('hidden');
     }
@@ -420,7 +415,6 @@ async function updateUIForUserRole(user) {
             uploadForm.classList.remove('hidden'); // Show the upload form
         }
     } else {
-        console.log('Hiding upload controls for non-owners.');
         // Ensure upload form stays hidden for non-owners
         if (uploadForm) uploadForm.classList.add('hidden');
     }
@@ -471,26 +465,43 @@ window.addToCart = async function(artworkId, title, price) {
         return;
     }
     
-    const item = { artworkId, title, price };
+    // Ensure price is a number
+    const numericPrice = parseFloat(price);
+    if (isNaN(numericPrice)) {
+        console.error('Invalid price:', price);
+        alert('Invalid price. Please try again.');
+        return;
+    }
+    
+    const item = { 
+        artworkId, 
+        title, 
+        price: numericPrice // Store as number
+    };
     cart.push(item);
     
     const cartRef = collection(db, 'carts');
     const q = query(cartRef, where('userId', '==', user.uid));
     const querySnapshot = await getDocs(q);
     
-    if (querySnapshot.empty) {
-        await addDoc(cartRef, {
-            userId: user.uid,
-            items: cart
-        });
-    } else {
-        const cartDoc = querySnapshot.docs[0];
-        await updateDoc(doc(db, 'carts', cartDoc.id), {
-            items: cart
-        });
+    try {
+        if (querySnapshot.empty) {
+            await addDoc(cartRef, {
+                userId: user.uid,
+                items: cart
+            });
+        } else {
+            const cartDoc = querySnapshot.docs[0];
+            await updateDoc(doc(db, 'carts', cartDoc.id), {
+                items: cart
+            });
+        }
+        
+        updateCartUI();
+    } catch (error) {
+        console.error('Error updating cart:', error);
+        alert('Failed to add item to cart. Please try again.');
     }
-    
-    updateCartUI();
 }
 
 window.removeFromCart = async function(index) {
@@ -538,12 +549,15 @@ function updateCartUI() {
         let total = 0;
         
         cart.forEach((item, index) => {
+            // Ensure price is a number
+            const itemPrice = parseFloat(item.price) || 0;
+            
             const itemElement = document.createElement('div');
             itemElement.className = 'flex justify-between items-center p-2 bg-white bg-opacity-10 rounded-lg';
             itemElement.innerHTML = `
                 <div>
                     <h3 class="font-semibold">${item.title}</h3>
-                    <p class="text-sm">₱${item.price.toFixed(2)}</p>
+                    <p class="text-sm">₱${itemPrice.toFixed(2)}</p>
                 </div>
                 <button onclick="window.removeFromCart(${index})" class="text-red-500 hover:text-red-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -552,7 +566,7 @@ function updateCartUI() {
                 </button>
             `;
             cartItems.appendChild(itemElement);
-            total += item.price;
+            total += itemPrice;
         });
         
         if (totalItems) totalItems.textContent = cart.length;

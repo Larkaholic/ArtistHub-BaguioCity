@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Artist Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="shop.css">
+    <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
+</head>
+<body class="bg-cover">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
+        <div class="flex w-24 ml-16">
+            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
+        </div>
+    
+        <div class="sm:hidden flex items-center mr-5">
+            <button onclick="toggleNav()" class="burger-icon">
+                <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    
+        <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-5">
+            <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./index.html#events')">Events</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./shop/shop.html')">Shop</a>
+                </li>
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')" id="profileLink">Profile</a>
+                </li>
+            </ul>
+            <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
+                    <a href="./admin/dashboard.html">Admin</a>
+                </li>
+                <li class="login-button">
+                    <button onclick="toggleLoginFlyout(event)" class="nav-item bg-blue-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-blue-600">Login</button>
+                </li>
+                <li class="logout-button" style="display: none;">
+                    <button onclick="handleLogout()" class="nav-item bg-red-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-red-600">Logout</button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+        <div class="glass-header h-full p-6">
+            <nav>
+                <ul class="flex flex-col space-y-4">
+                    <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')" id="profileLink">Profile</a></li>
+                    <li id="cartNavMobile" class="hidden">
+                        <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Cart (<span id="cartCountMobile">0</span>)
+                        </a>
+                    </li>
+                    <li class="login-button">
+                        <button onclick="toggleLoginFlyout(event)">Login</button>
+                    </li>
+                    <li class="logout-button" style="display: none;">
+                        <button onclick="handleLogout()">Logout</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+        <div id="loginForm" class="glass-header2 items-center rounded-lg w-96 mx-10">
+            <!-- ...existing login form code... -->
+        </div>
+        <div id="registerForm" class="glass-header2 items-center rounded-lg w-96 mx-10 hidden">
+            <!-- ...existing register form code... -->
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 pt-20">
+        <h1 class="text-3xl font-bold text-center mb-8">Art Gallery Shop</h1>
+        
+        <div class="mb-8">
+            <input type="text" 
+                   id="searchArtworks" 
+                   placeholder="Search artworks..." 
+                   class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+
+        <div class="mb-8 flex justify-end">
+            <select id="sortArtworks" class="p-2 rounded-lg border border-gray-300">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="priceAsc">Price: Low to High</option>
+                <option value="priceDesc">Price: High to Low</option>
+            </select>
+        </div>
+
+        <div id="galleryContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Artworks will be loaded here -->
+        </div>
+    </main>
+
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="glass-header2 p-4 max-w-md mx-auto mt-20 rounded-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Shopping Cart</h2>
+                <button onclick="window.toggleCart()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="cartItems" class="max-h-96 overflow-y-auto">
+                <!-- Cart items will be loaded here -->
+            </div>
+            <div class="mt-4 border-t pt-4">
+                <p>Total Items: <span id="totalItems">0</span></p>
+                <p>Total Price: ₱<span id="totalPrice">0.00</span></p>
+                <button onclick="window.checkout()" class="bg-green-500 text-white px-4 py-2 rounded mt-4 w-full hover:bg-green-600">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../js/navigation.js"></script>
+    <script type="module" src="shop.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            AOS.init({
+                duration: 1500,
+                once: true,
+            });
+        });
+
+        function toggleLoginFlyout(event) {
+            if (event) event.preventDefault();
+            const flyout = document.getElementById('LoginFlyout');
+            flyout.classList.toggle('hidden');
+        }
+
+        function toggleForms() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            loginForm.classList.toggle('hidden');
+            registerForm.classList.toggle('hidden');
+        }
+
+        document.getElementById('searchArtworks')?.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const artworks = document.querySelectorAll('#galleryContainer .art-gallery-item');
+            
+            artworks.forEach(artwork => {
+                const title = artwork.querySelector('h3').textContent.toLowerCase();
+                const description = artwork.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    artwork.style.display = '';
+                } else {
+                    artwork.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('sortArtworks')?.addEventListener('change', (e) => {
+            const sortType = e.target.value;
+            const container = document.getElementById('galleryContainer');
+            const artworks = Array.from(container.children);
+
+            artworks.sort((a, b) => {
+                switch(sortType) {
+                    case 'priceAsc':
+                        return getPrice(a) - getPrice(b);
+                    case 'priceDesc':
+                        return getPrice(b) - getPrice(a);
+                    case 'newest':
+                        return new Date(b.dataset.date) - new Date(a.dataset.date);
+                    case 'oldest':
+                        return new Date(a.dataset.date) - new Date(b.dataset.date);
+                }
+            });
+
+            container.innerHTML = '';
+            artworks.forEach(artwork => container.appendChild(artwork));
+        });
+
+        function getPrice(artwork) {
+            const priceText = artwork.querySelector('.text-green-600').textContent;
+            return parseFloat(priceText.replace('₱', ''));
+        }
+    </script>
+</body>
+</html>
