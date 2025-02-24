@@ -484,3 +484,12 @@ auth.onAuthStateChanged((user) => {
     updateUIForUser(user);
 });
 
+// Update the profile navigation logic
+export function navigateToProfile(userId) {
+    if (userId) {
+        window.location.href = `/profile/profile.html?id=${userId}`;
+    } else {
+        console.error('No user ID provided for profile navigation');
+    }
+}
+

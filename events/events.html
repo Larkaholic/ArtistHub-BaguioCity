@@ -35,11 +35,11 @@
                     <li class="nav-item hover:bg-gray-400 p-1 rounded-lg">
                         <a href="javascript:void(0)" onclick="navToEvent('index.html#events')">Events</a>
                     </li>
-                    <li class="nav-item hover:bg-gray-400 p-1 rounded-lg">
-                        <a href="javascript:void(0)" onclick="navToEvent('Gallery/gallery.html')">Gallery</a>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
+                        <a href="javascript:void(0)" onclick="navToEvent('../shop/shop.html')">Shop</a>
                     </li>
                     <li class="nav-item hover:bg-gray-400 p-1 rounded-lg">
-                        <a href="javascript:void(0)" onclick="navToEvent('profile/profile.html')">Profile</a>
+                        <a href="javascript:void(0)" id="profileNavLink" onclick="handleProfileClick()" class="text-black">Profile</a>
                     </li>
                     <li class="login-button">
                         <button onclick="toggleLoginFlyout(event)" 
@@ -64,7 +64,7 @@
                     <ul class="flex flex-col space-y-4">
                         <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a></li>
-                        <li><a href="javascript:void(0)" onclick="navToEvent('../Gallery/gallery.html')">Gallery</a></li>
+                        <li><a href="javascript:void(0)" onclick="navToEvent('../Gallery/gallery.html')"href="javascript:void(0)" onclick="navToEvent('profile/profile.html')">Shop</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')">Profile</a></li>
                         <li class="login-button">
                             <button onclick="toggleLoginFlyout(event)">Login</button>
@@ -229,6 +229,33 @@
                 : '';   
                 window.location.href = baseUrl + '/' + path;
             }
+        </script>
+        <script type="module">
+            // Import auth at the top level of module script
+            import { auth } from '../js/firebase-config.js';
+
+            // Make handleProfileClick available globally
+            window.handleProfileClick = function() {
+                if (auth.currentUser) {
+                    window.location.href = `../profile/profile.html?id=${auth.currentUser.uid}`;
+                } else {
+                    toggleLoginFlyout();
+                }
+            }
+
+            // Update mobile menu profile link
+            document.addEventListener('DOMContentLoaded', function() {
+                const mobileProfileLink = document.getElementById('profileLink');
+                if (mobileProfileLink) {
+                    mobileProfileLink.onclick = () => {
+                        if (auth.currentUser) {
+                            window.location.href = `../profile/profile.html?id=${auth.currentUser.uid}`;
+                        } else {
+                            toggleLoginFlyout();
+                        }
+                    };
+                }
+            });
         </script>
     </body>
 </html>
