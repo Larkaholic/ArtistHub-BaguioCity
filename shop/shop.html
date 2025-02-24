@@ -39,7 +39,7 @@
                     <a href="javascript:void(0)" onclick="navToEvent('./shop/shop.html')">Shop</a>
                 </li>
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')" id="profileLink">Profile</a>
+                    <a href="javascript:void(0)" id="profileNavLink" onclick="handleProfileClick()" class="text-black">Profile</a>
                 </li>
             </ul>
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
@@ -148,6 +148,33 @@
     <script type="module" src="../js/auth.js"></script>
     <script type="module" src="../js/navigation.js"></script>
     <script type="module" src="shop.js"></script>
+    <script type="module">
+        // Import auth at the top level of module script
+        import { auth } from '../js/firebase-config.js';
+
+        // Make handleProfileClick available globally
+        window.handleProfileClick = function() {
+            if (auth.currentUser) {
+                window.location.href = `../profile/profile.html?id=${auth.currentUser.uid}`;
+            } else {
+                toggleLoginFlyout();
+            }
+        }
+
+        // Update mobile menu profile link
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileProfileLink = document.querySelector('#flyout-menu #profileLink');
+            if (mobileProfileLink) {
+                mobileProfileLink.onclick = () => {
+                    if (auth.currentUser) {
+                        window.location.href = `../profile/profile.html?id=${auth.currentUser.uid}`;
+                    } else {
+                        toggleLoginFlyout();
+                    }
+                };
+            }
+        });
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             AOS.init({
@@ -211,6 +238,34 @@
             const priceText = artwork.querySelector('.text-green-600').textContent;
             return parseFloat(priceText.replace('₱', ''));
         }
+
+        // Add profile navigation handler
+        window.handleProfileClick = function() {
+            const user = auth.currentUser;
+            if (user) {
+                // Fix the path to profile.html
+                window.location.href = `../profile/profile.html?id=${user.uid}`;
+            } else {
+                // If not logged in, show login flyout
+                toggleLoginFlyout();
+            }
+        }
+
+        // Update mobile menu profile link as well
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileProfileLink = document.querySelector('#flyout-menu #profileLink');
+            if (mobileProfileLink) {
+                mobileProfileLink.onclick = () => {
+                    const user = auth.currentUser;
+                    if (user) {
+                        // Fix the path for mobile menu too
+                        window.location.href = `../profile/profile.html?id=${user.uid}`;
+                    } else {
+                        toggleLoginFlyout();
+                    }
+                };
+            }
+        });
     </script>
 </body>
 </html>
