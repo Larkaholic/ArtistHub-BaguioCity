@@ -242,15 +242,15 @@ const styles = `
 
 .art-gallery-card-image {
     width: 100%;
-    height: 16rem;
+    height: 20rem;
     object-fit: cover;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem 0.75rem 0 0;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
 }
 
 .art-gallery-card-image:hover {
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
 .art-gallery-protective-layer {
@@ -258,15 +258,87 @@ const styles = `
     top: 0;
     left: 0;
     width: 100%;
-    height: 16rem;
+    height: 20rem;
     z-index: 2;
     user-select: none;
     -webkit-user-select: none;
     cursor: pointer;
+    border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .art-gallery-item-content {
     position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.art-gallery-item-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.art-gallery-item {
+    margin-bottom: 2rem;
+}
+
+.art-gallery-price {
+    color: #10B981;
+    font-weight: 600;
+    font-size: 1.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    background: rgba(16, 185, 129, 0.1);
+    display: inline-block;
+}
+
+.art-gallery-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1F2937;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.art-gallery-description {
+    color: black;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+    border-left: 4px solid #10B981;
+    min-height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.art-gallery-button {
+    background: #10B981;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}
+
+.art-gallery-button:hover {
+    background: #059669;
+    transform: translateY(-2px);
 }
 `;
 
@@ -289,27 +361,29 @@ function createImageCard(docId, data) {
     const card = document.createElement('div');
     card.className = 'art-gallery-item';
     card.innerHTML = `
-        <div class="art-gallery-item-content glass-header2">
+        <div class="art-gallery-item-content">
             <div class="art-gallery-protective-layer"></div>
             <img src="${data.imageUrl}" alt="${data.title}" class="art-gallery-card-image">
-            <div class="p-4">
-                <h3 class="text-xl font-bold mb-2 text-black">${data.title}</h3>
-                <p class="text-sm mb-2 text-white">${data.description || ''}</p>
-                <p class="text-lg font-semibold mb-4 text-white">₱${parseFloat(data.price || 0).toFixed(2)}</p>
-                <div class="art-gallery-item-actions">
-                    ${auth.currentUser ? 
-                        `<button onclick="window.addToCart('${docId}', '${data.title}', ${parseFloat(data.price)})" 
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full">
-                            Add to Cart
-                        </button>` : ''
-                    }
-                    ${auth.currentUser && auth.currentUser.uid === artistId ?
-                        `<button onclick="deleteImage('${docId}')" class="text-red-500 hover:text-red-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                            </svg>
-                        </button>` : ''}
+            <div class="p-6">
+                <div class="flex flex-col gap-2">
+                    <h3 class="art-gallery-title">${data.title}</h3>
+                    <div class="flex justify-between items-center">
+                        <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
+                        ${auth.currentUser && auth.currentUser.uid === artistId ?
+                            `<button onclick="deleteImage('${docId}')" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>` : ''}
+                    </div>
                 </div>
+                <p class="art-gallery-description">${data.description || 'No description available.'}</p>
+                ${auth.currentUser ? 
+                    `<button onclick="window.addToCart('${docId}', '${data.title}', ${parseFloat(data.price)})" 
+                        class="art-gallery-button">
+                        Add this to Cart
+                    </button>` : ''
+                }
             </div>
         </div>
     `;

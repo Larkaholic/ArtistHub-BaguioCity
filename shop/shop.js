@@ -31,20 +31,24 @@ async function loadArtworks() {
 
 function createArtworkCard(id, data) {
     const card = document.createElement('div');
-    card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
+    card.className = 'artwork-card';
     card.innerHTML = `
-        <img src="${data.imageUrl}" alt="${data.title}" class="w-full h-48 object-cover">
-        <div class="p-4">
-            <h3 class="text-xl font-bold mb-2">${data.title}</h3>
-            <p class="text-gray-600 mb-2">${data.description || 'No description available'}</p>
-            <p class="text-lg font-semibold text-green-600">₱${parseFloat(data.price).toFixed(2)}</p>
+        <img src="${data.imageUrl}" alt="${data.title}" class="artwork-image">
+        <div class="p-6">
+            <div class="flex flex-col gap-2">
+                <h3 class="artwork-title">${data.title}</h3>
+                <div class="flex justify-between items-center">
+                    <p class="artwork-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
+                </div>
+            </div>
+            <p class="artwork-description">${data.description || 'No description available.'}</p>
             ${auth.currentUser ? 
-                `<button onclick="window.addToCart('${id}', '${data.title}', ${data.price})" 
-                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">
-                    Add to Cart
+                `<button onclick="window.addToCart('${id}', '${data.title}', ${parseFloat(data.price)})" 
+                    class="artwork-button">
+                    Add this to Cart
                 </button>` :
                 `<button onclick="window.toggleLoginFlyout()" 
-                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">
+                    class="artwork-button">
                     Login to Add to Cart
                 </button>`
             }
