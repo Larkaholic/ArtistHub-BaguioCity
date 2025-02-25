@@ -1,0 +1,1 @@
+export const VOICEFLOW_API_KEY = 'VF.DM.67497af1c675e7368a154809.zxu8byifheY2YV7T';
