@@ -231,17 +231,23 @@
         
         <!-- through the years -->
         <section class="baguio-timeline-section my-8">
-            <button class="timeline-search-btn border-2 border-green-600" onclick="toggleTimelineSearch()">
-                <i class="fas fa-search"></i>
-            </button>
-            <div class="search-input-container">
-                <input type="text" 
-                       id="timelineSearch" 
-                       placeholder="Search through history..." 
-                       class="timeline-search-input border-2 border-green-600">
-                <button class="search-close-btn" onclick="toggleTimelineSearch()">
-                    <i class="fas fa-times"></i>
+            <div class="header rounded-lg p-2 mt-10 w-full text-center" style="position: relative; z-index: 30; background: #F4F8FF;">
+                <h2 class="text-3xl font-bold text-black">THROUGH THE YEARS</h2>
+            </div>
+            
+            <div class="relative w-full flex justify-center mb-2">
+                <button class="timeline-search-btn border-2 border-green-600" onclick="toggleTimelineSearch()">
+                    <i class="fas fa-search"></i>
                 </button>
+                <div class="search-input-container">
+                    <input type="text" 
+                           id="timelineSearch" 
+                           placeholder="Search through history..." 
+                           class="timeline-search-input border-2 border-green-600">
+                    <button class="search-close-btn" onclick="toggleTimelineSearch()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="baguio-timeline-backgrounds"></div>

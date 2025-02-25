@@ -51,44 +51,60 @@
 .baguio-timeline-content-box {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 4px 6px rgba(0, 0, 0, 0.1),
-        0 10px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: absolute;
     bottom: 20px;
     right: 20px;
     color: white;
-    min-height: 200px;
-    max-height: 200px;
-    width: 900px;
-    max-width: 900px;
+    min-height: 150px;
+    max-height: 250px;
+    width: 600px;
+    max-width: 600px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    text-align: left;
     z-index: 2;
 }
 
 .baguio-timeline-year {
-    font-size: 2.5rem;
-    font-weight: bold;
+    display: none; /* Hide the year */
 }
 
 .baguio-timeline-title {
-    font-size: 1.5rem;
-    font-weight: 500;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
 .baguio-timeline-details {
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.5;
+    padding: 0;
+    margin: 0;
+}
+
+/* Add custom scrollbar styling */
+.baguio-timeline-content-box::-webkit-scrollbar,
+.baguio-timeline-details::-webkit-scrollbar {
+    width: 8px;
+}
+
+.baguio-timeline-content-box::-webkit-scrollbar-track,
+.baguio-timeline-details::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.baguio-timeline-content-box::-webkit-scrollbar-thumb,
+.baguio-timeline-details::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
 }
 
 .baguio-timeline-navigation {
@@ -176,18 +192,23 @@
     }
 
     .baguio-timeline-content-box {
-        margin: 0 auto;
-        width: 100%;
+        width: 500px;
+        max-width: 90%;
+        min-height: 120px;
+        max-height: 200px;
+        right: 10px;
+        bottom: 10px;
     }
 
     .baguio-timeline-navigation {
-        flex-wrap: wrap;
-        padding: 0.75rem;
+        width: 80px;
+        left: 5px;
     }
 
     .baguio-timeline-nav-btn {
-        width: 60px;
-        height: 35px;
+        width: 70px;
+        height: 30px;
+        font-size: 0.75rem;
     }
 }
 
@@ -197,9 +218,13 @@
     }
 
     .baguio-timeline-content-box {
-        padding: 1.5rem;
-        margin-top: 1rem;
-        max-width: 90%;
+        width: 400px;
+        max-width: 85%;
+        min-height: 100px;
+        max-height: 180px;
+        padding: 1rem;
+        right: 50%;
+        transform: translateX(50%);
     }
 
     .baguio-timeline-year {
@@ -207,15 +232,44 @@
     }
 
     .baguio-timeline-title {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
+        margin-bottom: 0.25rem;
     }
 
     .baguio-timeline-details {
         font-size: 0.9rem;
+        line-height: 1.4;
     }
 
     .baguio-timeline-navigation {
+        width: 60px;
+        padding: 0.5rem;
         margin-top: auto;
         margin-bottom: 1rem;
+    }
+
+    .baguio-timeline-nav-btn {
+        width: 50px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .baguio-timeline-content-box {
+        width: 300px;
+        max-width: 90%;
+        min-height: 80px;
+        max-height: 150px;
+        padding: 0.75rem;
+    }
+
+    .baguio-timeline-title {
+        font-size: 1rem;
+    }
+
+    .baguio-timeline-details {
+        font-size: 0.85rem;
+        line-height: 1.3;
     }
 }
