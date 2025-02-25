@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Placeholder for getting artist ID
 function getArtistIdFromProfile() {
-    return profileId; // Adjust this logic as needed to fetch the correct artist ID dynamically
+    return profileId;
 }
 
 // Navigate to Edit Profile page
@@ -64,6 +64,14 @@ async function loadProfile() {
         if (userDoc.exists()) {
             const userData = userDoc.data();
 
+            // Capitalize first letter of each word function
+            const capitalizeWords = (str) => {
+                return str
+                    .split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                    .join(' ');
+            };
+
             // Update profile image
             const profileImage = document.getElementById('profileImage');
             if (profileImage) {
@@ -73,22 +81,34 @@ async function loadProfile() {
                 };
             }
 
-            // Update display name
+            // Update display name with enhanced visibility
             const displayName = document.getElementById('displayName');
             if (displayName) {
-                displayName.textContent = userData.displayName || 'Unnamed Artist';
+                displayName.textContent = capitalizeWords(userData.displayName || 'Unnamed Artist');
+                displayName.classList.add('text-shadow');
             }
 
-            // Update artist bio
+            // Update artist bio with enhanced visibility
             const artistBio = document.getElementById('artistBio');
             if (artistBio) {
-                artistBio.textContent = userData.artistDetails?.bio || 'No bio available';
+                const bio = userData.artistDetails?.bio || 'No bio available';
+                artistBio.textContent = bio.charAt(0).toUpperCase() + bio.slice(1);
+                artistBio.classList.add('enhanced-text');
             }
 
-            // Update specialization
+            // Update specialization with enhanced visibility
             const specialization = document.getElementById('specialization');
             if (specialization) {
-                specialization.textContent = userData.artistDetails?.specialization || 'Artist';
+                const spec = userData.artistDetails?.specialization || 'Artist';
+                specialization.textContent = capitalizeWords(spec);
+                specialization.classList.add('highlight-text');
+            }
+
+            // Update location with enhanced visibility
+            const location = document.querySelector('.fa-map-marker + span');
+            if (location) {
+                location.textContent = capitalizeWords('Baguio City');
+                location.classList.add('highlight-text');
             }
 
             // Update social links
