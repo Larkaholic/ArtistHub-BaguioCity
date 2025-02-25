@@ -29,6 +29,10 @@
         font-family: 'Montserrat', sans-serif;
         min-height: 100vh;
         background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
     
     /* ==========================================================================
@@ -240,11 +244,20 @@
 }
 
 .artwork-title {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #1F2937;
+    text-shadow: 
+        -1px -1px 0 rgba(255, 255, 255, 0.5),
+         1px -1px 0 rgba(255, 255, 255, 0.5),
+        -1px  1px 0 rgba(255, 255, 255, 0.5),
+         1px  1px 0 rgba(255, 255, 255, 0.5),
+         2px 2px 4px rgba(0, 0, 0, 0.3);
+    -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.5px;
     line-height: 1.2;
     margin-bottom: 0.5rem;
+    text-transform: capitalize;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;

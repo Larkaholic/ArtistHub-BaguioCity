@@ -358,15 +358,19 @@ document.body.appendChild(modal);
 
 // Modified createImageCard function
 function createImageCard(docId, data) {
+    // Capitalize first letter of title and description
+    const formattedTitle = data.title.charAt(0).toUpperCase() + data.title.slice(1);
+    const formattedDescription = data.description.charAt(0).toUpperCase() + data.description.slice(1);
+    
     const card = document.createElement('div');
     card.className = 'art-gallery-item';
     card.innerHTML = `
         <div class="art-gallery-item-content">
             <div class="art-gallery-protective-layer"></div>
-            <img src="${data.imageUrl}" alt="${data.title}" class="art-gallery-card-image">
+            <img src="${data.imageUrl}" alt="${formattedTitle}" class="art-gallery-card-image">
             <div class="p-6">
                 <div class="flex flex-col gap-2">
-                    <h3 class="art-gallery-title">${data.title}</h3>
+                    <h3 class="art-gallery-title">${formattedTitle}</h3>
                     <div class="flex justify-between items-center">
                         <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
                         ${auth.currentUser && auth.currentUser.uid === artistId ?
@@ -377,9 +381,9 @@ function createImageCard(docId, data) {
                             </button>` : ''}
                     </div>
                 </div>
-                <p class="art-gallery-description">${data.description || 'No description available.'}</p>
+                <p class="art-gallery-description">${formattedDescription || 'No description available.'}</p>
                 ${auth.currentUser ? 
-                    `<button onclick="window.addToCart('${docId}', '${data.title}', ${parseFloat(data.price)})" 
+                    `<button onclick="window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)})" 
                         class="art-gallery-button">
                         Add this to Cart
                     </button>` : ''
