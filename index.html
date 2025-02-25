@@ -12,37 +12,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/history.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
-    <style>
-        .chat-widget-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        
-        .chat-widget-button {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #4CAF50;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .chat-widget-button:hover {
-            transform: scale(1.1);
-            background: #45a049;
-        }
-
-        .chat-widget-button i {
-            color: white;
-            font-size: 24px;
-        }
-    </style>
+    
 </head>
 <body class="bg-cover">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
@@ -202,7 +172,7 @@
         <!-- hero section -->
         <section id="landingPage" class="flex flex-col md:flex-row w-full h-full items-center overflow-hidden">
             <div class="artist-item position-absolute w-full h-1/2 md:w-1/2 md:h-full flex items-center justify-center p-0">
-                <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/logo.png" 
+                <img src="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/Home%20Logo.gif?raw=true" 
                      alt="Artist Hub Logo" 
                      class="w-full h-full md:h-full object-contain object-center scale-150 md:scale-100" 
                      data-aos="flip-left" data-aos-duration="1500">
@@ -261,7 +231,7 @@
         
         <!-- through the years -->
         <section class="baguio-timeline-section my-8">
-            <div class="header rounded-lg p-2 mt-10 w-full text-center" style="position: relative; z-index: 30; background: #F4F8FF;">
+            <div class="header rounded-lg p-2 mt-10 w-full text-center" style="position: relative; z-index: 30;">
                 <h2 class="text-3xl font-bold text-black">THROUGH THE YEARS</h2>
             </div>
             
@@ -922,6 +892,31 @@
                     versionID: 'production',
                     voice: {
                         url: "https://runtime-api.voiceflow.com"
+                    },
+                    // Updated styling configuration
+                    theme: {
+                        button: {
+                            size: 56,
+                            radius: 28,
+                            backgroundColor: '#4CAF50',
+                            iconColor: '#FFFFFF'
+                        },
+                        chat: {
+                            backgroundColor: '#F4F8FF',
+                            width: 400,
+                            height: 600,
+                            borderRadius: 16,
+                            poweredBy: false,
+                        },
+                        messages: {
+                            fontFamily: 'Montserrat, sans-serif',
+                            fontSize: 16,
+                            textColor: '#000000',
+                            userBackgroundColor: '#4CAF50',
+                            userTextColor: '#FFFFFF',
+                            assistantBackgroundColor: '#FFFFFF',
+                            assistantTextColor: '#000000'
+                        }
                     }
                 });
             }
