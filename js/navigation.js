@@ -1,16 +1,25 @@
 (function() {
     window.navToEvent = function(path) {
         try {
+            // If the path already starts with /ArtistHub-BaguioCity/, use it as is
+            if (path.startsWith('/ArtistHub-BaguioCity/')) {
+                window.location.href = path;
+                return;
+            }
+
             // Get the base URL for GitHub Pages or local development
             const baseUrl = window.location.hostname.includes('github.io') 
                 ? '/ArtistHub-BaguioCity'
                 : '';
 
+            // Remove leading slash if present to avoid double slashes
+            const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+
             // Check if the path contains an anchor
-            const hasAnchor = path.includes('#');
+            const hasAnchor = cleanPath.includes('#');
 
             if (hasAnchor) {
-                const [pagePath, anchor] = path.split('#');
+                const [pagePath, anchor] = cleanPath.split('#');
 
                 // If we're already on the correct page, just scroll to anchor
                 if (pagePath === '.' || pagePath === './index.html' || pagePath === window.location.pathname) {
@@ -22,10 +31,10 @@
                 }
 
                 // Navigate to new page with anchor
-                window.location.href = baseUrl + '/' + path;
+                window.location.href = `${baseUrl}/${cleanPath}`;
             } else {
                 // Regular page navigation
-                window.location.href = baseUrl + '/' + path;
+                window.location.href = `${baseUrl}/${cleanPath}`;
             }
         } catch (error) {
             console.error('Navigation error:', error);
