@@ -186,10 +186,31 @@
                 <form id="timelineEventForm" class="space-y-4">
                     <input type="hidden" id="timelineEventId">
                     
-                    <div>
-                        <label for="timelineEventYear" class="block text-sm font-medium text-gray-300">Year</label>
-                        <input type="number" id="timelineEventYear" required
-                               class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="timelineEventMonth" class="block text-sm font-medium text-gray-300">Month</label>
+                            <select id="timelineEventMonth" required
+                                   class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white">
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="timelineEventYear" class="block text-sm font-medium text-gray-300">Year</label>
+                            <input type="number" id="timelineEventYear" required
+                                   class="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white">
+                        </div>
                     </div>
 
                     <div>

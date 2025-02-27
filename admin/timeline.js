@@ -8,7 +8,18 @@ async function fetchTimelineEvents() {
     querySnapshot.forEach((doc) => {
         events.push({ id: doc.id, ...doc.data() });
     });
-    return events.sort((a, b) => a.year - b.year); // Sort by year
+    // Sort by year and month in descending order (newest first)
+    return events.sort((a, b) => {
+        const yearA = parseInt(a.year.split('-')[1]);
+        const yearB = parseInt(b.year.split('-')[1]);
+        const monthA = parseInt(a.year.split('-')[0]);
+        const monthB = parseInt(b.year.split('-')[0]);
+        
+        if (yearA !== yearB) {
+            return yearB - yearA; // Reverse year sort
+        }
+        return monthB - monthA; // Reverse month sort
+    });
 }
 
 async function loadTimelineEvents() {
@@ -17,11 +28,14 @@ async function loadTimelineEvents() {
     timelineEventsList.innerHTML = '';
 
     timelineEvents.forEach(event => {
+        const [month, year] = event.year.split('-');
+        const monthName = new Date(`2000-${month}-01`).toLocaleString('default', { month: 'long' });
+        
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('bg-gray-800', 'p-4', 'rounded-lg', 'flex', 'justify-between', 'items-center');
         eventDiv.innerHTML = `
             <div>
-                <h3 class="text-lg font-semibold">${event.year}</h3>
+                <h3 class="text-lg font-semibold">${monthName} ${year}</h3>
                 <p>${event.title}</p>
                 <p>${event.details}</p>
             </div>
@@ -53,12 +67,19 @@ function removeTimelineImage() {
 document.getElementById('timelineEventForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = document.getElementById('timelineEventId').value;
+    const month = document.getElementById('timelineEventMonth').value;
     const year = document.getElementById('timelineEventYear').value;
+    const formattedDate = `${month}-${year}`;
     const title = document.getElementById('timelineEventTitle').value;
     const details = document.getElementById('timelineEventDetails').value;
     const imageUrls = document.getElementById('timelineEventImageUrl').value.split(',');
 
-    const event = { year, title, details, backgrounds: imageUrls };
+    const event = { 
+        year: formattedDate, 
+        title, 
+        details, 
+        backgrounds: imageUrls 
+    };
 
     if (id) {
         await updateDoc(doc(db, "timelineEvents", id), event);
@@ -76,8 +97,11 @@ async function editTimelineEvent(id) {
 
     if (docSnap.exists()) {
         const event = docSnap.data();
+        const [month, year] = event.year.split('-');
+        
         document.getElementById('timelineEventId').value = id;
-        document.getElementById('timelineEventYear').value = event.year;
+        document.getElementById('timelineEventMonth').value = month;
+        document.getElementById('timelineEventYear').value = year;
         document.getElementById('timelineEventTitle').value = event.title;
         document.getElementById('timelineEventDetails').value = event.details;
         document.getElementById('timelineEventImageUrl').value = event.backgrounds.join(',');

@@ -13,7 +13,18 @@ async function fetchTimelineData() {
         querySnapshot.forEach((doc) => {
             data.push({ id: doc.id, ...doc.data() });
         });
-        return data.sort((a, b) => a.year - b.year);
+        // Sort by year and month in descending order (newest first)
+        return data.sort((a, b) => {
+            const yearA = parseInt(a.year.split('-')[1]);
+            const yearB = parseInt(b.year.split('-')[1]);
+            const monthA = parseInt(a.year.split('-')[0]);
+            const monthB = parseInt(b.year.split('-')[0]);
+            
+            if (yearA !== yearB) {
+                return yearB - yearA; // Reverse year sort
+            }
+            return monthB - monthA; // Reverse month sort
+        });
     } catch (error) {
         console.error("Error fetching timeline data:", error);
         const timelineSection = document.querySelector('.baguio-timeline-section');
@@ -114,7 +125,7 @@ function updateContent(data) {
 
     document.querySelectorAll('.baguio-timeline-bg-image').forEach(bg => {
         bg.classList.remove('baguio-timeline-active');
-        if (bg.dataset.year === data.year.toString() && bg.dataset.index === '0') {
+        if (bg.dataset.year === data.year && bg.dataset.index === '0') {
             bg.classList.add('baguio-timeline-active');
         }
     });
@@ -129,13 +140,16 @@ function updateContent(data) {
     titleElement.classList.add('baguio-timeline-fade-in');
     detailsElement.classList.add('baguio-timeline-fade-up');
 
-    yearElement.textContent = data.year;
+    // Format the date display
+    const [month, year] = data.year.split('-');
+    const formattedDate = `${month.padStart(2, '0')}-${year}`;
+    yearElement.textContent = formattedDate;
     titleElement.textContent = data.title;
     detailsElement.textContent = data.details;
 
     document.querySelectorAll('.baguio-timeline-nav-btn').forEach(btn => {
         btn.classList.remove('baguio-timeline-active');
-        if (btn.dataset.year === data.year.toString()) {
+        if (btn.dataset.year === data.year) {
             btn.classList.add('baguio-timeline-active');
         }
     });
@@ -205,16 +219,17 @@ function filterTimelineEvents(searchTerm) {
     let firstMatch = null;
 
     timelineData.forEach(data => {
-        const year = data.year.toString();
+        const [month, year] = data.year.split('-');
+        const formattedDate = `${month.padStart(2, '0')}-${year}`;
         const title = data.title.toLowerCase();
         const details = data.details.toLowerCase();
-        const matches = year.includes(searchTerm) || 
+        const matches = formattedDate.includes(searchTerm) || 
                        title.includes(searchTerm) || 
                        details.includes(searchTerm);
 
         // Find corresponding button
         const button = Array.from(navigationButtons).find(
-            btn => btn.dataset.year === year
+            btn => btn.dataset.year === data.year
         );
 
         if (button) {
