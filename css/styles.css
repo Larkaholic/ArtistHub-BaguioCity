@@ -69,6 +69,10 @@
         .nav-item button {
             font-weight: 600 !important;
         }
+
+        .nav-item:hover {
+            background-color: #F4A900
+        }
         
         /* Glass Effect Styles */
         .glass-header {
@@ -88,6 +92,16 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.01);
+        }
+
+        .transparent-header {
+            background: rgba(51, 51, 51, 0) !important;
+            transition: background 0.3s ease !important;
+        }
+
+        .solid-header {
+            background: #FFF2C8 !important;
+            transition: background 0.3s ease !important;
         }
 
         nav.hidden.sm\\:flex.sm\\:items-center.sm\\:space-x-5.mr-1 {
