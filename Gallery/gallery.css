@@ -80,18 +80,22 @@ nav ul li button,
 }
 
 /* Glass Header Styles */
-.glass-header,
-.glass-header2 {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.glass-header {
+    background: rgba(255, 255, 255, 1);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(19.8px);
+    -webkit-backdrop-filter: blur(19.8px);
+    border: 1px solid rgba(255, 255, 255, 0.01);
+    z-index: 1000;
 }
 
 .glass-header2 {
     background: rgba(255, 255, 255, 0.22);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.01);
 }
 
