@@ -21,12 +21,12 @@ window.toggleCart = function() {
 function showAddedToCartModal(item) {
     const modalHTML = `
         <div id="addedToCartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div class="rounded-lg p-6 max-w-sm mx-auto">
+            <div class="glass-header rounded-lg p-6 max-w-sm mx-auto">
                 <div class="text-center">
-                    <h3 class="text-lg font-bold mb-2">Item Added to Cart!</h3>
+                    <h3 class="text-lg font-bold mb-2 text-black">Item Added to Cart!</h3>
                     <div class="mb-4">
-                        <p class="font-medium">${item.title}</p>
-                        <p class="text-green-600">₱${item.price.toFixed(2)}</p>
+                        <p class="font-medium text-black">${item.title}</p>
+                        <p class="text-green-600">₱${Number(item.price).toFixed(2)}</p>
                     </div>
                     <div class="flex justify-center space-x-4">
                         <button onclick="closeAddedToCartModal()" class="text-black bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
@@ -64,9 +64,17 @@ window.addToCart = async function(artworkId, title, price) {
             return;
         }
         
-        // Ensure price has two decimal places
-        const formattedPrice = parseFloat(price).toFixed(2);
-        const item = { artworkId, title, price: formattedPrice };
+        // Convert price to number and ensure it has two decimal places
+        const numericPrice = Number(price);
+        if (isNaN(numericPrice)) {
+            throw new Error('Invalid price format');
+        }
+        
+        const item = { 
+            artworkId, 
+            title, 
+            price: numericPrice 
+        };
         cart.push(item);
         
         // Create a document reference with a custom ID (user's UID)
@@ -148,11 +156,14 @@ window.removeFromCart = async function(index) {
 // Show email preview modal
 function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') {
     console.log('Showing email preview for:', artworkData);
+    // Convert price to number if it's a string
+    const price = typeof artworkData.price === 'string' ? Number(artworkData.price) : artworkData.price;
+    
     const emailPreviewHTML = `
         <div id="emailPreviewModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div class="rounded-lg p-6 max-w-2xl w-full mx-4">
+            <div class="glass-header rounded-lg p-6 max-w-2xl w-full mx-4">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold">Email Preview</h2>
+                    <h2 class="text-2xl font-bold text-black">Email Preview</h2>
                     <button onclick="window.closeEmailPreview()" class="text-gray-500 hover:text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -160,16 +171,16 @@ function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') 
                     </button>
                 </div>
                 <div class="bg-white bg-opacity-10 rounded-lg p-4 space-y-4">
-                    <div>
+                    <div class="text-black">
                         <p class="font-semibold">To: ${ownerEmail}</p>
                         <p class="font-semibold">Subject: Interest in purchasing: ${artworkData.title}</p>
                     </div>
-                    <div class="border-t border-gray-300 pt-4">
+                    <div class="border-t border-gray-300 pt-4 text-black">
                         <p>Hello,</p>
                         <br/>
                         <p>I am interested in purchasing your artwork:</p>
                         <p>Title: ${artworkData.title}</p>
-                        <p>Price: ₱${artworkData.price.toFixed(2)}</p>
+                        <p>Price: ₱${price.toFixed(2)}</p>
                         <br/>
                         <p>Please let me know how we can proceed with the transaction.</p>
                         <br/>
@@ -181,8 +192,8 @@ function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') 
                     <button onclick="window.closeEmailPreview()" class="text-black bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
                         Edit
                     </button>
-                    <button onclick="window.sendEmail('${ownerEmail}', '${artworkData.title}', ${artworkData.price}, '${user.displayName || user.email}')" 
-                            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                    <button onclick="window.sendEmail('${ownerEmail}', '${artworkData.title}', ${price}, '${user.displayName || user.email}')" 
+                            class="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600">
                         Send Email
                     </button>
                 </div>
@@ -200,12 +211,15 @@ window.closeEmailPreview = function() {
 
 window.sendEmail = function(ownerEmail, title, price, buyerInfo) {
     console.log('Sending email to:', ownerEmail);
+    // Convert price to number if it's a string
+    const numericPrice = typeof price === 'string' ? Number(price) : price;
+    
     const subject = encodeURIComponent(`Interest in purchasing: ${title}`);
     const body = encodeURIComponent(
         `Hello,\n\n` +
         `I am interested in purchasing your artwork:\n` +
         `Title: ${title}\n` +
-        `Price: ₱${price.toFixed(2)}\n\n` +
+        `Price: ₱${numericPrice.toFixed(2)}\n\n` +
         `Please let me know how we can proceed with the transaction.\n\n` +
         `Best regards,\n` +
         `${buyerInfo}`
@@ -356,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div id="cartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
             <div class="items-center rounded-lg w-96 mx-10 p-6 bg-white border-2 border-black">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold">Shopping Cart</h2>
+                    <h2 class="text-2xl font-bold text-black">Shopping Cart</h2>
                     <button onclick="window.toggleCart()" class="text-black hover:text-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
