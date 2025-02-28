@@ -52,16 +52,23 @@ export function openAddTimelineEventModal() {
     document.getElementById('timelineEventForm').reset();
     document.getElementById('timelineEventId').value = '';
     document.getElementById('timelineModalTitle').textContent = 'Add New Timeline Event';
-    document.getElementById('timelineEventModal').classList.remove('hidden');
+    const modal = document.getElementById('timelineEventModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
 }
 
-function closeTimelineEventModal() {
-    document.getElementById('timelineEventModal').classList.add('hidden');
+export function closeTimelineEventModal() {
+    const modal = document.getElementById('timelineEventModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
 }
 
-function removeTimelineImage() {
+export function removeTimelineImage() {
     document.getElementById('timelineEventImageUrl').value = '';
-    document.getElementById('timelineImagePreview').classList.add('hidden');
+    const preview = document.getElementById('timelineImagePreview');
+    preview.classList.add('hidden');
+    const img = document.getElementById('timelinePreviewImg');
+    img.src = '';
 }
 
 document.getElementById('timelineEventForm').addEventListener('submit', async (e) => {
