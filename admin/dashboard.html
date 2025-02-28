@@ -20,12 +20,14 @@
     <script type="module" src="dashboard.js"></script>
     <script type="module" src="eventManagement.js"></script>
     <script type="module" src="artistRequest.js"></script>
-    <script type="module" src="./timeline.js"></script>
+    <script type="module" src="timeline.js"></script>
     <script type="module" src="featuredArtists.js"></script>
     <script type="module">
-        import { openAddTimelineEventModal } from './timeline.js';
+        import { openAddTimelineEventModal, closeTimelineEventModal, removeTimelineImage } from './timeline.js';
         import { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists, displayCurrentlyFeaturedArtists } from './featuredArtists.js';
         window.openAddTimelineEventModal = openAddTimelineEventModal;
+        window.closeTimelineEventModal = closeTimelineEventModal;
+        window.removeTimelineImage = removeTimelineImage;
         window.pickFeaturedArtists = pickFeaturedArtists;
         window.searchArtistsInDatabase = searchArtistsInDatabase;
         window.featureSelectedArtists = featureSelectedArtists;
