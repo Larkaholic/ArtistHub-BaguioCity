@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
 
-    console.log("Header found:", header);
-
     window.addEventListener('scroll', function() {
         if (window.scrollY > 50) {
             header.classList.add('solid-header');
@@ -19,6 +17,4 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("Header changed to transparent");
         }
     });
-
-    console.log("Scroll event listener added.");
 });
