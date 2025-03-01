@@ -10,11 +10,9 @@ document.addEventListener("DOMContentLoaded", function() {
         if (window.scrollY > 50) {
             header.classList.add('solid-header');
             header.classList.remove('transparent-header');
-            console.log("Header changed to solid");
         } else {
             header.classList.add('transparent-header');
             header.classList.remove('solid-header');
-            console.log("Header changed to transparent");
         }
     });
 });
