@@ -41,3 +41,13 @@
         }
     };
 })();
+
+window.handleProfileNavigation = () => {
+    const user = auth.currentUser;
+    if (user) {
+        window.location.href = `${baseUrl}/profile/profile.html?id=${user.uid}`;
+    } else {
+        alert('Please login to view your profile');
+        toggleLoginFlyout();
+    }
+};
