@@ -184,8 +184,19 @@
     <main class="pt-20">
         <div class="container mx-auto px-4 py-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Right Image Section - Moved to top on mobile -->
+                <div class="relative aspect-[4/5] md:order-2">
+                    <img
+                        id="profileImage"
+                        src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true"
+                        alt="Profile Image"
+                        class="absolute inset-0 w-full h-full object-cover rounded-3xl shadow-lg"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
+                </div>
+                
                 <!-- Left Profile Section -->
-                <div class="glass-header rounded-3xl p-8 shadow-xl h-[600px] md:h-auto flex flex-col">
+                <div class="glass-header rounded-3xl p-8 shadow-xl h-auto flex flex-col md:order-1">
                     <h1 id="displayName" class="text-3xl font-bold mb-6">Loading...</h1>
                     
                     <!-- Scrollable content area -->
@@ -224,17 +235,6 @@
                             <a id="googleLink" href="#" class="fa fa-google text-black hover:text-gray-700"></a>
                         </div>
                     </div>
-                </div>
-    
-                <!-- Right Image Section with fixed aspect ratio -->
-                <div class="relative aspect-[4/5]">
-                    <img
-                        id="profileImage"
-                        src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true"
-                        alt="Profile Image"
-                        class="absolute inset-0 w-full h-full object-cover rounded-3xl"
-                    />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
                 </div>
             </div>
     
