@@ -40,7 +40,7 @@
                     <a href="javascript:void(0)" onclick="navToEvent('./shop/shop.html')">Shop</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('../profile/profile.html')" id="profileLink">Profile</a>
+                    <a href="javascript:void(0)" onclick="handleProfileNavigation()">Profile</a>
                 </li>
             </ul>
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
@@ -64,7 +64,7 @@
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/profile/profile.html')" id="profileLink">Profile</a></li>
+                    <li><a href="javascript:void(0)" onclick="handleProfileNavigation()" id="profileLinkMobile">Profile</a></li>
                     <li id="cartNavMobile" class="hidden">
                         <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -863,7 +863,6 @@
             } else {
                 searchBtn.style.opacity = '1';
                 searchInput.value = '';
-                // Reset search results if needed
                 if (window.resetArtistSearch) {
                     window.resetArtistSearch();
                 }
@@ -871,12 +870,6 @@
         }
     </script>
     <script type="module" src="./js/loadEvents.js"></script>
-    <!-- <div class="chat-widget-container">
-        <div class="chat-widget-button">
-            <i class="fas fa-comments"></i>
-        </div>
-    </div> -->
-
     <script type="module">
         import { VOICEFLOW_API_KEY } from './js/config.js';
         
@@ -925,5 +918,27 @@
             s.parentNode.insertBefore(v, s);
         })(document, 'script');
     </script>
+    <script type="module">
+    import { auth } from './js/firebase-config.js';
+    
+    // Make handleProfileNavigation available globally
+    window.handleProfileNavigation = () => {
+        const user = auth.currentUser;
+        if (user) {
+            window.location.href = `/profile/profile.html?id=${user.uid}`;
+        } else {
+            alert('Please login to view your profile');
+            toggleLoginFlyout();
+        }
+    };
+
+    // Update mobile profile link behavior
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
+        if (mobileProfileLink) {
+            mobileProfileLink.onclick = () => handleProfileNavigation();
+        }
+    });
+</script>
 </body>
 </html>
