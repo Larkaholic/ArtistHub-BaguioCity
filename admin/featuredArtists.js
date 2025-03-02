@@ -71,7 +71,8 @@ async function searchArtistsInDatabase() {
 
         artistCard.dataset.artistId = artist.id;
         artistCard.querySelector('button').onclick = () => {
-            window.location.href = `./profile/profile.html?id=${artist.id}`;
+            // Update to match the pattern from search.js
+            window.location.href = `../profile/profile.html?id=${artist.id}`;
         };
 
         resultsContainer.appendChild(artistCard);
