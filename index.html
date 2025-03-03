@@ -925,7 +925,8 @@
     window.handleProfileNavigation = () => {
         const user = auth.currentUser;
         if (user) {
-            window.location.href = `/profile/profile.html?id=${user.uid}`;
+            // Updated to use relative path that works with GitHub Pages
+            window.location.href = `./profile/profile.html?id=${user.uid}`;
         } else {
             alert('Please login to view your profile');
             toggleLoginFlyout();
