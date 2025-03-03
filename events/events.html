@@ -39,7 +39,7 @@
                         <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a>
                     </li>
                     <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                        <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/profile/edit-profile.html')">Profile</a>
+                        <a href="javascript:void(0)" onclick="handleProfileNavigation()">Profile</a>
                     </li>
                     <li class="login-button">
                         <button onclick="toggleLoginFlyout(event)" 
@@ -65,7 +65,7 @@
                         <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
-                        <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/profile/profile.html')">Profile</a></li>
+                        <li><a href="javascript:void(0)" onclick="handleProfileNavigation()" id="profileLinkMobile">Profile</a></li>
                         <li class="login-button">
                             <button onclick="toggleLoginFlyout(event)">Login</button>
                         </li>
@@ -175,6 +175,7 @@
         <script type="module" src="../js/firebase-config.js"></script>
         <!-- Modules -->
         <script type="module" src="../js/auth.js"></script>
+        <script type="module" src="../js/navigation.js"></script>
         <script type="module" src="./events.js"></script>
         <script>
             function toggleNav() {

@@ -63,7 +63,7 @@
                     <li><a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('./index.html#events')">Events</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('.shop.html')">Shop</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('./profile/profile.html')" id="profileLink">Profile</a></li>
+                    <li><a href="javascript:void(0)" onclick="handleProfileNavigation()" id="profileLinkMobile">Profile</a></li>
                     <li id="cartNavMobile" class="hidden">
                         <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -238,18 +238,6 @@
         function getPrice(artwork) {
             const priceText = artwork.querySelector('.text-green-600').textContent;
             return parseFloat(priceText.replace('₱', ''));
-        }
-
-        // Add profile navigation handler
-        window.handleProfileClick = function() {
-            const user = auth.currentUser;
-            if (user) {
-                // Fix the path to profile.html
-                window.location.href = `../profile/profile.html?id=${user.uid}`;
-            } else {
-                // If not logged in, show login flyout
-                toggleLoginFlyout();
-            }
         }
 
         // Update mobile menu profile link as well
