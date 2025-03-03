@@ -1,27 +1,24 @@
+import { VOICEFLOW_API_KEY } from './config.js';
+import { auth } from './firebase-config.js';
+
+// Navigation function
 (function() {
     window.navToEvent = function(path) {
         try {
-            // If the path already starts with /ArtistHub-BaguioCity/, use it as is
             if (path.startsWith('/ArtistHub-BaguioCity/')) {
                 window.location.href = path;
                 return;
             }
 
-            // Get the base URL for GitHub Pages or local development
             const baseUrl = window.location.hostname.includes('github.io') 
                 ? '/ArtistHub-BaguioCity'
                 : '';
 
-            // Remove leading slash if present to avoid double slashes
             const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-
-            // Check if the path contains an anchor
             const hasAnchor = cleanPath.includes('#');
 
             if (hasAnchor) {
                 const [pagePath, anchor] = cleanPath.split('#');
-
-                // If we're already on the correct page, just scroll to anchor
                 if (pagePath === '.' || pagePath === './index.html' || pagePath === window.location.pathname) {
                     const element = document.getElementById(anchor);
                     if (element) {
@@ -29,11 +26,8 @@
                         return;
                     }
                 }
-
-                // Navigate to new page with anchor
                 window.location.href = `${baseUrl}/${cleanPath}`;
             } else {
-                // Regular page navigation
                 window.location.href = `${baseUrl}/${cleanPath}`;
             }
         } catch (error) {
@@ -42,12 +36,89 @@
     };
 })();
 
-window.handleProfileNavigation = () => {
-    const user = auth.currentUser;
-    if (user) {
-        window.location.href = `${baseUrl}/profile/profile.html?id=${user.uid}`;
-    } else {
-        alert('Please login to view your profile');
-        toggleLoginFlyout();
+// Voiceflow chat initialization
+(function(d, t) {
+    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+    v.onload = function() {
+        window.voiceflow.chat.load({
+            verify: { 
+                projectID: '6706887ba2382c6fe907495e',
+                apiKey: VOICEFLOW_API_KEY
+            },
+            url: 'https://general-runtime.voiceflow.com',
+            versionID: 'production',
+            voice: {
+                url: "https://runtime-api.voiceflow.com"
+            },
+            theme: {
+                button: {
+                    size: 56,
+                    radius: 28,
+                    backgroundColor: '#4CAF50',
+                    iconColor: '#FFFFFF'
+                },
+                chat: {
+                    backgroundColor: '#F4F8FF',
+                    width: 400,
+                    height: 600,
+                    borderRadius: 16,
+                    poweredBy: false,
+                },
+                messages: {
+                    fontFamily: 'Montserrat, sans-serif',
+                    fontSize: 16,
+                    textColor: '#000000',
+                    userBackgroundColor: '#4CAF50',
+                    userTextColor: '#FFFFFF',
+                    assistantBackgroundColor: '#FFFFFF',
+                    assistantTextColor: '#000000'
+                }
+            }
+        });
+    }
+    v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+    v.type = "text/javascript";
+    s.parentNode.insertBefore(v, s);
+})(document, 'script');
+
+// Profile navigation handling
+window.handleProfileNavigation = async () => {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            const authCheck = new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    resolve(user);
+                });
+            });
+            const finalUser = await authCheck;
+            if (!finalUser) {
+                alert('Please login to view your profile');
+                toggleLoginFlyout();
+                return;
+            }
+        }
+        
+        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+            ? '/ArtistHub-BaguioCity'
+            : '';
+            
+        const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
+        window.location.href = profileUrl;
+    } catch (error) {
+        console.error('Profile navigation error:', error);
+        alert('There was an error accessing your profile. Please try again.');
     }
 };
+
+// Mobile profile link handling
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
+    if (mobileProfileLink) {
+        mobileProfileLink.onclick = (e) => {
+            e.preventDefault();
+            handleProfileNavigation();
+        };
+    }
+});
