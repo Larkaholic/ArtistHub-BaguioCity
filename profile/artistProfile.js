@@ -247,3 +247,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Add click event listener for edit profile button
+document.addEventListener('DOMContentLoaded', () => {
+    const editProfileButton = document.getElementById('editProfileButton');
+    if (editProfileButton) {
+        editProfileButton.addEventListener('click', () => {
+            window.location.href = `edit-profile.html?id=${profileId}`;
+        });
+    }
+});
