@@ -2,9 +2,30 @@ import { signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider } f
 import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { auth, db, provider } from './firebase-config.js';
 
+let pendingGoogleUser = null;
 
-// sign in
-window.signInWithGoogle = async function(userType = 'user') {
+window.showUserTypeModal = function() {
+    const modal = document.getElementById('userTypeModal');
+    modal.classList.remove('hidden');
+}
+
+window.hideUserTypeModal = function() {
+    const modal = document.getElementById('userTypeModal');
+    modal.classList.add('hidden');
+}
+
+// Update the selectUserType function
+window.selectUserType = async function(userType) {
+    // Hide the modal first
+    const userTypeModal = document.getElementById('userTypeModal');
+    if (userTypeModal) userTypeModal.classList.add('hidden');
+    
+    // Complete Google sign in with selected user type
+    await completeGoogleSignIn(userType);
+}
+
+// Add new function to handle Google sign in after user type selection
+window.completeGoogleSignIn = async function(userType) {
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
@@ -13,36 +34,57 @@ window.signInWithGoogle = async function(userType = 'user') {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         
         if (!userDoc.exists()) {
-            // Create new user document if it doesn't exist
-            // Use the provided userType if it's a registration, otherwise default to 'user'
+            // Create new user document
             await setDoc(doc(db, 'users', user.uid), {
                 email: user.email,
                 name: user.displayName,
-                userType: userType, // Use the passed userType
+                userType: userType,
+                status: userType === 'artist' ? 'pending' : 'approved',
                 createdAt: new Date(),
                 lastLogin: new Date()
             });
+
+            if (userType === 'artist') {
+                alert('Your artist registration is pending approval. We will review your application shortly.');
+            }
         } else {
-            // Update last login
-            await setDoc(doc(db, 'users', user.uid), {
+            // Existing user - just update last login
+            await updateDoc(doc(db, 'users', user.uid), {
                 lastLogin: new Date()
-            }, { merge: true });
+            });
         }
 
-        // Close the login modal
-        toggleLoginFlyout();
+        // Hide user type modal
+        const userTypeModal = document.getElementById('userTypeModal');
+        if (userTypeModal) userTypeModal.classList.add('hidden');
         
-        // Update UI to show user is logged in
         if (typeof updateLoginState === 'function') {
             updateLoginState(user);
         }
         
-        console.log('Successfully signed in with Google');
         return user;
     } catch (error) {
         console.error('Error signing in with Google:', error);
         alert('Failed to sign in with Google. Please try again.');
         throw error;
+    }
+}
+
+// Update the signInWithGoogle function
+window.signInWithGoogle = async function() {
+    try {
+        // Show user type selection modal first
+        const userTypeModal = document.getElementById('userTypeModal');
+        if (userTypeModal) {
+            // Hide login flyout
+            const loginFlyout = document.getElementById('LoginFlyout');
+            if (loginFlyout) loginFlyout.classList.add('hidden');
+            // Show user type modal
+            userTypeModal.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('Error in Google sign-in flow:', error);
+        alert('Failed to initialize sign in. Please try again.');
     }
 }
 

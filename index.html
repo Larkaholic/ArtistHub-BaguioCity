@@ -824,6 +824,33 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
+
+        /* Add these styles for the user type modal */
+        #userTypeModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 99999;
+        }
+
+        #userTypeModal .glass-header2 {
+            z-index: 100000;
+            position: relative;
+        }
+
+        /* Ensure modal is above all other components */
+        #userTypeModal::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99998;
+        }
     </style>
     <script>
         function toggleTimelineSearch() {
@@ -967,5 +994,21 @@
         }
     });
 </script>
+    <!-- User Type Selection Modal -->
+    <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-[99999] hidden">
+        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+            <h2 class="text-center font-bold text-2xl mb-6">Select Account Type</h2>
+            <div class="flex flex-col gap-4">
+                <button onclick="selectUserType('artist')" class="glass-header py-4 px-6 rounded-lg hover:bg-gray-100 transition-all">
+                    <h3 class="font-bold text-lg mb-2">Artist</h3>
+                    <p class="text-sm text-gray-600">Create an artist profile to showcase your work and connect with art enthusiasts</p>
+                </button>
+                <button onclick="selectUserType('user')" class="glass-header py-4 px-6 rounded-lg hover:bg-gray-100 transition-all">
+                    <h3 class="font-bold text-lg mb-2">Regular User</h3>
+                    <p class="text-sm text-gray-600">Browse artworks, follow artists, and participate in the community</p>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
