@@ -21,23 +21,30 @@
     display: none;
 }
 
-html, body {
-    scroll-behavior: smooth;
+html {
     height: 100%;
-    min-height: 100vh;
-    background-color: #1B1B1B; /* Fallback color */
+    margin: 0;
+    padding: 0;
+    background-color: #1B1B1B;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
     background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
     background-attachment: fixed;
     background-size: cover;
-    background-attachment: scroll; /* Added scroll attachment */
-    min-height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #1B1B1B; /* Fallback color */
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
     position: relative;
     overflow-x: hidden;
-    min-height: 100vh;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2rem;
 }
 /* global header */
 
@@ -56,11 +63,12 @@ nav ul li button,
 }
 
 main {
-    min-height: 100vh;
+    flex: 1;
+    min-height: calc(100vh - 80px);
     position: relative;
     z-index: 1;
-    scroll-snap-type: y mandatory;
-    height: 100vh;
+    margin: 0;
+    padding-top: 80px; /* Account for fixed header */
 }
 
 .glass-header {
@@ -69,6 +77,11 @@ main {
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: auto;
+    min-height: fit-content;
+    @supports not (backdrop-filter: blur(12px)) {
+        background: rgba(255, 255, 255, 0.95);
+    }
 }
 /* 
 .flyout {
@@ -117,6 +130,15 @@ main {
     display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;
+    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+    #editProfileButton {
+        font-size: 1rem;
+        padding: 1rem 1.5rem;
+    }
 }
 
 /* Profile specific styles */
@@ -192,13 +214,19 @@ main {
 .text-shadow {
     color: #111827;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     letter-spacing: 0.025em;
+}
+
+@media (min-width: 640px) {
+    .text-shadow {
+        font-size: 2.5rem;
+    }
 }
 
 .enhanced-text {
     color: white;
-    font-size: 1.125rem;
+    font-size: 0.875rem;
     line-height: 1.75;
     font-weight: 500;
     background: rgba(255, 255, 255, 0.1);
@@ -206,12 +234,20 @@ main {
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1.25rem;
+    padding: 1rem;
     border-radius: 0.75rem;
     border-left: 4px solid #10B981;
-    margin: 1rem 0;
+    margin: 0.75rem 0;
     transition: all 0.3s ease;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 640px) {
+    .enhanced-text {
+        font-size: 1.125rem;
+        padding: 1.25rem;
+        margin: 1rem 0;
+    }
 }
 
 .enhanced-text:hover {
@@ -222,20 +258,37 @@ main {
 
 .highlight-text {
     color: #1F2937;
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
     background: rgba(255, 255, 255, 0.9);
-    padding: 0.5rem 1rem;
+    padding: 0.375rem 0.75rem;
     border-radius: 0.5rem;
     display: inline-block;
     margin: 0.5rem 0;
 }
 
+@media (min-width: 640px) {
+    .highlight-text {
+        font-size: 1.25rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
 .profile-section {
     background: rgba(255, 255, 255, 0.95);
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 1rem;
+    height: 100%;
+    min-height: fit-content;
+}
+
+@media (min-width: 640px) {
+    .profile-section {
+        margin: 2rem;
+        padding: 2rem;
+    }
 }
 
 /* Mobile-first grid layout */
@@ -334,4 +387,152 @@ main {
     .relative.aspect-\[4\/5\] {
         height: 500px; /* Medium height for tablets */
     }
+}
+
+/* Mobile-first adjustments */
+.fa {
+    padding: 12px;
+    font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+    .fa {
+        padding: 20px;
+        font-size: 1.25rem;
+    }
+}
+
+/* Improved touch targets for mobile */
+button, 
+.fa, 
+.nav-item {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Better spacing for stacked elements on mobile */
+.space-y-4 > * + * {
+    margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+    .space-y-4 > * + * {
+        margin-top: 1.5rem;
+    }
+}
+
+.container {
+    padding-bottom: 0; /* Remove bottom padding */
+    min-height: 100%;
+}
+
+/* Fix for mobile devices */
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll; /* Better performance on mobile */
+    }
+    
+    main {
+        min-height: calc(100vh - 60px); /* Adjust for smaller header on mobile */
+    }
+}
+
+/* Update profile image container and image styles */
+.relative.aspect-\[4\/5\] {
+    position: relative;
+    width: 100%;
+    height: 350px; /* Default height for mobile */
+    min-height: 300px;
+    overflow: hidden;
+    border-radius: 1rem;
+    visibility: visible;
+    display: block;
+}
+
+#profileImage {
+    position: absolute;
+    margin-top: 50px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .relative.aspect-\[4\/5\] {
+        height: 350px;
+        margin-bottom: 1rem;
+        order: -1;
+        position: relative !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 1;
+    }
+
+    #profileImage {
+        position: absolute !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 2;
+    }
+
+    /* Force grid layout */
+    .grid {
+        display: grid !important;
+        gap: 1rem;
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+    .relative.aspect-\[4\/5\] {
+        height: 600px;
+    }
+}
+
+/* Fix profile image visibility on mobile */
+@media (max-width: 768px) {
+    .grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    .order-1.lg\:order-2 {
+        order: -1 !important; /* Force image to top */
+        position: relative !important;
+        height: 350px !important;
+        margin-bottom: 1rem;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    #profileImage {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        z-index: 10 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Remove any conflicting styles */
+.relative.aspect-\[4\/5\] {
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
 }
