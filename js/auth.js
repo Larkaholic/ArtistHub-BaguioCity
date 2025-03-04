@@ -493,3 +493,19 @@ export function navigateToProfile(userId) {
     }
 }
 
+function closeAnnouncement() {
+    const announcement = document.getElementById('announcement');
+    announcement.style.display = 'none';
+    localStorage.setItem('announcement-closed', 'true');
+}
+
+// Check if announcement was previously closed
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('announcement-closed')) {
+        const announcement = document.getElementById('announcement');
+        if (announcement) {
+            announcement.style.display = 'none';
+        }
+    }
+});
+
