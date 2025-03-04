@@ -14,78 +14,80 @@ window.hideUserTypeModal = function() {
     modal.classList.add('hidden');
 }
 
-// Update the selectUserType function
-window.selectUserType = async function(userType) {
-    // Hide the modal first
-    const userTypeModal = document.getElementById('userTypeModal');
-    if (userTypeModal) userTypeModal.classList.add('hidden');
-    
-    // Complete Google sign in with selected user type
-    await completeGoogleSignIn(userType);
+// Update the signInWithGoogle function for login form
+window.signInWithGoogle = async function(isRegistration = false) {
+    try {
+        if (isRegistration) {
+            // If this is registration, show user type modal first
+            const loginFlyout = document.getElementById('LoginFlyout');
+            if (loginFlyout) loginFlyout.classList.add('hidden');
+            const userTypeModal = document.getElementById('userTypeModal');
+            if (userTypeModal) userTypeModal.classList.remove('hidden');
+        } else {
+            // If this is login, directly proceed with Google sign in
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            
+            // Check if user exists and update last login
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                await updateDoc(doc(db, 'users', user.uid), {
+                    lastLogin: new Date()
+                });
+                toggleLoginFlyout();
+                if (typeof updateLoginState === 'function') {
+                    updateLoginState(user);
+                }
+            } else {
+                // If user doesn't exist, they need to register first
+                alert('No account found. Please register first.');
+                toggleLoginFlyout();
+                toggleForms(); // Switch to registration form
+            }
+        }
+    } catch (error) {
+        console.error('Error in Google sign-in flow:', error);
+        alert('Failed to sign in with Google. Please try again.');
+    }
 }
 
-// Add new function to handle Google sign in after user type selection
-window.completeGoogleSignIn = async function(userType) {
+// Update the selectUserType function
+window.selectUserType = async function(userType) {
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         
-        // Check if user document exists
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        
-        if (!userDoc.exists()) {
-            // Create new user document
-            await setDoc(doc(db, 'users', user.uid), {
-                email: user.email,
-                name: user.displayName,
-                userType: userType,
-                status: userType === 'artist' ? 'pending' : 'approved',
-                createdAt: new Date(),
-                lastLogin: new Date()
-            });
+        // Create new user document
+        await setDoc(doc(db, 'users', user.uid), {
+            email: user.email,
+            name: user.displayName,
+            userType: userType,
+            status: userType === 'artist' ? 'pending' : 'approved',
+            createdAt: new Date(),
+            lastLogin: new Date()
+        });
 
-            if (userType === 'artist') {
-                alert('Your artist registration is pending approval. We will review your application shortly.');
-            }
-        } else {
-            // Existing user - just update last login
-            await updateDoc(doc(db, 'users', user.uid), {
-                lastLogin: new Date()
-            });
-        }
-
-        // Hide user type modal
-        const userTypeModal = document.getElementById('userTypeModal');
-        if (userTypeModal) userTypeModal.classList.add('hidden');
+        // Hide modals
+        hideUserTypeModal();
         
         if (typeof updateLoginState === 'function') {
             updateLoginState(user);
         }
+
+        if (userType === 'artist') {
+            alert('Your artist registration is pending approval. We will review your application shortly.');
+        }
         
-        return user;
     } catch (error) {
-        console.error('Error signing in with Google:', error);
-        alert('Failed to sign in with Google. Please try again.');
-        throw error;
+        console.error('Error creating user:', error);
+        alert('Failed to complete registration. Please try again.');
     }
 }
 
-// Update the signInWithGoogle function
-window.signInWithGoogle = async function() {
-    try {
-        // Show user type selection modal first
-        const userTypeModal = document.getElementById('userTypeModal');
-        if (userTypeModal) {
-            // Hide login flyout
-            const loginFlyout = document.getElementById('LoginFlyout');
-            if (loginFlyout) loginFlyout.classList.add('hidden');
-            // Show user type modal
-            userTypeModal.classList.remove('hidden');
-        }
-    } catch (error) {
-        console.error('Error in Google sign-in flow:', error);
-        alert('Failed to initialize sign in. Please try again.');
-    }
+// Add cancel button handler
+window.cancelUserTypeSelection = function() {
+    hideUserTypeModal();
+    toggleLoginFlyout();
 }
 
 // Registration
