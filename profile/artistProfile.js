@@ -72,13 +72,28 @@ async function loadProfile() {
                     .join(' ');
             };
 
-            // Update profile image
+            // Update profile image with error handling and visibility forcing
             const profileImage = document.getElementById('profileImage');
             if (profileImage) {
-                profileImage.src = userData.photoURL || 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
-                profileImage.onerror = () => {
-                    profileImage.src = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
-                };
+                const defaultImage = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
+                
+                // Force visibility
+                profileImage.style.visibility = 'visible';
+                profileImage.style.display = 'block';
+                profileImage.style.opacity = '1';
+                
+                // Set image source with fallback
+                if (userData.photoURL) {
+                    profileImage.src = userData.photoURL;
+                    profileImage.onerror = () => {
+                        profileImage.src = defaultImage;
+                    };
+                } else {
+                    profileImage.src = defaultImage;
+                }
+                
+                // Force layout recalculation
+                profileImage.offsetHeight;
             }
 
             // Update display name with enhanced visibility
@@ -216,4 +231,19 @@ window.handleAdminAction = async function(profileId) {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, calling loadProfile');
     loadProfile();
+});
+
+// Add image load event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const profileImage = document.getElementById('profileImage');
+    if (profileImage) {
+        profileImage.addEventListener('load', () => {
+            console.log('Profile image loaded');
+            profileImage.style.visibility = 'visible';
+        });
+        profileImage.addEventListener('error', () => {
+            console.log('Profile image failed to load');
+            profileImage.src = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
+        });
+    }
 });

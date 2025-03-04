@@ -177,73 +177,81 @@
         </div>
     </div>
 
-    <main class="pt-20">
-        <div class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Right Image Section - Moved to top on mobile -->
-                <div class="relative aspect-[4/5] md:order-2">
+    <main class="pt-20 px-4 sm:px-6 lg:px-8 min-h-screen">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
+                <!-- Image Section - Always on top for mobile -->
+                <div class="relative w-full h-[350px] sm:h-[400px] lg:h-[600px] order-1 lg:order-2 overflow-hidden rounded-2xl">
                     <img
                         id="profileImage"
                         src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true"
                         alt="Profile Image"
-                        class="absolute inset-0 w-full h-full object-cover rounded-3xl shadow-lg"
+                        class="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-lg"
+                        loading="eager"
+                        style="visibility: visible !important; display: block !important; z-index: 10 !important;"
                     />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
                 </div>
                 
-                <!-- Left Profile Section -->
-                <div class="glass-header rounded-3xl p-8 shadow-xl h-auto flex flex-col md:order-1">
-                    <h1 id="displayName" class="text-3xl font-bold mb-6">Loading...</h1>
+                <!-- Profile Section -->
+                <div class="glass-header rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl order-2 lg:order-1">
+                    <h1 id="displayName" class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Loading...</h1>
                     
-                    <!-- Scrollable content area -->
-                    <div class="flex-1 overflow-y-auto pr-4" style="scrollbar-width: thin;">
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-2 text-black">
-                                <i class="fa fa-paint-brush flex-shrink-0"></i>
-                                <span id="specialization">Loading...</span>
-                            </div>
-                            
-                            <div class="flex items-center gap-2 text-black">
-                                <i class="fa fa-map-marker flex-shrink-0"></i>
-                                <span>Baguio City</span>
-                            </div>
-                            
-                            <div class="prose max-w-none">
-                                <p id="artistBio" class="text-black whitespace-pre-wrap max-h-96 overflow-y-auto pr-4" style="scrollbar-width: thin;">Loading...</p>
-                            </div>
+                    <!-- Scrollable content -->
+                    <div class="space-y-4 mb-6">
+                        <div class="flex items-center gap-2 text-black">
+                            <i class="fa fa-paint-brush w-6"></i>
+                            <span id="specialization" class="text-sm sm:text-base">Loading...</span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 text-black">
+                            <i class="fa fa-map-marker w-6"></i>
+                            <span class="text-sm sm:text-base">Baguio City</span>
+                        </div>
+                        
+                        <div class="prose max-w-none">
+                            <p id="artistBio" class="text-black text-sm sm:text-base whitespace-pre-wrap max-h-[200px] sm:max-h-[300px] overflow-y-auto pr-4">Loading...</p>
                         </div>
                     </div>
                     
-                    <!-- Fixed bottom section -->
-                    <div class="mt-4 pt-4 border-t border-gray-200 flex-shrink-0">
+                    <!-- Bottom section -->
+                    <div class="mt-4 pt-4 border-t border-gray-200">
                         <button 
                             id="dynamicGalleryButton"
-                            class="bg-green-600 text-white text-xl px-6 py-5 rounded-lg hover:bg-green-700 transition-colors duration-300 w-full"
-                            onclick="navToEvent('../Gallery/gallery.html?artistId=aIGESSPWarMBvHykFWbuKmI6Je03')"
+                            class="bg-green-600 text-white text-base sm:text-xl px-4 sm:px-6 py-3 sm:py-5 rounded-lg hover:bg-green-700 transition-colors duration-300 w-full"
                         >
                             View My Gallery
                         </button>
                         
-                        <div class="flex gap-6 mt-4">
-                            <a id="facebookLink" href="#" class="fa fa-facebook text-black hover:text-gray-700"></a>
-                            <a id="instagramLink" href="#" class="fa fa-instagram text-black hover:text-gray-700"></a>
-                            <a id="youtubeLink" href="#" class="fa fa-youtube text-black hover:text-gray-700"></a>
-                            <a id="googleLink" href="#" class="fa fa-google text-black hover:text-gray-700"></a>
+                        <div class="flex flex-wrap gap-4 mt-4 justify-center sm:justify-start">
+                            <a id="facebookLink" href="#" class="fa fa-facebook"></a>
+                            <a id="instagramLink" href="#" class="fa fa-instagram"></a>
+                            <a id="youtubeLink" href="#" class="fa fa-youtube"></a>
+                            <a id="googleLink" href="#" class="fa fa-google"></a>
                         </div>
                     </div>
                 </div>
             </div>
-    
+
             <!-- Achievements Section -->
-            <section id="achievements" class="glass-header rounded-3xl p-8 mt-8 mb-8 max-w-6xl mx-auto">
-                <h2 class="text-2xl font-bold mb-4">Achievements</h2>
+            <section id="achievements" class="glass-header rounded-2xl p-4 sm:p-8 mt-6 sm:mt-8 max-w-7xl mx-auto">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4">Achievements</h2>
                 <div class="flex gap-4">
                     <input type="file" id="achievementImages" accept="image/*" multiple class="hidden">
-                    <label id="chooseFilesLabel" for="achievementImages" class="bg-green-600 text-white px-6 py-2 rounded-lg cursor-pointer hover:bg-green-700 transition-colors hidden">
+                    <label id="chooseFilesLabel" for="achievementImages" class="bg-green-600 text-white px-4 sm:px-6 py-2 rounded-lg cursor-pointer hover:bg-green-700 transition-colors text-sm sm:text-base hidden">
                         Choose Files
                     </label>
                 </div>
             </section>
+        </div>
+        <div class="fixed bottom-8 left-8 z-50 mb-4"> 
+            <button 
+                id="editProfileButton"
+                class="glass-header text-white p-4 rounded-full shadow-lg hover:bg-gray-300 hover:text-black transform hover:scale-105 transition-all duration-200 flex items-center space-x-2"
+                style="background-color: rgba(0, 0, 0, 0.5);"
+            >
+                <span>Edit Profile</span>
+            </button>
         </div>
     </main>
     <script type="module">
@@ -300,6 +308,24 @@
                 }
             });
         });
+
+        // Add this to debug profile loading
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, checking profile ID');
+            const urlParams = new URLSearchParams(window.location.search);
+            const profileId = urlParams.get('id');
+            console.log('Profile ID:', profileId);
+            
+            if (!profileId) {
+                console.log('No profile ID in URL, checking for artistId');
+                const artistId = urlParams.get('artistId');
+                if (artistId) {
+                    console.log('Found artistId:', artistId);
+                    // Redirect to correct URL format if needed
+                    window.location.href = `profile.html?id=${artistId}`;
+                }
+            }
+        });
     </script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
@@ -313,15 +339,6 @@
                 </ul>
             </nav>
         </div>
-    </div>
-    <div class="fixed bottom-8 left-8 z-50"> 
-        <button 
-            id="editProfileButton"
-            class="glass-header text-white p-4 rounded-full shadow-lg hover:bg-gray-300 hover:text-black transform hover:scale-105 transition-all duration-200 flex items-center space-x-2"
-            style="background-color: rgba(0, 0, 0, 0.5);"
-        >
-            <span>Edit Profile</span>
-        </button>
     </div>
 
     <!-- Scripts -->
