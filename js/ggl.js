@@ -2,48 +2,92 @@ import { signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider } f
 import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { auth, db, provider } from './firebase-config.js';
 
+let pendingGoogleUser = null;
 
-// sign in
-window.signInWithGoogle = async function(userType = 'user') {
+window.showUserTypeModal = function() {
+    const modal = document.getElementById('userTypeModal');
+    modal.classList.remove('hidden');
+}
+
+window.hideUserTypeModal = function() {
+    const modal = document.getElementById('userTypeModal');
+    modal.classList.add('hidden');
+}
+
+// Update the signInWithGoogle function for login form
+window.signInWithGoogle = async function(isRegistration = false) {
+    try {
+        if (isRegistration) {
+            // If this is registration, show user type modal first
+            const loginFlyout = document.getElementById('LoginFlyout');
+            if (loginFlyout) loginFlyout.classList.add('hidden');
+            const userTypeModal = document.getElementById('userTypeModal');
+            if (userTypeModal) userTypeModal.classList.remove('hidden');
+        } else {
+            // If this is login, directly proceed with Google sign in
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            
+            // Check if user exists and update last login
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                await updateDoc(doc(db, 'users', user.uid), {
+                    lastLogin: new Date()
+                });
+                toggleLoginFlyout();
+                if (typeof updateLoginState === 'function') {
+                    updateLoginState(user);
+                }
+            } else {
+                // If user doesn't exist, they need to register first
+                alert('No account found. Please register first.');
+                toggleLoginFlyout();
+                toggleForms(); // Switch to registration form
+            }
+        }
+    } catch (error) {
+        console.error('Error in Google sign-in flow:', error);
+        alert('Failed to sign in with Google. Please try again.');
+    }
+}
+
+// Update the selectUserType function
+window.selectUserType = async function(userType) {
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
         
-        // Check if user document exists
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        
-        if (!userDoc.exists()) {
-            // Create new user document if it doesn't exist
-            // Use the provided userType if it's a registration, otherwise default to 'user'
-            await setDoc(doc(db, 'users', user.uid), {
-                email: user.email,
-                name: user.displayName,
-                userType: userType, // Use the passed userType
-                createdAt: new Date(),
-                lastLogin: new Date()
-            });
-        } else {
-            // Update last login
-            await setDoc(doc(db, 'users', user.uid), {
-                lastLogin: new Date()
-            }, { merge: true });
-        }
+        // Create new user document
+        await setDoc(doc(db, 'users', user.uid), {
+            email: user.email,
+            name: user.displayName,
+            userType: userType,
+            status: userType === 'artist' ? 'pending' : 'approved',
+            createdAt: new Date(),
+            lastLogin: new Date()
+        });
 
-        // Close the login modal
-        toggleLoginFlyout();
+        // Hide modals
+        hideUserTypeModal();
         
-        // Update UI to show user is logged in
         if (typeof updateLoginState === 'function') {
             updateLoginState(user);
         }
+
+        if (userType === 'artist') {
+            alert('Your artist registration is pending approval. We will review your application shortly.');
+        }
         
-        console.log('Successfully signed in with Google');
-        return user;
     } catch (error) {
-        console.error('Error signing in with Google:', error);
-        alert('Failed to sign in with Google. Please try again.');
-        throw error;
+        console.error('Error creating user:', error);
+        alert('Failed to complete registration. Please try again.');
     }
+}
+
+// Add cancel button handler
+window.cancelUserTypeSelection = function() {
+    hideUserTypeModal();
+    toggleLoginFlyout();
 }
 
 // Registration
