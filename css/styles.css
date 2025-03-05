@@ -436,6 +436,8 @@
         justify-content: center;
         align-items: center;
         font-size: 0.95rem;
+        transition: opacity 0.5s ease-out;
+        opacity: 1;
     }
 
     .announcement-banner .new-badge {
