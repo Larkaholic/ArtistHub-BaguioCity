@@ -19,13 +19,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getBasePath, isUserAdmin, navToEvent } from './utils.js';
 
-// predefined admin emails (store these securely in production)
-const ADMIN_EMAILS = [
-    'admin@artisthub.com',
-    'developer@artisthub.com'
-    // Add other admin emails
-];
-
 // add the navigation helper at the top of the file
 function goToProfile() {
     window.location.href = './profile/profile.html';
@@ -76,7 +69,7 @@ window.handleRegister = async function(event) {
     }
 }
 
-// login handler
+// Modified login handler with better security
 window.handleLogin = async function(e) {
     e.preventDefault();
     
@@ -88,23 +81,32 @@ window.handleLogin = async function(e) {
         const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
         const userData = userDoc.data();
 
-        // hide login flyout
+        // Clear sensitive data immediately
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+
+        // Remove any console logs of user data
+        if (userData?.status === 'pending') {
+            await signOut(auth);
+            alert('Your account is pending approval.');
+            return;
+        }
+
         const loginFlyout = document.getElementById('LoginFlyout');
         if (loginFlyout) {
             loginFlyout.classList.add('hidden');
         }
 
-        // clear form
-        document.getElementById('loginEmail').value = '';
-        document.getElementById('loginPassword').value = '';
-
-        // redirect admin to dashboard
+        // Secure redirect without exposing role
         if (userData?.isAdmin) {
             window.location.href = `${baseUrl}/admin/dashboard.html`;
+        } else {
+            window.location.href = `${baseUrl}/profile/profile.html`;
         }
 
     } catch (error) {
-        alert('login failed: ' + error.message);
+        // Generic error message for security
+        alert('Invalid login credentials. Please try again.');
     }
 };
 
@@ -186,34 +188,10 @@ onAuthStateChanged(auth, async (user) => {
     const profileLinks = document.querySelectorAll('#profileLink');
 
     if (user) {
-        // User is signed in
-        console.log('User is signed in:', user.email);
-        
-        // Check if user is admin
-        try {
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            const isAdmin = userDoc.exists() && userDoc.data().isAdmin;
-            
-            // Show/hide admin button based on role
-            adminButtons.forEach(btn => {
-                btn.style.display = isAdmin ? 'block' : 'none';
-            });
-        } catch (error) {
-            console.error('Error checking admin status:', error);
-            adminButtons.forEach(btn => btn.style.display = 'none');
-        }
-
-        // Update other UI elements
-        loginButtons.forEach(btn => btn.style.display = 'none');
-        logoutButtons.forEach(btn => btn.style.display = 'block');
-        profileLinks.forEach(link => link.style.display = 'block');
+        // Update UI without logging credentials
+        updateUIForUser(user);
     } else {
-        // User is signed out
-        console.log('User is signed out');
-        loginButtons.forEach(btn => btn.style.display = 'block');
-        logoutButtons.forEach(btn => btn.style.display = 'none');
-        adminButtons.forEach(btn => btn.style.display = 'none');
-        profileLinks.forEach(link => link.style.display = 'none');
+        updateUIForNoUser();
     }
 
     // get current page
