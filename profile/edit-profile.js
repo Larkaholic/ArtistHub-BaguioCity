@@ -21,18 +21,53 @@ window.closeInstructions = closeInstructions;
 
 import { auth, db } from '../js/firebase-config.js';
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { GoogleAuthProvider, linkWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // add your Cloudinary configuration
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'artist_profiles';
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize auth state listener first
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
             window.location.href = 'profile.html';
             return;
         }
 
+        // Check Google binding status immediately when user is available
+        try {
+            const methods = await fetchSignInMethodsForEmail(auth, user.email);
+            const isGoogleLinked = methods.includes('google.com');
+            
+            const statusSpan = document.getElementById('bindingStatus');
+            const bindButton = document.getElementById('bindGoogleBtn');
+            const buttonText = document.getElementById('bindGoogleBtnText');
+
+            if (statusSpan && bindButton && buttonText) {
+                if (isGoogleLinked) {
+                    statusSpan.textContent = 'Connected';
+                    statusSpan.className = 'text-green-600 font-semibold';
+                    buttonText.textContent = 'Google Account Connected';
+                    bindButton.disabled = true;
+                    bindButton.className = 'bg-gray-100 text-gray-500 px-6 py-2 rounded-lg border-2 border-gray-300 flex items-center gap-2 cursor-not-allowed';
+                } else {
+                    statusSpan.textContent = 'Not Connected';
+                    statusSpan.className = 'text-red-600 font-semibold';
+                    buttonText.textContent = 'Bind Google Account';
+                    bindButton.disabled = false;
+                }
+            }
+        } catch (error) {
+            console.error('Error checking Google binding status:', error);
+            const statusSpan = document.getElementById('bindingStatus');
+            if (statusSpan) {
+                statusSpan.textContent = 'Error checking status';
+                statusSpan.className = 'text-red-600 font-semibold';
+            }
+        }
+
+        // Rest of your existing code for loading profile data
         try {
             const userDoc = await getDoc(doc(db, "users", user.uid));
             const userData = userDoc.data();
@@ -195,3 +230,53 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
+
+async function updateGoogleBindingStatus(user) {
+    const statusSpan = document.getElementById('bindingStatus');
+    const bindButton = document.getElementById('bindGoogleBtn');
+    const buttonText = document.getElementById('bindGoogleBtnText');
+
+    if (!statusSpan || !bindButton || !buttonText) return;
+
+    const methods = await fetchSignInMethodsForEmail(auth, user.email);
+    const isGoogleLinked = methods.includes('google.com');
+
+    if (isGoogleLinked) {
+        statusSpan.textContent = 'Connected';
+        statusSpan.className = 'text-green-600 font-semibold';
+        buttonText.textContent = 'Google Account Connected';
+        bindButton.disabled = true;
+        bindButton.className = 'bg-gray-100 text-gray-500 px-6 py-2 rounded-lg border-2 border-gray-300 flex items-center gap-2 cursor-not-allowed';
+    } else {
+        statusSpan.textContent = 'Not Connected';
+        statusSpan.className = 'text-red-600 font-semibold';
+        buttonText.textContent = 'Bind Google Account';
+        bindButton.disabled = false;
+    }
+}
+
+// Add this function to handle Google binding
+async function handleGoogleBinding() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+        const provider = new GoogleAuthProvider();
+        await linkWithPopup(user, provider);
+        
+        // Update UI after successful binding
+        await updateGoogleBindingStatus(user);
+        
+        alert('Google account successfully linked!');
+    } catch (error) {
+        console.error('Error linking Google account:', error);
+        if (error.code === 'auth/credential-already-in-use') {
+            alert('This Google account is already linked to another profile.');
+        } else {
+            alert('Failed to link Google account. Please try again.');
+        }
+    }
+}
+
+// Make function globally available
+window.handleGoogleBinding = handleGoogleBinding;
