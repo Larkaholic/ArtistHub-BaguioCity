@@ -19,8 +19,6 @@ export async function loadArtists() {
         const featuredArtistsRef = doc(db, "featured", "artists");
         const featuredSnap = await getDoc(featuredArtistsRef);
         
-        console.log('Fetching featured artists list...');
-        
         if (!featuredSnap.exists()) {
             console.log('No featured artists document found');
             artistsGrid.innerHTML = '<p class="text-center text-gray-600">No featured artists selected by admin yet</p>';
@@ -28,7 +26,6 @@ export async function loadArtists() {
         }
 
         const featuredArtists = featuredSnap.data().artists || [];
-        console.log('Featured artists data:', featuredArtists);
 
         if (featuredArtists.length === 0) {
             artistsGrid.innerHTML = '<p class="text-center text-gray-600">No featured artists selected by admin yet</p>';

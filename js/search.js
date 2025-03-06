@@ -37,9 +37,6 @@ async function fetchArtistsFromDatabase() {
             }
         });
 
-        console.log('Fetched all artists:', cachedArtists);
-        console.log('Fetched featured artists:', featuredArtists);
-
         return { cachedArtists, featuredArtists };
     } catch (error) {
         console.error('Error fetching artists:', error);
