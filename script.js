@@ -6,21 +6,15 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
 
-    console.log("Header found:", header);
-
     window.addEventListener('scroll', function() {
         if (window.scrollY > 50) {
             header.classList.add('solid-header');
             header.classList.remove('transparent-header');
-            console.log("Header changed to solid");
         } else {
             header.classList.add('transparent-header');
             header.classList.remove('solid-header');
-            console.log("Header changed to transparent");
         }
     });
-
-    console.log("Scroll event listener added.");
 });
 
 // Auto-hide announcement after 5 seconds
