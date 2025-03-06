@@ -1,0 +1,68 @@
+body {
+    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    margin: 0;
+    color: white;
+}
+
+.edit-form-container {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.button-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: rgba(27, 66, 66, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 50;
+}
+
+.edit-form-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.edit-form-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.edit-form-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+}
+
+.text-stroke {
+    color: black;
+    text-shadow: 
+        -1px -1px 0 white,
+        1px -1px 0 white,
+        -1px 1px 0 white,
+        1px 1px 0 white;
+}
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input, textarea {
+    color: black;
+    border-color: #4B5563; /* gray-600 */
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #2563EB; /* blue-600 */
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); /* blue-600 with opacity */
+}

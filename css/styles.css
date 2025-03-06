@@ -420,3 +420,45 @@
         background-color: rgba(255, 255, 255, 0.3);
         border-radius: 20px;
     }
+
+    /* ==========================================================================
+        12. ANNOUNCEMENT BANNER
+        ========================================================================== */
+    .announcement-banner {
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        color: white;
+        text-align: center;
+        padding: 12px 20px;
+        position: relative;
+        width: 100%;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.95rem;
+        transition: opacity 0.5s ease-out;
+        opacity: 1;
+    }
+
+    .announcement-banner .new-badge {
+        background-color: #FFD700;
+        color: black;
+        padding: 2px 8px;
+        border-radius: 12px;
+        margin-right: 10px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .announcement-banner .close-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 5px;
+        font-size: 2rem;
+    }

@@ -7,54 +7,8 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="editprofile.css">
 
-    <style>
-        body {
-            background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
-            background-size: cover;
-            background-position: center;
-            min-height: 100vh;
-            margin: 0;
-            color: white;
-        }
-
-        .edit-form-container {
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-            padding-bottom: 20px;
-        }
-        
-        .button-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1rem;
-            background: rgba(27, 66, 66, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 50;
-        }
-
-        .edit-form-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .edit-form-container::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .edit-form-container::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-        }
-
-        input, textarea {
-            color: black;
-        }
-    </style>
 </head>
 <body>
     <div class="container mx-auto px-4 py-8">
@@ -79,55 +33,75 @@
             <!-- basic Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block font-medium mb-2 text-black">Display Name</label>
-                    <input type="text" id="displayName" class="w-full p-2 border rounded-md">
+                    <label class="block font-bold mb-2 text-black text-stroke">Display Name</label>
+                    <input type="text" id="displayName" class="w-full p-2 border-2 border-gray-600 rounded-md">
                 </div>
                 
                 <div>
-                    <label class="block font-medium mb-2 text-black">Specialization</label>
-                    <input type="text" id="specialization" class="w-full p-2 border rounded-md">
+                    <label class="block font-bold mb-2 text-black text-stroke">Specialization</label>
+                    <input type="text" id="specialization" class="w-full p-2 border-2 border-gray-600 rounded-md">
                 </div>
             </div>
 
             <!-- Bio -->
             <div>
-                <label class="block font-medium mb-2">Bio</label>
-                <textarea id="bio" rows="4" class="w-full p-2 border rounded-md"></textarea>
+                <label class="block font-bold mb-2 text-black text-stroke">Bio</label>
+                <textarea id="bio" rows="4" class="w-full p-2 border-2 border-gray-600 rounded-md"></textarea>
             </div>
 
             <!-- Social Links -->
             <div class="space-y-4">
-                <h3 class="font-medium text-black">Social Media Links</h3>
+                <h3 class="font-bold text-black text-stroke">Social Media Links</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1 text-black">Facebook</label>
-                            <input type="url" id="facebook" placeholder="Facebook URL" class="w-full p-2 border rounded-md">
+                            <label class="block text-sm mb-1 text-black text-stroke font-bold">Facebook</label>
+                            <input type="url" id="facebook" placeholder="Facebook URL" class="w-full p-2 border-2 border-gray-600 rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('facebook')">Instructions</button>
                     </div>
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1 text-black">Instagram</label>
-                            <input type="url" id="instagram" placeholder="Instagram URL" class="w-full p-2 border rounded-md">
+                            <label class="block text-sm mb-1 text-black text-stroke font-bold">Instagram</label>
+                            <input type="url" id="instagram" placeholder="Instagram URL" class="w-full p-2 border-2 border-gray-600 rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('instagram')">Instructions</button>
                     </div>
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1 text-black">YouTube</label>
-                            <input type="url" id="youtube" placeholder="YouTube URL" class="w-full p-2 border rounded-md">
+                            <label class="block text-sm mb-1 text-black text-stroke font-bold">YouTube</label>
+                            <input type="url" id="youtube" placeholder="YouTube URL" class="w-full p-2 border-2 border-gray-600 rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('youtube')">Instructions</button>
                     </div>
                     <div class="flex items-center space-x-2">
                         <div class="flex-1">
-                            <label class="block text-sm mb-1 text-black">Google</label>
-                            <input type="url" id="google" placeholder="Google URL" class="w-full p-2 border rounded-md">
+                            <label class="block text-sm mb-1 text-black text-stroke font-bold">Google</label>
+                            <input type="url" id="google" placeholder="Google URL" class="w-full p-2 border-2 border-gray-600 rounded-md">
                         </div>
                         <button type="button" class="text-blue-500 hover:text-blue-700 text-sm" onclick="showInstructions('google')">Instructions</button>
                     </div>
                 </div>
+            </div>
+
+            <!-- Google Account Binding -->
+            <div class="mt-8 p-4 border-2 border-gray-300 rounded-lg">
+                <h3 class="font-bold text-black text-stroke mb-4">Google Account</h3>
+                <div id="googleAccountStatus" class="mb-4">
+                    <p class="text-black text-stroke">Status: <span id="bindingStatus">Checking...</span></p>
+                </div>
+                <button type="button" 
+                        id="bindGoogleBtn"
+                        onclick="handleGoogleBinding()"
+                        class="bg-white text-black px-6 py-2 rounded-lg border-2 border-gray-300 hover:bg-gray-100 flex items-center gap-2">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span id="bindGoogleBtnText">Bind Google Account</span>
+                </button>
             </div>
             
             <!-- Instructions Modal -->
@@ -158,4 +132,4 @@
     <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="./edit-profile.js"></script>
 </body>
-</html> 
+</html>

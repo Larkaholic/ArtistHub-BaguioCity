@@ -15,6 +15,11 @@
     
 </head>
 <body class="bg-cover">
+    <div id="announcement" class="announcement-banner">
+        <span class="new-badge">New!</span>
+        <span>You can now sign in or sign up with Google for faster access! Edit your profile to bind your account.</span>
+        <button class="close-btn" onclick="closeAnnouncement()">×</button>
+    </div>
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
@@ -107,7 +112,7 @@
                     <div class="border-t border-gray-300 flex-grow mx-4"></div>
                 </div>
                 <div class="flex justify-center mb-4">
-                    <button type="button" onclick="signInWithGoogle()" class="glass-header flex items-center justify-center gap-2 w-4/5 py-2 px-4 rounded-md hover:bg-gray-300">
+                    <button type="button" onclick="signInWithGoogle(false)" class="glass-header flex items-center justify-center gap-2 w-4/5 py-2 px-4 rounded-md hover:bg-gray-300">
                         <svg class="w-5 h-5" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                             <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -151,7 +156,7 @@
                     <div class="border-t border-gray-300 flex-grow mx-4"></div>
                 </div>
                 <div class="flex justify-center mb-4">
-                    <button type="button" onclick="signInWithGoogle(document.getElementById('userType').value)" class="glass-header flex items-center justify-center gap-2 w-4/5 py-2 px-4 rounded-md hover:bg-gray-300">
+                    <button type="button" onclick="signInWithGoogle(true)" class="glass-header flex items-center justify-center gap-2 w-4/5 py-2 px-4 rounded-md hover:bg-gray-300">
                         <svg class="w-5 h-5" viewBox="0 0 24 24">
                             <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                             <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -824,6 +829,33 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
+
+        /* Add these styles for the user type modal */
+        #userTypeModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 99999;
+        }
+
+        #userTypeModal .glass-header2 {
+            z-index: 100000;
+            position: relative;
+        }
+
+        /* Ensure modal is above all other components */
+        #userTypeModal::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99998;
+        }
     </style>
     <script>
         function toggleTimelineSearch() {
@@ -967,5 +999,26 @@
         }
     });
 </script>
+    <!-- User Type Selection Modal -->
+    <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-[99999] hidden">
+        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+            <button onclick="cancelUserTypeSelection()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h2 class="text-center font-bold text-2xl mb-6">Select Account Type</h2>
+            <div class="flex flex-col gap-4">
+                <button onclick="selectUserType('artist')" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-green-500 hover:border-green-600">
+                    <h3 class="font-bold text-lg mb-2">Artist</h3>
+                    <p class="text-sm text-gray-600">Create an artist profile to showcase your work and connect with art enthusiasts</p>
+                </button>
+                <button onclick="selectUserType('user')" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-blue-500 hover:border-blue-600">
+                    <h3 class="font-bold text-lg mb-2">Regular User</h3>
+                    <p class="text-sm text-gray-600">Browse artworks, follow artists, and participate in the community</p>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -151,32 +151,45 @@ async function loadProfile() {
                 buttonContainer.style.display = 'none';
             }
 
-            // Check user permissions
+            // Check user permissions and handle button visibility
             onAuthStateChanged(auth, async (user) => {
                 const editButton = document.getElementById('editProfileButton');
-                if (!editButton || !buttonContainer) return;
-
-                if (!user) {
-                    buttonContainer.style.display = 'none';
-                    return;
-                }
-
+                const buttonContainer = document.querySelector('.fixed.bottom-8.right-8'); // Make sure this matches your HTML
+            
+                // Hide edit button by default
+                if (editButton) editButton.style.display = 'none';
+                if (buttonContainer) buttonContainer.style.display = 'none';
+            
+                // If no user is logged in, keep button hidden
+                if (!user || !profileId) return;
+            
                 try {
-                    const currentUserDoc = await getDoc(doc(db, "users", user.uid));
-                    const isAdmin = currentUserDoc.exists() && currentUserDoc.data().isAdmin === true;
-
-                    if (isAdmin) {
-                        buttonContainer.style.display = 'block';
-                        editButton.innerHTML = `<span>Admin Controls</span>`;
-                        editButton.onclick = () => handleAdminAction(profileId);
-                    } else if (user.uid === profileId) {
-                        buttonContainer.style.display = 'block';
-                        editButton.innerHTML = `<span>Edit Profile</span>`;
-                        editButton.onclick = goToEditProfile;
+                    // Show edit button only if user is viewing their own profile
+                    if (user.uid === profileId) {
+                        if (buttonContainer) buttonContainer.style.display = 'block';
+                        if (editButton) {
+                            editButton.style.display = 'block';
+                            editButton.innerHTML = '<span>Edit Profile</span>';
+                            editButton.onclick = goToEditProfile;
+                        }
+                    } else {
+                        // Check if user is admin viewing someone else's profile
+                        const currentUserDoc = await getDoc(doc(db, "users", user.uid));
+                        const isAdmin = currentUserDoc.exists() && currentUserDoc.data().isAdmin === true;
+            
+                        if (isAdmin) {
+                            if (buttonContainer) buttonContainer.style.display = 'block';
+                            if (editButton) {
+                                editButton.style.display = 'block';
+                                editButton.innerHTML = '<span>Admin Controls</span>';
+                                editButton.onclick = () => handleAdminAction(profileId);
+                            }
+                        }
                     }
                 } catch (error) {
                     console.error("Error checking user status:", error);
-                    buttonContainer.style.display = 'none';
+                    if (editButton) editButton.style.display = 'none';
+                    if (buttonContainer) buttonContainer.style.display = 'none';
                 }
             });
         }
@@ -244,6 +257,16 @@ document.addEventListener('DOMContentLoaded', () => {
         profileImage.addEventListener('error', () => {
             console.log('Profile image failed to load');
             profileImage.src = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
+        });
+    }
+});
+
+// Add click event listener for edit profile button
+document.addEventListener('DOMContentLoaded', () => {
+    const editProfileButton = document.getElementById('editProfileButton');
+    if (editProfileButton) {
+        editProfileButton.addEventListener('click', () => {
+            window.location.href = `edit-profile.html?id=${profileId}`;
         });
     }
 });
