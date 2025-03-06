@@ -15,8 +15,4 @@ document.addEventListener("DOMContentLoaded", function() {
             header.classList.remove('solid-header');
         }
     });
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 });
