@@ -45,7 +45,7 @@
                     <a href="javascript:void(0)" onclick="navToEvent('./shop/shop.html')">Shop</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="handleProfileNavigation()">Profile</a>
+                    <a href="javascript:void(0)" onclick="handleEditProfile()">Profile</a>
                 </li>
             </ul>
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
@@ -55,14 +55,26 @@
                 <li class="login-button">
                     <button onclick="toggleLoginFlyout(event)" class="nav-item bg-blue-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-blue-600">Login</button>
                 </li>
-                <li class="logout-button" style="display: none;">
-                    <button onclick="handleLogout()" class="nav-item bg-red-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-red-600">Logout</button>
+                <li class="profile-dropdown-container" style="display: none;">
+                    <div class="relative">
+                        <button class="profile-button flex items-center">
+                            <img id="userProfilePic" src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
+                                 alt="Profile" 
+                                 class="w-10 h-10 rounded-full object-cover border-2 border-green-500">
+                        </button>
+                        <div id="profileDropdown" class="profile-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-50">
+                            <div class="py-1">
+                                <a href="javascript:void(0)" onclick="handleEditProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Profile</a>
+                                <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </nav>
     </header>
 
-    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration:300 ease-in-out z-40 sm:hidden">
         <div class="glass-header h-full p-6">
             <nav>
                 <ul class="flex flex-col space-y-4 mt-5">
@@ -856,6 +868,24 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 99998;
         }
+
+        .profile-dropdown {
+            transform-origin: top right;
+            transition: all 0.2s ease-out;
+        }
+
+        .profile-button:hover img {
+            border-color: #22c55e;
+        }
+
+        .profile-dropdown.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .profile-dropdown a {
+            transition: all 0.2s ease;
+        }
     </style>
     <script>
         function toggleTimelineSearch() {
@@ -900,6 +930,42 @@
                 }
             }
         }
+
+        function toggleProfileDropdown(event) {
+            event.preventDefault();
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileButton = document.querySelector('.profile-button');
+            
+            if (!profileButton.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Modify your existing auth state observer to update the profile picture
+        auth.onAuthStateChanged(function(user) {
+            const loginButton = document.querySelector('.login-button');
+            const profileDropdown = document.querySelector('.profile-dropdown-container');
+            const userProfilePic = document.getElementById('userProfilePic');
+            
+            if (user) {
+                loginButton.style.display = 'none';
+                profileDropdown.style.display = 'block';
+                
+                // Update profile picture if available
+                if (user.photoURL) {
+                    userProfilePic.src = user.photoURL;
+                }
+            } else {
+                loginButton.style.display = 'block';
+                profileDropdown.style.display = 'none';
+            }
+        });
     </script>
     <script type="module" src="./js/loadEvents.js"></script>
     <script type="module">
@@ -999,6 +1065,53 @@
         }
     });
 </script>
+    <script type="module">
+import { auth } from './js/firebase-config.js';
+
+// Update the profile navigation function
+window.handleEditProfile = async () => {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            const authCheck = new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    resolve(user);
+                });
+            });
+            const finalUser = await authCheck;
+            if (!finalUser) {
+                alert('Please login to edit your profile');
+                toggleLoginFlyout();
+                return;
+            }
+        }
+        
+        // Get the base URL for GitHub Pages
+        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+            ? '/ArtistHub-BaguioCity'
+            : '';
+            
+        // Go directly to edit profile page
+        const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${auth.currentUser.uid}`;
+        window.location.href = editProfileUrl;
+    } catch (error) {
+        console.error('Profile navigation error:', error);
+        alert('There was an error accessing your profile. Please try again.');
+    }
+};
+
+// Update mobile profile link behavior
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
+    if (mobileProfileLink) {
+        mobileProfileLink.onclick = (e) => {
+            e.preventDefault();
+            handleEditProfile();
+        };
+    }
+});
+</script>
     <!-- User Type Selection Modal -->
     <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-[99999] hidden">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
@@ -1020,5 +1133,9 @@
             </div>
         </div>
     </div>
+    <script type="module">
+        import { initProfileDropdown } from './js/profileDropdown.js';
+        document.addEventListener('DOMContentLoaded', initProfileDropdown);
+    </script>
 </body>
 </html>
