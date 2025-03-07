@@ -85,6 +85,48 @@ export async function handleEditProfile() {
 }
 
 /**
+ * Navigate to change password page or show password change UI
+ * @returns {Promise<void>}
+ */
+export async function handleChangePassword() {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            const authCheck = new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    unsubscribe();
+                    resolve(user);
+                });
+            });
+            const finalUser = await authCheck;
+            if (!finalUser) {
+                alert('Please login to change your password');
+                window.toggleLoginFlyout();
+                return;
+            }
+        }
+        
+        // If user logged in with email/password
+        if (user.providerData.some(provider => provider.providerId === 'password')) {
+            // Get the base URL for GitHub Pages
+            const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+                ? '/ArtistHub-BaguioCity'
+                : '';
+                
+            // Navigate to change password page
+            const changePasswordUrl = `${baseUrl}/profile/change-password.html?id=${auth.currentUser.uid}`;
+            window.location.href = changePasswordUrl;
+        } else {
+            // User logged in with OAuth provider
+            alert('You are signed in with an external provider (like Google). Password change is managed through that provider.');
+        }
+    } catch (error) {
+        console.error('Password change navigation error:', error);
+        alert('There was an error accessing the password change page. Please try again.');
+    }
+}
+
+/**
  * Handle user logout
  * @returns {Promise<void>}
  */
@@ -107,6 +149,7 @@ export function initProfileNavigation() {
     window.handleProfileNavigation = handleProfileNavigation;
     window.handleEditProfile = handleEditProfile;
     window.handleLogout = handleLogout;
+    window.handleChangePassword = handleChangePassword;
     
     // Update mobile profile link behavior
     document.addEventListener('DOMContentLoaded', () => {
@@ -128,5 +171,6 @@ export default {
     handleProfileNavigation,
     handleEditProfile,
     handleLogout,
+    handleChangePassword,
     initProfileNavigation
 };
