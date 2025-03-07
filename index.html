@@ -57,13 +57,17 @@
                 </li>
                 <li class="profile-dropdown-container" style="display: none;">
                     <div class="relative">
-                        <button class="profile-button flex items-center">
+                        <button class="profile-button flex items-center" onclick="toggleProfileDropdown(event)">
                             <img id="userProfilePic" src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
                                  alt="Profile" 
                                  class="w-10 h-10 rounded-full object-cover border-2 border-green-500">
                         </button>
-                        <div id="profileDropdown" class="profile-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-50">
-                            <div class="py-1">
+                        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-50">
+                            <div class="py-2">
+                                <div class="px-4 py-2 border-b border-gray-200">
+                                    <p class="text-sm font-semibold text-gray-700" id="profileDropdownName">Loading...</p>
+                                    <p class="text-xs text-gray-500" id="profileDropdownEmail">Loading...</p>
+                                </div>
                                 <a href="javascript:void(0)" onclick="handleEditProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Profile</a>
                                 <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
                             </div>
@@ -946,28 +950,21 @@
                 dropdown.classList.add('hidden');
             }
         });
-
-        // Modify your existing auth state observer to update the profile picture
-        auth.onAuthStateChanged(function(user) {
-            const loginButton = document.querySelector('.login-button');
-            const profileDropdown = document.querySelector('.profile-dropdown-container');
-            const userProfilePic = document.getElementById('userProfilePic');
-            
-            if (user) {
-                loginButton.style.display = 'none';
-                profileDropdown.style.display = 'block';
-                
-                // Update profile picture if available
-                if (user.photoURL) {
-                    userProfilePic.src = user.photoURL;
-                }
-            } else {
-                loginButton.style.display = 'block';
-                profileDropdown.style.display = 'none';
-            }
-        });
     </script>
     <script type="module" src="./js/loadEvents.js"></script>
+    
+    <!-- Move these scripts to ensure proper loading order -->
+    <script type="module" src="./js/profileDropdown.js"></script>
+    <script type="module" src="./js/voiceflow-integration.js"></script>
+    <script type="module" src="./js/profile-navigation.js"></script>
+    
+    <!-- Place this initialization at the end to ensure all modules are loaded -->
+    <script type="module">
+        import { initProfileDropdown } from './js/profileDropdown.js';
+        document.addEventListener('DOMContentLoaded', function() {
+            initProfileDropdown();
+        });
+    </script>
     <script type="module">
         import { VOICEFLOW_API_KEY } from './js/config.js';
         
@@ -1136,6 +1133,123 @@ document.addEventListener('DOMContentLoaded', () => {
     <script type="module">
         import { initProfileDropdown } from './js/profileDropdown.js';
         document.addEventListener('DOMContentLoaded', initProfileDropdown);
+    </script>
+    <!-- Place this before all module scripts to create a global auth variable -->
+    <script>
+        // Global variable to store Firebase auth instance
+        window.firebaseAuth = null;
+    </script>
+    
+    <script type="module">
+        import { auth } from './js/firebase-config.js';
+        // Assign the auth instance to the global variable
+        window.firebaseAuth = auth;
+        
+        // Make handleProfileNavigation available globally
+        window.handleProfileNavigation = async () => {
+            try {
+                // Wait for auth state to be determined
+                const user = window.firebaseAuth.currentUser;
+                if (!user) {
+                    // If no user is signed in, first check if auth is still initializing
+                    const authCheck = new Promise((resolve) => {
+                        const unsubscribe = window.firebaseAuth.onAuthStateChanged((user) => {
+                            unsubscribe();
+                            resolve(user);
+                        });
+                    });
+                    const finalUser = await authCheck;
+                    if (!finalUser) {
+                        alert('Please login to view your profile');
+                        toggleLoginFlyout();
+                        return;
+                    }
+                }
+                
+                // Get the base URL for GitHub Pages
+                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+                    ? '/ArtistHub-BaguioCity'
+                    : '';
+                    
+                // Construct the profile URL
+                const profileUrl = `${baseUrl}/profile/profile.html?id=${window.firebaseAuth.currentUser.uid}`;
+                window.location.href = profileUrl;
+            } catch (error) {
+                console.error('Profile navigation error:', error);
+                alert('There was an error accessing your profile. Please try again.');
+            }
+        };
+
+        // Update mobile profile link behavior
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
+            if (mobileProfileLink) {
+                mobileProfileLink.onclick = (e) => {
+                    e.preventDefault();
+                    handleProfileNavigation();
+                };
+            }
+        });
+    </script>
+    
+    <script type="module">
+        import { auth } from './js/firebase-config.js';
+        
+        // Update the profile navigation function
+        window.handleEditProfile = async () => {
+            try {
+                const user = window.firebaseAuth.currentUser;
+                if (!user) {
+                    const authCheck = new Promise((resolve) => {
+                        const unsubscribe = window.firebaseAuth.onAuthStateChanged((user) => {
+                            unsubscribe();
+                            resolve(user);
+                        });
+                    });
+                    const finalUser = await authCheck;
+                    if (!finalUser) {
+                        alert('Please login to edit your profile');
+                        toggleLoginFlyout();
+                        return;
+                    }
+                }
+                
+                // Get the base URL for GitHub Pages
+                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+                    ? '/ArtistHub-BaguioCity'
+                    : '';
+                    
+                // Go directly to edit profile page
+                const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${window.firebaseAuth.currentUser.uid}`;
+                window.location.href = editProfileUrl;
+            } catch (error) {
+                console.error('Profile navigation error:', error);
+                alert('There was an error accessing your profile. Please try again.');
+            }
+        };
+        
+        // Make handleLogout globally accessible
+        window.handleLogout = async () => {
+            try {
+                await window.firebaseAuth.signOut();
+                alert('You have been logged out successfully.');
+                window.location.reload();
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('There was an error during logout. Please try again.');
+            }
+        };
+
+        // Update mobile profile link behavior
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
+            if (mobileProfileLink) {
+                mobileProfileLink.onclick = (e) => {
+                    e.preventDefault();
+                    handleEditProfile();
+                };
+            }
+        });
     </script>
 </body>
 </html>
