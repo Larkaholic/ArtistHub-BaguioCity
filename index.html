@@ -68,7 +68,8 @@
                                     <p class="text-sm font-semibold text-gray-700" id="profileDropdownName">Loading...</p>
                                     <p class="text-xs text-gray-500" id="profileDropdownEmail">Loading...</p>
                                 </div>
-                                <a href="javascript:void(0)" onclick="handleEditProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Profile</a>
+                                <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
+                                <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
                                 <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
                             </div>
                         </div>
@@ -361,6 +362,10 @@
     <script type="module" src="./js/navigation.js"></script>
     <script src="./script.js" defer></script>
 
+    <script type="module">
+        import { navToEvent } from './js/navigation.js';
+        window.navToEvent = navToEvent;
+    </script>
 
     <div id="userMenu" class="hidden">
         <div class="glass-header rounded-lg p-4">
@@ -387,14 +392,7 @@
         });
     </script>
 
-    <script>
-        function toggleLoginFlyout(event) {
-            if (event) event.preventDefault();
-            const flyout = document.getElementById('LoginFlyout');
-            flyout.classList.toggle('hidden');
-        }
-    </script>
-
+    <!-- Single clean style block -->
     <style>
         .glass-header {
             background: rgba(255, 255, 255, 1);
@@ -408,612 +406,24 @@
         #events {
             background-color: #F4F8FF;
         }
-
-        #artistsGrid {
-            position: relative;
-            z-index: 5;
-        }
-
-        #artistsGrid > div {
-            display: flex !important;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem;
-            min-height: 300px;
-            border-style: solid;
-            border-width: 1px;
-            border-color: gray;
-        }
-
-        #artistsGrid img {
-            width: 128px;
-            height: 128px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-        }
-
-        #artistsGrid h3 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        #artistsGrid p {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        #artistsGrid button {
-            background: white;
-            color: black;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-            transition: all 300ms;
-        }
-
-        #artistsGrid button:hover {
-            background: #d1d5db;
-        }
-
-        #artists {
-            background: #F4F8FF;
-            /* background: linear-gradient(0deg, rgba(226,226,226,1) 15%, rgba(255,255,255,1) 40%,
-            rgba(110,212,136,1) 59%, rgba(50,170,80,1) 83%, rgba(35,78,47,1) 100%);        */
-        } 
-
-        .EvntPage {
-            position: relative;
-            overflow: hidden;
-            display: block;
-        }
-
-        .EvntContainer {
-            position: relative;
-            width: 100%;
-            padding: 1rem;
-            height: auto;
-            min-height: 200px;
-        }
-
-        /* Responsive containers */
-        @media (max-width: 768px) {
-            .EvntContainer {
-                padding: 0.5rem;
-            }
-        }
-
-        /* Event cards */
-        .EvntContainer .glass-header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            margin-bottom: 1rem;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        /* Force visibility on viewport changes */
-        .EvntContainer * {
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
-        /* Ensure content stays visible during transitions */
-        .EvntContainer .glass-header {
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .transparent-header {
-            background: rgba(51, 51, 51, 0) !important;
-            transition: background 0.3s ease !important;
-        }
-
-        .solid-header {
-            background: rgba(255, 255, 255, 0.9) !important;
-            transition: background 0.3s ease !important;
-
-        }
-
-        .spinner .loader {
-            border: 16px solid #f3f3f3;
-            border-top: 16px solid #3498db;
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .search-bar-container {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-bar-container input {
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-bar-container input:focus {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .collapsible-search-container {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-        }
-
-        .timeline-search-btn {
-            width: 45px;
-            height: 45px;
-            background: #4CAF50;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: white;
-            font-size: 1.2rem;
-            z-index: 2;
-            border: none;
-        }
-
-        .timeline-search-btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
-        }
-
-        .search-input-container {
-            position: absolute;
-            width: 45px;
-            height: 45px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            opacity: 0;
-            border-radius: 25px;
-            background: white;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-input-container.expanded {
-            width: 100%;
-            opacity: 1;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .timeline-search-input {
-            width: calc(100% - 90px);
-            height: 100%;
-            padding: 0 45px;
-            border: none;
-            outline: none;
-            font-size: 1.1rem;
-            background: transparent;
-        }
-
-        .search-close-btn {
-            width: 45px;
-            height: 45px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #666;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .search-close-btn:hover {
-            color: #333;
-        }
-
-        .baguio-timeline-section {
-            position: relative;
-            padding-top: 20px;
-        }
-
-        .timeline-search-btn {
-            position: absolute; /* Changed from fixed */
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: #4CAF50;
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .timeline-search-btn:hover {
-            background: #45a049;
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .search-input-container {
-            position: absolute; /* Changed from fixed */
-            top: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            z-index: 20;
-        }
-
-        .search-input-container.expanded {
-            width: 300px;
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .timeline-search-input {
-            width: calc(100% - 50px);
-            height: 100%;
-            padding: 0 20px;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            color: #333;
-        }
-
-        .search-close-btn {
-            width: 50px;
-            height: 50px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: #666;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.3s ease;
-        }
-
-        .search-close-btn:hover {
-            color: #333;
-        }
-
-        @media (max-width: 640px) {
-            .search-input-container.expanded {
-                width: calc(100% - 40px);
-                right: 20px;
-            }
-        }
-
-        .artist-search-btn {
-            position: absolute;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: #4CAF50;
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .artist-search-btn:hover {
-            background: #45a049;
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .artist-search-container {
-            position: absolute;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: white;
-            border-radius: 25px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            opacity: 0;
-            visibility: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            z-index: 20;
-        }
-
-        .artist-search-container.expanded {
-            width: 300px;
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .artist-search-input {
-            width: calc(100% - 50px);
-            height: 100%;
-            padding: 0 20px;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            color: #333;
-        }
-
-        .artist-close-btn {
-            width: 50px;
-            height: 50px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: #666;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.3s ease;
-        }
-
-        .artist-close-btn:hover {
-            color: #333;
-        }
-
-        @media (max-width: 640px) {
-            .artist-search-container.expanded {
-                width: calc(100% - 40px);
-                right: 20px;
-            }
-        }
-
-        #featuredArtistsSection {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            padding: 1rem;
-        }
-
-        .section-header {
-            text-align: center;
-            padding: 0.25rem;
-            margin-top: 2.5rem;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .section-header h2 {
-            font-size: 1.875rem;
-            font-weight: bold;
-            color: black;
-        }
-
-        .search-wrapper {
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            padding-right: 20px;
-        }
-
-        .grid-container {
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-        }
-
-        .artist-grid {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 1rem;
-        }
-
-        @media (min-width: 768px) {
-            .artist-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* Add these styles for the user type modal */
-        #userTypeModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 99999;
-        }
-
-        #userTypeModal .glass-header2 {
-            z-index: 100000;
-            position: relative;
-        }
-
-        /* Ensure modal is above all other components */
-        #userTypeModal::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 99998;
-        }
-
-        .profile-dropdown {
-            transform-origin: top right;
-            transition: all 0.2s ease-out;
-        }
-
-        .profile-button:hover img {
-            border-color: #22c55e;
-        }
-
-        .profile-dropdown.show {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .profile-dropdown a {
-            transition: all 0.2s ease;
-        }
-
-        /* Responsive styles for profile dropdown */
-        @media (max-width: 768px) {
-            .profile-dropdown-container {
-                position: relative;
-            }
-            
-            #profileDropdown {
-                position: fixed;
-                top: auto;
-                right: 10px;
-                width: 90%;
-                max-width: 300px;
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-            }
-            
-            #profileDropdown .py-2 {
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-            }
-            
-            #profileDropdown a {
-                padding-top: 0.75rem;
-                padding-bottom: 0.75rem;
-                font-size: 1rem;
-            }
-            
-            .profile-button img {
-                width: 2.5rem;
-                height: 2.5rem;
-                border-width: 3px;
-            }
-            
-            /* Overlay for mobile dropdown */
-            .profile-dropdown-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 40;
-            }
-            
-            .profile-dropdown-overlay.visible {
-                display: block;
-            }
-            
-            /* Enhanced navigation styles for mobile */
-            #flyout-menu .profile-nav-item {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            
-            #flyout-menu .profile-nav-item img {
-                width: 2rem;
-                height: 2rem;
-                border-radius: 50%;
-                object-fit: cover;
-            }
-        }
-
-        /* Mobile flyout menu improvements */
-        #flyout-menu {
-            z-index: 9999;
-        }
-        
-        #flyout-menu .logout-button {
-            display: none; /* Initially hidden, controlled by JS */
-        }
-        
-        /* Improved handling for profile link on mobile */
-        #profileLinkMobile {
-            display: flex;
-            align-items: center;
-        }
-        
-        #profileLinkMobile img {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 0.5rem;
-            border: 2px solid #4CAF50;
-        }
-        
-        /* Positioning fixes for mobile dropdown */
-        @media (max-width: 768px) {
-            #profileDropdown {
-                position: fixed;
-                top: auto;
-                left: 0;
-                right: 0;
-                width: 90%;
-                max-width: 350px;
-                margin: 0 auto;
-                bottom: 20%;
-                transform: translateY(-50%);
-                z-index: 999;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-                border-radius: 12px;
-            }
-            
-            #profileDropdown::before {
-                content: '';
-                position: absolute;
-                top: -8px;
-                right: 20px;
-                height: 16px;
-                width: 16px;
-                background: white;
-                transform: rotate(45deg);
-                border-radius: 2px;
-            }
-            
-            .profile-dropdown-overlay.visible {
-                background-color: rgba(0, 0, 0, 0.5);
-                display: block;
-                z-index: 998;
-            }
-        }
     </style>
+
+    <!-- Consolidated Scripts -->
+    <script>
+        function toggleLoginFlyout(event) {
+            if (event) event.preventDefault();
+            const flyout = document.getElementById('LoginFlyout');
+            flyout.classList.toggle('hidden');
+        }
+
+        function toggleNav() {
+            const menu = document.getElementById('flyout-menu');
+            menu.classList.toggle('translate-x-full');
+            document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
+        }
+        window.toggleNav = toggleNav;
+    </script>
+
     <script>
         function toggleTimelineSearch() {
             const searchContainer = document.querySelector('.search-input-container');
@@ -1073,7 +483,7 @@
                 dropdown.classList.add('hidden');
             }
         });
-
+        
         // Ensure the flyout menu closes when clicking anywhere else
         document.addEventListener('click', function(event) {
             const flyoutMenu = document.getElementById('flyout-menu');
@@ -1086,30 +496,11 @@
                 toggleNav();
             }
         });
-        
-        // Toggle the navigation flyout
-        function toggleNav() {
-            const menu = document.getElementById('flyout-menu');
-            menu.classList.toggle('translate-x-full');
-            
-            // Lock/unlock body scroll when menu is open/closed
-            if (menu.classList.contains('translate-x-full')) {
-                document.body.style.overflow = '';
-            } else {
-                document.body.style.overflow = 'hidden';
-            }
-        }
-        
-        // Make toggleNav globally accessible
-        window.toggleNav = toggleNav;
     </script>
     <script type="module" src="./js/loadEvents.js"></script>
-    
-    <!-- Move these scripts to ensure proper loading order -->
     <script type="module" src="./js/profileDropdown.js"></script>
     <script type="module" src="./js/voiceflow-integration.js"></script>
     <script type="module" src="./js/profile-navigation.js"></script>
-    
     <!-- Place this initialization at the end to ensure all modules are loaded -->
     <script type="module">
         import { initProfileDropdown } from './js/profileDropdown.js';
@@ -1119,12 +510,11 @@
     </script>
     <script type="module">
         import { VOICEFLOW_API_KEY } from './js/config.js';
-        
         (function(d, t) {
             var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
             v.onload = function() {
                 window.voiceflow.chat.load({
-                    verify: { 
+                    verify: {
                         projectID: '6706887ba2382c6fe907495e',
                         apiKey: VOICEFLOW_API_KEY
                     },
@@ -1166,101 +556,94 @@
         })(document, 'script');
     </script>
     <script type="module">
-    import { auth } from './js/firebase-config.js';
-    
-    // Make handleProfileNavigation available globally
-    window.handleProfileNavigation = async () => {
-        try {
-            // Wait for auth state to be determined
-            const user = auth.currentUser;
-            if (!user) {
-                // If no user is signed in, first check if auth is still initializing
-                const authCheck = new Promise((resolve) => {
-                    const unsubscribe = auth.onAuthStateChanged((user) => {
-                        unsubscribe();
-                        resolve(user);
+        import { auth } from './js/firebase-config.js';
+        // Make handleProfileNavigation available globally
+        window.handleProfileNavigation = async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    // If no user is signed in, first check if auth is still initializing
+                    const authCheck = new Promise((resolve) => {
+                        const unsubscribe = auth.onAuthStateChanged((user) => {
+                            unsubscribe();
+                            resolve(user);
+                        });
                     });
-                });
-                const finalUser = await authCheck;
-                if (!finalUser) {
-                    alert('Please login to view your profile');
-                    toggleLoginFlyout();
-                    return;
+                    const finalUser = await authCheck;
+                    if (!finalUser) {
+                        alert('Please login to view your profile');
+                        toggleLoginFlyout();
+                        return;
+                    }
                 }
+                // Get the base URL for GitHub Pages
+                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+                    ? '/ArtistHub-BaguioCity'
+                    : '';
+                // Construct the profile URL
+                const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
+                window.location.href = profileUrl;
+            } catch (error) {
+                console.error('Profile navigation error:', error);
+                alert('There was an error accessing your profile. Please try again.');
             }
-            
-            // Get the base URL for GitHub Pages
-            const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                ? '/ArtistHub-BaguioCity'
-                : '';
-                
-            // Construct the profile URL
-            const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
-            window.location.href = profileUrl;
-        } catch (error) {
-            console.error('Profile navigation error:', error);
-            alert('There was an error accessing your profile. Please try again.');
-        }
-    };
-
-    // Update mobile profile link behavior
-    document.addEventListener('DOMContentLoaded', () => {
-        const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
-        if (mobileProfileLink) {
-            mobileProfileLink.onclick = (e) => {
-                e.preventDefault();
-                handleProfileNavigation();
-            };
-        }
-    });
-</script>
-    <script type="module">
-import { auth } from './js/firebase-config.js';
-
-// Update the profile navigation function
-window.handleEditProfile = async () => {
-    try {
-        const user = auth.currentUser;
-        if (!user) {
-            const authCheck = new Promise((resolve) => {
-                const unsubscribe = auth.onAuthStateChanged((user) => {
-                    unsubscribe();
-                    resolve(user);
-                });
-            });
-            const finalUser = await authCheck;
-            if (!finalUser) {
-                alert('Please login to edit your profile');
-                toggleLoginFlyout();
-                return;
-            }
-        }
-        
-        // Get the base URL for GitHub Pages
-        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-            ? '/ArtistHub-BaguioCity'
-            : '';
-            
-        // Go directly to edit profile page
-        const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${auth.currentUser.uid}`;
-        window.location.href = editProfileUrl;
-    } catch (error) {
-        console.error('Profile navigation error:', error);
-        alert('There was an error accessing your profile. Please try again.');
-    }
-};
-
-// Update mobile profile link behavior
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
-    if (mobileProfileLink) {
-        mobileProfileLink.onclick = (e) => {
-            e.preventDefault();
-            handleEditProfile();
         };
-    }
-});
-</script>
+
+        // Update mobile profile link behavior
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
+            if (mobileProfileLink) {
+                mobileProfileLink.onclick = (e) => {
+                    e.preventDefault();
+                    handleProfileNavigation();
+                };
+            }
+        });
+    </script>
+    <script type="module">
+        import { auth } from './js/firebase-config.js';
+        // Update the profile navigation function
+        window.handleEditProfile = async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    const authCheck = new Promise((resolve) => {
+                        const unsubscribe = auth.onAuthStateChanged((user) => {
+                            unsubscribe();
+                            resolve(user);
+                        });
+                    });
+                    const finalUser = await authCheck;
+                    if (!finalUser) {
+                        alert('Please login to edit your profile');
+                        toggleLoginFlyout();
+                        return;
+                    }
+                }
+                // Get the base URL for GitHub Pages
+                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+                    ? '/ArtistHub-BaguioCity'
+                    : '';
+                // Go directly to edit profile page
+                const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${auth.currentUser.uid}`;
+                window.location.href = editProfileUrl;
+            } catch (error) {
+                console.error('Profile navigation error:', error);
+                alert('There was an error accessing your profile. Please try again.');
+            }
+        };
+
+        // Update mobile profile link behavior
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileProfileLink = document.querySelector('#flyout-menu [onclick*="profile"]');
+            if (mobileProfileLink) {
+                mobileProfileLink.onclick = (e) => {
+                    e.preventDefault();
+                    handleEditProfile();
+                };
+            }
+        });
+    </script>
     <!-- User Type Selection Modal -->
     <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-[99999] hidden">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
@@ -1287,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('DOMContentLoaded', initProfileDropdown);
     </script>
     <!-- Place this before all module scripts to create a global auth variable -->
-    <script>
+    <script>   
         // Global variable to store Firebase auth instance
         window.firebaseAuth = null;
     </script>
@@ -1300,7 +683,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Make handleProfileNavigation available globally
         window.handleProfileNavigation = async () => {
             try {
-                // Wait for auth state to be determined
                 const user = window.firebaseAuth.currentUser;
                 if (!user) {
                     // If no user is signed in, first check if auth is still initializing
@@ -1317,12 +699,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                 }
-                
                 // Get the base URL for GitHub Pages
                 const baseUrl = window.location.hostname === 'larkaholic.github.io' 
                     ? '/ArtistHub-BaguioCity'
                     : '';
-                    
                 // Construct the profile URL
                 const profileUrl = `${baseUrl}/profile/profile.html?id=${window.firebaseAuth.currentUser.uid}`;
                 window.location.href = profileUrl;
@@ -1343,10 +723,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     </script>
-    
     <script type="module">
         import { auth } from './js/firebase-config.js';
-        
         // Update the profile navigation function
         window.handleEditProfile = async () => {
             try {
@@ -1365,30 +743,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                 }
-                
                 // Get the base URL for GitHub Pages
                 const baseUrl = window.location.hostname === 'larkaholic.github.io' 
                     ? '/ArtistHub-BaguioCity'
                     : '';
-                    
                 // Go directly to edit profile page
                 const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${window.firebaseAuth.currentUser.uid}`;
                 window.location.href = editProfileUrl;
             } catch (error) {
                 console.error('Profile navigation error:', error);
                 alert('There was an error accessing your profile. Please try again.');
-            }
-        };
-        
-        // Make handleLogout globally accessible
-        window.handleLogout = async () => {
-            try {
-                await window.firebaseAuth.signOut();
-                alert('You have been logged out successfully.');
-                window.location.reload();
-            } catch (error) {
-                console.error('Logout error:', error);
-                alert('There was an error during logout. Please try again.');
             }
         };
 
@@ -1402,6 +766,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             }
         });
+    </script>
+    <script type="module">
+        import { auth } from './js/firebase-config.js';
+        // Make handleLogout globally accessible
+        window.handleLogout = async () => {
+            try {
+                await window.firebaseAuth.signOut();
+                alert('You have been logged out successfully.');
+                window.location.reload();
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('There was an error during logout. Please try again.');
+            }
+        };
     </script>
     <div class="profile-dropdown-overlay" id="profileDropdownOverlay"></div>
 </body>

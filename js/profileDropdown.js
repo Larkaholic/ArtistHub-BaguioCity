@@ -13,19 +13,14 @@ function initProfileDropdown() {
     const mobileLogoutButton = document.querySelector('#flyout-menu .logout-button');
     
     function toggleProfileDropdown(event) {
-        if (event) event.preventDefault();
+        event.preventDefault();
         const dropdown = document.getElementById('profileDropdown');
+        const overlay = document.getElementById('profileDropdownOverlay');
         const isHidden = dropdown.classList.toggle('hidden');
         
-        // Handle overlay for mobile
         if (window.innerWidth <= 768) {
-            if (isHidden) {
-                overlay.classList.remove('visible');
-                document.body.style.overflow = '';
-            } else {
-                overlay.classList.add('visible');
-                document.body.style.overflow = 'hidden';
-            }
+            overlay.classList.toggle('visible');
+            document.body.style.overflow = isHidden ? '' : 'hidden';
         }
     }
 
@@ -77,6 +72,9 @@ function initProfileDropdown() {
             navigateToUserProfile();
         });
     }
+
+    // Remove the setupSettingsMenu function call since we're using a modal now
+    // setupSettingsMenu(); - removing this line
 
     // Update profile UI based on auth state
     auth.onAuthStateChanged(async function(user) {
@@ -154,6 +152,31 @@ function initProfileDropdown() {
     });
 }
 
+// Set up settings menu hover and click behavior
+function setupSettingsMenu() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const settingsMenu = document.querySelector('.settings-menu');
+        const settingsTrigger = document.querySelector('.settings-trigger');
+        const settingsSubmenu = document.querySelector('.settings-submenu');
+        
+        if (settingsMenu && settingsSubmenu) {
+            // For touch devices
+            settingsTrigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                settingsSubmenu.classList.toggle('hidden');
+            });
+            
+            // Close submenu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!settingsMenu.contains(event.target)) {
+                    settingsSubmenu.classList.add('hidden');
+                }
+            });
+        }
+    });
+}
+
 // Navigate to user's profile
 function navigateToUserProfile() {
     if (!auth.currentUser) {
@@ -176,20 +199,14 @@ function navigateToUserProfile() {
 
 // Make these functions available globally
 window.toggleProfileDropdown = function(event) {
-    if (event) event.preventDefault();
+    event.preventDefault();
     const dropdown = document.getElementById('profileDropdown');
     const overlay = document.getElementById('profileDropdownOverlay');
     const isHidden = dropdown.classList.toggle('hidden');
     
-    // Handle overlay for mobile
     if (window.innerWidth <= 768) {
-        if (isHidden) {
-            overlay.classList.remove('visible');
-            document.body.style.overflow = '';
-        } else {
-            overlay.classList.add('visible');
-            document.body.style.overflow = 'hidden';
-        }
+        overlay.classList.toggle('visible');
+        document.body.style.overflow = isHidden ? '' : 'hidden';
     }
 };
 
