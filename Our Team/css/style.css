@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background:url(../img/NewBack.jpg)no-repeat center center fixed;
+    text-align: center;
+}
+.team-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.member-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-bottom: 20px;
+}
+.member {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    margin: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 250px;
+}
+.member:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.7);
+}
+.member.large {
+    width: 300px;
+    padding: 25px;
+}
+.member img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    display: block;
+    margin: 0 auto;
+}
+.category {
+    width: 100%;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 2.2em;
+    background-color: lightgray;
+    color: #000000;
+}
