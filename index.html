@@ -13,6 +13,12 @@
     <link rel="stylesheet" href="css/history.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
     
+    <!-- Add this before other module scripts -->
+    <script type="module">
+        import { initNavigation } from './js/navigation.js';
+        // Initialize navigation immediately
+        initNavigation();
+    </script>
 </head>
 <body class="bg-cover">
     <div id="announcement" class="announcement-banner">
@@ -353,6 +359,7 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 
+    <!-- Move other module scripts after main content -->
     <script type="module" src="./js/ggl.js"></script>
     <script type="module" src="./js/firebase-config.js"></script>
     <script type="module" src="./js/auth.js"></script>

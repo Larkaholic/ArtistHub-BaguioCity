@@ -31,6 +31,34 @@ export function navToEvent(path) {
 // Make navToEvent available globally
 window.navToEvent = navToEvent;
 
+// Initialize navigation
+export function initNavigation() {
+    // Make navToEvent globally available immediately
+    window.navToEvent = function(path) {
+        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+            ? '/ArtistHub-BaguioCity'
+            : '';
+            
+        const fullPath = baseUrl + path;
+        
+        if (path.includes('#')) {
+            const [pagePath, hash] = path.split('#');
+            if (window.location.pathname.endsWith(pagePath)) {
+                const element = document.getElementById(hash);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+            }
+        }
+        
+        window.location.href = fullPath;
+    };
+}
+
+// Initialize on module load
+initNavigation();
+
 // Voiceflow chat initialization
 (function(d, t) {
     var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
