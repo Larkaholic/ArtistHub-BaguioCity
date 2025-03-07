@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background:url(../img/NewBack.jpg)no-repeat center center fixed;
+    background-size:cover;
     text-align: center;
 }
 .team-container {
@@ -53,6 +54,7 @@ body {
     margin-top: 20px;
     font-weight: bold;
     font-size: 2.2em;
-    background-color: lightgray;
+    background:url(../img/bahag.jpg);
+    border-radius: 40%;
     color: #000000;
 }
