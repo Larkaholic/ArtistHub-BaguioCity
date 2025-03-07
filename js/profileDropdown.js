@@ -6,11 +6,36 @@ function initProfileDropdown() {
     const db = getFirestore();
     const profileDropdown = document.querySelector('.profile-dropdown-container');
     const userProfilePic = document.getElementById('userProfilePic');
-
+    const overlay = document.getElementById('profileDropdownOverlay');
+    const loginButton = document.querySelector('.login-button');
+    const logoutButton = document.querySelector('.logout-button');
+    const mobileLoginButton = document.querySelector('#flyout-menu .login-button');
+    const mobileLogoutButton = document.querySelector('#flyout-menu .logout-button');
+    
     function toggleProfileDropdown(event) {
         if (event) event.preventDefault();
         const dropdown = document.getElementById('profileDropdown');
-        dropdown.classList.toggle('hidden');
+        const isHidden = dropdown.classList.toggle('hidden');
+        
+        // Handle overlay for mobile
+        if (window.innerWidth <= 768) {
+            if (isHidden) {
+                overlay.classList.remove('visible');
+                document.body.style.overflow = '';
+            } else {
+                overlay.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+    }
+
+    // Close dropdown when clicking overlay
+    if (overlay) {
+        overlay.addEventListener('click', function() {
+            document.getElementById('profileDropdown').classList.add('hidden');
+            overlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        });
     }
 
     // Close dropdown when clicking outside
@@ -18,8 +43,12 @@ function initProfileDropdown() {
         const dropdown = document.getElementById('profileDropdown');
         const profileButton = document.querySelector('.profile-button');
         
-        if (profileButton && !profileButton.contains(event.target) && !dropdown.contains(event.target)) {
+        if (profileButton && !profileButton.contains(event.target) && 
+            !dropdown.contains(event.target) && 
+            !event.target.closest('.profile-dropdown-overlay')) {
             dropdown.classList.add('hidden');
+            if (overlay) overlay.classList.remove('visible');
+            document.body.style.overflow = '';
         }
     });
 
@@ -40,10 +69,24 @@ function initProfileDropdown() {
         profileNavLink.setAttribute('onclick', 'event.preventDefault(); window.navigateToUserProfile();');
     }
 
+    // Handle mobile profile navigation in the flyout menu
+    const mobileProfileLink = document.getElementById('profileLinkMobile');
+    if (mobileProfileLink) {
+        mobileProfileLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            navigateToUserProfile();
+        });
+    }
+
     // Update profile UI based on auth state
     auth.onAuthStateChanged(async function(user) {
         if (user) {
+            // User is logged in
             profileDropdown.style.display = 'block';
+            if (loginButton) loginButton.style.display = 'none';
+            if (logoutButton) logoutButton.style.display = 'block';
+            if (mobileLoginButton) mobileLoginButton.style.display = 'none';
+            if (mobileLogoutButton) mobileLogoutButton.style.display = 'block';
             
             try {
                 // Fetch user data from Firestore
@@ -53,6 +96,22 @@ function initProfileDropdown() {
                     // Update profile picture
                     if (userData.photoURL) {
                         userProfilePic.src = userData.photoURL;
+                        
+                        // Update mobile flyout menu profile image if it exists
+                        const mobileProfileImg = document.querySelector('#profileLinkMobile img');
+                        if (mobileProfileImg) {
+                            mobileProfileImg.src = userData.photoURL;
+                        }
+                        
+                        // Create mobile profile image if it doesn't exist
+                        if (!mobileProfileImg && mobileProfileLink) {
+                            const imgElement = document.createElement('img');
+                            imgElement.src = userData.photoURL;
+                            imgElement.alt = "Profile";
+                            imgElement.classList.add('w-6', 'h-6', 'rounded-full', 'mr-2');
+                            mobileProfileLink.prepend(imgElement);
+                            mobileProfileLink.classList.add('flex', 'items-center');
+                        }
                     } else {
                         userProfilePic.src = "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png";
                     }
@@ -68,7 +127,29 @@ function initProfileDropdown() {
                 userProfilePic.src = "https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png";
             }
         } else {
+            // User is logged out
             profileDropdown.style.display = 'none';
+            if (loginButton) loginButton.style.display = 'block';
+            if (logoutButton) logoutButton.style.display = 'none';
+            if (mobileLoginButton) mobileLoginButton.style.display = 'block';
+            if (mobileLogoutButton) mobileLogoutButton.style.display = 'none';
+            
+            // Reset mobile profile link if needed
+            if (mobileProfileLink) {
+                const mobileProfileImg = mobileProfileLink.querySelector('img');
+                if (mobileProfileImg) {
+                    mobileProfileImg.remove();
+                }
+            }
+        }
+    });
+    
+    // Handle window resize to ensure proper display
+    window.addEventListener('resize', function() {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && !dropdown.classList.contains('hidden') && window.innerWidth > 768) {
+            if (overlay) overlay.classList.remove('visible');
+            document.body.style.overflow = '';
         }
     });
 }
@@ -97,7 +178,19 @@ function navigateToUserProfile() {
 window.toggleProfileDropdown = function(event) {
     if (event) event.preventDefault();
     const dropdown = document.getElementById('profileDropdown');
-    dropdown.classList.toggle('hidden');
+    const overlay = document.getElementById('profileDropdownOverlay');
+    const isHidden = dropdown.classList.toggle('hidden');
+    
+    // Handle overlay for mobile
+    if (window.innerWidth <= 768) {
+        if (isHidden) {
+            overlay.classList.remove('visible');
+            document.body.style.overflow = '';
+        } else {
+            overlay.classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+    }
 };
 
 window.navigateToUserProfile = navigateToUserProfile;

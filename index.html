@@ -85,7 +85,7 @@
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
-                    <li><a href="javascript:void(0)" onclick="handleProfileNavigation()" id="profileLinkMobile">Profile</a></li>
+                    <li><a href="javascript:void(0)" onclick="navigateToUserProfile()" id="profileLinkMobile" class="flex items-center justify-center">Profile</a></li>
                     <li id="cartNavMobile" class="hidden">
                         <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -95,10 +95,10 @@
                         </a>
                     </li>
                     <li class="login-button">
-                        <button onclick="toggleLoginFlyout(event)">Login</button>
+                        <button onclick="toggleLoginFlyout(event)" class="py-2 px-4 bg-blue-500 text-white rounded-lg w-full">Login</button>
                     </li>
                     <li class="logout-button" style="display: none;">
-                        <button onclick="handleLogout()">Logout</button>
+                        <button onclick="handleLogout()" class="py-2 px-4 bg-red-500 text-white rounded-lg w-full">Logout</button>
                     </li>
                 </ul>
             </nav>
@@ -890,6 +890,129 @@
         .profile-dropdown a {
             transition: all 0.2s ease;
         }
+
+        /* Responsive styles for profile dropdown */
+        @media (max-width: 768px) {
+            .profile-dropdown-container {
+                position: relative;
+            }
+            
+            #profileDropdown {
+                position: fixed;
+                top: auto;
+                right: 10px;
+                width: 90%;
+                max-width: 300px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            }
+            
+            #profileDropdown .py-2 {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+            
+            #profileDropdown a {
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+                font-size: 1rem;
+            }
+            
+            .profile-button img {
+                width: 2.5rem;
+                height: 2.5rem;
+                border-width: 3px;
+            }
+            
+            /* Overlay for mobile dropdown */
+            .profile-dropdown-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+            
+            .profile-dropdown-overlay.visible {
+                display: block;
+            }
+            
+            /* Enhanced navigation styles for mobile */
+            #flyout-menu .profile-nav-item {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            #flyout-menu .profile-nav-item img {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+        }
+
+        /* Mobile flyout menu improvements */
+        #flyout-menu {
+            z-index: 9999;
+        }
+        
+        #flyout-menu .logout-button {
+            display: none; /* Initially hidden, controlled by JS */
+        }
+        
+        /* Improved handling for profile link on mobile */
+        #profileLinkMobile {
+            display: flex;
+            align-items: center;
+        }
+        
+        #profileLinkMobile img {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.5rem;
+            border: 2px solid #4CAF50;
+        }
+        
+        /* Positioning fixes for mobile dropdown */
+        @media (max-width: 768px) {
+            #profileDropdown {
+                position: fixed;
+                top: auto;
+                left: 0;
+                right: 0;
+                width: 90%;
+                max-width: 350px;
+                margin: 0 auto;
+                bottom: 20%;
+                transform: translateY(-50%);
+                z-index: 999;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                border-radius: 12px;
+            }
+            
+            #profileDropdown::before {
+                content: '';
+                position: absolute;
+                top: -8px;
+                right: 20px;
+                height: 16px;
+                width: 16px;
+                background: white;
+                transform: rotate(45deg);
+                border-radius: 2px;
+            }
+            
+            .profile-dropdown-overlay.visible {
+                background-color: rgba(0, 0, 0, 0.5);
+                display: block;
+                z-index: 998;
+            }
+        }
     </style>
     <script>
         function toggleTimelineSearch() {
@@ -950,6 +1073,35 @@
                 dropdown.classList.add('hidden');
             }
         });
+
+        // Ensure the flyout menu closes when clicking anywhere else
+        document.addEventListener('click', function(event) {
+            const flyoutMenu = document.getElementById('flyout-menu');
+            const burgerIcon = document.querySelector('.burger-icon');
+            
+            if (flyoutMenu && burgerIcon && 
+                !flyoutMenu.contains(event.target) && 
+                !burgerIcon.contains(event.target) &&
+                !flyoutMenu.classList.contains('translate-x-full')) {
+                toggleNav();
+            }
+        });
+        
+        // Toggle the navigation flyout
+        function toggleNav() {
+            const menu = document.getElementById('flyout-menu');
+            menu.classList.toggle('translate-x-full');
+            
+            // Lock/unlock body scroll when menu is open/closed
+            if (menu.classList.contains('translate-x-full')) {
+                document.body.style.overflow = '';
+            } else {
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        // Make toggleNav globally accessible
+        window.toggleNav = toggleNav;
     </script>
     <script type="module" src="./js/loadEvents.js"></script>
     
@@ -1251,5 +1403,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     </script>
+    <div class="profile-dropdown-overlay" id="profileDropdownOverlay"></div>
 </body>
 </html>
