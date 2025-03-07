@@ -2,10 +2,36 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background:url(../img/NewBack.jpg)no-repeat center center fixed;
-    background-size:cover;
+    background: url(../img/NewBack.jpg) no-repeat center center fixed;
+    background-size: cover;
     text-align: center;
 }
+
+h1 {
+    font-size: 4.5rem;
+    font-family: rockybilly;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #391d0f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.back-button:hover {
+    background: #955428;
+    box-shadow: #cb8f35;
+    transform: scale(1.1);
+}
+
 .team-container {
     width: 90%;
     max-width: 1200px;
@@ -14,6 +40,7 @@ body {
     flex-direction: column;
     align-items: center;
 }
+
 .member-container {
     display: flex;
     justify-content: center;
@@ -21,40 +48,113 @@ body {
     flex-wrap: wrap;
     width: 100%;
     margin-bottom: 20px;
+    align-items: center;
 }
+
+/* Flip Card Container */
 .member {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    margin: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
     width: 250px;
+    height: 350px;
+    perspective: 1000px; 
 }
-.member:hover {
-    transform: scale(1.2);
-    box-shadow: 0 0 20px rgba(0, 0, 255, 0.7);
-}
+
 .member.large {
     width: 300px;
-    padding: 25px;
+    height: 400px;
 }
-.member img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+
+
+.member .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+
+.member:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.flip-card-front {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.flip-card-front img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border: 4px solid white;
-    display: block;
-    margin: 0 auto;
+    border-radius: 15px;
 }
+
+.flip-card-back {
+    background: #331a1594;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: rotateY(180deg);
+}
+
+.flip-card-back p {
+    margin: 10px 0;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+
+.map-button, .link-button {
+    background-color: #e0cba8;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.map-button:hover, .link-button:hover {
+    background: #331a15;
+}
+
+.link-button img, .map-button img {
+    width: 22px;
+    height: 22px;
+}
+
 .category {
     width: 100%;
     margin-top: 20px;
     font-weight: bold;
     font-size: 2.2em;
-    background:url(../img/bahag.jpg);
+    background: url(../img/wood.jpg);
     border-radius: 40%;
-    color: #000000;
 }
