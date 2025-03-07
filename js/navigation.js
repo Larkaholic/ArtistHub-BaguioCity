@@ -2,62 +2,39 @@ import { VOICEFLOW_API_KEY } from './config.js';
 import { auth } from './firebase-config.js';
 
 // Navigation function
-export function navToEvent(path) {
-    // Get the base URL for GitHub Pages
-    const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-        ? '/ArtistHub-BaguioCity'
-        : '';
-        
-    // Add base URL if on GitHub Pages
-    const fullPath = baseUrl + path;
-    
-    // Handle hash navigation
-    if (path.includes('#')) {
-        const [pagePath, hash] = path.split('#');
-        if (window.location.pathname.endsWith(pagePath)) {
-            // If already on the correct page, just scroll to hash
-            const element = document.getElementById(hash);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
+(function() {
+    window.navToEvent = function(path) {
+        try {
+            if (path.startsWith('/ArtistHub-BaguioCity/')) {
+                window.location.href = path;
                 return;
             }
-        }
-    }
-    
-    // Navigate to the path
-    window.location.href = fullPath;
-}
 
-// Make navToEvent available globally
-window.navToEvent = navToEvent;
+            const baseUrl = window.location.hostname.includes('github.io') 
+                ? '/ArtistHub-BaguioCity'
+                : '';
 
-// Initialize navigation
-export function initNavigation() {
-    // Make navToEvent globally available immediately
-    window.navToEvent = function(path) {
-        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-            ? '/ArtistHub-BaguioCity'
-            : '';
-            
-        const fullPath = baseUrl + path;
-        
-        if (path.includes('#')) {
-            const [pagePath, hash] = path.split('#');
-            if (window.location.pathname.endsWith(pagePath)) {
-                const element = document.getElementById(hash);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                    return;
+            const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+            const hasAnchor = cleanPath.includes('#');
+
+            if (hasAnchor) {
+                const [pagePath, anchor] = cleanPath.split('#');
+                if (pagePath === '.' || pagePath === './index.html' || pagePath === window.location.pathname) {
+                    const element = document.getElementById(anchor);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        return;
+                    }
                 }
+                window.location.href = `${baseUrl}/${cleanPath}`;
+            } else {
+                window.location.href = `${baseUrl}/${cleanPath}`;
             }
+        } catch (error) {
+            console.error('Navigation error:', error);
         }
-        
-        window.location.href = fullPath;
     };
-}
-
-// Initialize on module load
-initNavigation();
+})();
 
 // Voiceflow chat initialization
 (function(d, t) {
