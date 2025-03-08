@@ -108,23 +108,31 @@ export async function handleChangePassword() {
         
         // If user logged in with email/password
         if (user.providerData.some(provider => provider.providerId === 'password')) {
-            // Get the base URL for GitHub Pages
-            const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                ? '/ArtistHub-BaguioCity'
-                : '';
-                
-            // Navigate to change password page
-            const changePasswordUrl = `${baseUrl}/profile/change-password.html?id=${auth.currentUser.uid}`;
-            window.location.href = changePasswordUrl;
+            // Show password change form in settings modal
+            const modal = document.getElementById('settingsModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                showPasswordChangeForm();
+            }
         } else {
             // User logged in with OAuth provider
             alert('You are signed in with an external provider (like Google). Password change is managed through that provider.');
         }
     } catch (error) {
-        console.error('Password change navigation error:', error);
-        alert('There was an error accessing the password change page. Please try again.');
+        console.error('Password change error:', error);
+        alert('There was an error accessing password change. Please try again.');
     }
 }
+
+// Make showPasswordChangeForm globally available
+window.showPasswordChangeForm = function() {
+    const mainView = document.getElementById('settingsMainView');
+    const passwordForm = document.getElementById('passwordChangeForm');
+    if (mainView && passwordForm) {
+        mainView.classList.add('hidden');
+        passwordForm.classList.remove('hidden');
+    }
+};
 
 /**
  * Handle user logout
@@ -142,6 +150,34 @@ export async function handleLogout() {
 }
 
 /**
+ * Open settings modal
+ */
+export function openSettingsModal() {
+    const modal = document.getElementById('settingsModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Close the profile dropdown when opening settings
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) {
+        dropdown.classList.add('hidden');
+    }
+}
+
+/**
+ * Close settings modal
+ */
+export function closeSettingsModal() {
+    const modal = document.getElementById('settingsModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+}
+
+/**
  * Initialize profile navigation functionality
  */
 export function initProfileNavigation() {
@@ -150,6 +186,8 @@ export function initProfileNavigation() {
     window.handleEditProfile = handleEditProfile;
     window.handleLogout = handleLogout;
     window.handleChangePassword = handleChangePassword;
+    window.openSettingsModal = openSettingsModal;
+    window.closeSettingsModal = closeSettingsModal;
     
     // Update mobile profile link behavior
     document.addEventListener('DOMContentLoaded', () => {
@@ -172,5 +210,7 @@ export default {
     handleEditProfile,
     handleLogout,
     handleChangePassword,
+    openSettingsModal,
+    closeSettingsModal,
     initProfileNavigation
 };
