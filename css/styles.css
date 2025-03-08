@@ -717,3 +717,20 @@
         transform: translate(-50%, -50%);
     }
 }
+
+/* Settings Modal Styles */
+#settingsModal {
+    transition: opacity 0.2s ease-out;
+}
+
+#settingsModal:not(.hidden) {
+    animation: fadeIn 0.2s ease-out;
+}
+
+#settingsModal button {
+    transition: all 0.2s ease;
+}
+
+#settingsModal button:hover {
+    transform: translateY(-2px);
+}
