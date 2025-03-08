@@ -105,13 +105,20 @@ h1 {
 }
 
 .flip-card-back {
-    background: #331a1594;
+    background: #391d0f;
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     transform: rotateY(180deg);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); 
+    transition: background 0.3s ease-in-out; 
+}
+
+
+.member:hover .flip-card-back {
+    background: #955428;
 }
 
 .flip-card-back p {
