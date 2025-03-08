@@ -95,7 +95,24 @@
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
-                    <li><a href="javascript:void(0)" onclick="navigateToUserProfile()" id="profileLinkMobile" class="flex items-center justify-center">Profile</a></li>
+                    <li class="relative">
+                        <button id="profileLinkMobile" class="flex items-center w-full">
+                            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
+                                 alt="Profile" 
+                                 class="w-8 h-8 rounded-full object-cover border-2 border-green-500 mr-2">
+                            <span>Profile</span>
+                        </button>
+                        <div id="mobileProfileDropdown" class="hidden mt-2 bg-white rounded-lg shadow-lg border-2 border-black">
+                            <div class="px-4 py-3 border-b border-gray-200">
+                                <p id="mobileProfileName" class="text-sm font-semibold text-gray-700">Loading...</p>
+                                <p id="mobileProfileEmail" class="text-xs text-gray-500">Loading...</p>
+                            </div>
+                            <div class="py-2">
+                                <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
+                                <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                            </div>
+                        </div>
+                    </li>
                     <li id="cartNavMobile" class="hidden">
                         <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

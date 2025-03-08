@@ -69,12 +69,70 @@ function initProfileDropdown() {
     if (mobileProfileLink) {
         mobileProfileLink.addEventListener('click', function(event) {
             event.preventDefault();
-            navigateToUserProfile();
+            event.stopPropagation();
+            const mobileDropdown = document.getElementById('mobileProfileDropdown');
+            if (mobileDropdown) {
+                // Remove display:none first
+                mobileDropdown.style.display = 'block';
+                // Then toggle the hidden class
+                requestAnimationFrame(() => {
+                    mobileDropdown.classList.toggle('hidden');
+                });
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileDropdown = document.getElementById('mobileProfileDropdown');
+            if (mobileDropdown && !mobileProfileLink.contains(event.target) && !mobileDropdown.contains(event.target)) {
+                mobileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Update mobile dropdown info when user data changes
+        auth.onAuthStateChanged(async function(user) {
+            if (user) {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    document.getElementById('mobileProfileName').textContent = userData.displayName || 'User';
+                    document.getElementById('mobileProfileEmail').textContent = user.email;
+                }
+            }
         });
     }
 
     // Remove the setupSettingsMenu function call since we're using a modal now
     // setupSettingsMenu(); - removing this line
+
+    // Update mobile flyout menu profile
+    const updateFlyoutProfile = (userData) => {
+        const flyoutProfileLink = document.getElementById('profileLinkMobile');
+        if (!flyoutProfileLink) return;
+
+        // Create the profile image button
+        if (!flyoutProfileLink.querySelector('img')) {
+            const imgElement = document.createElement('img');
+            imgElement.src = userData.photoURL || 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png';
+            imgElement.alt = "Profile";
+            imgElement.classList.add('w-10', 'h-10', 'rounded-full', 'object-cover', 'border-2', 'border-green-500');
+            flyoutProfileLink.innerHTML = ''; // Clear existing content
+            flyoutProfileLink.appendChild(imgElement);
+        }
+
+        // Add click event to profile link to toggle regular profile dropdown
+        flyoutProfileLink.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const profileDropdown = document.getElementById('profileDropdown');
+            const overlay = document.getElementById('profileDropdownOverlay');
+            
+            profileDropdown.classList.toggle('hidden');
+            if (overlay) {
+                overlay.classList.toggle('visible');
+            }
+        };
+    };
 
     // Update profile UI based on auth state
     auth.onAuthStateChanged(async function(user) {
@@ -119,6 +177,9 @@ function initProfileDropdown() {
                     const emailElement = document.getElementById('profileDropdownEmail');
                     if (nameElement) nameElement.textContent = userData.displayName || 'User';
                     if (emailElement) emailElement.textContent = user.email;
+
+                    // Update both desktop and mobile dropdowns
+                    updateFlyoutProfile({ ...userData, email: user.email });
                 }
             } catch (error) {
                 console.error("Error fetching user profile:", error);
@@ -138,6 +199,12 @@ function initProfileDropdown() {
                 if (mobileProfileImg) {
                     mobileProfileImg.remove();
                 }
+            }
+
+            // Remove flyout dropdown when logged out
+            const flyoutDropdown = document.getElementById('flyoutProfileDropdown');
+            if (flyoutDropdown) {
+                flyoutDropdown.remove();
             }
         }
     });
@@ -178,7 +245,7 @@ function setupSettingsMenu() {
 }
 
 // Navigate to user's profile
-function navigateToUserProfile() {
+function showUserProfileModal() {
     if (!auth.currentUser) {
         alert('Please login to view your profile');
         if (window.toggleLoginFlyout) {
@@ -187,14 +254,16 @@ function navigateToUserProfile() {
         return;
     }
     
-    // Get the base URL for GitHub Pages
-    const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-        ? '/ArtistHub-BaguioCity'
-        : '';
-        
-    // Construct the profile URL
-    const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
-    window.location.href = profileUrl;
+    const flyoutDropdown = document.getElementById('flyoutProfileDropdown');
+    if (flyoutDropdown) {
+        flyoutDropdown.classList.add('hidden');
+    }
+
+    // Show the profile modal
+    const profileModal = document.getElementById('settingsModal');
+    if (profileModal) {
+        profileModal.classList.remove('hidden');
+    }
 }
 
 // Make these functions available globally
@@ -210,7 +279,8 @@ window.toggleProfileDropdown = function(event) {
     }
 };
 
-window.navigateToUserProfile = navigateToUserProfile;
+window.navigateToUserProfile = showUserProfileModal;
+window.showUserProfileModal = showUserProfileModal;
 
 // Export the initialization function
-export { initProfileDropdown, navigateToUserProfile };
+export { initProfileDropdown, showUserProfileModal };

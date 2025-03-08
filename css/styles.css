@@ -799,3 +799,359 @@
 #settingsModal button:hover {
     transform: translateY(-2px);
 }
+
+/* Mobile Profile Dropdown Styles */
+@media (max-width: 768px) {
+    .profile-button {
+        display: flex;
+        align-items: center;
+        padding: 0;
+        border: none;
+        background: none;
+    }
+
+    .profile-button img {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    #profileDropdown {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        width: 90%;
+        max-width: 320px;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        opacity: 1;
+        visibility: visible;
+        transition: all 0.3s ease;
+        padding: 1rem;
+    }
+
+    #profileDropdown .user-info {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    #profileDropdown .user-info img {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4CAF50;
+        margin-right: 1rem;
+    }
+
+    #profileDropdown .user-details {
+        flex: 1;
+    }
+
+    #profileDropdown .user-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #1f2937;
+    }
+
+    #profileDropdown .user-email {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    #profileDropdown .dropdown-menu {
+        padding: 0.5rem 0;
+    }
+
+    #profileDropdown .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: #374151;
+        transition: all 0.2s ease;
+        border-radius: 0.5rem;
+        margin: 0.25rem 0;
+    }
+
+    #profileDropdown .dropdown-item:hover {
+        background-color: #f3f4f6;
+    }
+
+    #profileDropdown .dropdown-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+        color: #6b7280;
+    }
+
+    #profileDropdown .dropdown-item.danger {
+        color: #dc2626;
+    }
+
+    #profileDropdown .dropdown-item.danger svg {
+        color: #dc2626;
+    }
+
+    .profile-dropdown-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(4px);
+    }
+
+    .profile-dropdown-overlay.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #profileDropdown.hidden {
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, -40%) scale(0.95);
+    }
+
+    /* Enhanced mobile touch targets */
+    #profileDropdown button,
+    #profileDropdown a {
+        min-height: 44px;
+        width: 100%;
+        text-align: left;
+        font-size: 1rem;
+    }
+}
+
+/* Animation keyframes */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Mobile Flyout Profile Dropdown */
+#flyoutProfileDropdown {
+    background: white;
+    border-radius: 0.75rem;
+    margin: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#flyoutProfileDropdown.hidden {
+    display: none;
+}
+
+#flyoutProfileDropdown .user-info {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: #f8fafc;
+}
+
+#flyoutProfileDropdown .user-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+#flyoutProfileDropdown .user-email {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+#flyoutProfileDropdown .dropdown-menu {
+    padding: 0.5rem;
+}
+
+#flyoutProfileDropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #374151;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+#flyoutProfileDropdown .dropdown-item:hover {
+    background-color: #f3f4f6;
+}
+
+/* Adjust profile link in flyout menu */
+#profileLinkMobile {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+#profileLinkMobile img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+    transition: border-color 0.2s ease;
+}
+
+#profileLinkMobile img:hover {
+    border-color: #45a049;
+}
+
+/* Mobile Flyout Profile Dropdown */
+#flyoutProfileDropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: white;
+    margin: 0.5rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s ease;
+}
+
+#flyoutProfileDropdown.hidden {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#flyoutProfileDropdown .user-info {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: #f8fafc;
+}
+
+/* Mobile Profile Dropdown Styles */
+@media (max-width: 768px) {
+    #profileDropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: white;
+        margin-top: 0.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+    }
+
+    #profileDropdown.hidden {
+        display: none;
+    }
+
+    #profileDropdown .py-2 {
+        padding: 1rem;
+    }
+
+    #profileDropdown .px-4 {
+        padding: 0.75rem 1rem;
+    }
+
+    #profileDropdown .border-b {
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    #profileDropdown a {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: #374151;
+        transition: background-color 0.2s ease;
+    }
+
+    #profileDropdown a:hover {
+        background-color: #f3f4f6;
+    }
+}
+
+/* Mobile Profile Dropdown in Flyout */
+#mobileProfileDropdown {
+    background: white;
+    margin-top: 0.5rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#mobileProfileDropdown.hidden {
+    display: none;
+}
+
+#mobileProfileDropdown .border-b {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#mobileProfileDropdown a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #374151;
+    transition: background-color 0.2s ease;
+}
+
+#mobileProfileDropdown a:hover {
+    background-color: #f3f4f6;
+}
+
+#profileLinkMobile {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+#profileLinkMobile:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile Profile Dropdown in Flyout */
+#mobileProfileDropdown {
+    background: white;
+    margin: 0.5rem 0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#mobileProfileDropdown.hidden {
+    display: none;
+}
+
+#mobileProfileDropdown .border-b {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#mobileProfileDropdown a {
+    transition: background-color 0.2s ease;
+}
+
+#profileLinkMobile {
+    text-align: left;
+    width: 100%;
+    padding: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+#profileLinkMobile:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
