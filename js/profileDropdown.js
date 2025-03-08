@@ -260,7 +260,7 @@ function setupSettingsMenu() {
 }
 
 // Navigate to user's profile
-function showUserProfileModal() {
+function navigateToUserProfile() {
     if (!auth.currentUser) {
         alert('Please login to view your profile');
         if (window.toggleLoginFlyout) {
@@ -269,16 +269,12 @@ function showUserProfileModal() {
         return;
     }
     
-    const flyoutDropdown = document.getElementById('flyoutProfileDropdown');
-    if (flyoutDropdown) {
-        flyoutDropdown.classList.add('hidden');
-    }
-
-    // Show the profile modal
-    const profileModal = document.getElementById('settingsModal');
-    if (profileModal) {
-        profileModal.classList.remove('hidden');
-    }
+    // Get the base URL for GitHub Pages
+    const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+        ? '/ArtistHub-BaguioCity'
+        : '';
+    // Navigate to profile page
+    window.location.href = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
 }
 
 // Make these functions available globally
@@ -294,8 +290,7 @@ window.toggleProfileDropdown = function(event) {
     }
 };
 
-window.navigateToUserProfile = showUserProfileModal;
-window.showUserProfileModal = showUserProfileModal;
+window.navigateToUserProfile = navigateToUserProfile;
 
 // Export the initialization function
-export { initProfileDropdown, showUserProfileModal };
+export { initProfileDropdown, navigateToUserProfile };
