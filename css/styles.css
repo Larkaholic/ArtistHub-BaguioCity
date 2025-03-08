@@ -22,6 +22,7 @@
         scroll-behavior: smooth;
         font-family: Arial, sans-serif;
         scroll-snap-type: y mandatory; /* Ensure this line is present */
+        background-color: #F4F8FF;
     }
     
     /* ==========================================================================
@@ -176,6 +177,70 @@
         scrollbar-width: thin;
         scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    /* Artist Search Styles */
+    .artist-search-btn {
+        background: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 20;
+        transition: all 0.3s ease;
+    }
+
+    .artist-search-container {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 40px;
+        width: 40px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: white;
+        border-radius: 20px;
+        z-index: 10;
+    }
+
+    .artist-search-container.expanded {
+        width: 300px;
+    }
+
+    .artist-search-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+        padding: 0 40px 0 20px;
+        font-size: 16px;
+        background: transparent;
+    }
+
+    .artist-close-btn {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: none;
+    }
+
+    .artist-search-container.expanded .artist-close-btn {
+        display: block;
+    }
+
+    .artist-search-btn.hidden {
+        opacity: 0;
+        pointer-events: none;
     }
     
     .artist-card {
