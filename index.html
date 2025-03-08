@@ -820,21 +820,32 @@
             </div>
             <div id="passwordChangeForm" class="hidden">
                 <h2 class="text-center font-bold text-2xl mb-6">Change Password</h2>
+                <!-- Add error and success message containers -->
+                <div id="passwordChangeError" class="hidden p-4 mb-4 text-red-700 bg-red-100 rounded-lg"></div>
+                <div id="passwordChangeSuccess" class="hidden p-4 mb-4 text-green-700 bg-green-100 rounded-lg"></div>
+                
                 <form onsubmit="submitPasswordChange(event)" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Current Password</label>
                         <input type="password" id="currentPassword" required 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">New Password</label>
                         <input type="password" id="newPassword" required 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
+                        <p class="mt-1 text-sm text-gray-500">
+                            Password must be at least 8 characters and include:
+                            <br>• One uppercase letter
+                            <br>• One lowercase letter
+                            <br>• One number
+                        </p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Confirm New Password</label>
                         <input type="password" id="confirmPassword" required 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
                     </div>
                     <div class="flex justify-between pt-4">
                         <button type="button" onclick="hidePasswordChangeForm()" 
