@@ -67,17 +67,26 @@ function initProfileDropdown() {
     // Handle mobile profile navigation in the flyout menu
     const mobileProfileLink = document.getElementById('profileLinkMobile');
     if (mobileProfileLink) {
+        let isDropdownVisible = false;
         mobileProfileLink.addEventListener('click', function(event) {
             event.preventDefault();
             event.stopPropagation();
             const mobileDropdown = document.getElementById('mobileProfileDropdown');
             if (mobileDropdown) {
-                // Remove display:none first
-                mobileDropdown.style.display = 'block';
-                // Then toggle the hidden class
-                requestAnimationFrame(() => {
-                    mobileDropdown.classList.toggle('hidden');
-                });
+                if (!isDropdownVisible) {
+                    // Show dropdown
+                    mobileDropdown.style.display = 'block';
+                    mobileDropdown.classList.remove('hidden');
+                } else {
+                    // Hide dropdown
+                    mobileDropdown.classList.add('hidden');
+                    setTimeout(() => {
+                        if (mobileDropdown.classList.contains('hidden')) {
+                            mobileDropdown.style.display = 'none';
+                        }
+                    }, 150); // Match transition duration
+                }
+                isDropdownVisible = !isDropdownVisible;
             }
         });
 
@@ -86,6 +95,12 @@ function initProfileDropdown() {
             const mobileDropdown = document.getElementById('mobileProfileDropdown');
             if (mobileDropdown && !mobileProfileLink.contains(event.target) && !mobileDropdown.contains(event.target)) {
                 mobileDropdown.classList.add('hidden');
+                isDropdownVisible = false;
+                setTimeout(() => {
+                    if (mobileDropdown.classList.contains('hidden')) {
+                        mobileDropdown.style.display = 'none';
+                    }
+                }, 150);
             }
         });
 
