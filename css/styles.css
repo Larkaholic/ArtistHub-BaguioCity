@@ -139,7 +139,7 @@
     #landingPage {
         width: 100%;
         height: 100vh; /* Ensure this line is present */
-        background-image: url("/images/back.jpg");
+        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/back.jpg?raw=true");
         backdrop-filter: blur(1px);
         z-index: -0.5;
         background-attachment: fixed;
