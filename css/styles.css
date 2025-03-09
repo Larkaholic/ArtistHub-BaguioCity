@@ -138,11 +138,14 @@
     #landingPage {
         width: 100%;
         height: 100vh; /* Ensure this line is present */
-        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/larkBranchh/images/newBackground.jpg?raw=true");
+        background-image: url("/images/back.jpg");
+        backdrop-filter: blur(1px);
+        z-index: -0.5;
         background-attachment: fixed;
         background-size: cover;
         padding: 0;
     }
+    
     
     /* ==========================================================================
         6. ARTISTS SECTION
@@ -717,3 +720,40 @@
         transform: translate(-50%, -50%);
     }
 }
+
+/*=================================================================================
+13. LOGO FONT ========================================================
+===================================================================================*/
+
+@font-face {
+    font-family: 'Rockybilly';
+    src: url('/font/Rockybilly.ttf') format('truetype'); 
+}
+
+.typing-container {
+    text-align: center;
+    display: block;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1, h2 {
+    font-family: "Rockybilly", cursive;
+    font-size: 5rem; 
+    color: rgb(0, 0, 0);
+    margin: 20; 
+    
+}
+h1{
+    transform: scale(5.5);
+    margin-bottom: 100%;
+    white-space: nowrap;
+    -webkit-text-stroke: 0.2px white;
+}
+
+h2 {
+    font-size: 3rem;
+    margin-top: 70%;
+    padding: 20px;
+}
+

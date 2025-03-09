@@ -8,9 +8,8 @@
     <title>ArtistHub - Our Team</title>
 </head>
 <body>
-    <img src="/images/Home Logo.gif" width="5%">
     <button class="back-button" onclick="window.location.href='/index.html';">Back to Home Page</button>
-    <h1>Our Team</h1>    
+    <h1 id="typing"></h1>
     <div class="team-container">
         <!-- CAPSTONE MEMBERS -->
         <div class="category">CAPSTONE MEMBERS</div><br>
@@ -207,21 +206,7 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            (function(d, t) {
-                var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-                v.onload = function() {
-                  window.voiceflow.chat.load({
-                    verify: { projectID: '6706887ba2382c6fe907495e' },
-                    url: 'https://general-runtime.voiceflow.com',
-                    versionID: 'production', 
-                    voice: { 
-                      url: "https://runtime-api.voiceflow.com" 
-                    }
-                  });
-                }
-                v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
-            })(document, 'script');
-          </script>
+        <script src="script/script.js"></script>
+       
     </body>
     </html>
