@@ -182,9 +182,9 @@
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
 
-    /* Artist Search Styles */
+    /* Artist Search Styles - Updated */
     .artist-search-btn {
-        background: white;
+        background: #FFF2C8;
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -193,30 +193,40 @@
         justify-content: center;
         cursor: pointer;
         z-index: 20;
-        transition: all 0.3s ease;
+        position: relative;
+        transition: opacity 0.3s ease, background-color 0.3s ease;
+        border: 2px solid #d4c689;
+    }
+
+    .artist-search-btn:hover {
+        background: #f7e4a0;
     }
 
     .artist-search-container {
         position: absolute;
-        right: 0;
+        right: 5px; /* Adjusted positioning */
         top: 0;
         height: 40px;
         width: 40px;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        background: white;
+        opacity: 0;
+        visibility: hidden;
+        background: #FFF2C8;
         border-radius: 20px;
         z-index: 10;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        border: 2px solid #d4c689;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .artist-search-container.expanded {
         width: 300px;
+        opacity: 1;
+        visibility: visible;
     }
 
     .artist-search-input {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         border: none;
@@ -224,26 +234,49 @@
         padding: 0 40px 0 20px;
         font-size: 16px;
         background: transparent;
+        color: #333;
+        opacity: 0;
+        transition: opacity 0.2s ease 0.2s;
+    }
+
+    .artist-search-input::placeholder {
+        color: #806b2d;
+        opacity: 0.7;
+    }
+
+    .artist-search-container.expanded .artist-search-input {
+        opacity: 1;
     }
 
     .artist-close-btn {
         position: absolute;
-        top: 50%;
-        right: 10px;
-        transform: translateY(-50%);
+        right: 12px;
         background: none;
         border: none;
         cursor: pointer;
-        display: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #806b2d;
     }
 
-    .artist-search-container.expanded .artist-close-btn {
-        display: block;
+    .artist-close-btn:hover {
+        color: #4a3d1a;
     }
 
     .artist-search-btn.hidden {
         opacity: 0;
         pointer-events: none;
+    }
+
+    .artist-search-container.expanded .artist-close-btn {
+        opacity: 1;
+        color: #000;
+        font-size: 18px;
+        font-weight: bold;
     }
     
     .artist-card {
@@ -787,7 +820,7 @@
 }
 
 /*=================================================================================
-13. LOGO FONT ========================================================
+13. LOGO FONT 
 ===================================================================================*/
 
 @font-face {
@@ -822,7 +855,6 @@ h2 {
     padding: 20px;
 }
 
-=======
 /* Settings Modal Styles */
 #settingsModal {
     transition: opacity 0.2s ease-out;
@@ -1206,4 +1238,101 @@ h2 {
 
 #profileLinkMobile:hover {
     background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Timeline Search Styles - Update this section */
+.timeline-search-btn {
+    background: #FFF2C8;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    position: absolute;
+    right: 20px;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    border: 2px solid #d4c689;
+}
+
+.timeline-search-btn:hover {
+    background: #f7e4a0;
+}
+
+.search-input-container {
+    position: absolute;
+    right: 20px;  /* Adjusted right positioning */
+    top: 0;
+    height: 40px;
+    width: 40px;
+    opacity: 0;
+    visibility: hidden;
+    background: #FFF2C8;
+    border-radius: 20px;
+    z-index: 10;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    border: 2px solid #d4c689;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-input-container.expanded {
+    width: 300px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.timeline-search-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0 40px 0 20px;
+    font-size: 16px;
+    background: transparent;
+    color: #333;
+    opacity: 0;
+    transition: opacity 0.2s ease 0.2s;
+}
+
+.timeline-search-input::placeholder {
+    color: #806b2d;
+    opacity: 0.7;
+}
+
+.search-input-container.expanded .timeline-search-input {
+    opacity: 1;
+}
+
+.search-close-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;  /* Changed to black */
+    font-size: 18px;  /* Make it slightly larger */
+    font-weight: bold;  /* Make it bolder */
+}
+
+.search-input-container.expanded .search-close-btn {
+    opacity: 1;
+}
+
+.search-close-btn:hover {
+    color: #333;  /* Darker on hover */
+}
+
+.timeline-search-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
