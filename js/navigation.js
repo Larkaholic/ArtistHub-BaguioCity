@@ -37,6 +37,7 @@ export function initNavigation() {
     };
 }
 
+
 // Voiceflow chat initialization
 (function(d, t) {
     var v = d.createElement(t), s = d.getElementsByTagName(t)[0];

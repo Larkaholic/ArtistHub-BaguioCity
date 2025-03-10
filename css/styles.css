@@ -132,6 +132,11 @@
         .burger-icon svg {
             fill: white;
         }
+
+        .header img {
+            height: 50px; /* Adjust the height to make the logo smaller */
+            width: auto;
+        }
     
     /* ==========================================================================
         5. LANDING PAGE
@@ -1335,4 +1340,48 @@ h2 {
 .timeline-search-btn.hidden {
     opacity: 0;
     pointer-events: none;
+}
+
+.typing-container {
+    text-align: center;
+    display: block;
+    flex-direction: column;
+    align-items: center;
+}
+
+#typing-h1-container {
+    margin-bottom: 40px;
+}
+
+#typing-h2-container {
+    margin-top: 50px;
+}
+
+.typing-container typing-h1, typing-h2 {
+    font-family: "Rockybilly", cursive;
+    font-size: 5rem; 
+    color: rgb(0, 0, 0);
+    margin: 20; 
+}
+
+.typing-container typing-h1 {
+    transform: scale(5.5);
+    white-space: nowrap;
+    -webkit-text-stroke: 0.2px white;
+}
+
+.typing-container typing-h2 {
+    font-size: 1rem;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .typing-container typing-h1 {
+        font-size: 3rem;
+        margin-top: 70px; /* Add 20 pixels more margin-top for small screens */
+    }
+
+    .typing-container typing-h2 {
+        font-size: 0.8rem;
+    }
 }

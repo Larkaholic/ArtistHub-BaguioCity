@@ -150,8 +150,11 @@
     <script type="module" src="./shop.js"></script>
     <script type="module" src="../Gallery/cart.js"></script>
     <script type="module">
-        // Import auth at the top level of module script
         import { auth } from '../js/firebase-config.js';
+        import { initNavigation } from '../js/navigation.js';
+
+        // Initialize navigation
+        initNavigation();
 
         // Make handleProfileClick available globally
         window.handleProfileClick = function() {
