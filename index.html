@@ -31,7 +31,7 @@
     </div>
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
         <div class="flex w-24 ml-16">
-            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer">
+            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer; height: 50px;">
         </div>
     
         <div class="sm:hidden flex items-center mr-5">
@@ -216,14 +216,17 @@
         </div>
     </div>
 
-    <main class="hero-section max-w-full h-screen ">
+    <main class="hero-section max-w-full h-screen">
         <!-- hero section -->
         <section id="landingPage" class="flex flex-col md:flex-row w-full h-full items-center overflow-hidden">
             <div class="artist-item position-absolute w-full h-1/2 md:w-1/2 md:h-full flex items-center justify-center p-0">
                 <div class="typing-container">
-                    <h1 id="typing-h1"></h1>
-                    <br><br><br><br><br> 
-                    <h2 id="typing-h2"></h2>    
+                    <div id="typing-h1-container">
+                        <typing-h1 id="typing-h1" class="typing"></typing-h1>
+                    </div>
+                    <div id="typing-h2-container">
+                        <typing-h2 id="typing-h2" class="typing"></typing-h2>
+                    </div>
                 </div>
             </div>
             <div class="important-events w-full h-1/2 md:w-1/2 md:h-full md:mt-24 overflow-x-auto">
