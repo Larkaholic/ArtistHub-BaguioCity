@@ -1,7 +1,6 @@
 import { VOICEFLOW_API_KEY } from './config.js';
 import { auth } from './firebase-config.js';
 
-// Initialize navigation function
 export function initNavigation() {
     // Make navToEvent globally available
     window.navToEvent = function(path) {
@@ -36,7 +35,6 @@ export function initNavigation() {
         }
     };
 }
-
 
 // Voiceflow chat initialization
 (function(d, t) {
