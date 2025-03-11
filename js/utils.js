@@ -177,36 +177,28 @@ export async function handleAdminAction(profileId) {
 }
 
 export function navToEvent(url) {
+    const basePath = getBasePath();
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id') || urlParams.get('artistId');
+
     // Special handling for gallery navigation
     if (url.includes('gallery')) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id') || urlParams.get('artistId');
+        console.log('Navigating to gallery with ID:', userId);
         if (userId) {
-            // Get base path (empty for local, '/ArtistHub-BaguioCity' for GitHub Pages)
-            const basePath = getBasePath();
-            // Use consistent path structure
-            const galleryPath = `${basePath}/gallery/gallery.html?artistId=${userId}`;
-            console.log('Navigating to gallery:', galleryPath);
-            window.location.href = galleryPath;
+            const fullPath = `${basePath}/gallery/gallery.html?artistId=${userId}`;
+            console.log('Full gallery path:', fullPath);
+            window.location.href = fullPath;
             return;
         }
     }
-    // For non-gallery navigation
-    if (url.startsWith('/')) {
-        // Handle absolute paths
-        window.location.href = url;
-    } else {
-        // Handle relative paths
-        const basePath = getBasePath();
-        window.location.href = `${basePath}/${url}`;
-    }
+
+    // Handle other navigation
+    const fullPath = url.startsWith('/') ? url : `${basePath}/${url}`;
+    window.location.href = fullPath;
 }
 
 export function getBasePath() {
-    // For GitHub Pages, we need to include the repository name in the path
-    return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? ''
-        : '/ArtistHub-BaguioCity';
+    return window.location.hostname === 'larkaholic.github.io' ? '/ArtistHub-BaguioCity' : '';
 }
 
 // Add a navigation helper that uses the base path
