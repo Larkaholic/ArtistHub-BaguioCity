@@ -270,3 +270,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Override any existing gallery navigation
+window.navigateToGallery = function() {
+    const userId = new URLSearchParams(window.location.search).get('id') || 
+                  new URLSearchParams(window.location.search).get('artistId');
+    
+    if (userId) {
+        // Force direct navigation to gallery
+        document.location.href = `/gallery/gallery.html?artistId=${userId}`;
+    }
+};
+
+// Remove the existing gallery navigation code
+document.addEventListener('DOMContentLoaded', () => {
+    const artistId = getArtistIdFromProfile();
+    if (artistId) {
+        const galleryButton = document.getElementById('dynamicGalleryButton');
+        if (galleryButton) {
+            galleryButton.setAttribute('onclick', `navToEvent('gallery/gallery.html')`);
+        }
+    }
+});
