@@ -183,22 +183,26 @@ export function navToEvent(url) {
 
     // Special handling for gallery navigation
     if (url.includes('gallery')) {
-        console.log('Navigating to gallery with ID:', userId);
         if (userId) {
-            const fullPath = `${basePath}/gallery/gallery.html?artistId=${userId}`;
-            console.log('Full gallery path:', fullPath);
+            const fullPath = `${basePath}/Gallery/gallery.html?artistId=${userId}`;
+            console.log('Gallery navigation:', { basePath, userId, fullPath });
             window.location.href = fullPath;
             return;
         }
     }
 
-    // Handle other navigation
-    const fullPath = url.startsWith('/') ? url : `${basePath}/${url}`;
-    window.location.href = fullPath;
+    if (url.startsWith('/')) {
+        window.location.href = url;
+    } else {
+        window.location.href = `${basePath}/${url}`;
+    }
 }
 
 export function getBasePath() {
-    return window.location.hostname === 'larkaholic.github.io' ? '/ArtistHub-BaguioCity' : '';
+    if (window.location.hostname === 'larkaholic.github.io') {
+        return '/ArtistHub-BaguioCity';
+    }
+    return '';
 }
 
 // Add a navigation helper that uses the base path
