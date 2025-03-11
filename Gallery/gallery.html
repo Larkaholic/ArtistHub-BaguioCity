@@ -39,6 +39,14 @@
       margin-top: 1rem;
     }
   </style>
+
+        <!--Added For Disable Right Click-->
+        <script>document.addEventListener('contextmenu', function(e) {
+            if (e.target.tagName === 'IMG', 'VIDEO') {
+                e.preventDefault();
+            }
+        });</script>
+        
 </head>
 
 <body class="overflow-hidden">

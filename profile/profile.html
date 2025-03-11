@@ -65,6 +65,14 @@
             setTimeout(() => clearInterval(styleCheck), 5000);
         });
     </script>
+
+        <!--Added For Disable Right Click-->
+        <script>document.addEventListener('contextmenu', function(e) {
+            if (e.target.tagName === 'IMG', 'VIDEO') {
+                e.preventDefault();
+            }
+        });</script>
+
 </head>
 <body class="">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-30 p-1 glass-header">

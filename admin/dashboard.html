@@ -57,6 +57,14 @@
             text-decoration: underline;
         }
     </style>
+
+        <!--Added For Disable Right Click-->
+        <script>document.addEventListener('contextmenu', function(e) {
+            if (e.target.tagName === 'IMG', 'VIDEO') {
+                e.preventDefault();
+            }
+        });</script>
+
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <nav class="bg-black fixed top-0 left-0 right-0 p-4 flex justify-between items-center">

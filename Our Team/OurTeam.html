@@ -6,6 +6,14 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
     <title>ArtistHub - Our Team</title>
+
+        <!--Added For Disable Right Click-->
+        <script>document.addEventListener('contextmenu', function(e) {
+            if (e.target.tagName === 'IMG', 'VIDEO') {
+                e.preventDefault();
+            }
+        });</script>
+
 </head>
 <body>
     <button class="back-button" onclick="window.location.href='/index.html';">Back to Home Page</button>
