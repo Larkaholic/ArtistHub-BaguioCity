@@ -218,6 +218,7 @@
                     <div class="mt-4 pt-4 border-t border-gray-200">
                         <button 
                             id="dynamicGalleryButton"
+                            onclick="navigateToGallery()"
                             class="bg-green-600 text-white text-base sm:text-xl px-4 sm:px-6 py-3 sm:py-5 rounded-lg hover:bg-green-700 transition-colors duration-300 w-full"
                         >
                             View My Gallery
@@ -327,6 +328,26 @@
                 }
             }
         });
+
+        function navigateToGallery() {
+            const userId = new URLSearchParams(window.location.search).get('id') || 
+                          new URLSearchParams(window.location.search).get('artistId');
+            if (userId) {
+                // Use consistent path structure
+                const galleryPath = `../gallery/artist-gallery.html?artistId=${userId}`;
+                window.location.href = galleryPath;
+            } else {
+                console.error('No user ID found in URL');
+            }
+        }
+
+        // Add debug logging
+        document.getElementById('dynamicGalleryButton').addEventListener('click', function(e) {
+            console.log('Gallery button clicked');
+            console.log('Current URL:', window.location.href);
+            console.log('User ID:', new URLSearchParams(window.location.search).get('id') || 
+                                  new URLSearchParams(window.location.search).get('artistId'));
+        });
     </script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
@@ -405,6 +426,15 @@
                 }
             });
         });
+
+        function navigateToGallery() {
+            const userId = new URLSearchParams(window.location.search).get('id');
+            if (userId) {
+                // Use relative path instead of absolute path
+                const galleryPath = `../gallery/gallery.html?id=${userId}`;
+                window.location.href = galleryPath;
+            }
+        }
     </script>
 </body>
 </html>
