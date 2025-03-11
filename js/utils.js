@@ -182,12 +182,24 @@ export function navToEvent(url) {
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('id') || urlParams.get('artistId');
         if (userId) {
+            // Get base path (empty for local, '/ArtistHub-BaguioCity' for GitHub Pages)
             const basePath = getBasePath();
-            window.location.href = `${basePath}/gallery/gallery.html?artistId=${userId}`;
+            // Use consistent path structure
+            const galleryPath = `${basePath}/gallery/gallery.html?artistId=${userId}`;
+            console.log('Navigating to gallery:', galleryPath);
+            window.location.href = galleryPath;
             return;
         }
     }
-    window.location.href = url;
+    // For non-gallery navigation
+    if (url.startsWith('/')) {
+        // Handle absolute paths
+        window.location.href = url;
+    } else {
+        // Handle relative paths
+        const basePath = getBasePath();
+        window.location.href = `${basePath}/${url}`;
+    }
 }
 
 export function getBasePath() {
