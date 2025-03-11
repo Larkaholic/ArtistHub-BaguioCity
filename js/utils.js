@@ -177,6 +177,16 @@ export async function handleAdminAction(profileId) {
 }
 
 export function navToEvent(url) {
+    // Special handling for gallery navigation
+    if (url.includes('gallery')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id') || urlParams.get('artistId');
+        if (userId) {
+            const basePath = getBasePath();
+            window.location.href = `${basePath}/gallery/gallery.html?artistId=${userId}`;
+            return;
+        }
+    }
     window.location.href = url;
 }
 
