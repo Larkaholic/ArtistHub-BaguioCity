@@ -177,14 +177,32 @@ export async function handleAdminAction(profileId) {
 }
 
 export function navToEvent(url) {
-    window.location.href = url;
+    const basePath = getBasePath();
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id') || urlParams.get('artistId');
+
+    // Special handling for gallery navigation
+    if (url.includes('gallery')) {
+        if (userId) {
+            const fullPath = `${basePath}/Gallery/gallery.html?artistId=${userId}`;
+            console.log('Gallery navigation:', { basePath, userId, fullPath });
+            window.location.href = fullPath;
+            return;
+        }
+    }
+
+    if (url.startsWith('/')) {
+        window.location.href = url;
+    } else {
+        window.location.href = `${basePath}/${url}`;
+    }
 }
 
 export function getBasePath() {
-    // For GitHub Pages, we need to include the repository name in the path
-    return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? ''
-        : '/ArtistHub-BaguioCity';
+    if (window.location.hostname === 'larkaholic.github.io') {
+        return '/ArtistHub-BaguioCity';
+    }
+    return '';
 }
 
 // Add a navigation helper that uses the base path

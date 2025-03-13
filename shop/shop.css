@@ -2,7 +2,7 @@
     1. IMPORTS AND FONTS
     ========================================================================== */
     @import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap');
-    @import url('../css/styles.css');
+    /* @import url('../css/styles.css'); */
 
     .rubik-dirt-regular {
         font-family: "Rubik Dirt", system-ui;
