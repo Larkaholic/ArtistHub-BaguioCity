@@ -13,14 +13,36 @@ function initProfileDropdown() {
     const mobileLogoutButton = document.querySelector('#flyout-menu .logout-button');
     
     function toggleProfileDropdown(event) {
-        event.preventDefault();
-        const dropdown = document.getElementById('profileDropdown');
-        const overlay = document.getElementById('profileDropdownOverlay');
-        const isHidden = dropdown.classList.toggle('hidden');
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
         
-        if (window.innerWidth <= 768) {
-            overlay.classList.toggle('visible');
-            document.body.style.overflow = isHidden ? '' : 'hidden';
+        const dropdown = document.getElementById('profileDropdown');
+        const button = document.querySelector('.profile-button');
+        
+        // Add null check
+        if (!dropdown || !button) {
+            console.warn('Profile dropdown elements not found');
+            return;
+        }
+        
+        // Toggle dropdown
+        dropdown.classList.toggle('hidden');
+        
+        // Handle click outside
+        function handleClickOutside(e) {
+            if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+                dropdown.classList.add('hidden');
+                document.removeEventListener('click', handleClickOutside);
+            }
+        }
+        
+        // Add click outside listener
+        if (!dropdown.classList.contains('hidden')) {
+            setTimeout(() => {
+                document.addEventListener('click', handleClickOutside);
+            }, 10);
         }
     }
 

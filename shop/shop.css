@@ -589,3 +589,20 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
 #flyout-menu {
     z-index: 100 !important;
 }
+
+/* Fix login/logout button visibility */
+.login-button {
+    display: none !important; /* Hide by default */
+}
+
+.login-button.visible {
+    display: block !important;
+}
+
+.profile-dropdown-container {
+    display: none !important; /* Hide by default */
+}
+
+.profile-dropdown-container.visible {
+    display: block !important;
+}
