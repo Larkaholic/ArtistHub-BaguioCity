@@ -187,8 +187,7 @@
                         <span>Cart (<span id="cartCount">0</span>)</span>
                     </a>
                 </li>
-                <!-- Add Login/Logout buttons -->
-                <li class="login-button" style="display: block;">
+                <li class="login-button hidden"> <!-- Add hidden class -->
                     <button onclick="toggleLoginFlyout(event)" class="bg-blue-500 text-white p-2 px-4 rounded-lg font-semibold hover:bg-blue-600" style="display: inline-block; min-width: 80px;">Login</button>
                 </li>
                 <!-- Profile dropdown container remains the same -->
@@ -723,6 +722,22 @@
         
         if (cartNav) cartNav.style.display = 'block';
         if (cartNavMobile) cartNavMobile.style.display = 'block';
+    });
+</script>
+<script type="module">
+    import { auth } from '../js/firebase-config.js';
+    
+    // Initialize auth state observer
+    auth.onAuthStateChanged((user) => {
+        const loginButton = document.querySelector('.login-button');
+        
+        if (user) {
+            // User is logged in - hide login button
+            loginButton?.classList.remove('visible');
+        } else {
+            // User is logged out - show login button
+            loginButton?.classList.add('visible');
+        }
     });
 </script>
 </body>
