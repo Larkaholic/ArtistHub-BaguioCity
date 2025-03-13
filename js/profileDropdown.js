@@ -164,6 +164,13 @@ function initProfileDropdown() {
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
+                    
+                    // Update admin button visibility based on isAdmin property
+                    const adminButtons = document.querySelectorAll('.admin-button');
+                    adminButtons.forEach(button => {
+                        button.style.display = userData.isAdmin === true ? 'block' : 'none';
+                    });
+
                     // Update profile picture
                     if (userData.photoURL) {
                         userProfilePic.src = userData.photoURL;
@@ -207,6 +214,12 @@ function initProfileDropdown() {
             if (logoutButton) logoutButton.style.display = 'none';
             if (mobileLoginButton) mobileLoginButton.style.display = 'block';
             if (mobileLogoutButton) mobileLogoutButton.style.display = 'none';
+            
+            // Hide admin button when logged out
+            const adminButtons = document.querySelectorAll('.admin-button');
+            adminButtons.forEach(button => {
+                button.style.display = 'none';
+            });
             
             // Reset mobile profile link if needed
             if (mobileProfileLink) {

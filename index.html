@@ -66,7 +66,7 @@
             </ul>
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
-                    <a href="./admin/dashboard.html">Admin</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('./admin/dashboard.html')">Admin</a>
                 </li>
                 <li class="login-button">
                     <button onclick="toggleLoginFlyout(event)" class="nav-item bg-blue-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-blue-600">Login</button>
@@ -119,6 +119,9 @@
                                 <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
                             </div>
                         </div>
+                    </li>
+                    <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
+                        <a href="javascript:void(0)" onclick="navToEvent('./admin/dashboard.html')">Admin</a>
                     </li>
                     <li id="cartNavMobile" class="hidden">
                         <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
@@ -833,8 +836,7 @@
                         <div class="text-left">
                             <h3 class="font-bold text-lg">Edit Profile</h3>
                             <p class="text-sm text-gray-600">Update your personal information</p>
-                        </div>
-                    </button>
+                        </button>
                     <button onclick="showPasswordChangeForm()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-blue-500 hover:border-blue-600 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
