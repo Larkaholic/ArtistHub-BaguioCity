@@ -548,3 +548,140 @@ button,
     display: block !important;
     visibility: visible !important;
 }
+
+/* Profile dropdown styles */
+.profile-dropdown-container {
+    position: relative;
+    z-index: 50;
+}
+
+.profile-dropdown-container .profile-button {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.profile-dropdown-container .profile-button:hover {
+    transform: scale(1.05);
+}
+
+#profileDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 12rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+}
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-button img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img {
+    border-color: #059669;
+}
+
+/* Update z-index values */
+#main-header {
+    z-index: 99 !important;
+}
+
+/* Update dropdown styles */
+.profile-dropdown-container {
+    position: relative;
+    z-index: 1000;
+}
+
+#profileDropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    width: 12rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    visibility: visible;
+    transform-origin: top right;
+    transition: all 0.2s ease;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+#profileDropdown .py-2 {
+    text-align: center;
+}
+
+#profileDropdown .px-4 {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 1rem;
+}
+
+#profileDropdown .border-b {
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Mobile Profile Dropdown Styles */
+#profileLinkMobile {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+#profileLinkMobile:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+#mobileProfileDropdown {
+    background: white;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+#mobileProfileDropdown a {
+    text-align: center;
+    padding: 0.75rem 1rem;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+#mobileProfileDropdown a:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+#mobileProfileDropdown .border-b {
+    text-align: center;
+    padding: 1rem;
+}
