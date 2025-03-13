@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="shop.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
+
+    <!--Added For Disable Right Click-->
+    <script>document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG', 'VIDEO') {
+            e.preventDefault();
+        }
+    });</script>
+
 </head>
 <body class="bg-cover">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
@@ -140,7 +148,7 @@
     </div>
 
     <main class="container mx-auto px-4 pt-20">
-        <h1 class="text-3xl font-bold text-center mb-8">Art Gallery Shop</h1>
+        <h3 class="text-3xl font-bold text-center mb-8">Art Gallery Shop</h1>
         
         <div class="mb-8">
             <input type="text" 

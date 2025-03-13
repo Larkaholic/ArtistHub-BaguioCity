@@ -9,6 +9,13 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="editprofile.css">
 
+    <!--Added For Disable Right Click-->
+    <script>document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG', 'VIDEO') {
+            e.preventDefault();
+        }
+    });</script>
+    
 </head>
 <body>
     <div class="container mx-auto px-4 py-8">

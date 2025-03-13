@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Setup - Artist Hub</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+        <!--Added For Disable Right Click-->
+        <script>document.addEventListener('contextmenu', function(e) {
+            if (e.target.tagName === 'IMG', 'VIDEO') {
+                e.preventDefault();
+            }
+        });</script>
+
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
     <div class="max-w-md w-full mx-4">

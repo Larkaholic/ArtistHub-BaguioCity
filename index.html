@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="css/history.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
     
+    <!--Added For Disable Right Click-->
+    <script>document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG', 'VIDEO') {
+            e.preventDefault();
+        }
+    });</script>
+
     <!-- Add this before other module scripts -->
     <script type="module">
         import { initNavigation } from './js/navigation.js';

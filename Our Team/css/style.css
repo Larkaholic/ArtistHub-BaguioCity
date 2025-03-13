@@ -12,7 +12,7 @@ html {
 }
 @font-face {
     font-family: 'Rockybilly';
-    src: url('/font/Rockybilly.ttf') format('truetype'); 
+    src: url('/font/Rockybilly.ttf?raw=true') format('truetype'); 
     font-weight: normal;
     font-style: normal;
 }
