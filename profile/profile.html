@@ -74,7 +74,7 @@
         });</script>
 
 </head>
-<body class="">
+<body class="z-10">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-30 p-1 glass-header">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')" style="cursor: pointer">
@@ -492,6 +492,131 @@
                 profileButton.addEventListener('click', toggleProfileDropdown);
             }
         });
+    </script>
+    
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-20 hidden" style="position: fixed; isolation: isolate;">
+        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl" style="z-index: 999999;">
+            <button onclick="closeSettingsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div id="settingsMainView">
+                <h2 class="text-center font-bold text-2xl mb-6">Account Settings</h2>
+                <div class="flex flex-col gap-4">
+                    <button onclick="handleEditProfile()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-green-500 hover:border-green-600 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <div class="text-left">
+                            <h3 class="font-bold text-lg">Edit Profile</h3>
+                            <p class="text-sm text-gray-600">Update your personal information</p>
+                        </div>
+                    </button>
+                    <button onclick="showPasswordChangeForm()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-blue-500 hover:border-blue-600 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <div class="text-left">
+                            <h3 class="font-bold text-lg">Change Password</h3>
+                            <p class="text-sm text-gray-600">Update your account security</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div id="passwordChangeForm" class="hidden">
+                <h2 class="text-center font-bold text-2xl mb-6">Change Password</h2>
+                <div id="passwordChangeError" class="hidden p-4 mb-4 text-red-700 bg-red-100 rounded-lg"></div>
+                <div id="passwordChangeSuccess" class="hidden p-4 mb-4 text-green-700 bg-green-100 rounded-lg"></div>
+                
+                <form onsubmit="submitPasswordChange(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Current Password</label>
+                        <input type="password" id="currentPassword" required 
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">New Password</label>
+                        <input type="password" id="newPassword" required 
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
+                        <p class="mt-1 text-sm text-gray-500">
+                            Password must be at least 8 characters and include:
+                            <br>• One uppercase letter
+                            <br>• One lowercase letter
+                            <br>• One number
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" required 
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
+                    </div>
+                    <div class="flex justify-between pt-4">
+                        <button type="button" onclick="hidePasswordChangeForm()" 
+                                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            Back
+                        </button>
+                        <button type="submit" 
+                                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700">
+                            Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/password-change.js"></script>
+    <script>
+        function showPasswordChangeForm() {
+            document.getElementById('settingsMainView').classList.add('hidden');
+            document.getElementById('passwordChangeForm').classList.remove('hidden');
+        }
+
+        function hidePasswordChangeForm() {
+            document.getElementById('settingsMainView').classList.remove('hidden');
+            document.getElementById('passwordChangeForm').classList.add('hidden');
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+            // Reset to main view when closing
+            document.getElementById('settingsMainView').classList.remove('hidden');
+            document.getElementById('passwordChangeForm').classList.add('hidden');
+        }
+
+        async function submitPasswordChange(event) {
+            event.preventDefault();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match');
+                return;
+            }
+
+            try {
+                await window.handlePasswordChange(currentPassword, newPassword);
+                event.target.reset();
+                hidePasswordChangeForm();
+            } catch (error) {
+                console.error('Password change failed:', error);
+            }
+        }
+
+        // Make functions globally available
+        window.showPasswordChangeForm = showPasswordChangeForm;
+        window.hidePasswordChangeForm = hidePasswordChangeForm;
+        window.openSettingsModal = openSettingsModal;
+        window.closeSettingsModal = closeSettingsModal;
+        window.submitPasswordChange = submitPasswordChange;
     </script>
 </body>
 </html>
