@@ -506,7 +506,7 @@
                 <h2 class="text-center font-bold text-2xl mb-6">Account Settings</h2>
                 <div class="flex flex-col gap-4">
                     <button onclick="handleEditProfile()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-green-500 hover:border-green-600 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="black">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         <div class="text-left">
@@ -515,7 +515,7 @@
                         </div>
                     </button>
                     <button onclick="showPasswordChangeForm()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-blue-500 hover:border-blue-600 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="black">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <div class="text-left">
@@ -578,6 +578,15 @@
         function hidePasswordChangeForm() {
             document.getElementById('settingsMainView').classList.remove('hidden');
             document.getElementById('passwordChangeForm').classList.add('hidden');
+            // Clear form fields when going back
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            // Clear any error messages
+            const errorDiv = document.getElementById('passwordChangeError');
+            const successDiv = document.getElementById('passwordChangeSuccess');
+            if (errorDiv) errorDiv.classList.add('hidden');
+            if (successDiv) successDiv.classList.add('hidden');
         }
 
         function openSettingsModal() {
