@@ -1,12 +1,23 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/back.jpg?raw=true") no-repeat center center fixed;
+    margin: auto;
+    padding: auto;
+    background: url("/images/bg.jpg") no-repeat center center fixed;
     background-size: cover;
     text-align: center;
 }
 
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: -1;
+}
 html {
     scroll-behavior: smooth;
 }
@@ -19,7 +30,8 @@ html {
 
 h1 {
     font-family: 'Rockybilly', cursive;
-    font-size: 2.5rem;
+    font-size: 2.6rem;
+    
 }
 .typing {
 
