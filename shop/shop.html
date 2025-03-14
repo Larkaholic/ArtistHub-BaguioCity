@@ -99,11 +99,6 @@
         .profile-dropdown-container.authenticated {
             display: block !important;
         }
-        
-        /* Fix dropdown display when toggled */
-        #profileDropdown:not(.hidden) {
-            display: block !important;
-        }
 
         /* Cart button styling */
         #cartNav {
@@ -190,7 +185,7 @@
                 <li class="login-button hidden"> <!-- Add hidden class -->
                     <button onclick="toggleLoginFlyout(event)" class="bg-blue-500 text-white p-2 px-4 rounded-lg font-semibold hover:bg-blue-600" style="display: inline-block; min-width: 80px;">Login</button>
                 </li>
-                <!-- Profile dropdown container remains the same -->
+                <!-- Add Profile dropdown container -->
                 <li class="profile-dropdown-container" style="display: none;">
                     <div class="relative">
                         <button class="profile-button flex items-center" onclick="toggleProfileDropdown(event)">
@@ -289,7 +284,6 @@
         </div>
     </main>
     
-    <div class="profile-dropdown-overlay" id="profileDropdownOverlay"></div>
     <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
@@ -393,25 +387,53 @@
 <script type="module" src="../js/password-change.js"></script>
 <script type="module" src="../js/profile-navigation.js"></script>
 <script type="module" src="../js/profileDropdown.js"></script>
+
 <script type="module">
-    import { initNavigation } from '../js/navigation.js';
-    import { initProfileNavigation } from '../js/profile-navigation.js';
     import { initProfileDropdown } from '../js/profileDropdown.js';
-    
-    // Initialize all modules when DOM is ready
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM Loaded, initializing modules');
-        initNavigation();
-        initProfileNavigation();
         initProfileDropdown();
-        
-        // Initialize AOS animation library
-        AOS.init({
-            duration: 1500,
-            once: true,
-        });
     });
 </script>
+<script>
+    // Fix dropdown functionality
+    function toggleProfileDropdown(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        
+        const dropdown = document.getElementById('profileDropdown');
+        if (!dropdown) return;
+        
+        dropdown.classList.toggle('hidden');
+        
+        // Close dropdown when clicking outside
+        const closeDropdown = (e) => {
+            if (!dropdown.contains(e.target) && !e.target.matches('.profile-button')) {
+                dropdown.classList.add('hidden');
+                document.removeEventListener('click', closeDropdown);
+            }
+        };
+        
+        if (!dropdown.classList.contains('hidden')) {
+            setTimeout(() => {
+                document.addEventListener('click', closeDropdown);
+            }, 0);
+        }
+    }
+
+    // Make function available globally
+    window.toggleProfileDropdown = toggleProfileDropdown;
+
+    // Initialize dropdown when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.querySelector('.profile-button');
+        if (profileButton) {
+            profileButton.addEventListener('click', toggleProfileDropdown);
+        }
+    });
+</script>
+
 <script>
     function toggleLoginFlyout(event) {
         if (event) event.preventDefault();
@@ -487,43 +509,6 @@
         document.getElementById('settingsMainView').classList.remove('hidden');
     }
 
-    // Profile dropdown functionality - from index.html
-    function toggleProfileDropdown(event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        
-        const dropdown = document.getElementById('profileDropdown');
-        if (!dropdown) return;
-        
-        // Toggle the hidden class
-        dropdown.classList.toggle('hidden');
-        
-        // Debug visibility state
-        console.log('Profile dropdown toggled:', !dropdown.classList.contains('hidden'));
-        
-        if (!dropdown.classList.contains('hidden')) {
-            // Force display: block when visible
-            dropdown.style.display = 'block';
-        } else {
-            // Allow CSS to control display when hidden
-            dropdown.style.display = '';
-        }
-    }
-    
-    // Ensure this function is available globally
-    window.toggleProfileDropdown = toggleProfileDropdown;
-    
-    // Re-add event listener to profile button
-    document.addEventListener('DOMContentLoaded', function() {
-        const profileButton = document.querySelector('.profile-button');
-        if (profileButton) {
-            profileButton.addEventListener('click', toggleProfileDropdown);
-            console.log('Added click listener to profile button');
-        }
-    });
-
     // Add this function for mobile navigation toggle
     function toggleNav() {
         const menu = document.getElementById('flyout-menu');
@@ -557,14 +542,6 @@
             profileDropdown.style.display = 'none';
         }
     });
-
-    // Fix the toggleProfile function to make it work
-    function toggleProfileDropdown(event) {
-        event.preventDefault();
-        const dropdown = document.getElementById('profileDropdown');
-        dropdown.classList.toggle('hidden');
-        console.log('Toggled profile dropdown');
-    }
 
     // Add click event listener to close mobile nav when clicking outside
     document.addEventListener('click', function(event) {

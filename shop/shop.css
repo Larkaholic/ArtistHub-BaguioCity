@@ -322,27 +322,162 @@
 }
 
 #profileDropdown {
-  display: none;
-  z-index: 50;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 16rem; /* Increased width */
+    background-color: white;
+    border-radius: 0.75rem; /* Slightly larger radius */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    z-index: 999;
+    margin-top: 0.75rem; /* Added space from button */
+    padding: 0.5rem 0; /* Added internal padding */
 }
 
-#profileDropdown.show {
-  display: block;
+#profileDropdown .py-2 {
+    padding: 0.75rem 0; /* Increased vertical padding */
+}
+
+#profileDropdown .px-4 {
+    padding: 0.75rem 1.25rem; /* Increased horizontal padding */
+}
+
+#profileDropdown .border-b {
+    padding: 1.25rem; /* Increased padding for header section */
+    margin-bottom: 0.5rem; /* Added space after header */
+}
+
+#profileDropdown a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem; /* Increased padding */
+    margin: 0.25rem 0; /* Added vertical spacing between items */
+    color: #374151;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+/* Enhance text styles */
+#profileDropdownName {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+#profileDropdownEmail {
+    font-size: 0.875rem;
+    color: #6B7280;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+}
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-button img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img {
+    border-color: #059669;
+}
+
+/* Update z-index values */
+#main-header {
+    z-index: 99 !important;
+}
+
+/* Update dropdown styles */
+.profile-dropdown-container {
+    position: relative;
+    z-index: 1000;
+}
+
+#profileDropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    width: 12rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    visibility: visible;
+    transform-origin: top right;
+    transition: all 0.2s ease;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+#profileDropdown .py-2 {
+    text-align: center;
+}
+
+#profileDropdown .px-4 {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 1rem;
+}
+
+#profileDropdown .border-b {
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Mobile Profile Dropdown Styles */
+#profileLinkMobile {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+#profileLinkMobile:hover {
+    background: rgba(0, 0, 0, 0.05);
 }
 
 #mobileProfileDropdown {
-  display: none;
-  z-index: 50;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+    background: white;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
 }
 
-#mobileProfileDropdown.show {
-  display: block;
+#mobileProfileDropdown a {
+    text-align: center;
+    padding: 0.75rem 1rem;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+#mobileProfileDropdown a:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+#mobileProfileDropdown .border-b {
+    text-align: center;
+    padding: 1rem;
 }
 
 /* Make sure the dropdown appears above other elements */
@@ -385,17 +520,6 @@
   cursor: pointer;
 }
 
-#profileDropdown {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  width: 12rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  z-index: 50;
-  margin-top: 0.5rem;
-}
 
 #mobileProfileDropdown {
   background: white;
@@ -481,21 +605,6 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
 }
 
 .profile-dropdown-container.authenticated {
-    display: block !important;
-}
-
-#profileDropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 12rem;
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 999;
-}
-
-#profileDropdown:not(.hidden) {
     display: block !important;
 }
 
@@ -599,10 +708,108 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
     display: block !important;
 }
 
+/* Profile Dropdown Styles */
 .profile-dropdown-container {
-    display: none !important; /* Hide by default */
+    position: relative;
+    z-index: 50;
 }
 
-.profile-dropdown-container.visible {
+.profile-dropdown-container .profile-button {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.profile-dropdown-container .profile-button:hover {
+    transform: scale(1.05);
+}
+
+#profileDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 12rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.2s ease;
+}
+
+#profileDropdown:not(.hidden) {
     display: block !important;
+}
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.profile-button img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    object-fit: cover;
+    border: 2px solid #10B981;
+    transition: all 0.2s;
+}
+
+.profile-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.profile-button:hover img {
+    border-color: #059669;
+    transform: scale(1.05);
+}
+
+#profileDropdown .py-2 {
+    padding: 0.5rem 0;
+}
+
+#profileDropdown .px-4 {
+    padding: 0 1rem;
+}
+
+#profileDropdown .border-b {
+    border-bottom: 1px solid #E5E7EB;
+}
+
+#profileDropdown a {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    color: #374151;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+#profileDropdown a:hover {
+    background-color: #F3F4F6;
+}
+
+/* Mobile Profile Dropdown */
+#mobileProfileDropdown {
+    background: white;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+#mobileProfileDropdown a {
+    text-align: center;
+    padding: 0.75rem 1rem;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+#mobileProfileDropdown a:hover {
+    background: rgba(0, 0, 0, 0.05);
 }
