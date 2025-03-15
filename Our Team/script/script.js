@@ -22,7 +22,7 @@ let i = 0, j = 0, currentWord = "", isDeleting = false;
         const cursorSpeed = 900; 
 function loopTyping() {
   currentWord = words[i].substring(0, j);
-  document.getElementById("typing").innerHTML = currentWord + " |";
+  document.getElementById("typing").innerHTML = currentWord + "";
 
   if (!isDeleting && j < words[i].length) {
     j++;
