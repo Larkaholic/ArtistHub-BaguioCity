@@ -20,9 +20,129 @@
         }
     });</script>
 
+    <style>
+        /* Navigation bar styling */
+        .transparent-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-item {
+            transition: all 0.2s ease-in-out;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Fix navigation button visibility */
+        .nav-item.rounded-lg {
+            display: inline-block;
+        }
+        
+        .profile-dropdown-container {
+            display: none; /* Will be shown by JavaScript when logged in */
+        }
+        
+        /* Mobile menu toggle fix */
+        #flyout-menu.translate-x-full {
+            transform: translateX(100%);
+        }
+        
+        #flyout-menu:not(.translate-x-full) {
+            transform: translateX(0);
+        }
+        
+        /* Fix transparent header for color */
+        #main-header {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 240, 0.9) 100%);
+        }
+        
+        /* Fix button styles */
+        .login-button button, 
+        .logout-button button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .login-button button {
+            background-color: #3B82F6;
+            color: white;
+        }
+        
+        .login-button button:hover {
+            background-color: #2563EB;
+        }
+        
+        .logout-button button {
+            background-color: #EF4444;
+            color: white;
+        }
+        
+        .logout-button button:hover {
+            background-color: #DC2626;
+        }
+
+        /* Ensure proper login/logout button visibility */
+        .login-button.authenticated {
+            display: none !important;
+        }
+        
+        .profile-dropdown-container.authenticated {
+            display: block !important;
+        }
+
+        /* Cart button styling */
+        #cartNav {
+            display: block !important;
+        }
+
+        #cartNav a {
+            display: flex !important;
+            align-items: center;
+            color: black;
+            transition: all 0.2s ease;
+        }
+
+        #cartNav a:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+        }
+
+        #cartNav svg {
+            margin-right: 4px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Mobile cart button */
+        #cartNavMobile {
+            display: block !important;
+        }
+
+        #cartNavMobile a {
+            display: flex;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+    </style>
 </head>
 <body class="bg-cover">
-    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1" id="main-header">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer; height: 50px;">
         </div>
@@ -38,13 +158,13 @@
         <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-5">
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('./shop.html')">Shop</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
                     <a href="javascript:void(0)" onclick="handleEditProfile()">Profile</a>
@@ -56,20 +176,16 @@
                 </li>
                 <li id="cartNav" class="p-1">
                     <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        Cart (<span id="cartCount">0</span>)
+                        <span>Cart (<span id="cartCount">0</span>)</span>
                     </a>
                 </li>
-                <!-- Add Login/Logout buttons -->
-                <li class="login-button">
-                    <button onclick="toggleLoginFlyout(event)" class="nav-item bg-blue-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-blue-600">Login</button>
+                <li class="login-button hidden"> <!-- Add hidden class -->
+                    <button onclick="toggleLoginFlyout(event)" class="bg-blue-500 text-white p-2 px-4 rounded-lg font-semibold hover:bg-blue-600" style="display: inline-block; min-width: 80px;">Login</button>
                 </li>
-                <li class="logout-button" style="display: none;">
-                    <button onclick="handleLogout()" class="nav-item bg-red-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-red-600">Logout</button>
-                </li>
-                <!-- Profile dropdown container remains the same -->
+                <!-- Add Profile dropdown container -->
                 <li class="profile-dropdown-container" style="display: none;">
                     <div class="relative">
                         <button class="profile-button flex items-center" onclick="toggleProfileDropdown(event)">
@@ -94,13 +210,13 @@
         </nav>
     </header>
 
-    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration:300 ease-in-out z-40 sm:hidden">
+    <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration:300 ease-in-out z-[100] sm:hidden">
         <div class="glass-header h-full p-6">
             <nav>
                 <ul class="flex flex-col space-y-4 mt-5">
-                    <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('./shop.html')">Shop</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
                     <li class="relative">
                         <button id="profileLinkMobile" class="flex items-center w-full">
                             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
@@ -119,19 +235,16 @@
                             </div>
                         </div>
                     </li>
-                    <li id="cartNavMobile" class="hidden">
+                    <li id="cartNavMobile" class="block">
                         <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                             </svg>
-                            Cart (<span id="cartCountMobile">0</span>)
+                            <span>Cart (<span id="cartCountMobile">0</span>)</span>
                         </a>
                     </li>
-                    <li class="login-button">
-                        <button onclick="toggleLoginFlyout(event)" class="py-2 px-4 bg-blue-500 text-white rounded-lg w-full">Login</button>
-                    </li>
                     <li class="logout-button" style="display: none;">
-                        <button onclick="handleLogout()" class="py-2 px-4 bg-red-500 text-white rounded-lg w-full">Logout</button>
+                        <button onclick="handleLogout()" class="py-2 px-4 bg-red-500 text-white rounded-lg w-full font-semibold hover:bg-red-600" style="display: inline-block;">Logout</button>
                     </li>
                 </ul>
             </nav>
@@ -170,6 +283,80 @@
             <!-- Artworks will be loaded here -->
         </div>
     </main>
+    
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
+        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+            <button onclick="closeSettingsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div id="settingsMainView">
+                <h2 class="text-center font-bold text-2xl mb-6">Account Settings</h2>
+                <div class="flex flex-col gap-4">
+                    <button onclick="handleEditProfile()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-green-500 hover:border-green-600 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <div class="text-left">
+                            <h3 class="font-bold text-lg">Edit Profile</h3>
+                            <p class="text-sm text-gray-600">Update your personal information</p>
+                        </button>
+                    <button onclick="showPasswordChangeForm()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-blue-500 hover:border-blue-600 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <div class="text-left">
+                            <h3 class="font-bold text-lg">Change Password</h3>
+                            <p class="text-sm text-gray-600">Update your account security</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div id="passwordChangeForm" class="hidden">
+                <h2 class="text-center font-bold text-2xl mb-6">Change Password</h2>
+                <!-- Add error and success message containers -->
+                <div id="passwordChangeError" class="hidden p-4 mb-4 text-red-700 bg-red-100 rounded-lg"></div>
+                <div id="passwordChangeSuccess" class="hidden p-4 mb-4 text-green-700 bg-green-100 rounded-lg"></div>
+                
+                <form onsubmit="submitPasswordChange(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Current Password</label>
+                        <input type="password" id="currentPassword" required 
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">New Password</label>
+                        <input type="password" id="newPassword" required 
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
+                        <p class="mt-1 text-sm text-gray-500">
+                            Password must be at least 8 characters and include:
+                            <br>• One uppercase letter
+                            <br>• One lowercase letter
+                            <br>• One number
+                        </p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" required 
+                               class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
+                    </div>
+                    <div class="flex justify-between pt-4">
+                        <button type="button" onclick="hidePasswordChangeForm()" 
+                                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            Back
+                        </button>
+                        <button type="submit" 
+                                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700">
+                            Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="glass-header2 p-4 max-w-md mx-auto mt-20 rounded-lg">
@@ -182,106 +369,353 @@
                 </button>
             </div>
             <div id="cartItems" class="max-h-96 overflow-y-auto">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-    <script type="module" src="../js/firebase-config.js"></script>
-    <script type="module" src="../js/auth.js"></script>
-    <script type="module" src="../js/navigation.js"></script>
-    <script type="module" src="./shop.js"></script>
-    <script type="module" src="../Gallery/cart.js"></script>
-    <script type="module" src="../js/password-change.js"></script>
-    <script type="module" src="../js/profile-navigation.js"></script>
-    <script type="module" src="../js/profileDropdown.js"></script>
-    <script type="module">
-        import { initNavigation } from '../js/navigation.js';
-        import { initProfileNavigation } from '../js/profile-navigation.js';
+                <!-- Cart items will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<script type="module" src="../js/firebase-config.js"></script>
+<script type="module" src="../js/auth.js"></script>
+<script type="module" src="../js/navigation.js"></script>
+<script type="module" src="./shop.js"></script>
+<script type="module" src="../Gallery/cart.js"></script>
+<script type="module" src="../js/password-change.js"></script>
+<script type="module" src="../js/profile-navigation.js"></script>
+<script type="module" src="../js/profileDropdown.js"></script>
+
+<script type="module">
+    import { initProfileDropdown } from '../js/profileDropdown.js';
+    document.addEventListener('DOMContentLoaded', function() {
+        initProfileDropdown();
+    });
+</script>
+<script>
+    // Fix dropdown functionality
+    function toggleProfileDropdown(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
         
-        // Initialize both modules immediately
-        initNavigation();
-        initProfileNavigation();
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            AOS.init({
-                duration: 1500,
-                once: true,
-            });
-        });
-
-        function toggleLoginFlyout(event) {
-            if (event) event.preventDefault();
-            const flyout = document.getElementById('LoginFlyout');
-            flyout.classList.toggle('hidden');
+        const dropdown = document.getElementById('profileDropdown');
+        if (!dropdown) return;
+        
+        dropdown.classList.toggle('hidden');
+        
+        // Close dropdown when clicking outside
+        const closeDropdown = (e) => {
+            if (!dropdown.contains(e.target) && !e.target.matches('.profile-button')) {
+                dropdown.classList.add('hidden');
+                document.removeEventListener('click', closeDropdown);
+            }
+        };
+        
+        if (!dropdown.classList.contains('hidden')) {
+            setTimeout(() => {
+                document.addEventListener('click', closeDropdown);
+            }, 0);
         }
+    }
 
-        function toggleForms() {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            loginForm.classList.toggle('hidden');
-            registerForm.classList.toggle('hidden');
+    // Make function available globally
+    window.toggleProfileDropdown = toggleProfileDropdown;
+
+    // Initialize dropdown when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileButton = document.querySelector('.profile-button');
+        if (profileButton) {
+            profileButton.addEventListener('click', toggleProfileDropdown);
         }
+    });
+</script>
 
-        document.getElementById('searchArtworks')?.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const artworks = document.querySelectorAll('#galleryContainer .art-gallery-item');
+<script>
+    function toggleLoginFlyout(event) {
+        if (event) event.preventDefault();
+        const flyout = document.getElementById('LoginFlyout');
+        flyout.classList.toggle('hidden');
+    }
+
+    function toggleForms() {
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        loginForm.classList.toggle('hidden');
+        registerForm.classList.toggle('hidden');
+    }
+
+    document.getElementById('searchArtworks')?.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const artworks = document.querySelectorAll('#galleryContainer .art-gallery-item');
+        
+        artworks.forEach(artwork => {
+            const title = artwork.querySelector('h3').textContent.toLowerCase();
+            const description = artwork.querySelector('p').textContent.toLowerCase();
             
-            artworks.forEach(artwork => {
-                const title = artwork.querySelector('h3').textContent.toLowerCase();
-                const description = artwork.querySelector('p').textContent.toLowerCase();
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    artwork.style.display = '';
-                } else {
-                    artwork.style.display = 'none';
-                }
-            });
-        });
-
-        document.getElementById('sortArtworks')?.addEventListener('change', (e) => {
-            const sortType = e.target.value;
-            const container = document.getElementById('galleryContainer');
-            const artworks = Array.from(container.children);
-
-            artworks.sort((a, b) => {
-                switch(sortType) {
-                    case 'priceAsc':
-                        return getPrice(a) - getPrice(b);
-                    case 'priceDesc':
-                        return getPrice(b) - getPrice(a);
-                    case 'newest':
-                        return new Date(b.dataset.date) - new Date(a.dataset.date);
-                    case 'oldest':
-                        return new Date(a.dataset.date) - new Date(b.dataset.date);
-                }
-            });
-
-            container.innerHTML = '';
-            artworks.forEach(artwork => container.appendChild(artwork));
-        });
-
-        function getPrice(artwork) {
-            const priceText = artwork.querySelector('.text-green-600').textContent;
-            return parseFloat(priceText.replace('₱', ''));
-        }
-
-        // Update mobile menu profile link as well
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileProfileLink = document.querySelector('#flyout-menu #profileLink');
-            if (mobileProfileLink) {
-                mobileProfileLink.onclick = () => {
-                    const user = auth.currentUser;
-                    if (user) {
-                        // Fix the path for mobile menu too
-                        window.location.href = `../profile/profile.html?id=${user.uid}`;
-                    } else {
-                        toggleLoginFlyout();
-                    }
-                };
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                artwork.style.display = '';
+            } else {
+                artwork.style.display = 'none';
             }
         });
-    </script>
+    });
+
+    document.getElementById('sortArtworks')?.addEventListener('change', (e) => {
+        const sortType = e.target.value;
+        const container = document.getElementById('galleryContainer');
+        const artworks = Array.from(container.children);
+
+        artworks.sort((a, b) => {
+            switch(sortType) {
+                case 'priceAsc':
+                    return getPrice(a) - getPrice(b);
+                case 'priceDesc':
+                    return getPrice(b) - getPrice(a);
+                case 'newest':
+                    return new Date(b.dataset.date) - new Date(a.dataset.date);
+                case 'oldest':
+                    return new Date(a.dataset.date) - new Date(b.dataset.date);
+            }
+        });
+
+        container.innerHTML = '';
+        artworks.forEach(artwork => container.appendChild(artwork));
+    });
+
+    function getPrice(artwork) {
+        const priceText = artwork.querySelector('.text-green-600').textContent;
+        return parseFloat(priceText.replace('₱', ''));
+    }
+
+    function openSettingsModal() {
+        document.getElementById('settingsModal').classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+        document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    function showPasswordChangeForm() {
+        document.getElementById('settingsMainView').classList.add('hidden');
+        document.getElementById('passwordChangeForm').classList.remove('hidden');
+    }
+
+    function hidePasswordChangeForm() {
+        document.getElementById('passwordChangeForm').classList.add('hidden');
+        document.getElementById('settingsMainView').classList.remove('hidden');
+    }
+
+    // Add this function for mobile navigation toggle
+    function toggleNav() {
+        const menu = document.getElementById('flyout-menu');
+        menu.classList.toggle('translate-x-full');
+        document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
+    }
+
+    // Add this function to make sure the navigation is properly initialized
+    document.addEventListener('DOMContentLoaded', function() {
+        // Force the flyout menu to be properly initialized
+        const menu = document.getElementById('flyout-menu');
+        if (menu && !menu.classList.contains('translate-x-full')) {
+            menu.classList.add('translate-x-full');
+        }
+        
+        // Make sure the login button is visible if not logged in
+        const loginButton = document.querySelector('.login-button');
+        const logoutButton = document.querySelector('.logout-button');
+        const profileDropdown = document.querySelector('.profile-dropdown-container');
+        
+        // Until auth state is determined, show the login button
+        if (loginButton && !window.firebaseAuth?.currentUser) {
+            loginButton.style.display = 'block';
+        }
+        
+        if (logoutButton) {
+            logoutButton.style.display = 'none';
+        }
+        
+        if (profileDropdown) {
+            profileDropdown.style.display = 'none';
+        }
+    });
+
+    // Add click event listener to close mobile nav when clicking outside
+    document.addEventListener('click', function(event) {
+        const flyoutMenu = document.getElementById('flyout-menu');
+        const burgerButton = document.querySelector('.burger-icon');
+        
+        if (flyoutMenu && !flyoutMenu.classList.contains('translate-x-full') && // menu is open
+            !flyoutMenu.contains(event.target) && // click not inside menu
+            !burgerButton.contains(event.target)) { // click not on burger button
+            toggleNav(); // close the menu
+        }
+    });
+
+    // Update toggleNav to use stopPropagation
+    function toggleNav() {
+        const menu = document.getElementById('flyout-menu');
+        menu.classList.toggle('translate-x-full');
+        document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
+    }
+
+    // Update the burger button click handler
+    document.querySelector('.burger-icon').addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent the document click handler from firing
+        toggleNav();
+    });
+
+    // Fix burger icon functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const burgerButton = document.querySelector('.burger-icon');
+        const menu = document.getElementById('flyout-menu');
+        
+        // Burger button click handler
+        burgerButton.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent document click handler
+            toggleNav(e);
+        });
+
+        // Document click handler for closing menu
+        document.addEventListener('click', function(event) {
+            if (menu && 
+                !menu.classList.contains('translate-x-full') && // menu is open
+                !menu.contains(event.target) && // click not inside menu
+                !burgerButton.contains(event.target)) { // click not on burger button
+                toggleNav(); // close the menu
+            }
+        });
+
+        // Toggle function
+        function toggleNav(e) {
+            if (e) e.stopPropagation();
+            menu.classList.toggle('translate-x-full');
+            document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
+        }
+
+        // Make toggleNav available globally
+        window.toggleNav = toggleNav;
+    });
+</script>
+<script type="module">
+    import { auth } from '../js/firebase-config.js';
+    
+    // Assign auth to global window object for access in non-module scripts
+    window.firebaseAuth = auth;
+    
+    // Make navigateToUserProfile globally accessible
+    window.navigateToUserProfile = async () => {
+        try {
+            const user = window.firebaseAuth.currentUser;
+            if (!user) {
+                // If no user is signed in, first check if auth is still initializing
+                const authCheck = new Promise((resolve) => {
+                    const unsubscribe = window.firebaseAuth.onAuthStateChanged((user) => {
+                        unsubscribe();
+                        resolve(user);
+                    });
+                });
+                const finalUser = await authCheck;
+                if (!finalUser) {
+                    alert('Please login to view your profile');
+                    toggleLoginFlyout();
+                    return;
+                }
+            }
+            // Get the base URL for GitHub Pages
+            const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+                ? '/ArtistHub-BaguioCity'
+                : '';
+            // Construct the profile URL
+            const profileUrl = `${baseUrl}/profile/profile.html?id=${window.firebaseAuth.currentUser.uid}`;
+            window.location.href = profileUrl;
+        } catch (error) {
+            console.error('Profile navigation error:', error);
+            alert('There was an error accessing your profile. Please try again.');
+        }
+    };
+
+    // Make handleEditProfile globally accessible
+    window.handleEditProfile = async () => {
+        try {
+            const user = window.firebaseAuth.currentUser;
+            if (!user) {
+                const authCheck = new Promise((resolve) => {
+                    const unsubscribe = window.firebaseAuth.onAuthStateChanged((user) => {
+                        unsubscribe();
+                        resolve(user);
+                    });
+                });
+                const finalUser = await authCheck;
+                if (!finalUser) {
+                    alert('Please login to edit your profile');
+                    toggleLoginFlyout();
+                    return;
+                }
+            }
+            // Get the base URL for GitHub Pages
+            const baseUrl = window.location.hostname === 'larkaholic.github.io' 
+                ? '/ArtistHub-BaguioCity'
+                : '';
+            // Go directly to edit profile page
+            const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${window.firebaseAuth.currentUser.uid}`;
+            window.location.href = editProfileUrl;
+        } catch (error) {
+            console.error('Profile navigation error:', error);
+            alert('There was an error accessing your profile. Please try again.');
+        }
+    };
+
+    // Make handleLogout globally accessible
+    window.handleLogout = async () => {
+        try {
+            await window.firebaseAuth.signOut();
+            alert('You have been logged out successfully.');
+            window.location.reload();
+        } catch (error) {
+            console.error('Logout error:', error);
+            alert('There was an error during logout. Please try again.');
+        }
+    };
+
+    // Ensure cart toggle is initialized
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make sure the cart toggle function is available globally
+        if (typeof window.toggleCart !== 'function') {
+            window.toggleCart = function() {
+                const cartModal = document.getElementById('cartModal');
+                if (cartModal) {
+                    cartModal.classList.toggle('hidden');
+                }
+            }
+        }
+        
+        // Make sure both desktop and mobile cart buttons are visible
+        const cartNav = document.getElementById('cartNav');
+        const cartNavMobile = document.getElementById('cartNavMobile');
+        
+        if (cartNav) cartNav.style.display = 'block';
+        if (cartNavMobile) cartNavMobile.style.display = 'block';
+    });
+</script>
+<script type="module">
+    import { auth } from '../js/firebase-config.js';
+    
+    // Initialize auth state observer
+    auth.onAuthStateChanged((user) => {
+        const loginButton = document.querySelector('.login-button');
+        
+        if (user) {
+            // User is logged in - hide login button
+            loginButton?.classList.remove('visible');
+        } else {
+            // User is logged out - show login button
+            loginButton?.classList.add('visible');
+        }
+    });
+</script>
 </body>
 </html>

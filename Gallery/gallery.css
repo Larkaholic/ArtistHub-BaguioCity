@@ -220,11 +220,10 @@ nav ul li button,
 }
 
 .gallery-item img {
-    pointer-events: none;
-    user-select: none;
     width: 100%;
     height: 200px;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .gallery-item h3,
@@ -273,4 +272,511 @@ nav ul li button,
 .art-gallery-price {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     font-weight: 700;
+}
+
+/* Profile dropdown styles */
+.profile-dropdown-container {
+    position: relative;
+    z-index: 1000;
+}
+
+#profileDropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    width: 12rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 50;
+    display: none;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+}
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.profile-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.profile-button img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img {
+    border-color: #059669;
+}
+
+/* Profile dropdown items */
+#profileDropdown a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #4B5563;
+    transition: all 0.2s ease;
+}
+
+#profileDropdown a:hover {
+    background-color: #F3F4F6;
+}
+
+/* Profile dropdown styles */
+.profile-dropdown-container {
+    position: relative;
+    z-index: 1000;
+}
+
+#profileDropdown, #mobileProfileDropdown {
+    position: absolute;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.2s ease;
+    display: none;
+}
+
+#profileDropdown {
+    right: 0;
+    top: calc(100% + 0.5rem);
+    width: 12rem;
+}
+
+#mobileProfileDropdown {
+    position: relative;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+#profileDropdown:not(.hidden),
+#mobileProfileDropdown:not(.hidden) {
+    display: block;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+/* Dropdown animation */
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Profile buttons styling */
+.profile-button, #profileLinkMobile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-button:hover, #profileLinkMobile:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.profile-button img, #profileLinkMobile img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img, #profileLinkMobile:hover img {
+    border-color: #059669;
+}
+
+/* Dropdown items styling */
+#profileDropdown .py-2, #mobileProfileDropdown .py-2 {
+    text-align: center;
+}
+
+#profileDropdown .px-4, #mobileProfileDropdown .px-4 {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 1rem;
+}
+
+#profileDropdown .border-b, #mobileProfileDropdown .border-b {
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Fixed z-index values */
+#main-header { z-index: 99 !important; }
+#flyout-menu { z-index: 100 !important; }
+#profileDropdown, #mobileProfileDropdown { z-index: 101 !important; }
+
+/* Profile links styling */
+#profileDropdown a,
+#mobileProfileDropdown a {
+    display: block;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+#profileDropdown a:hover,
+#mobileProfileDropdown a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Profile buttons */
+.profile-button, #profileLinkMobile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-button:hover, #profileLinkMobile:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0.5rem;
+}
+
+.profile-button img, #profileLinkMobile img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img, #profileLinkMobile:hover img {
+    border-color: #059669;
+}
+
+#profileDropdown .py-2 {
+    text-align: center;
+}
+
+#profileDropdown .px-4 {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 1rem;
+}
+
+#profileDropdown .border-b {
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Profile button styles */
+.profile-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-button img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img {
+    border-color: #059669;
+}
+
+/* Critical fixes for login button and dropdown */
+.login-button {
+    display: block;
+}
+
+.login-button.authenticated {
+    display: none !important;
+}
+
+.profile-dropdown-container {
+    display: none;
+}
+
+.profile-dropdown-container.authenticated {
+    display: block !important;
+}
+
+#profileDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 12rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+}
+
+/* Fix button styles */
+.login-button button {
+    background-color: #3B82F6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-button img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img {
+    border-color: #059669;
+}
+
+/* Fix z-index stacking */
+header { z-index: 40; }
+.profile-dropdown-container { z-index: 50; }
+#profileDropdown { z-index: 60; }
+
+/* Critical dropdown fixes */
+.profile-dropdown-container {
+    position: relative !important;
+    z-index: 50;
+}
+
+.profile-button {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.5rem !important;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#profileDropdown {
+    position: absolute !important;
+    top: calc(100% + 0.5rem) !important;
+    right: 0 !important;
+    width: 12rem !important;
+    background: white !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+    z-index: 9999 !important;
+    visibility: visible !important;
+    transform-origin: top right;
+    transition: all 0.2s ease;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Fix z-index stacking */
+header { z-index: 40 !important; }
+.profile-dropdown-container { z-index: 50 !important; }
+#profileDropdown { z-index: 60 !important; }
+
+/* Critical dropdown fixes */
+.profile-dropdown-container {
+    position: relative !important;
+}
+
+.profile-dropdown-container .relative {
+    position: relative !important;
+}
+
+#profileDropdown {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    width: 12rem !important;
+    background: white !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+    z-index: 9999 !important; /* Higher z-index to ensure visibility */
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    visibility: visible !important;
+}
+
+.profile-button {
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    padding: 0.5rem !important;
+    border-radius: 0.5rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.profile-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.profile-button img {
+    transition: all 0.2s;
+}
+
+.profile-button:hover img {
+    border-color: #059669;
+}
+
+/* Critical dropdown fixes */
+.profile-dropdown-container {
+    position: relative !important;
+    display: inline-block !important;
+}
+
+.profile-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0.5rem !important;
+    border-radius: 0.5rem !important;
+    cursor: pointer !important;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.profile-button:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+#profileDropdown {
+    position: absolute !important;
+    top: calc(100% + 0.5rem) !important;
+    right: 0 !important;
+    min-width: 12rem !important;
+    background-color: white !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+    z-index: 9999 !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease !important;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Fix stacking context */
+header { z-index: 40 !important; }
+.profile-dropdown-container { z-index: 50 !important; }
+#profileDropdown { z-index: 9999 !important; }
+
+/* Ensure dropdown items are clickable */
+#profileDropdown a {
+    display: block !important;
+    padding: 0.75rem 1rem !important;
+    color: #4B5563 !important;
+    text-decoration: none !important;
+}
+
+#profileDropdown a:hover {
+    background-color: #F3F4F6 !important;
+}
+
+/* Critical dropdown fixes */
+#dropdown-portal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    pointer-events: none !important;
+}
+
+#profileDropdownContainer {
+    pointer-events: auto !important;
+}
+
+#profileDropdown {
+    position: relative !important;
+    margin-top: 0.5rem !important;
+    background: white !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+    min-width: 12rem !important;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Fix dropdown portal */
+#dropdown-portal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    pointer-events: none !important;
+    z-index: 9999 !important;
+}
+
+#profileDropdown {
+    pointer-events: auto !important;
+    min-width: 12rem !important;
+    transform-origin: top right;
+    transition: all 0.2s ease !important;
+    z-index: 9999 !important;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Floating dropdown styles */
+#profileDropdown {
+    position: fixed !important;
+    top: 5rem !important; /* Adjust based on header height */
+    right: 1rem !important;
+    min-width: 12rem !important;
+    background: white !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+    z-index: 9999 !important;
+}
+
+#profileDropdown:not(.hidden) {
+    display: block !important;
+}
+
+/* Remove old dropdown portal styles */
+#dropdown-portal {
+    display: none;
+}
+
+/* Image modal styles */
+#imageModal {
+    backdrop-filter: blur(5px);
+}
+
+#imageModal img {
+    max-height: 80vh;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

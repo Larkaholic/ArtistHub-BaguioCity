@@ -72,7 +72,7 @@
         }
 
         .nav-item:hover {
-            background-color: #F4A900
+            background-color: #F4A900;
         }
         
         /* Glass Effect Styles */
@@ -421,9 +421,22 @@
         font-family: Arial, sans-serif;
         text-align: center;
     }
+
+    .footer-socials-nav {
+        display: flex;
+        align-items: flex-start; 
+        gap: 2rem;
+        height: 100%;
+        margin-bottom: 50px;
+    }
     
     .lrk-social-icons-container {
-        margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        height: 100%;
+        gap: 0.75rem;
+        margin-top: 20px;
     }
     
     .lrk-social-link {
@@ -432,7 +445,7 @@
         height: 35px;
         background-color: white;
         border-radius: 50%;
-        margin: 0 0.5rem;
+        margin: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -451,6 +464,10 @@
     
     .lrk-nav-container {
         margin: 1.5rem 0;
+        height: 100%;  /* Match height */
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;  /* Match gap with social icons */
     }
     
     .lrk-nav-link {
@@ -830,7 +847,7 @@
 
 @font-face {
     font-family: 'Rockybilly';
-    src: url('/font/Rockybilly.ttf') format('truetype'); 
+    src: url('https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/font/Rockybilly.ttf') format('truetype'); 
 }
 
 .typing-container {
@@ -860,7 +877,10 @@ h2 {
     padding: 20px;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 971866773cfc9d5a07b2d42b6c2865b58f812c1d
 /* Settings Modal Styles */
 #settingsModal {
     transition: opacity 0.2s ease-out;
