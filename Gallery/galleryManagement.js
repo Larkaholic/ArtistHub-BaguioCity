@@ -34,6 +34,230 @@ document.getElementById('showUploadForm')?.addEventListener('click', () => {
     }
 });
 
+// Add global toggle function for upload form
+window.toggleUploadForm = function() {
+    console.log('Toggle upload form called');
+    const container = document.getElementById('uploadFormContainer');
+    const button = document.getElementById('toggleUploadForm');
+    console.log('Container:', container);
+    console.log('Button:', button);
+    
+    if (!container || !button) {
+        console.error('Missing container or button elements');
+        return;
+    }
+
+    const isHidden = container.classList.contains('hidden');
+    console.log('Is form hidden:', isHidden);
+    container.classList.toggle('hidden');
+    
+    if (isHidden) {
+        button.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span>Close</span>
+        `;
+        button.classList.remove('bg-green-500', 'hover:bg-green-600');
+        button.classList.add('bg-red-500', 'hover:bg-red-600');
+    } else {
+        button.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Add Artwork</span>
+        `;
+        button.classList.remove('bg-red-500', 'hover:bg-red-600');
+        button.classList.add('bg-green-500', 'hover:bg-green-600');
+    }
+};
+
+// Add input validation for numeric fields
+document.getElementById('price')?.addEventListener('input', (e) => {
+    let value = parseFloat(e.target.value);
+    if (isNaN(value) || value < 0) {
+        e.target.value = '';
+    }
+});
+
+// Initialize Cloudinary widget at the top level
+const myWidget = cloudinary.createUploadWidget(
+    {
+        cloudName: 'dxeyr4pvf', 
+        uploadPreset: 'artist_profiles',
+        maxFiles: 1,
+        sources: ['local', 'camera', 'url'],
+        showAdvancedOptions: false,
+        multiple: false,
+        defaultSource: 'local'
+    },
+    (error, result) => {
+        console.log('Cloudinary callback triggered:', result?.event);
+        if (error) {
+            console.error('Cloudinary error:', error);
+            return;
+        }
+        
+        if (result.event === "success") {
+            try {
+                console.log('Upload successful:', result.info);
+                
+                // Get all required elements
+                const elements = {
+                    preview: document.getElementById('imagePreview'),
+                    previewContainer: document.getElementById('imagePreviewContainer'),
+                    placeholder: document.getElementById('uploadPlaceholder'),
+                    removeButton: document.getElementById('removeImage'),
+                    uploadForm: document.getElementById('uploadForm'),
+                    imageUrlInput: document.getElementById('imageUrlInput')
+                };
+
+                // Check if all elements exist
+                const missingElements = Object.entries(elements)
+                    .filter(([key, element]) => !element)
+                    .map(([key]) => key);
+
+                if (missingElements.length > 0) {
+                    console.error('Missing elements:', missingElements);
+                    return;
+                }
+
+                // Update UI elements
+                elements.preview.src = result.info.secure_url;
+                elements.previewContainer.classList.remove('hidden');
+                elements.placeholder.classList.add('hidden');
+                elements.removeButton.classList.remove('hidden');
+                elements.uploadForm.dataset.imageUrl = result.info.secure_url;
+                elements.imageUrlInput.value = result.info.secure_url;
+
+            } catch (error) {
+                console.error('Error updating UI after upload:', error);
+            }
+        }
+    }
+);
+
+// Update click handlers
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Setting up upload handlers');
+
+    // Function to handle upload click
+    const openCloudinaryWidget = (e) => {
+        console.log('Opening Cloudinary widget');
+        e.preventDefault();
+        e.stopPropagation();
+        myWidget.open();
+    };
+
+    // Add click handler only to the placeholder div
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    if (uploadPlaceholder) {
+        console.log('Adding click handler to uploadPlaceholder');
+        uploadPlaceholder.addEventListener('click', openCloudinaryWidget);
+    }
+
+    // Remove click handler from imageFile input
+    const fileInput = document.getElementById('imageFile');
+    if (fileInput) {
+        fileInput.style.display = 'none'; // Hide the file input since we're using Cloudinary
+    }
+
+    // Handle drag and drop on the upload area
+    const uploadArea = document.querySelector('.flex.flex-col.items-center.justify-center.border-2.border-dashed');
+    if (uploadArea) {
+        console.log('Setting up drag and drop handlers');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('border-blue-500');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('border-blue-500');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('border-blue-500');
+            myWidget.open();
+        });
+
+        // Prevent click propagation on the upload area
+        uploadArea.addEventListener('click', (e) => {
+            if (e.target === uploadArea || e.target === uploadPlaceholder) {
+                openCloudinaryWidget(e);
+            }
+        });
+    }
+});
+
+// Update form submission to use stored Cloudinary URL
+document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!auth.currentUser) {
+        alert('Please login to upload images');
+        return;
+    }
+
+    const imageUrlInput = document.getElementById('imageUrlInput');
+    if (!imageUrlInput?.value) {
+        alert('Please upload an image first');
+        return;
+    }
+
+    const title = document.getElementById('title')?.value;
+    const description = document.getElementById('description')?.value;
+    // Store price with two decimal places
+    const rawPrice = document.getElementById('price')?.value || 0;
+    const price = parseFloat(rawPrice).toFixed(2);
+
+    if (!title || !description || isNaN(parseFloat(price))) {
+        alert('Please fill in all fields, including a valid price.');
+        return;
+    }
+
+    try {
+        const galleryCollection = collection(db, 'gallery_images');
+        await addDoc(galleryCollection, {
+            artistEmail: auth.currentUser.email,
+            artistId: auth.currentUser.uid,
+            profileId: artistId,
+            imageId: generateImageId(),
+            title,
+            description,
+            price: parseFloat(price), // Store as number but formatted
+            imageUrl: imageUrlInput.value,
+            uploadDate: serverTimestamp(),
+            isPublic: true
+        });
+
+        if (uploadForm) {
+            uploadForm.reset();
+        }
+        loadImages();
+        alert('Image uploaded successfully!');
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Failed to upload image. Please try again.');
+    }
+});
+
+// Remove image preview
+document.getElementById('removeImage')?.addEventListener('click', () => {
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    const placeholder = document.getElementById('uploadPlaceholder');
+    const removeButton = document.getElementById('removeImage');
+    const uploadForm = document.getElementById('uploadForm');
+    const imageUrlInput = document.getElementById('imageUrlInput');
+
+    previewContainer.classList.add('hidden');
+    placeholder.classList.remove('hidden');
+    removeButton.classList.add('hidden');
+    delete uploadForm.dataset.imageUrl;
+    imageUrlInput.value = ''; // Clear hidden input value
+});
+
 // Function to generate unique image ID
 function generateImageId() {
     const timestamp = Date.now();
@@ -96,75 +320,6 @@ async function addWatermark(imageFile) {
         img.src = URL.createObjectURL(imageFile);
     });
 }
-
-// Upload form handling
-document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    if (!auth.currentUser) {
-        alert('Please login to upload images');
-        return;
-    }
-
-    const file = document.getElementById('imageFile')?.files[0];
-    const title = document.getElementById('title')?.value;
-    const description = document.getElementById('description')?.value;
-    // Store price with two decimal places
-    const rawPrice = document.getElementById('price')?.value || 0;
-    const price = parseFloat(rawPrice).toFixed(2);
-
-    if (!file || !title || !description || isNaN(parseFloat(price))) {
-        alert('Please fill in all fields, including a valid price.');
-        return;
-    }
-
-    try {
-        // Add watermark to image before uploading
-        const { file: watermarkedFile, imageId } = await addWatermark(file);
-        
-        const formData = new FormData();
-        formData.append('file', watermarkedFile);
-        formData.append('upload_preset', 'artist_profiles');
-
-        const cloudinaryResponse = await fetch(
-            `https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload`,
-            {
-                method: 'POST',
-                body: formData
-            }
-        );
-            
-        if (!cloudinaryResponse.ok) {
-            throw new Error('Upload failed');
-        }
-            
-        const cloudinaryData = await cloudinaryResponse.json();
-
-        const galleryCollection = collection(db, 'gallery_images');
-        await addDoc(galleryCollection, {
-            artistEmail: auth.currentUser.email,
-            artistId: auth.currentUser.uid,
-            profileId: artistId,
-            imageId: imageId,
-            title,
-            description,
-            price: parseFloat(price), // Store as number but formatted
-            imageUrl: cloudinaryData.secure_url,
-            uploadDate: serverTimestamp(),
-            isPublic: true
-        });
-
-        const uploadForm = document.getElementById('uploadForm');
-        if (uploadForm) {
-            uploadForm.reset();
-        }
-        loadImages();
-        alert('Image uploaded successfully!');
-    } catch (error) {
-        console.error('Error uploading image:', error);
-        alert('Failed to upload image. Please try again.');
-    }
-});
 
 // Load images
 async function loadImages() {
