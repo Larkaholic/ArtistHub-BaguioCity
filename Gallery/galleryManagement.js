@@ -8,7 +8,8 @@ import {
     doc,
     getDoc,
     serverTimestamp,
-    updateDoc
+    updateDoc,
+    onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { auth, db } from '../js/firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -353,11 +354,14 @@ async function loadImages() {
         }
 
         container.innerHTML = ''; // Clear loading message
-        querySnapshot.forEach(doc => {
-            const data = doc.data();
-            const card = createImageCard(doc.id, data);
-            container.appendChild(card);
-        });
+        
+        // Use Promise.all to handle async card creation
+        const cards = await Promise.all(
+            querySnapshot.docs.map(doc => createImageCard(doc.id, doc.data()))
+        );
+        
+        cards.forEach(card => container.appendChild(card));
+        
     } catch (error) {
         console.error('Error loading images:', error);
         container.innerHTML = '<p class="text-center text-red-500">Error loading gallery images. Please try again later.</p>';
@@ -521,8 +525,29 @@ modal.innerHTML = `
 `;
 document.body.appendChild(modal);
 
-// Modified createImageCard function
-function createImageCard(docId, data) {
+// Add isInCart check function
+function isItemInCart(artworkId) {
+    return cart.some(item => item.artworkId === artworkId);
+}
+
+// Add function to check if item is in anyone's cart
+async function isItemInAnyCart(artworkId) {
+    const cartRef = collection(db, 'carts');
+    const snapshot = await getDocs(cartRef);
+    return snapshot.docs.some(doc => 
+        doc.data().items?.some(item => item.artworkId === artworkId)
+    );
+}
+
+// Modified createImageCard function to handle async properly
+async function createImageCard(docId, data) {
+    const isLastItem = data.stock === 1;
+    let isReserved = false;
+    
+    if (isLastItem) {
+        isReserved = await isItemInAnyCart(docId);
+    }
+
     // Capitalize first letter of title and description
     const formattedTitle = data.title.charAt(0).toUpperCase() + data.title.slice(1);
     const formattedDescription = data.description.charAt(0).toUpperCase() + data.description.slice(1);
@@ -549,16 +574,23 @@ function createImageCard(docId, data) {
                             </button>` : ''}
                     </div>
                 </div>
-                <p class="art-gallery-description">${formattedDescription || 'No description available.'}</p>
-                ${auth.currentUser && data.stock > 0 ? 
-                    `<button onclick="window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)})" 
-                        class="art-gallery-button">
-                        Add this to Cart
-                    </button>` : 
-                    `<button disabled class="art-gallery-button opacity-50 cursor-not-allowed">
-                        Out of Stock
-                    </button>`
-                }
+                <div class="flex items-center justify-between mt-4">
+                    ${auth.currentUser ? 
+                        `<button 
+                            onclick="${data.stock > 0 ? `window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)}, ${data.stock})` : 'void(0)'}" 
+                            id="cartButton-${docId}"
+                            class="art-gallery-button flex-1 ${data.stock === 0 || (isLastItem && isReserved) ? 'bg-gray-500 hover:bg-gray-500 cursor-not-allowed' : ''}"
+                            ${data.stock === 0 || (isLastItem && isReserved) ? 'disabled' : ''}
+                        >
+                            ${data.stock === 0 ? 'Out of Stock' : 
+                              (isLastItem && isReserved) ? 'Item Reserved' : 
+                              'Add this to Cart'}
+                        </button>` : 
+                        `<button disabled class="art-gallery-button opacity-50 cursor-not-allowed w-full">
+                            Please login to purchase
+                        </button>`
+                    }
+                </div>
             </div>
         </div>
     `;
@@ -678,16 +710,28 @@ async function updateUIForUserRole(user) {
 // Cart Management
 let cart = [];
 
+// Updated cart initialization
 function initializeCart(userId) {
     if (!userId) return;
     
     const cartRef = collection(db, 'carts');
     const q = query(cartRef, where('userId', '==', userId));
     
-    getDocs(q).then((querySnapshot) => {
+    // Listen for real-time updates to cart
+    onSnapshot(q, (querySnapshot) => {
         if (!querySnapshot.empty) {
             const cartDoc = querySnapshot.docs[0];
             cart = cartDoc.data().items || [];
+            
+            // Show cart navigation if user is not admin or artist
+            const cartNav = document.getElementById('cartNav');
+            const cartNavMobile = document.getElementById('cartNavMobile');
+            
+            if (auth.currentUser && auth.currentUser.uid !== artistId) {
+                cartNav?.classList.remove('hidden');
+                cartNavMobile?.classList.remove('hidden');
+            }
+            
             updateCartUI();
         }
     });
@@ -707,7 +751,7 @@ window.toggleCart = function() {
     }
 }
 
-window.addToCart = async function(artworkId, title, price) {
+window.addToCart = async function(artworkId, title, price, stock) {
     const user = auth.currentUser;
     if (!user) {
         alert('Please login to add items to cart');
@@ -722,10 +766,20 @@ window.addToCart = async function(artworkId, title, price) {
         return;
     }
     
+    // Check if last item and if it's in anyone's cart
+    if (stock === 1) {
+        const isReserved = await isItemInAnyCart(artworkId);
+        if (isReserved) {
+            showNotification('This item is already reserved', 'error');
+            return;
+        }
+    }
+
     const item = { 
         artworkId, 
         title, 
-        price: numericPrice // Store as number
+        price: numericPrice,
+        addedAt: serverTimestamp() // Add timestamp
     };
     cart.push(item);
     
@@ -737,23 +791,82 @@ window.addToCart = async function(artworkId, title, price) {
         if (querySnapshot.empty) {
             await addDoc(cartRef, {
                 userId: user.uid,
-                items: cart
+                items: cart,
+                lastUpdated: serverTimestamp()
             });
         } else {
             const cartDoc = querySnapshot.docs[0];
             await updateDoc(doc(db, 'carts', cartDoc.id), {
-                items: cart
+                items: cart,
+                lastUpdated: serverTimestamp()
             });
         }
         
+        // Update button text and style
+        const cartButton = document.getElementById(`cartButton-${artworkId}`);
+        if (cartButton && stock === 1) {
+            cartButton.textContent = 'Item Reserved';
+            cartButton.classList.add('bg-gray-500', 'hover:bg-gray-500', 'cursor-not-allowed');
+            cartButton.disabled = true;
+        }
+        
         updateCartUI();
+        showNotification('Item added to cart!', 'success');
+        animateCartIcon();
+        
     } catch (error) {
         console.error('Error updating cart:', error);
-        alert('Failed to add item to cart. Please try again.');
+        showNotification('Failed to add item to cart', 'error');
+    }
+}
+
+// Add notification functionality
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white transform transition-transform duration-300 translate-y-full`;
+    
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <span class="mr-2">${
+                type === 'success' 
+                    ? '✓' 
+                    : '✕'
+            }</span>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateY(full)';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Add cart icon animation
+function animateCartIcon() {
+    const cartIcon = document.querySelector('#cartNav svg');
+    if (cartIcon) {
+        cartIcon.classList.add('animate-bounce');
+        setTimeout(() => {
+            cartIcon.classList.remove('animate-bounce');
+        }, 1000);
     }
 }
 
 window.removeFromCart = async function(index) {
+    const item = cart[index];
     const user = auth.currentUser;
     if (!user) return;
     
@@ -763,14 +876,25 @@ window.removeFromCart = async function(index) {
     const q = query(cartRef, where('userId', '==', user.uid));
     const querySnapshot = await getDocs(q);
     
-    if (!querySnapshot.empty) {
-        const cartDoc = querySnapshot.docs[0];
-        await updateDoc(doc(db, 'carts', cartDoc.id), {
-            items: cart
-        });
+    try {
+        if (!querySnapshot.empty) {
+            const cartDoc = querySnapshot.docs[0];
+            await updateDoc(doc(db, 'carts', cartDoc.id), {
+                items: cart
+            });
+        }
+        
+        // Update button text and style if item exists in current view
+        const cartButton = document.getElementById(`cartButton-${item.artworkId}`);
+        if (cartButton) {
+            cartButton.textContent = 'Add this to Cart';
+            cartButton.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+        }
+        
+        updateCartUI();
+    } catch (error) {
+        console.error('Error removing from cart:', error);
     }
-    
-    updateCartUI();
 }
 
 window.checkout = async function() {
@@ -783,6 +907,7 @@ window.checkout = async function() {
     alert('Checkout functionality will be implemented soon!');
 }
 
+// Updated cart UI update function
 function updateCartUI() {
     const cartCount = document.getElementById('cartCount');
     const cartCountMobile = document.getElementById('cartCountMobile');
@@ -821,6 +946,40 @@ function updateCartUI() {
         if (totalItems) totalItems.textContent = cart.length;
         if (totalPrice) totalPrice.textContent = total.toFixed(2);
     }
+    
+    // Make the cart nav visible if there are items
+    const cartNav = document.getElementById('cartNav');
+    const cartNavMobile = document.getElementById('cartNavMobile');
+    
+    if (cart.length > 0) {
+        cartNav?.classList.remove('hidden');
+        cartNavMobile?.classList.remove('hidden');
+    }
+}
+
+// Add real-time updates for cart status
+function initializeCartTracking() {
+    const cartsRef = collection(db, 'carts');
+    onSnapshot(cartsRef, async (snapshot) => {
+        const galleryItems = document.querySelectorAll('.art-gallery-item');
+        for (const item of galleryItems) {
+            const button = item.querySelector('[id^="cartButton-"]');
+            if (button) {
+                const artworkId = button.id.replace('cartButton-', '');
+                const stockText = item.querySelector('.text-sm.text-white').textContent;
+                const stock = parseInt(stockText.replace('Stock: ', ''));
+                
+                if (stock === 1) {
+                    const isReserved = await isItemInAnyCart(artworkId);
+                    if (isReserved && !button.disabled) {
+                        button.textContent = 'Item Reserved';
+                        button.classList.add('bg-gray-500', 'hover:bg-gray-500', 'cursor-not-allowed');
+                        button.disabled = true;
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Initialize gallery
@@ -831,6 +990,7 @@ auth.onAuthStateChanged(async (user) => {
         updateUIForUserRole(user);
         loadImages();
         initializeCart(user.uid);
+        initializeCartTracking();
     } else {
         console.log('No user logged in');
         updateUIForUserRole(null);
