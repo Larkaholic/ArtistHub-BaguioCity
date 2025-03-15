@@ -80,6 +80,14 @@ document.getElementById('price')?.addEventListener('input', (e) => {
     }
 });
 
+// Add stock validation
+document.getElementById('stock')?.addEventListener('input', (e) => {
+    let value = parseInt(e.target.value);
+    if (isNaN(value) || value < 0) {
+        e.target.value = '';
+    }
+});
+
 // Initialize Cloudinary widget at the top level
 const myWidget = cloudinary.createUploadWidget(
     {
@@ -211,9 +219,10 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
     // Store price with two decimal places
     const rawPrice = document.getElementById('price')?.value || 0;
     const price = parseFloat(rawPrice).toFixed(2);
+    const stock = parseInt(document.getElementById('stock')?.value || '0');
 
-    if (!title || !description || isNaN(parseFloat(price))) {
-        alert('Please fill in all fields, including a valid price.');
+    if (!title || !description || isNaN(parseFloat(price)) || isNaN(stock)) {
+        alert('Please fill in all fields with valid values.');
         return;
     }
 
@@ -227,6 +236,7 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
             title,
             description,
             price: parseFloat(price), // Store as number but formatted
+            stock: stock,
             imageUrl: imageUrlInput.value,
             uploadDate: serverTimestamp(),
             isPublic: true
@@ -527,7 +537,10 @@ function createImageCard(docId, data) {
                 <div class="flex flex-col gap-2">
                     <h3 class="art-gallery-title">${formattedTitle}</h3>
                     <div class="flex justify-between items-center">
-                        <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
+                        <div class="flex flex-col">
+                            <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
+                            <p class="text-sm text-white mt-1">Stock: ${data.stock || 0}</p>
+                        </div>
                         ${auth.currentUser && auth.currentUser.uid === artistId ?
                             `<button onclick="deleteImage('${docId}')" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -537,11 +550,14 @@ function createImageCard(docId, data) {
                     </div>
                 </div>
                 <p class="art-gallery-description">${formattedDescription || 'No description available.'}</p>
-                ${auth.currentUser ? 
+                ${auth.currentUser && data.stock > 0 ? 
                     `<button onclick="window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)})" 
                         class="art-gallery-button">
                         Add this to Cart
-                    </button>` : ''
+                    </button>` : 
+                    `<button disabled class="art-gallery-button opacity-50 cursor-not-allowed">
+                        Out of Stock
+                    </button>`
                 }
             </div>
         </div>
