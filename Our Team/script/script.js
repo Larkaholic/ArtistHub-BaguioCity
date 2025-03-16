@@ -16,26 +16,40 @@
 /*End of ChatBot AI*/
 
 /*Typing Loop OUR TEAM */
-const words = ["Our Team","ArtistHub"];
-let i = 0, j = 0, currentWord = "", isDeleting = false;
-        const speed = 200; 
-        const cursorSpeed = 900; 
-function loopTyping() {
-  currentWord = words[i].substring(0, j);
-  document.getElementById("typing").innerHTML = currentWord + "";
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("JavaScript Loaded!");
 
-  if (!isDeleting && j < words[i].length) {
-    j++;
-    setTimeout(loopTyping, 100);
-  } else if (isDeleting && j > 0) {
-    j--;
-    setTimeout(loopTyping, 100);
-  } else {
-    isDeleting = !isDeleting;
-    if (!isDeleting) i = (i + 1) % words.length;
-    setTimeout(loopTyping, 1000);
+  const loader = document.getElementById("loader");
+  const typingElement = document.getElementById("typing");
+  const content = document.getElementById("content");
+
+  if (!loader || !typingElement || !content) {
+      console.error("One or more elements are missing!");
+      return;
   }
-}
 
-window.onload = loopTyping;
-/* End of Typing Loop */
+  // Typing Effect
+  const text = "Meet Our Team";
+  let index = 0;
+  typingElement.innerHTML = "";
+
+  function typeEffect() {
+      if (index < text.length) {
+          typingElement.innerHTML += text.charAt(index);
+          index++;
+          setTimeout(typeEffect, 100);
+      } else {
+          setTimeout(() => {
+              loader.style.transform = "translateY(-100%)";
+              loader.style.opacity = "0";
+              content.style.opacity = "1";
+              content.style.pointerEvents = "auto";
+          }, 2000);
+      }
+  }
+
+  // Start Typing Effect
+  typeEffect();
+});
+
+
