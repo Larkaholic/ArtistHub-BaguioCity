@@ -231,8 +231,6 @@ h1 {
 /*============================
         Loader Screen
 ==============================*/
-/* Preloader Full-Screen */
-/* Loader (Typing Effect) */
 #loader {
     position: fixed;
     top: 0;
@@ -243,20 +241,18 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Ensures it covers content */
+    z-index: 9999;
     transition: transform 1s ease, opacity 1s ease;
 }
 
-/* Typing Text Style */
 #typing {
     font-size: 2rem;
     font-weight: bold;
 }
 
-/* Hide Content Initially */
 #content {
     opacity: 0;
-    pointer-events: none; /* Prevent clicks until fully visible */
+    pointer-events: none; 
     transition: opacity 1s ease;
 }
 

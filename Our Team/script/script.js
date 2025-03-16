@@ -39,12 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
           index++;
           setTimeout(typeEffect, 100);
       } else {
-          // Delay before removing loader
           setTimeout(() => {
-              loader.style.transform = "translateY(-100%)"; // Moves loader up
-              loader.style.opacity = "0"; // Fades loader out
-              content.style.opacity = "1"; // Reveals content
-              content.style.pointerEvents = "auto"; // Enable interactions
+              loader.style.transform = "translateY(-100%)";
+              loader.style.opacity = "0";
+              content.style.opacity = "1";
+              content.style.pointerEvents = "auto";
           }, 2000);
       }
   }
