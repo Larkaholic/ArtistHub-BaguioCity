@@ -847,7 +847,7 @@
 
 @font-face {
     font-family: 'Rockybilly';
-    src: url('/font/Rockybilly.ttf') format('truetype'); 
+    src: url('https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/font/Rockybilly.ttf') format('truetype'); 
 }
 
 .typing-container {
