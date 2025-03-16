@@ -33,13 +33,13 @@
 <body class="bg-cover">
 
 <!-- Preloader -->
-<div id="loader">
-    <h1 id="typing"></h1> <!-- Typing Effect Here -->
+<!-- <div id="loader">
+    <h1 id="typing"></h1>
 </div>
 
 <div id="content">
     <h1>ArtistHub</h1>
-</div>
+</div> -->
 
     <div id="announcement" class="announcement-banner">
         <span class="new-badge">New!</span>
@@ -936,41 +936,39 @@
     </script>
 
     <script> 
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("JavaScript Loaded!");
+// document.addEventListener("DOMContentLoaded", function () {
+//   console.log("JavaScript Loaded!");
 
-  const loader = document.getElementById("loader");
-  const typingElement = document.getElementById("typing");
-  const content = document.getElementById("content");
+//   const loader = document.getElementById("loader");
+//   const typingElement = document.getElementById("typing");
+//   const content = document.getElementById("content");
 
-  if (!loader || !typingElement || !content) {
-      console.error("One or more elements are missing!");
-      return;
-  }
+//   if (!loader || !typingElement || !content) {
+//       console.error("One or more elements are missing!");
+//       return;
+//   }
 
-  // Typing Effect
-  const text = "ArtistHub";
-  let index = 0;
-  typingElement.innerHTML = "";
+//   const text = "ArtistHub";
+//   let index = 0;
+//   typingElement.innerHTML = "";
 
-  function typeEffect() {
-      if (index < text.length) {
-          typingElement.innerHTML += text.charAt(index);
-          index++;
-          setTimeout(typeEffect, 100);
-      } else {
-          setTimeout(() => {
-              loader.style.transform = "translateY(-100%)";
-              loader.style.opacity = "0";
-              content.style.opacity = "1";
-              content.style.pointerEvents = "auto";
-          }, 100);
-      }
-  }
+//   function typeEffect() {
+//       if (index < text.length) {
+//           typingElement.innerHTML += text.charAt(index);
+//           index++;
+//           setTimeout(typeEffect, 100);
+//       } else {
+//           setTimeout(() => {
+//               loader.style.transform = "translateY(-100%)";
+//               loader.style.opacity = "0";
+//               content.style.opacity = "1";
+//               content.style.pointerEvents = "auto";
+//           }, 100);
+//       }
+//   }
 
-  // Start Typing Effect
-  typeEffect();
-});
+//   typeEffect();
+// });
 
 
     </script>
