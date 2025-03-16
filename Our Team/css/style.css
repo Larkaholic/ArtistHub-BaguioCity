@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: auto;
     padding: auto;
-    background: url("/images/bg.jpg") no-repeat center center fixed;
+    background: url("../img/bg.jpg") no-repeat center center fixed;
     background-size: cover;
     text-align: center;
 }
@@ -23,7 +23,7 @@ html {
 }
 @font-face {
     font-family: 'Rockybilly';
-    src: url('https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/font/Rockybilly.ttf') format('truetype'); 
+    src: url('../font/Rockybilly.ttf') format('truetype'); 
     font-weight: normal;
     font-style: normal;
 }
@@ -227,3 +227,37 @@ h1 {
     animation: fadeInSlide 1s ease-in-out;
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Soft shadow for better visibility */
 }
+
+/*============================
+        Loader Screen
+==============================*/
+/* Preloader Full-Screen */
+/* Loader (Typing Effect) */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensures it covers content */
+    transition: transform 1s ease, opacity 1s ease;
+}
+
+/* Typing Text Style */
+#typing {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Hide Content Initially */
+#content {
+    opacity: 0;
+    pointer-events: none; /* Prevent clicks until fully visible */
+    transition: opacity 1s ease;
+}
+
+
