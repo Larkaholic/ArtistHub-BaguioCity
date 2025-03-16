@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Typing Effect
-  const text = "Meet Our Team";
+  const text = "Meet Our Team, ArtistHub";
+
   let index = 0;
   typingElement.innerHTML = "";
 
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
               loader.style.opacity = "0";
               content.style.opacity = "1";
               content.style.pointerEvents = "auto";
-          }, 2000);
+          }, 1200);
       }
   }
 
