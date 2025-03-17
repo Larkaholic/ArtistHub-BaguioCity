@@ -249,11 +249,13 @@ h1 {
     font-size: 2rem;
     font-weight: bold;
 }
-
 #content {
     opacity: 0;
     pointer-events: none; 
     transition: opacity 1s ease;
-}
+    }
+    #content h1{
+        font-size: 5;
+    }
 
 
