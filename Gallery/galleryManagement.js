@@ -8,7 +8,8 @@ import {
     doc,
     getDoc,
     serverTimestamp,
-    updateDoc
+    updateDoc,
+    onSnapshot
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { auth, db } from '../js/firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -32,6 +33,240 @@ document.getElementById('showUploadForm')?.addEventListener('click', () => {
     if (uploadForm) {
         uploadForm.style.display = uploadForm.style.display === 'none' ? 'block' : 'none';
     }
+});
+
+// Add global toggle function for upload form
+window.toggleUploadForm = function() {
+    console.log('Toggle upload form called');
+    const container = document.getElementById('uploadFormContainer');
+    const button = document.getElementById('toggleUploadForm');
+    console.log('Container:', container);
+    console.log('Button:', button);
+    
+    if (!container || !button) {
+        console.error('Missing container or button elements');
+        return;
+    }
+
+    const isHidden = container.classList.contains('hidden');
+    console.log('Is form hidden:', isHidden);
+    container.classList.toggle('hidden');
+    
+    if (isHidden) {
+        button.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span>Close</span>
+        `;
+        button.classList.remove('bg-green-500', 'hover:bg-green-600');
+        button.classList.add('bg-red-500', 'hover:bg-red-600');
+    } else {
+        button.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Add Artwork</span>
+        `;
+        button.classList.remove('bg-red-500', 'hover:bg-red-600');
+        button.classList.add('bg-green-500', 'hover:bg-green-600');
+    }
+};
+
+// Add input validation for numeric fields
+document.getElementById('price')?.addEventListener('input', (e) => {
+    let value = parseFloat(e.target.value);
+    if (isNaN(value) || value < 0) {
+        e.target.value = '';
+    }
+});
+
+// Add stock validation
+document.getElementById('stock')?.addEventListener('input', (e) => {
+    let value = parseInt(e.target.value);
+    if (isNaN(value) || value < 0) {
+        e.target.value = '';
+    }
+});
+
+// Initialize Cloudinary widget at the top level
+const myWidget = cloudinary.createUploadWidget(
+    {
+        cloudName: 'dxeyr4pvf', 
+        uploadPreset: 'artist_profiles',
+        maxFiles: 1,
+        sources: ['local', 'camera', 'url'],
+        showAdvancedOptions: false,
+        multiple: false,
+        defaultSource: 'local'
+    },
+    (error, result) => {
+        console.log('Cloudinary callback triggered:', result?.event);
+        if (error) {
+            console.error('Cloudinary error:', error);
+            return;
+        }
+        
+        if (result.event === "success") {
+            try {
+                console.log('Upload successful:', result.info);
+                
+                // Get all required elements
+                const elements = {
+                    preview: document.getElementById('imagePreview'),
+                    previewContainer: document.getElementById('imagePreviewContainer'),
+                    placeholder: document.getElementById('uploadPlaceholder'),
+                    removeButton: document.getElementById('removeImage'),
+                    uploadForm: document.getElementById('uploadForm'),
+                    imageUrlInput: document.getElementById('imageUrlInput')
+                };
+
+                // Check if all elements exist
+                const missingElements = Object.entries(elements)
+                    .filter(([key, element]) => !element)
+                    .map(([key]) => key);
+
+                if (missingElements.length > 0) {
+                    console.error('Missing elements:', missingElements);
+                    return;
+                }
+
+                // Update UI elements
+                elements.preview.src = result.info.secure_url;
+                elements.previewContainer.classList.remove('hidden');
+                elements.placeholder.classList.add('hidden');
+                elements.removeButton.classList.remove('hidden');
+                elements.uploadForm.dataset.imageUrl = result.info.secure_url;
+                elements.imageUrlInput.value = result.info.secure_url;
+
+            } catch (error) {
+                console.error('Error updating UI after upload:', error);
+            }
+        }
+    }
+);
+
+// Update click handlers
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Setting up upload handlers');
+
+    // Function to handle upload click
+    const openCloudinaryWidget = (e) => {
+        console.log('Opening Cloudinary widget');
+        e.preventDefault();
+        e.stopPropagation();
+        myWidget.open();
+    };
+
+    // Add click handler only to the placeholder div
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    if (uploadPlaceholder) {
+        console.log('Adding click handler to uploadPlaceholder');
+        uploadPlaceholder.addEventListener('click', openCloudinaryWidget);
+    }
+
+    // Remove click handler from imageFile input
+    const fileInput = document.getElementById('imageFile');
+    if (fileInput) {
+        fileInput.style.display = 'none'; // Hide the file input since we're using Cloudinary
+    }
+
+    // Handle drag and drop on the upload area
+    const uploadArea = document.querySelector('.flex.flex-col.items-center.justify-center.border-2.border-dashed');
+    if (uploadArea) {
+        console.log('Setting up drag and drop handlers');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('border-blue-500');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('border-blue-500');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('border-blue-500');
+            myWidget.open();
+        });
+
+        // Prevent click propagation on the upload area
+        uploadArea.addEventListener('click', (e) => {
+            if (e.target === uploadArea || e.target === uploadPlaceholder) {
+                openCloudinaryWidget(e);
+            }
+        });
+    }
+});
+
+// Update form submission to use stored Cloudinary URL
+document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!auth.currentUser) {
+        alert('Please login to upload images');
+        return;
+    }
+
+    const imageUrlInput = document.getElementById('imageUrlInput');
+    if (!imageUrlInput?.value) {
+        alert('Please upload an image first');
+        return;
+    }
+
+    const title = document.getElementById('title')?.value;
+    const description = document.getElementById('description')?.value;
+    // Store price with two decimal places
+    const rawPrice = document.getElementById('price')?.value || 0;
+    const price = parseFloat(rawPrice).toFixed(2);
+    const stock = parseInt(document.getElementById('stock')?.value || '0');
+
+    if (!title || !description || isNaN(parseFloat(price)) || isNaN(stock)) {
+        alert('Please fill in all fields with valid values.');
+        return;
+    }
+
+    try {
+        const galleryCollection = collection(db, 'gallery_images');
+        await addDoc(galleryCollection, {
+            artistEmail: auth.currentUser.email,
+            artistId: auth.currentUser.uid,
+            profileId: artistId,
+            imageId: generateImageId(),
+            title,
+            description,
+            price: parseFloat(price), // Store as number but formatted
+            stock: stock,
+            imageUrl: imageUrlInput.value,
+            uploadDate: serverTimestamp(),
+            isPublic: true
+        });
+
+        if (uploadForm) {
+            uploadForm.reset();
+        }
+        loadImages();
+        alert('Image uploaded successfully!');
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        alert('Failed to upload image. Please try again.');
+    }
+});
+
+// Remove image preview
+document.getElementById('removeImage')?.addEventListener('click', () => {
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    const placeholder = document.getElementById('uploadPlaceholder');
+    const removeButton = document.getElementById('removeImage');
+    const uploadForm = document.getElementById('uploadForm');
+    const imageUrlInput = document.getElementById('imageUrlInput');
+
+    previewContainer.classList.add('hidden');
+    placeholder.classList.remove('hidden');
+    removeButton.classList.add('hidden');
+    delete uploadForm.dataset.imageUrl;
+    imageUrlInput.value = ''; // Clear hidden input value
 });
 
 // Function to generate unique image ID
@@ -97,75 +332,6 @@ async function addWatermark(imageFile) {
     });
 }
 
-// Upload form handling
-document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    if (!auth.currentUser) {
-        alert('Please login to upload images');
-        return;
-    }
-
-    const file = document.getElementById('imageFile')?.files[0];
-    const title = document.getElementById('title')?.value;
-    const description = document.getElementById('description')?.value;
-    // Store price with two decimal places
-    const rawPrice = document.getElementById('price')?.value || 0;
-    const price = parseFloat(rawPrice).toFixed(2);
-
-    if (!file || !title || !description || isNaN(parseFloat(price))) {
-        alert('Please fill in all fields, including a valid price.');
-        return;
-    }
-
-    try {
-        // Add watermark to image before uploading
-        const { file: watermarkedFile, imageId } = await addWatermark(file);
-        
-        const formData = new FormData();
-        formData.append('file', watermarkedFile);
-        formData.append('upload_preset', 'artist_profiles');
-
-        const cloudinaryResponse = await fetch(
-            `https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload`,
-            {
-                method: 'POST',
-                body: formData
-            }
-        );
-            
-        if (!cloudinaryResponse.ok) {
-            throw new Error('Upload failed');
-        }
-            
-        const cloudinaryData = await cloudinaryResponse.json();
-
-        const galleryCollection = collection(db, 'gallery_images');
-        await addDoc(galleryCollection, {
-            artistEmail: auth.currentUser.email,
-            artistId: auth.currentUser.uid,
-            profileId: artistId,
-            imageId: imageId,
-            title,
-            description,
-            price: parseFloat(price), // Store as number but formatted
-            imageUrl: cloudinaryData.secure_url,
-            uploadDate: serverTimestamp(),
-            isPublic: true
-        });
-
-        const uploadForm = document.getElementById('uploadForm');
-        if (uploadForm) {
-            uploadForm.reset();
-        }
-        loadImages();
-        alert('Image uploaded successfully!');
-    } catch (error) {
-        console.error('Error uploading image:', error);
-        alert('Failed to upload image. Please try again.');
-    }
-});
-
 // Load images
 async function loadImages() {
     const container = document.getElementById('galleryContainer');
@@ -188,11 +354,14 @@ async function loadImages() {
         }
 
         container.innerHTML = ''; // Clear loading message
-        querySnapshot.forEach(doc => {
-            const data = doc.data();
-            const card = createImageCard(doc.id, data);
-            container.appendChild(card);
-        });
+        
+        // Use Promise.all to handle async card creation
+        const cards = await Promise.all(
+            querySnapshot.docs.map(doc => createImageCard(doc.id, doc.data()))
+        );
+        
+        cards.forEach(card => container.appendChild(card));
+        
     } catch (error) {
         console.error('Error loading images:', error);
         container.innerHTML = '<p class="text-center text-red-500">Error loading gallery images. Please try again later.</p>';
@@ -356,8 +525,29 @@ modal.innerHTML = `
 `;
 document.body.appendChild(modal);
 
-// Modified createImageCard function
-function createImageCard(docId, data) {
+// Add isInCart check function
+function isItemInCart(artworkId) {
+    return cart.some(item => item.artworkId === artworkId);
+}
+
+// Add function to check if item is in anyone's cart
+async function isItemInAnyCart(artworkId) {
+    const cartRef = collection(db, 'carts');
+    const snapshot = await getDocs(cartRef);
+    return snapshot.docs.some(doc => 
+        doc.data().items?.some(item => item.artworkId === artworkId)
+    );
+}
+
+// Modified createImageCard function to handle async properly
+async function createImageCard(docId, data) {
+    const isLastItem = data.stock === 1;
+    let isReserved = false;
+    
+    if (isLastItem) {
+        isReserved = await isItemInAnyCart(docId);
+    }
+
     // Capitalize first letter of title and description
     const formattedTitle = data.title.charAt(0).toUpperCase() + data.title.slice(1);
     const formattedDescription = data.description.charAt(0).toUpperCase() + data.description.slice(1);
@@ -372,7 +562,10 @@ function createImageCard(docId, data) {
                 <div class="flex flex-col gap-2">
                     <h3 class="art-gallery-title">${formattedTitle}</h3>
                     <div class="flex justify-between items-center">
-                        <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
+                        <div class="flex flex-col">
+                            <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
+                            <p class="text-sm text-white mt-1">Stock: ${data.stock || 0}</p>
+                        </div>
                         ${auth.currentUser && auth.currentUser.uid === artistId ?
                             `<button onclick="deleteImage('${docId}')" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -381,13 +574,23 @@ function createImageCard(docId, data) {
                             </button>` : ''}
                     </div>
                 </div>
-                <p class="art-gallery-description">${formattedDescription || 'No description available.'}</p>
-                ${auth.currentUser ? 
-                    `<button onclick="window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)})" 
-                        class="art-gallery-button">
-                        Add this to Cart
-                    </button>` : ''
-                }
+                <div class="flex items-center justify-between mt-4">
+                    ${auth.currentUser ? 
+                        `<button 
+                            onclick="${data.stock > 0 ? `window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)}, ${data.stock})` : 'void(0)'}" 
+                            id="cartButton-${docId}"
+                            class="art-gallery-button flex-1 ${data.stock === 0 || (isLastItem && isReserved) ? 'bg-gray-500 hover:bg-gray-500 cursor-not-allowed' : ''}"
+                            ${data.stock === 0 || (isLastItem && isReserved) ? 'disabled' : ''}
+                        >
+                            ${data.stock === 0 ? 'Out of Stock' : 
+                              (isLastItem && isReserved) ? 'Item Reserved' : 
+                              'Add this to Cart'}
+                        </button>` : 
+                        `<button disabled class="art-gallery-button opacity-50 cursor-not-allowed w-full">
+                            Please login to purchase
+                        </button>`
+                    }
+                </div>
             </div>
         </div>
     `;
@@ -507,16 +710,28 @@ async function updateUIForUserRole(user) {
 // Cart Management
 let cart = [];
 
+// Updated cart initialization
 function initializeCart(userId) {
     if (!userId) return;
     
     const cartRef = collection(db, 'carts');
     const q = query(cartRef, where('userId', '==', userId));
     
-    getDocs(q).then((querySnapshot) => {
+    // Listen for real-time updates to cart
+    onSnapshot(q, (querySnapshot) => {
         if (!querySnapshot.empty) {
             const cartDoc = querySnapshot.docs[0];
             cart = cartDoc.data().items || [];
+            
+            // Show cart navigation if user is not admin or artist
+            const cartNav = document.getElementById('cartNav');
+            const cartNavMobile = document.getElementById('cartNavMobile');
+            
+            if (auth.currentUser && auth.currentUser.uid !== artistId) {
+                cartNav?.classList.remove('hidden');
+                cartNavMobile?.classList.remove('hidden');
+            }
+            
             updateCartUI();
         }
     });
@@ -536,7 +751,7 @@ window.toggleCart = function() {
     }
 }
 
-window.addToCart = async function(artworkId, title, price) {
+window.addToCart = async function(artworkId, title, price, stock) {
     const user = auth.currentUser;
     if (!user) {
         alert('Please login to add items to cart');
@@ -551,10 +766,20 @@ window.addToCart = async function(artworkId, title, price) {
         return;
     }
     
+    // Check if last item and if it's in anyone's cart
+    if (stock === 1) {
+        const isReserved = await isItemInAnyCart(artworkId);
+        if (isReserved) {
+            showNotification('This item is already reserved', 'error');
+            return;
+        }
+    }
+
     const item = { 
         artworkId, 
         title, 
-        price: numericPrice // Store as number
+        price: numericPrice,
+        addedAt: serverTimestamp() // Add timestamp
     };
     cart.push(item);
     
@@ -566,23 +791,82 @@ window.addToCart = async function(artworkId, title, price) {
         if (querySnapshot.empty) {
             await addDoc(cartRef, {
                 userId: user.uid,
-                items: cart
+                items: cart,
+                lastUpdated: serverTimestamp()
             });
         } else {
             const cartDoc = querySnapshot.docs[0];
             await updateDoc(doc(db, 'carts', cartDoc.id), {
-                items: cart
+                items: cart,
+                lastUpdated: serverTimestamp()
             });
         }
         
+        // Update button text and style
+        const cartButton = document.getElementById(`cartButton-${artworkId}`);
+        if (cartButton && stock === 1) {
+            cartButton.textContent = 'Item Reserved';
+            cartButton.classList.add('bg-gray-500', 'hover:bg-gray-500', 'cursor-not-allowed');
+            cartButton.disabled = true;
+        }
+        
         updateCartUI();
+        showNotification('Item added to cart!', 'success');
+        animateCartIcon();
+        
     } catch (error) {
         console.error('Error updating cart:', error);
-        alert('Failed to add item to cart. Please try again.');
+        showNotification('Failed to add item to cart', 'error');
+    }
+}
+
+// Add notification functionality
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white transform transition-transform duration-300 translate-y-full`;
+    
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <span class="mr-2">${
+                type === 'success' 
+                    ? '✓' 
+                    : '✕'
+            }</span>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.transform = 'translateY(full)';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Add cart icon animation
+function animateCartIcon() {
+    const cartIcon = document.querySelector('#cartNav svg');
+    if (cartIcon) {
+        cartIcon.classList.add('animate-bounce');
+        setTimeout(() => {
+            cartIcon.classList.remove('animate-bounce');
+        }, 1000);
     }
 }
 
 window.removeFromCart = async function(index) {
+    const item = cart[index];
     const user = auth.currentUser;
     if (!user) return;
     
@@ -592,14 +876,25 @@ window.removeFromCart = async function(index) {
     const q = query(cartRef, where('userId', '==', user.uid));
     const querySnapshot = await getDocs(q);
     
-    if (!querySnapshot.empty) {
-        const cartDoc = querySnapshot.docs[0];
-        await updateDoc(doc(db, 'carts', cartDoc.id), {
-            items: cart
-        });
+    try {
+        if (!querySnapshot.empty) {
+            const cartDoc = querySnapshot.docs[0];
+            await updateDoc(doc(db, 'carts', cartDoc.id), {
+                items: cart
+            });
+        }
+        
+        // Update button text and style if item exists in current view
+        const cartButton = document.getElementById(`cartButton-${item.artworkId}`);
+        if (cartButton) {
+            cartButton.textContent = 'Add this to Cart';
+            cartButton.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+        }
+        
+        updateCartUI();
+    } catch (error) {
+        console.error('Error removing from cart:', error);
     }
-    
-    updateCartUI();
 }
 
 window.checkout = async function() {
@@ -612,6 +907,7 @@ window.checkout = async function() {
     alert('Checkout functionality will be implemented soon!');
 }
 
+// Updated cart UI update function
 function updateCartUI() {
     const cartCount = document.getElementById('cartCount');
     const cartCountMobile = document.getElementById('cartCountMobile');
@@ -650,6 +946,40 @@ function updateCartUI() {
         if (totalItems) totalItems.textContent = cart.length;
         if (totalPrice) totalPrice.textContent = total.toFixed(2);
     }
+    
+    // Make the cart nav visible if there are items
+    const cartNav = document.getElementById('cartNav');
+    const cartNavMobile = document.getElementById('cartNavMobile');
+    
+    if (cart.length > 0) {
+        cartNav?.classList.remove('hidden');
+        cartNavMobile?.classList.remove('hidden');
+    }
+}
+
+// Add real-time updates for cart status
+function initializeCartTracking() {
+    const cartsRef = collection(db, 'carts');
+    onSnapshot(cartsRef, async (snapshot) => {
+        const galleryItems = document.querySelectorAll('.art-gallery-item');
+        for (const item of galleryItems) {
+            const button = item.querySelector('[id^="cartButton-"]');
+            if (button) {
+                const artworkId = button.id.replace('cartButton-', '');
+                const stockText = item.querySelector('.text-sm.text-white').textContent;
+                const stock = parseInt(stockText.replace('Stock: ', ''));
+                
+                if (stock === 1) {
+                    const isReserved = await isItemInAnyCart(artworkId);
+                    if (isReserved && !button.disabled) {
+                        button.textContent = 'Item Reserved';
+                        button.classList.add('bg-gray-500', 'hover:bg-gray-500', 'cursor-not-allowed');
+                        button.disabled = true;
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Initialize gallery
@@ -660,6 +990,7 @@ auth.onAuthStateChanged(async (user) => {
         updateUIForUserRole(user);
         loadImages();
         initializeCart(user.uid);
+        initializeCartTracking();
     } else {
         console.log('No user logged in');
         updateUIForUserRole(null);
