@@ -394,6 +394,79 @@
         initProfileDropdown();
     });
 </script>
+<script type="module">
+    // Import navigation function
+    import { navToEvent } from '../js/utils.js';
+    
+    // Make navigation function available globally
+    window.navToEvent = navToEvent;
+    
+    // Import other functions
+    import { 
+        toggleLoginFlyout, 
+        submitLogin, 
+        toggleNav, 
+        toggleForms 
+    } from './profile.js';
+
+    // Make other functions available globally
+    window.toggleLoginFlyout = toggleLoginFlyout;
+    window.submitLogin = submitLogin;
+    window.toggleNav = toggleNav;
+    window.toggleForms = toggleForms;
+
+    // Import auth and Firestore functions from firebase-config
+    import { auth, db } from '../js/firebase-config.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Ensure auth is available globally
+    window.auth = auth;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        auth.onAuthStateChanged(async (user) => {
+            const chooseFilesLabel = document.getElementById('chooseFilesLabel');
+            if (!chooseFilesLabel) return;
+
+            if (!user) {
+                chooseFilesLabel.classList.add('hidden');
+                return;
+            }
+
+            try {
+                const currentUserDoc = await getDoc(doc(db, "users", user.uid));
+                const isAdmin = currentUserDoc.exists() && currentUserDoc.data().isAdmin === true;
+                const profileUserId = new URLSearchParams(window.location.search).get('id');
+
+                if (isAdmin || user.uid === profileUserId) {
+                    chooseFilesLabel.classList.remove('hidden');
+                } else {
+                    chooseFilesLabel.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error("Error checking user status:", error);
+                chooseFilesLabel.classList.add('hidden');
+            }
+        });
+    });
+
+    // Add this to debug profile loading
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded, checking profile ID');
+        const urlParams = new URLSearchParams(window.location.search);
+        const profileId = urlParams.get('id');
+        console.log('Profile ID:', profileId);
+        
+        if (!profileId) {
+            console.log('No profile ID in URL, checking for artistId');
+            const artistId = urlParams.get('artistId');
+            if (artistId) {
+                console.log('Found artistId:', artistId);
+                // Redirect to correct URL format if needed
+                window.location.href = `profile.html?id=${artistId}`;
+            }
+        }
+    });
+</script>
 <script>
     // Fix dropdown functionality
     function toggleProfileDropdown(event) {

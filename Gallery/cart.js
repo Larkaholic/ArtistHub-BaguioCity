@@ -154,11 +154,15 @@ window.removeFromCart = async function(index) {
 }
 
 // Show email preview modal
-function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') {
-    console.log('Showing email preview for:', artworkData);
-    // Convert price to number if it's a string
-    const price = typeof artworkData.price === 'string' ? Number(artworkData.price) : artworkData.price;
+function showEmailPreview(cartItems, user, ownerEmail = 'artist@example.com') {
+    console.log('Showing email preview for:', cartItems);
     
+    const itemsList = cartItems.map(item => `
+        <p>Title: ${item.title}</p>
+        <p>Price: ₱${item.price.toFixed(2)}</p>
+        <br/>
+    `).join('');
+
     const emailPreviewHTML = `
         <div id="emailPreviewModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
             <div class="glass-header rounded-lg p-6 max-w-2xl w-full mx-4">
@@ -173,15 +177,13 @@ function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') 
                 <div class="bg-white bg-opacity-10 rounded-lg p-4 space-y-4">
                     <div class="text-black">
                         <p class="font-semibold">To: ${ownerEmail}</p>
-                        <p class="font-semibold">Subject: Interest in purchasing: ${artworkData.title}</p>
+                        <p class="font-semibold">Subject: Interest in purchasing artworks</p>
                     </div>
                     <div class="border-t border-gray-300 pt-4 text-black">
                         <p>Hello,</p>
                         <br/>
-                        <p>I am interested in purchasing your artwork:</p>
-                        <p>Title: ${artworkData.title}</p>
-                        <p>Price: ₱${price.toFixed(2)}</p>
-                        <br/>
+                        <p>I am interested in purchasing the following artworks:</p>
+                        ${itemsList}
                         <p>Please let me know how we can proceed with the transaction.</p>
                         <br/>
                         <p>Best regards,</p>
@@ -192,7 +194,7 @@ function showEmailPreview(artworkData, user, ownerEmail = 'artist@example.com') 
                     <button onclick="window.closeEmailPreview()" class="text-black bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
                         Edit
                     </button>
-                    <button onclick="window.sendEmail('${ownerEmail}', '${artworkData.title}', ${price}, '${user.displayName || user.email}')" 
+                    <button onclick="window.sendEmail('${ownerEmail}', '${user.displayName || user.email}', ${JSON.stringify(cartItems)})" 
                             class="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600">
                         Send Email
                     </button>
@@ -209,17 +211,19 @@ window.closeEmailPreview = function() {
     if (modal) modal.remove();
 }
 
-window.sendEmail = function(ownerEmail, title, price, buyerInfo) {
+window.sendEmail = function(ownerEmail, buyerInfo, cartItems) {
     console.log('Sending email to:', ownerEmail);
-    // Convert price to number if it's a string
-    const numericPrice = typeof price === 'string' ? Number(price) : price;
     
-    const subject = encodeURIComponent(`Interest in purchasing: ${title}`);
+    const itemsList = cartItems.map(item => `
+        Title: ${item.title}
+        Price: ₱${item.price.toFixed(2)}
+    `).join('\n\n');
+
+    const subject = encodeURIComponent(`Interest in purchasing artworks`);
     const body = encodeURIComponent(
         `Hello,\n\n` +
-        `I am interested in purchasing your artwork:\n` +
-        `Title: ${title}\n` +
-        `Price: ₱${numericPrice.toFixed(2)}\n\n` +
+        `I am interested in purchasing the following artworks:\n\n` +
+        `${itemsList}\n\n` +
         `Please let me know how we can proceed with the transaction.\n\n` +
         `Best regards,\n` +
         `${buyerInfo}`
@@ -282,11 +286,10 @@ window.checkout = async function() {
         const items = cartDoc.data().items;
         console.log('Cart items from Firestore:', items);
         
-        // Show preview for first item only
+        // Show preview for all items
         if (items.length > 0) {
-            const item = items[0];
             try {
-                const artworkDoc = await getDoc(doc(db, 'artworks', item.artworkId));
+                const artworkDoc = await getDoc(doc(db, 'artworks', items[0].artworkId));
                 let ownerEmail = 'artist@example.com'; // Default email
                 
                 if (artworkDoc.exists()) {
@@ -294,11 +297,11 @@ window.checkout = async function() {
                     ownerEmail = artworkData.artistEmail || ownerEmail;
                 }
                 
-                showEmailPreview(item, user, ownerEmail);
+                showEmailPreview(items, user, ownerEmail);
             } catch (error) {
                 console.error('Error fetching artwork:', error);
                 // Still show preview even if artwork fetch fails
-                showEmailPreview(item, user, 'artist@example.com');
+                showEmailPreview(items, user, 'artist@example.com');
             }
         }
         
