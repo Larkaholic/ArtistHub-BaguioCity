@@ -1008,3 +1008,8 @@ function onSignIn() {
         console.error('Error during sign-in: ', error);
     });
 }
+
+// Function to handle navigation events
+window.navToEvent = function(url) {
+    window.location.href = url;
+}
