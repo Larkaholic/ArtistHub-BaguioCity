@@ -407,7 +407,7 @@
         submitLogin, 
         toggleNav, 
         toggleForms 
-    } from './profile.js';
+    } from '../profile/profile.js';
 
     // Make other functions available globally
     window.toggleLoginFlyout = toggleLoginFlyout;
@@ -789,6 +789,15 @@
             loginButton?.classList.add('visible');
         }
     });
+</script>
+<script>
+    // Function to handle navigation events
+    function navToEvent(url) {
+        window.location.href = url;
+    }
+
+    // Make the function available globally
+    window.navToEvent = navToEvent;
 </script>
 </body>>
 </html>Function to handle navigation events
