@@ -27,6 +27,31 @@ import { GoogleAuthProvider, linkWithPopup, fetchSignInMethodsForEmail } from "h
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'artist_profiles';
 
+// Function to add genre tag
+function addGenreTag() {
+    const genreInput = document.getElementById('genreInput');
+    const genre = genreInput.value.trim();
+    if (genre !== '') {
+        const genreContainer = document.getElementById('genreContainer');
+        const genreTag = document.createElement('span');
+        genreTag.className = 'genre-tag';
+        genreTag.textContent = genre;
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'x';
+        removeBtn.className = 'remove-genre-btn';
+        removeBtn.onclick = () => genreContainer.removeChild(genreTag);
+        genreTag.appendChild(removeBtn);
+        genreContainer.appendChild(genreTag); // Add the new genre tag at the end
+        genreInput.value = '';
+    }
+}
+
+// Function to get genres from tags
+function getGenres() {
+    const genreContainer = document.getElementById('genreContainer');
+    return Array.from(genreContainer.children).map(tag => tag.textContent.slice(0, -1));
+}
+
 // Update the auth state listener at the top of the file
 document.addEventListener('DOMContentLoaded', async () => {
     auth.onAuthStateChanged(async (user) => {
@@ -98,6 +123,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('youtube').value = data.socialLinks?.youtube || '';
                 document.getElementById('google').value = data.socialLinks?.google || '';
                 
+                // Load genres
+                const genreContainer = document.getElementById('genreContainer');
+                if (data.artistDetails?.genre) {
+                    data.artistDetails.genre.forEach(genre => {
+                        const genreTag = document.createElement('span');
+                        genreTag.className = 'genre-tag';
+                        genreTag.textContent = genre;
+                        const removeBtn = document.createElement('button');
+                        removeBtn.textContent = 'x';
+                        removeBtn.className = 'remove-genre-btn';
+                        removeBtn.onclick = () => genreContainer.removeChild(genreTag);
+                        genreTag.appendChild(removeBtn);
+                        genreContainer.appendChild(genreTag);
+                    });
+                }
+                
                 if (data.photoURL) {
                     document.getElementById('profileImage').src = data.photoURL;
                 }
@@ -122,7 +163,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 displayName: document.getElementById('displayName').value,
                 artistDetails: {
                     specialization: document.getElementById('specialization').value,
-                    bio: document.getElementById('bio').value
+                    bio: document.getElementById('bio').value,
+                    genre: getGenres()
                 },
                 socialLinks: {
                     facebook: document.getElementById('facebook').value,
@@ -213,6 +255,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             reader.readAsDataURL(file);
         }
     });
+
+    // Add event listener for genre input
+    document.getElementById('addGenreButton').addEventListener('click', addGenreTag);
 });
 
 // Add new helper function to force status update

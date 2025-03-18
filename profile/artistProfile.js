@@ -66,7 +66,8 @@ async function loadProfile() {
 
             // Capitalize first letter of each word function
             const capitalizeWords = (str) => {
-                return str
+                if (!str) return ''; // Return empty string if input is null/undefined
+                return String(str) // Convert to string in case of numbers
                     .split(' ')
                     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
                     .join(' ');
@@ -99,7 +100,7 @@ async function loadProfile() {
             // Update display name with enhanced visibility
             const displayName = document.getElementById('displayName');
             if (displayName) {
-                displayName.textContent = capitalizeWords(userData.displayName || 'Unnamed Artist');
+                displayName.textContent = capitalizeWords(userData.displayName) || 'Unnamed Artist';
                 displayName.classList.add('text-shadow');
             }
 
@@ -117,6 +118,17 @@ async function loadProfile() {
                 const spec = userData.artistDetails?.specialization || 'Artist';
                 specialization.textContent = capitalizeWords(spec);
                 specialization.classList.add('highlight-text');
+            }
+
+            // Update genre with enhanced visibility
+            const genre = document.getElementById('genre');
+            if (genre) {
+                const genres = userData.artistDetails?.genre || ['No genre'];
+                genre.innerHTML = genres.map(g => 
+                    `<span class="px-2 py-1 bg-gray-600 text-white rounded-lg text-sm" style="background: rgba(75, 85, 99, 0.8); backdrop-filter: blur(4px);">
+                        #${g.toLowerCase().replace(/\s+/g, '')}
+                    </span>`
+                ).join('');
             }
 
             // Update location with enhanced visibility

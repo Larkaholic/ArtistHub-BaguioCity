@@ -5,6 +5,8 @@ const baseUrl = window.location.hostname === '127.0.0.1' || window.location.host
     ? '' 
     : '/ArtistHub-BaguioCity';
 
+let allArtists = [];
+
 export async function loadArtists() {
     const artistsGrid = document.getElementById('featuredArtistsGrid');
     if (!artistsGrid) {
@@ -31,6 +33,10 @@ export async function loadArtists() {
             artistsGrid.innerHTML = '<p class="text-center text-gray-600">No featured artists selected by admin yet</p>';
             return;
         }
+
+        // Load all artists
+        const querySnapshot = await getDocs(collection(db, "artists"));
+        allArtists = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
         // Display each featured artist
         for (const artist of featuredArtists) {
@@ -70,4 +76,76 @@ export async function loadArtists() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadArtists);
+function displayArtists(artists) {
+    const grid = document.querySelector('#featuredArtistsGrid');
+    grid.innerHTML = artists.map(artist => `
+        <div class="artist-card border-2 border-black rounded-lg p-4 mb-4">
+            <h3 class="text-2xl font-bold mb-2">${artist.name}</h3>
+            <p class="text-sm">Specialization: ${artist.specialization}</p>
+            <p class="text-sm">Location: ${artist.location}</p>
+            <p class="text-sm">Genre: ${artist.genre}</p>
+            <p class="text-sm">${artist.bio.substring(0, 100)}...</p>
+        </div>
+    `).join('');
+}
+
+// Debounced search function
+let debounceTimeout;
+function debouncedSearch() {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(applyFilters, 300);
+}
+
+// Apply search and filters
+function applyFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const locationFilter = document.getElementById('locationFilter');
+    const genreFilter = document.getElementById('genreFilter');
+    const specializationFilter = document.getElementById('specializationFilter');
+
+    const searchValue = searchInput?.value?.toLowerCase() || '';
+    const locationValue = locationFilter?.value || 'All';
+    const genreValue = genreFilter?.value || 'All';
+    const specializationValue = specializationFilter?.value || 'All';
+
+    const filteredArtists = allArtists.filter(artist => {
+        const matchesSearch = artist.name.toLowerCase().includes(searchValue) ||
+                            artist.specialization.toLowerCase().includes(searchValue) ||
+                            artist.genre.toLowerCase().includes(searchValue) ||
+                            artist.bio.toLowerCase().includes(searchValue);
+        const matchesLocation = locationValue === 'All' || artist.location === locationValue;
+        const matchesGenre = genreValue === 'All' || artist.genre === genreValue;
+        const matchesSpecialization = specializationValue === 'All' || artist.specialization === specializationValue;
+
+        return matchesSearch && matchesLocation && matchesGenre && matchesSpecialization;
+    });
+
+    displayArtists(filteredArtists);
+}
+
+// Add event listeners for search and filter inputs with null checks
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const locationFilter = document.getElementById('locationFilter');
+    const genreFilter = document.getElementById('genreFilter');
+    const specializationFilter = document.getElementById('specializationFilter');
+
+    // Only add event listeners if elements exist
+    if (searchInput) {
+        searchInput.addEventListener('input', debouncedSearch);
+    }
+    
+    if (locationFilter) {
+        locationFilter.addEventListener('change', applyFilters);
+    }
+    
+    if (genreFilter) {
+        genreFilter.addEventListener('change', applyFilters);
+    }
+    
+    if (specializationFilter) {
+        specializationFilter.addEventListener('change', applyFilters);
+    }
+
+    loadArtists();
+});
