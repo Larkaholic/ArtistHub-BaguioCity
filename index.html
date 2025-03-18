@@ -257,10 +257,33 @@
         <section id="featuredArtistsSection" class="flex flex-col gap-4 p-4">
             <!-- title container -->
             <div class="header text-center py-1 mt-10 w-full flex justify-center items-center">
-                <h3 class="text-3xl font-bold text-black">FEATURED ARTISTS</h2>
+                <h3 class="text-3xl font-bold text-black">FEATURED ARTISTS</h3>
             </div>
 
             <div class="relative w-full flex justify-end pr-5">
+                <!-- Filter options -->
+                <div class="flex flex-wrap gap-4 mt-4">
+                    <select id="locationFilter" class="p-2 border border-gray-300 rounded">
+                        <option value="All">All Locations</option>
+                        <option value="Baguio City">Baguio City</option>
+                        <option value="La Trinidad">La Trinidad</option>
+                        <option value="Benguet">Benguet</option>
+                    </select>
+                    <select id="genreFilter" class="p-2 border border-gray-300 rounded">
+                        <option value="All">All Genres</option>
+                        <option value="Contemporary">Contemporary</option>
+                        <option value="Abstract">Abstract</option>
+                        <option value="Realism">Realism</option>
+                        <option value="Folk Art">Folk Art</option>
+                    </select>
+                    <select id="specializationFilter" class="p-2 border border-gray-300 rounded">
+                        <option value="All">All Specializations</option>
+                        <option value="Painter">Painter</option>
+                        <option value="Sculptor">Sculptor</option>
+                        <option value="Digital Artist">Digital Artist</option>
+                        <option value="Traditional Artist">Traditional Artist</option>
+                    </select>
+                </div>
                 <button class="artist-search-btn border-2 border-black" onclick="toggleArtistSearch()">
                     <i class="fas fa-search"></i>
                 </button>
@@ -274,7 +297,7 @@
                     </button>
                 </div>
             </div>
-                       
+            
             <!-- artist grid container -->
             <div class="rounded-lg p-2 overflow-y-auto" style="max-height: 100vh;">
                 <div id="featuredArtistsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -286,7 +309,7 @@
         <!-- Events Seciton-->
         <section id="events" class="EvntPage max-h-screen w-full min-h-screen p-6 overflow-auto">
             <div class="header rounded-lg p-2 mt-10 w-full text-center mb-4">
-                <h3 class="text-3xl font-bold text-black">UPCOMING EVENTS</h2>
+                <h3 class="text-3xl font-bold text-black">UPCOMING EVENTS</h3>
             </div>
             <div class="EvntContainer max-w-full mx-auto overflow-y-auto" style="max-height: 100vh;">
                 <!-- events will load here -->
@@ -296,7 +319,7 @@
         <!-- through the years -->
         <section class="baguio-timeline-section my-8">
             <div class="header rounded-lg p-2 mt-10 w-full text-center" style="position: relative; z-index: 30;">
-                <h3 class="text-3xl font-bold text-black">THROUGH THE YEARS</h2>
+                <h3 class="text-3xl font-bold text-black">THROUGH THE YEARS</h3>
             </div>
             
             <div class="relative w-full flex justify-center mb-2">
@@ -319,7 +342,7 @@
                 <div class="baguio-timeline-navigation"></div>
                 <div class="baguio-timeline-content-box">
                     <div class="baguio-timeline-year baguio-timeline-fade-in"></div>
-                    <h3 class="baguio-timeline-title baguio-timeline-fade-in"></h2>
+                    <h3 class="baguio-timeline-title baguio-timeline-fade-in"></h3>
                     <p class="baguio-timeline-details baguio-timeline-fade-up"></p>
                 </div>
             </div>

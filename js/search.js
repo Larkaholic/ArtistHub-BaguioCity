@@ -63,8 +63,11 @@ function performSearch(searchTerm) {
 
     // Filter artists based on search term
     const filteredArtists = cachedArtists.filter(artist => 
-        artist.displayName && 
-        artist.displayName.toLowerCase().includes(searchTerm.toLowerCase())
+        (artist.displayName && artist.displayName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (artist.specialization && artist.specialization.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (artist.genre && artist.genre.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (artist.bio && artist.bio.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (artist.location && artist.location.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     if (filteredArtists.length > 0) {

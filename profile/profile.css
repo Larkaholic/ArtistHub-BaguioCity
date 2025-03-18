@@ -286,6 +286,53 @@ main {
     }
 }
 
+/* Genre specific styles - separate from highlight-text */
+.genre-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: transparent;
+    margin: 0.5rem 0;
+}
+
+.genre-tag {
+    color: white;
+    background-color: #4b5563;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Genre specific styles */
+#genreLabel {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1F2937;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    display: inline-block;
+}
+
+#genreLabel::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 2px;
+    background-color: #4b5563;
+    border-radius: 2px;
+}
+
 .profile-section {
     background: rgba(255, 255, 255, 0.95);
     padding: 1rem;
