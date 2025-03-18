@@ -37,21 +37,25 @@ async function loadEvents() {
                 `;
             } else {
                 importantEventsContainer.innerHTML = upcomingFeaturedEvents.map(event => `
-                    <div class="glass-header2 rounded-lg p-4 m-4 event-card" 
-                        data-id="${event.id}" data-aos="fade-left" style="cursor: pointer;">
-                        <h3 class="rubik-dirt-regular font-custom text-2xl font-bold mb-2">${event.title}</h3>
-                        <p class="text-sm font-bold">Start: ${event.startDate}</p>
-                        <p class="text-sm font-bold">Location: ${event.location}</p>
-                        ${event.description ? `<p class="mt-2">${event.description.substring(0, 100)}...</p>` : ''}
-                        ${event.imageUrl ? `
-                            <img src="${event.imageUrl}" alt="${event.title}" 
-                                class="mt-4 w-full h-48 object-cover rounded">
-                        ` : ''}
+                    <div class="glass-header2 rounded-lg p-4 m-4 event-card relative" 
+                        data-id="${event.id}" data-aos="fade-left" style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px;">
+                        <div class="event-content flex-grow">
+                            <h3 class="rubik-dirt-regular font-custom text-2xl font-bold mb-2">${event.title}</h3>
+                            <p class="text-sm font-bold">Start: ${event.startDate}</p>
+                            <p class="text-sm font-bold">Location: ${event.location}</p>
+                            ${event.description ? `<p class="mt-2">${event.description.substring(0, 100)}...</p>` : ''}
+                            ${event.imageUrl ? `
+                                <img src="${event.imageUrl}" alt="${event.title}" 
+                                    class="mt-4 w-full h-48 object-cover rounded">
+                            ` : ''}
+                        </div>
+                        <div class="mt-auto text-right">
+                            <button class="view-event-btn mt-4 p-2 text-black rounded" style="background: #F4A900;">View Event</button>
+                        </div>
                     </div>
                 `).join('');
             }
         }
-
         // Display non-featured events in upcoming events section
         const eventsContainer = document.querySelector('.EvntContainer');
         if (eventsContainer) {
@@ -66,9 +70,9 @@ async function loadEvents() {
                 eventsContainer.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overscroll-y-auto" style="max-height: 100%;">
                         ${updatedNonFeaturedEvents.map(event => `
-                            <div class="artist-card border-2 border-black rounded-lg p-4 mb-4 event-card"
-                            style="cursor: pointer;" data-id="${event.id}">
-                                <div class="event-content" style="position: relative; z-index: 12;">
+                            <div class="artist-card border-2 border-black rounded-lg p-4 mb-4 event-card relative"
+                            style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px;" data-id="${event.id}">
+                                <div class="event-content flex-grow" style="position: relative; z-index: 12;">
                                     <h3 class="rubik-dirt-regular text-2xl font-bold mb-2 text-black">${event.title}</h3>
                                     <p class="text-sm text-black">Start: ${event.startDate}</p>
                                     <p class="text-sm text-black">End: ${event.endDate}</p>
@@ -78,6 +82,9 @@ async function loadEvents() {
                                         <img src="${event.imageUrl}" alt="${event.title}" 
                                             class="mt-4 w-full h-48 object-cover rounded">
                                     ` : ''}
+                                </div>
+                                <div class="mt-auto text-right">
+                                    <button class="view-event-btn mt-4 p-2 text-black rounded" style="background: #F4A900;">View Event</button>
                                 </div>
                             </div>
                         `).join('')}
