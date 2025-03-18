@@ -51,58 +51,98 @@ function performSearch(searchTerm) {
         return;
     }
 
-    // Reset to featured artists when empty
-    if (!searchTerm || !searchTerm.trim()) {
-        console.log('Search term is empty, resetting to featured artists');
-        resetSearch();
+    // If search is empty, reset to featured artists
+    if (!searchTerm || searchTerm.trim() === '') {
+        loadArtists();
         return;
     }
 
-    // Clear previous results
-    resultsContainer.innerHTML = '';
+    // Convert search term to lowercase for case-insensitive comparison
+    const searchLower = searchTerm.toLowerCase();
 
-    // Filter artists based on search term
-    const filteredArtists = cachedArtists.filter(artist => 
-        (artist.displayName && artist.displayName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (artist.specialization && artist.specialization.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (artist.genre && artist.genre.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (artist.bio && artist.bio.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (artist.location && artist.location.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    // Filter artists based on search term and filters
+    const filteredArtists = cachedArtists.filter(artist => {
+        // Basic search criteria
+        const matchesSearch = !searchTerm || (
+            // Check basic fields
+            (artist.displayName && artist.displayName.toLowerCase().includes(searchLower)) ||
+            (artist.artistDetails?.specialization && artist.artistDetails.specialization.toLowerCase().includes(searchLower)) ||
+            (artist.artistDetails?.bio && artist.artistDetails.bio.toLowerCase().includes(searchLower)) ||
+            // Check genres - handle both array and string cases
+            (artist.artistDetails?.genre && (
+                Array.isArray(artist.artistDetails.genre) 
+                    ? artist.artistDetails.genre.some(g => g.toLowerCase().includes(searchLower))
+                    : artist.artistDetails.genre.toLowerCase().includes(searchLower)
+            ))
+        );
 
-    if (filteredArtists.length > 0) {
-        displayArtists(filteredArtists);
-    } else {
-        resultsContainer.innerHTML = '<p class="text-center text-gray-600">No artists found</p>';
-    }
+        // Get filter values
+        const genreFilter = document.getElementById('genreFilter')?.value || 'All';
+        const locationFilter = document.getElementById('locationFilter')?.value || 'All';
+
+        // Filter by genre
+        const matchesGenre = genreFilter === 'All' || (
+            artist.artistDetails?.genre && (
+                Array.isArray(artist.artistDetails.genre)
+                    ? artist.artistDetails.genre.some(g => g.toLowerCase() === genreFilter.toLowerCase())
+                    : artist.artistDetails.genre.toLowerCase() === genreFilter.toLowerCase()
+            )
+        );
+
+        // Filter by location
+        const matchesLocation = locationFilter === 'All' || (
+            artist.location && artist.location === locationFilter
+        );
+
+        return matchesSearch && matchesGenre && matchesLocation;
+    });
+
+    // Display results
+    displayFilteredResults(filteredArtists);
 }
 
 function displayArtists(artists) {
-    resultsContainer.innerHTML = ''; // Clear existing content
+    if (!resultsContainer) return;
+    resultsContainer.innerHTML = '';
+
+    const defaultImage = 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png';
+
     artists.forEach(artist => {
         const card = document.createElement('div');
-        card.className = `
-            rounded-lg p-6 flex flex-col items-center border-2 border-gray-700
-            min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1
-        `;
+        card.className = `rounded-lg p-6 flex flex-col items-center border-2 border-gray-700
+            min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1`;
         
-        const specialization = artist.artistDetails?.specialization ?? 'artist';
+        const specialization = artist.artistDetails?.specialization ?? 'Artist';
         
-        // Create a default avatar if image is missing
-        const defaultAvatar = 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/default-profile.png';
-        const initial = artist.displayName ? artist.displayName.charAt(0).toUpperCase() : 'A';
-        
+        // Create image element separately for better control
+        const img = new Image();
+        img.className = 'w-32 h-32 rounded-full object-cover mb-4 border-4 border-black text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]';
+        img.alt = artist.displayName || 'Artist';
+        img.src = defaultImage; // Start with default image
+
+        // Only try to load the actual image if it exists
+        if (artist.photoURL && artist.photoURL.trim()) {
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                img.src = artist.photoURL;
+            };
+            tempImg.onerror = () => {
+                console.log('Artist image failed to load:', artist.displayName);
+                img.src = defaultImage;
+            };
+            tempImg.src = artist.photoURL;
+        }
+
         card.innerHTML = `
-            <img src="${artist.photoURL || defaultAvatar}" 
-                alt="${artist.displayName}" 
-                class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-black text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-                onerror="this.src='${defaultAvatar}';">
-            <h3 class="text-3xl font-bold mb-2 text-black">${artist.displayName}</h3>
+            <h3 class="text-3xl font-bold mb-2 text-black">${artist.displayName || 'Unnamed Artist'}</h3>
             <p class="text-center mb-4 text-black text-lg">${specialization}</p>
             <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2 border-black">
                 View Profile
             </button>
         `;
+
+        // Insert the image at the beginning of the card
+        card.insertBefore(img, card.firstChild);
 
         card.querySelector('button').onclick = () => {
             window.location.href = `./profile/profile.html?id=${artist.id}`;
@@ -112,22 +152,36 @@ function displayArtists(artists) {
     });
 }
 
+// Add the missing displayFilteredResults function
+function displayFilteredResults(artists) {
+    if (!resultsContainer) return;
+    
+    if (artists.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="text-center p-4">
+                <p class="text-gray-600">No artists found matching your search.</p>
+            </div>
+        `;
+        return;
+    }
+
+    displayArtists(artists);
+}
+
 function resetSearch() {
+    if (!searchInput || !resultsContainer) return;
+    
+    searchInput.value = '';
+    
     const searchBtn = document.querySelector('.artist-search-btn');
     const searchContainer = document.querySelector('.artist-search-container');
     
-    // Reset UI elements
     if (searchContainer && searchBtn) {
         searchContainer.classList.remove('expanded');
         searchBtn.style.opacity = '1';
     }
-    
-    // Clear search input
-    if (searchInput) {
-        searchInput.value = '';
-    }
 
-    console.log('Resetting search to load featured artists');
+    // Always load featured artists when resetting
     loadArtists();
 }
 
@@ -149,7 +203,11 @@ async function initializeSearch() {
             }
             searchTimeout = setTimeout(() => {
                 const searchTerm = e.target.value;
-                performSearch(searchTerm);
+                if (!searchTerm || searchTerm.trim() === '') {
+                    loadArtists(); // Reset to featured artists
+                } else {
+                    performSearch(searchTerm);
+                }
             }, 300);
         });
     }
@@ -162,5 +220,8 @@ async function initializeSearch() {
         });
     }
 }
+
+// Make displayFilteredResults available globally
+window.displayFilteredResults = displayFilteredResults;
 
 document.addEventListener('DOMContentLoaded', initializeSearch);

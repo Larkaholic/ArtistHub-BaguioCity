@@ -261,36 +261,13 @@
             </div>
 
             <div class="relative w-full flex justify-end pr-5">
-                <!-- Filter options -->
-                <div class="flex flex-wrap gap-4 mt-4">
-                    <select id="locationFilter" class="p-2 border border-gray-300 rounded">
-                        <option value="All">All Locations</option>
-                        <option value="Baguio City">Baguio City</option>
-                        <option value="La Trinidad">La Trinidad</option>
-                        <option value="Benguet">Benguet</option>
-                    </select>
-                    <select id="genreFilter" class="p-2 border border-gray-300 rounded">
-                        <option value="All">All Genres</option>
-                        <option value="Contemporary">Contemporary</option>
-                        <option value="Abstract">Abstract</option>
-                        <option value="Realism">Realism</option>
-                        <option value="Folk Art">Folk Art</option>
-                    </select>
-                    <select id="specializationFilter" class="p-2 border border-gray-300 rounded">
-                        <option value="All">All Specializations</option>
-                        <option value="Painter">Painter</option>
-                        <option value="Sculptor">Sculptor</option>
-                        <option value="Digital Artist">Digital Artist</option>
-                        <option value="Traditional Artist">Traditional Artist</option>
-                    </select>
-                </div>
                 <button class="artist-search-btn border-2 border-black" onclick="toggleArtistSearch()">
                     <i class="fas fa-search"></i>
                 </button>
                 <div class="artist-search-container border-2 border-black">
                     <input type="text" 
                            id="searchInput" 
-                           placeholder="Search artists..." 
+                           placeholder="Search artists, specializations, genres..." 
                            class="artist-search-input">
                     <button class="artist-close-btn" onclick="toggleArtistSearch()">
                         <i class="fas fa-times"></i>

@@ -98,19 +98,24 @@ function debouncedSearch() {
 
 // Apply search and filters
 function applyFilters() {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
-    const locationFilter = document.getElementById('locationFilter').value;
-    const genreFilter = document.getElementById('genreFilter').value;
-    const specializationFilter = document.getElementById('specializationFilter').value;
+    const searchInput = document.getElementById('searchInput');
+    const locationFilter = document.getElementById('locationFilter');
+    const genreFilter = document.getElementById('genreFilter');
+    const specializationFilter = document.getElementById('specializationFilter');
+
+    const searchValue = searchInput?.value?.toLowerCase() || '';
+    const locationValue = locationFilter?.value || 'All';
+    const genreValue = genreFilter?.value || 'All';
+    const specializationValue = specializationFilter?.value || 'All';
 
     const filteredArtists = allArtists.filter(artist => {
-        const matchesSearch = artist.name.toLowerCase().includes(searchInput) ||
-                              artist.specialization.toLowerCase().includes(searchInput) ||
-                              artist.genre.toLowerCase().includes(searchInput) ||
-                              artist.bio.toLowerCase().includes(searchInput);
-        const matchesLocation = locationFilter === 'All' || artist.location === locationFilter;
-        const matchesGenre = genreFilter === 'All' || artist.genre === genreFilter;
-        const matchesSpecialization = specializationFilter === 'All' || artist.specialization === specializationFilter;
+        const matchesSearch = artist.name.toLowerCase().includes(searchValue) ||
+                            artist.specialization.toLowerCase().includes(searchValue) ||
+                            artist.genre.toLowerCase().includes(searchValue) ||
+                            artist.bio.toLowerCase().includes(searchValue);
+        const matchesLocation = locationValue === 'All' || artist.location === locationValue;
+        const matchesGenre = genreValue === 'All' || artist.genre === genreValue;
+        const matchesSpecialization = specializationValue === 'All' || artist.specialization === specializationValue;
 
         return matchesSearch && matchesLocation && matchesGenre && matchesSpecialization;
     });
@@ -118,11 +123,29 @@ function applyFilters() {
     displayArtists(filteredArtists);
 }
 
-// Add event listeners for search and filter inputs
+// Add event listeners for search and filter inputs with null checks
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('searchInput').addEventListener('input', debouncedSearch);
-    document.getElementById('locationFilter').addEventListener('change', applyFilters);
-    document.getElementById('genreFilter').addEventListener('change', applyFilters);
-    document.getElementById('specializationFilter').addEventListener('change', applyFilters);
+    const searchInput = document.getElementById('searchInput');
+    const locationFilter = document.getElementById('locationFilter');
+    const genreFilter = document.getElementById('genreFilter');
+    const specializationFilter = document.getElementById('specializationFilter');
+
+    // Only add event listeners if elements exist
+    if (searchInput) {
+        searchInput.addEventListener('input', debouncedSearch);
+    }
+    
+    if (locationFilter) {
+        locationFilter.addEventListener('change', applyFilters);
+    }
+    
+    if (genreFilter) {
+        genreFilter.addEventListener('change', applyFilters);
+    }
+    
+    if (specializationFilter) {
+        specializationFilter.addEventListener('change', applyFilters);
+    }
+
     loadArtists();
 });
