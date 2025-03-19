@@ -7,19 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial load
     loadArtworks();
 
-    // Add event listeners to all filter inputs
-    const filterInputs = [
-        'artworkSearch',
-        'genreFilter',
-        'categoryFilter',
-        'sizeFilter',
-        'mediumFilter'
-    ];
+    // Add search button click handler
+    const searchButton = document.getElementById('searchButton');
+    if (searchButton) {
+        searchButton.addEventListener('click', applyFilters);
+    }
 
-    filterInputs.forEach(filterId => {
+    // Add search input handler for "Enter" key
+    const searchInput = document.getElementById('searchArtworks');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
+    }
+
+    // Add filter change handlers
+    const filters = ['genreFilter', 'categoryFilter', 'sizeFilter', 'mediumFilter'];
+    filters.forEach(filterId => {
         const element = document.getElementById(filterId);
         if (element) {
-            element.addEventListener('input', applyFilters);
             element.addEventListener('change', applyFilters);
         }
     });
@@ -51,7 +59,7 @@ async function loadArtworks() {
 }
 
 function applyFilters() {
-    const searchTerm = document.getElementById('artworkSearch')?.value.toLowerCase() || '';
+    const searchTerm = document.getElementById('searchArtworks')?.value.toLowerCase() || '';
     const genre = document.getElementById('genreFilter')?.value || '';
     const category = document.getElementById('categoryFilter')?.value || '';
     const size = document.getElementById('sizeFilter')?.value || '';
@@ -76,14 +84,14 @@ function applyFilters() {
 
 function displayArtworks(artworks) {
     const galleryContainer = document.getElementById('galleryContainer');
-    
+    galleryContainer.innerHTML = '';
+
     if (artworks.length === 0) {
-        galleryContainer.innerHTML = '<p class="text-center col-span-full">No artworks found matching your criteria.</p>';
+        galleryContainer.innerHTML = '<p class="text-center col-span-full">No artworks found.</p>';
         return;
     }
 
-    galleryContainer.innerHTML = '';
-    artworks.forEach(artwork => {
+    artworks.forEach((artwork) => {
         const card = createArtworkCard(artwork.id, artwork);
         galleryContainer.appendChild(card);
     });
