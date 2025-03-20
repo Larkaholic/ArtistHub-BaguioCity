@@ -35,24 +35,23 @@ document.getElementById('showUploadForm')?.addEventListener('click', () => {
     }
 });
 
-// Add global toggle function for upload form
-window.toggleUploadForm = function() {
+// Define toggleUploadForm before attaching to window
+function toggleUploadForm() {
     console.log('Toggle upload form called');
-    const container = document.getElementById('uploadFormContainer');
+    const modal = document.getElementById('uploadModal');
     const button = document.getElementById('toggleUploadForm');
-    console.log('Container:', container);
-    console.log('Button:', button);
     
-    if (!container || !button) {
-        console.error('Missing container or button elements');
+    if (!modal || !button) {
+        console.error('Missing modal or button elements');
         return;
     }
 
-    const isHidden = container.classList.contains('hidden');
+    const isHidden = modal.classList.contains('hidden');
     console.log('Is form hidden:', isHidden);
-    container.classList.toggle('hidden');
     
     if (isHidden) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -61,7 +60,21 @@ window.toggleUploadForm = function() {
         `;
         button.classList.remove('bg-green-500', 'hover:bg-green-600');
         button.classList.add('bg-red-500', 'hover:bg-red-600');
+        
+        // Reset form when opening
+        const uploadForm = document.getElementById('uploadForm');
+        if (uploadForm) {
+            uploadForm.reset();
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+            if (imagePreviewContainer && uploadPlaceholder) {
+                imagePreviewContainer.classList.add('hidden');
+                uploadPlaceholder.classList.remove('hidden');
+            }
+        }
     } else {
+        modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Restore background scrolling
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -71,7 +84,19 @@ window.toggleUploadForm = function() {
         button.classList.remove('bg-red-500', 'hover:bg-red-600');
         button.classList.add('bg-green-500', 'hover:bg-green-600');
     }
-};
+}
+
+// Make toggleUploadForm globally available
+window.toggleUploadForm = toggleUploadForm;
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Setting up upload form toggle');
+    const toggleButton = document.getElementById('toggleUploadForm');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', toggleUploadForm);
+    }
+});
 
 // Add input validation for numeric fields
 document.getElementById('price')?.addEventListener('input', (e) => {
@@ -98,84 +123,192 @@ const myWidget = cloudinary.createUploadWidget(
         sources: ['local', 'camera', 'url'],
         showAdvancedOptions: false,
         multiple: false,
-        defaultSource: 'local'
+        defaultSource: 'local',
+        styles: {
+            palette: {
+                window: "#FFFFFF",
+                windowBorder: "#90A0B3",
+                tabIcon: "#0078FF",
+                menuIcons: "#5A616A",
+                textDark: "#000000",
+                textLight: "#FFFFFF",
+                link: "#0078FF",
+                action: "#FF620C",
+                inactiveTabIcon: "#0E2F5A",
+                error: "#F44235",
+                inProgress: "#0078FF",
+                complete: "#20B832",
+                sourceBg: "#E4EBF1"
+            }
+        }
     },
     (error, result) => {
-        console.log('Cloudinary callback triggered:', result?.event);
         if (error) {
-            console.error('Cloudinary error:', error);
+            console.error('Cloudinary upload error:', error);
+            showNotification('Upload failed', 'error');
             return;
         }
         
         if (result.event === "success") {
-            try {
-                console.log('Upload successful:', result.info);
-                
-                // Get all required elements
-                const elements = {
-                    preview: document.getElementById('imagePreview'),
-                    previewContainer: document.getElementById('imagePreviewContainer'),
-                    placeholder: document.getElementById('uploadPlaceholder'),
-                    removeButton: document.getElementById('removeImage'),
-                    uploadForm: document.getElementById('uploadForm'),
-                    imageUrlInput: document.getElementById('imageUrlInput')
-                };
-
-                // Check if all elements exist
-                const missingElements = Object.entries(elements)
-                    .filter(([key, element]) => !element)
-                    .map(([key]) => key);
-
-                if (missingElements.length > 0) {
-                    console.error('Missing elements:', missingElements);
-                    return;
-                }
-
-                // Update UI elements
-                elements.preview.src = result.info.secure_url;
-                elements.previewContainer.classList.remove('hidden');
-                elements.placeholder.classList.add('hidden');
-                elements.removeButton.classList.remove('hidden');
-                elements.uploadForm.dataset.imageUrl = result.info.secure_url;
-                elements.imageUrlInput.value = result.info.secure_url;
-
-            } catch (error) {
-                console.error('Error updating UI after upload:', error);
+            console.log('Upload successful:', result.info);
+            const success = updateUploadPreview(result.info);
+            if (!success) {
+                showNotification('Failed to update preview', 'error');
+            } else {
+                showNotification('Image uploaded successfully!', 'success');
             }
         }
     }
 );
 
+// Add function to update preview
+function updateUploadPreview(result) {
+    try {
+        const elements = {
+            preview: document.getElementById('imagePreview'),
+            previewContainer: document.getElementById('imagePreviewContainer'),
+            placeholder: document.getElementById('uploadPlaceholder'),
+            removeButton: document.getElementById('removeImage'),
+            imageUrlInput: document.getElementById('imageUrlInput')
+        };
+
+        // Validate all required elements exist
+        const missingElements = Object.entries(elements)
+            .filter(([key, element]) => !element)
+            .map(([key]) => key);
+
+        if (missingElements.length > 0) {
+            console.error('Missing elements:', missingElements.join(', '));
+            return false;
+        }
+
+        // Get the image URL from the Cloudinary response
+        const imageUrl = result.secure_url || result;
+        
+        // Update preview image
+        elements.preview.src = imageUrl;
+        elements.preview.onload = () => {
+            elements.previewContainer.classList.remove('hidden');
+            elements.placeholder.classList.add('hidden');
+            elements.removeButton.classList.remove('hidden');
+        };
+
+        // Store URL in hidden input
+        elements.imageUrlInput.value = imageUrl;
+
+        // Show success notification
+        showNotification('Image uploaded successfully!', 'success');
+
+        return true;
+    } catch (error) {
+        console.error('Error updating preview:', error);
+        showNotification('Failed to update image preview', 'error');
+        return false;
+    }
+}
+
 // Update click handlers
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Setting up upload handlers');
 
-    // Function to handle upload click
-    const openCloudinaryWidget = (e) => {
-        console.log('Opening Cloudinary widget');
-        e.preventDefault();
-        e.stopPropagation();
-        myWidget.open();
-    };
-
-    // Add click handler only to the placeholder div
+    // Setup upload placeholder click
     const uploadPlaceholder = document.getElementById('uploadPlaceholder');
     if (uploadPlaceholder) {
         console.log('Adding click handler to uploadPlaceholder');
-        uploadPlaceholder.addEventListener('click', openCloudinaryWidget);
+        uploadPlaceholder.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Opening Cloudinary widget');
+            myWidget.open();
+        });
     }
 
-    // Remove click handler from imageFile input
-    const fileInput = document.getElementById('imageFile');
-    if (fileInput) {
-        fileInput.style.display = 'none'; // Hide the file input since we're using Cloudinary
+    // Add form submission handler
+    const uploadFormContainer = document.getElementById('uploadFormContainer');
+    const submitButton = uploadFormContainer?.querySelector('button[type="submit"]');
+    
+    if (uploadFormContainer && submitButton) {
+        console.log('Setting up form submission');
+        
+        // Add click handler to submit button
+        submitButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            console.log('Submit button clicked');
+
+            if (!auth.currentUser) {
+                showNotification('Please login to upload images', 'error');
+                return;
+            }
+
+            const imageUrl = document.getElementById('imageUrlInput')?.value;
+            if (!imageUrl) {
+                showNotification('Please upload an image first', 'error');
+                return;
+            }
+
+            try {
+                const formData = {
+                    title: document.getElementById('title')?.value,
+                    description: document.getElementById('description')?.value,
+                    price: parseFloat(document.getElementById('price')?.value || 0),
+                    stock: parseInt(document.getElementById('stock')?.value || 0),
+                    genre: document.getElementById('genre')?.value,
+                    canvasSize: document.getElementById('canvasSize')?.value,
+                    medium: document.getElementById('medium')?.value
+                };
+
+                if (!formData.title || !formData.description || isNaN(formData.price) || isNaN(formData.stock)) {
+                    showNotification('Please fill in all required fields', 'error');
+                    return;
+                }
+
+                const galleryCollection = collection(db, 'gallery_images');
+                await addDoc(galleryCollection, {
+                    artistEmail: auth.currentUser.email,
+                    artistId: auth.currentUser.uid,
+                    profileId: artistId,
+                    imageId: generateImageId(),
+                    imageUrl,
+                    uploadDate: serverTimestamp(),
+                    isPublic: true,
+                    ...formData
+                });
+
+                // Reset form fields individually
+                document.getElementById('title').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('price').value = '';
+                document.getElementById('stock').value = '';
+                document.getElementById('genre').value = '';
+                document.getElementById('canvasSize').value = '';
+                document.getElementById('medium').value = '';
+                
+                // Reset image preview
+                document.getElementById('imagePreviewContainer')?.classList.add('hidden');
+                document.getElementById('uploadPlaceholder')?.classList.remove('hidden');
+                document.getElementById('removeImage')?.classList.add('hidden');
+                document.getElementById('imageUrlInput').value = '';
+                
+                // Close modal
+                toggleUploadForm();
+                
+                // Reload images and show success message
+                await loadImages();
+                showNotification('Artwork uploaded successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error uploading artwork:', error);
+                showNotification('Failed to upload artwork', 'error');
+            }
+        });
+    } else {
+        console.error('Upload form or submit button not found');
     }
 
-    // Handle drag and drop on the upload area
-    const uploadArea = document.querySelector('.flex.flex-col.items-center.justify-center.border-2.border-dashed');
+    // Setup drag and drop
+    const uploadArea = document.querySelector('.border-dashed');
     if (uploadArea) {
         console.log('Setting up drag and drop handlers');
-        
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('border-blue-500');
@@ -190,67 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadArea.classList.remove('border-blue-500');
             myWidget.open();
         });
-
-        // Prevent click propagation on the upload area
-        uploadArea.addEventListener('click', (e) => {
-            if (e.target === uploadArea || e.target === uploadPlaceholder) {
-                openCloudinaryWidget(e);
-            }
-        });
-    }
-});
-
-// Update form submission to use stored Cloudinary URL
-document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    if (!auth.currentUser) {
-        alert('Please login to upload images');
-        return;
-    }
-
-    const imageUrlInput = document.getElementById('imageUrlInput');
-    if (!imageUrlInput?.value) {
-        alert('Please upload an image first');
-        return;
-    }
-
-    const title = document.getElementById('title')?.value;
-    const description = document.getElementById('description')?.value;
-    // Store price with two decimal places
-    const rawPrice = document.getElementById('price')?.value || 0;
-    const price = parseFloat(rawPrice).toFixed(2);
-    const stock = parseInt(document.getElementById('stock')?.value || '0');
-
-    if (!title || !description || isNaN(parseFloat(price)) || isNaN(stock)) {
-        alert('Please fill in all fields with valid values.');
-        return;
-    }
-
-    try {
-        const galleryCollection = collection(db, 'gallery_images');
-        await addDoc(galleryCollection, {
-            artistEmail: auth.currentUser.email,
-            artistId: auth.currentUser.uid,
-            profileId: artistId,
-            imageId: generateImageId(),
-            title,
-            description,
-            price: parseFloat(price), // Store as number but formatted
-            stock: stock,
-            imageUrl: imageUrlInput.value,
-            uploadDate: serverTimestamp(),
-            isPublic: true
-        });
-
-        if (uploadForm) {
-            uploadForm.reset();
-        }
-        loadImages();
-        alert('Image uploaded successfully!');
-    } catch (error) {
-        console.error('Error uploading image:', error);
-        alert('Failed to upload image. Please try again.');
     }
 });
 
@@ -259,14 +331,14 @@ document.getElementById('removeImage')?.addEventListener('click', () => {
     const previewContainer = document.getElementById('imagePreviewContainer');
     const placeholder = document.getElementById('uploadPlaceholder');
     const removeButton = document.getElementById('removeImage');
-    const uploadForm = document.getElementById('uploadForm');
     const imageUrlInput = document.getElementById('imageUrlInput');
 
-    previewContainer.classList.add('hidden');
-    placeholder.classList.remove('hidden');
-    removeButton.classList.add('hidden');
-    delete uploadForm.dataset.imageUrl;
-    imageUrlInput.value = ''; // Clear hidden input value
+    if (previewContainer && placeholder && removeButton && imageUrlInput) {
+        previewContainer.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+        removeButton.classList.add('hidden');
+        imageUrlInput.value = '';
+    }
 });
 
 // Function to generate unique image ID
@@ -378,13 +450,32 @@ const styles = `
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
+}
+
+.art-gallery-item {
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.art-gallery-protective-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20rem;
+    z-index: 1;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    border-radius: 0.75rem 0 0 0;
 }
 
 .art-gallery-modal.art-modal-active {
@@ -420,19 +511,6 @@ const styles = `
 
 .art-gallery-card-image:hover {
     transform: scale(1.03);
-}
-
-.art-gallery-protective-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 20rem;
-    z-index: 2;
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: pointer;
-    border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .art-gallery-item-content {
@@ -548,12 +626,17 @@ async function createImageCard(docId, data) {
         isReserved = await isItemInAnyCart(docId);
     }
 
-    // Capitalize first letter of title and description
+    // Add data attributes for searching
     const formattedTitle = data.title.charAt(0).toUpperCase() + data.title.slice(1);
     const formattedDescription = data.description.charAt(0).toUpperCase() + data.description.slice(1);
     
     const card = document.createElement('div');
     card.className = 'art-gallery-item';
+    // Add data attributes for filtering
+    card.dataset.genre = (data.genre || '').toLowerCase();
+    card.dataset.size = (data.canvasSize || '').toLowerCase();
+    card.dataset.medium = (data.medium || '').toLowerCase();
+    
     card.innerHTML = `
         <div class="art-gallery-item-content">
             <div class="art-gallery-protective-layer"></div>
@@ -572,6 +655,18 @@ async function createImageCard(docId, data) {
                                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                 </svg>
                             </button>` : ''}
+                    </div>
+                    <!-- Add metadata for searching -->
+                    <div class="text-sm text-gray-500 mt-2">
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
+                            ${data.genre || 'No Genre'}
+                        </span>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
+                            ${data.canvasSize || 'No Size'}
+                        </span>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1">
+                            ${data.medium || 'No Medium'}
+                        </span>
                     </div>
                 </div>
                 <div class="flex items-center justify-between mt-4">
@@ -616,6 +711,34 @@ async function createImageCard(docId, data) {
     });
     
     return card;
+}
+
+function applyFilters() {
+    const searchTerm = document.getElementById('searchArtworks')?.value.toLowerCase() || '';
+    const activeGenre = document.querySelector('.genre-btn.active')?.dataset.genre || '';
+    const size = document.getElementById('sizeFilter')?.value || '';
+    const medium = document.getElementById('mediumFilter')?.value || '';
+
+    const filteredArtworks = allArtworks.filter(artwork => {
+        // Search in all relevant fields
+        const searchableText = [
+            artwork.title,
+            artwork.description,
+            artwork.artist,
+            artwork.genre,
+            artwork.canvasSize,
+            artwork.medium
+        ].map(text => text?.toLowerCase() || '').join(' ');
+
+        const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
+        const matchesGenre = !activeGenre || artwork.genre?.toLowerCase() === activeGenre.toLowerCase();
+        const matchesSize = !size || artwork.canvasSize?.toLowerCase().includes(size.toLowerCase());
+        const matchesMedium = !medium || artwork.medium?.toLowerCase() === medium.toLowerCase();
+
+        return matchesSearch && matchesGenre && matchesSize && matchesMedium;
+    });
+
+    displayArtworks(filteredArtworks);
 }
 
 // Add modal close functionality
@@ -829,11 +952,7 @@ function showNotification(message, type = 'success') {
     
     notification.innerHTML = `
         <div class="flex items-center">
-            <span class="mr-2">${
-                type === 'success' 
-                    ? '✓' 
-                    : '✕'
-            }</span>
+            <span class="mr-2">${type === 'success' ? '✓' : '✕'}</span>
             <span>${message}</span>
         </div>
     `;
@@ -845,56 +964,13 @@ function showNotification(message, type = 'success') {
         notification.style.transform = 'translateY(0)';
     }, 100);
     
-    // Remove after 3 seconds
+    // Remove after delay
     setTimeout(() => {
         notification.style.transform = 'translateY(full)';
         setTimeout(() => {
             notification.remove();
         }, 300);
     }, 3000);
-}
-
-// Add cart icon animation
-function animateCartIcon() {
-    const cartIcon = document.querySelector('#cartNav svg');
-    if (cartIcon) {
-        cartIcon.classList.add('animate-bounce');
-        setTimeout(() => {
-            cartIcon.classList.remove('animate-bounce');
-        }, 1000);
-    }
-}
-
-window.removeFromCart = async function(index) {
-    const item = cart[index];
-    const user = auth.currentUser;
-    if (!user) return;
-    
-    cart.splice(index, 1);
-    
-    const cartRef = collection(db, 'carts');
-    const q = query(cartRef, where('userId', '==', user.uid));
-    const querySnapshot = await getDocs(q);
-    
-    try {
-        if (!querySnapshot.empty) {
-            const cartDoc = querySnapshot.docs[0];
-            await updateDoc(doc(db, 'carts', cartDoc.id), {
-                items: cart
-            });
-        }
-        
-        // Update button text and style if item exists in current view
-        const cartButton = document.getElementById(`cartButton-${item.artworkId}`);
-        if (cartButton) {
-            cartButton.textContent = 'Add this to Cart';
-            cartButton.classList.remove('bg-gray-500', 'hover:bg-gray-600');
-        }
-        
-        updateCartUI();
-    } catch (error) {
-        console.error('Error removing from cart:', error);
-    }
 }
 
 window.checkout = async function() {
@@ -1013,39 +1089,50 @@ function onSignIn() {
 window.navToEvent = function(url) {
     window.location.href = url;
 }
-// FOR SECURITY OF THE WEBSITE //
-/*
-// Create a custom alert box
-function showCustomAlert(message) {
-  let alertBox = document.createElement("div");
-  alertBox.innerHTML = `<div style="
-      position: fixed; 
-      top: 50%; 
-      left: 50%; 
-      transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-      border-radius: 10px;
-      width: 50%;
-      max-width: 400px;
-      z-index: 9999;
-      box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
-  ">
-      ${message}
-  </div>`;
 
-  document.body.appendChild(alertBox);
-  setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
-}
-*/
-/* Prevent Right Click, F12, and Ctrl+Shift+I/U/J */
+// Security measures - Keep the code clean and readable
+const security = {
+    disableRightClick: () => {
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') {
+                e.preventDefault();
+            }
+        });
+    },
 
-// Disable right-click
-var _0x1b93ce=_0x2266;function _0x2266(_0x4109c8,_0x52d5ba){var _0x3a68f5=_0x39e2();return _0x2266=function(_0x398c6b,_0x22327d){_0x398c6b=_0x398c6b-(-0x2*0x7be+-0x1e6+0x1285);var _0x141f81=_0x3a68f5[_0x398c6b];return _0x141f81;},_0x2266(_0x4109c8,_0x52d5ba);}(function(_0x2e1921,_0xbded3c){var _0xcefd39=_0x2266,_0x23a468=_0x2e1921();while(!![]){try{var _0x5f4125=-parseInt(_0xcefd39(0x12f))/(-0xc0d*-0x2+-0x19*0x124+0xd*0x57)+-parseInt(_0xcefd39(0x123))/(-0x21f0+0xb*0x28d+0x5e3)*(parseInt(_0xcefd39(0x12e))/(0x257f+-0x1bf+-0x23bd))+parseInt(_0xcefd39(0x125))/(0x865*-0x2+-0xd8c*0x2+0x2be6)*(parseInt(_0xcefd39(0x12c))/(0x16a0+-0x457*-0x9+-0x3daa))+-parseInt(_0xcefd39(0x132))/(-0xc7*-0x13+-0x226*-0x11+0x3345*-0x1)+-parseInt(_0xcefd39(0x126))/(-0x9a4*-0x2+-0x18a0+-0x37*-0x19)*(-parseInt(_0xcefd39(0x12a))/(-0x337*-0x7+0x1*-0x206e+0x9f5*0x1))+-parseInt(_0xcefd39(0x130))/(-0x2*-0x6df+0x1*0xf01+0x32*-0x93)*(parseInt(_0xcefd39(0x128))/(0x328*0x1+0x1758+-0x1a76))+-parseInt(_0xcefd39(0x129))/(-0x1f45+0x10de+-0x739*-0x2)*(-parseInt(_0xcefd39(0x12d))/(-0x10c+-0x336+0x227*0x2));if(_0x5f4125===_0xbded3c)break;else _0x23a468['push'](_0x23a468['shift']());}catch(_0x6dc65e){_0x23a468['push'](_0x23a468['shift']());}}}(_0x39e2,0x1*0x54b3+0x2*-0x5d4+0x1e080),document[_0x1b93ce(0x124)+_0x1b93ce(0x127)](_0x1b93ce(0x133)+'u',function(_0x49bedb){var _0x2f62fd=_0x1b93ce;_0x49bedb[_0x2f62fd(0x131)+_0x2f62fd(0x12b)]();}));function _0x39e2(){var _0x4175f8=['addEventLi','4RKcRIE','1066401DfcYCm','stener','3760cqqYeT','3784fOnuSX','8XcZNzR','ault','309640nLvbHX','26544GTmnyE','607653hPnosl','267910bosEoj','5211jvKpcK','preventDef','871962gZbMQA','contextmen','2uMOIIB'];_0x39e2=function(){return _0x4175f8;};return _0x39e2();}
+    disableKeyboardShortcuts: () => {
+        document.addEventListener('keydown', (e) => {
+            // Prevent Ctrl + Shift + I/J/C/U
+            if ((e.ctrlKey && e.shiftKey) && 
+                (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+            // Prevent F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            // Prevent PrintScreen
+            if (e.key === 'PrintScreen') {
+                navigator.clipboard.writeText('');
+                return false;
+            }
+        });
+    },
 
-// Block all key shortcuts
-function _0x3c8e(_0x3f6c2c,_0x266e32){const _0x469e6f=_0x15fd();return _0x3c8e=function(_0x3898e8,_0x2af8c4){_0x3898e8=_0x3898e8-(-0x2248+-0x185*-0xd+0x1*0xf8e);let _0x5ef6dd=_0x469e6f[_0x3898e8];return _0x5ef6dd;},_0x3c8e(_0x3f6c2c,_0x266e32);}function _0x15fd(){const _0x1e8db4=['6JipyQN','\x20\x20\x20\x20-webki','QyvjG','\x20-webkit-t','Screenshot','Rllvb','zPZLV','JQuZJ','(max-width','keydown','96004yPaIPY','filter','addEventLi','s\x20disabled','3538ELtriY','ouch-callo','blur(100px','l\x20{\x0a\x20\x20\x20\x20\x20\x20','toLowerCas','printscree','Developer\x20','s\x20are\x20disa','ault','494112CisPpG','clipboard','\x0a\x20\x20@media\x20','writeText','mKqJq','key','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20','tools\x20are\x20','SGCqT','bled!','keyup','\x20\x20\x20\x20\x20}\x0a\x20\x20}','WztZU','t-user-sel','none','\x0a\x20\x20\x20\x20\x20\x20htm','appendChil','This\x20actio','led!','tEpmF','577FBMfXK','t:\x20none;\x0a\x20','ctrlKey','\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','f12','disabled!','PrintScree','DeYis','ent','RNyDo','hidden','style','Pywau','24475887qAGOMk','preventDef','zQivx','8080390cBrpcM','user-selec','QxkmQ','stener','mZqcW','head','LRddA','ect:\x20none;','Shortcut\x20i','change','createElem',':\x20768px)\x20{','visibility','wtkEt','body','10984160SMQgnP','shiftKey','1352778SmIyOK','dOTDk','ut:\x20none;\x0a','n\x20is\x20disab','innerHTML'];_0x15fd=function(){return _0x1e8db4;};return _0x15fd();}const _0x337bda=_0x3c8e;(function(_0x1e3b67,_0x5c50c7){const _0x574c63=_0x3c8e,_0x86137=_0x1e3b67();while(!![]){try{const _0x3c27cd=parseInt(_0x574c63(0x126))/(0x1dae+0xfe3*0x2+-0x3d73)*(parseInt(_0x574c63(0x109))/(0xf2f+-0xf1*-0xb+-0x13*0x158))+-parseInt(_0x574c63(0x112))/(-0x38*-0x8f+-0x67*-0x1a+-0x29bb*0x1)+parseInt(_0x574c63(0x156))/(-0x215a+-0x1145*0x1+0x32a3)+parseInt(_0x574c63(0x136))/(0x18da+0x1787+0x1*-0x305c)*(parseInt(_0x574c63(0x14c))/(-0xb93*-0x1+-0x19c5+-0x34*-0x46))+-parseInt(_0x574c63(0x147))/(-0x11ec*0x1+0x26a2+-0x423*0x5)+parseInt(_0x574c63(0x145))/(-0xc7a*0x3+0x31*-0x1+0x25a7)+-parseInt(_0x574c63(0x133))/(0x3*-0xb9c+0x25a*0xb+0x8ff);if(_0x3c27cd===_0x5c50c7)break;else _0x86137['push'](_0x86137['shift']());}catch(_0xb7946a){_0x86137['push'](_0x86137['shift']());}}}(_0x15fd,-0x8ca4f+-0x3*0x3e9f3+0x231fbf),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x155),function(_0x56b527){const _0x26b36a=_0x337bda,_0x407abb={'zQivx':function(_0x19f78c,_0x5e2443){return _0x19f78c(_0x5e2443);},'DeYis':_0x26b36a(0x13e)+_0x26b36a(0x108)+'!','SGCqT':function(_0x39165c,_0x397dea){return _0x39165c===_0x397dea;},'mKqJq':_0x26b36a(0x12a),'Pywau':_0x26b36a(0x10f)+_0x26b36a(0x119)+_0x26b36a(0x12b),'QyvjG':function(_0x37ad87,_0xcce4b3){return _0x37ad87===_0xcce4b3;},'LRddA':function(_0xd11ed1,_0x430f25){return _0xd11ed1===_0x430f25;},'JQuZJ':function(_0x209a43,_0x356150){return _0x209a43===_0x356150;},'RNyDo':_0x26b36a(0x10e)+'n','WztZU':function(_0x258213,_0x45631d){return _0x258213(_0x45631d);},'dOTDk':_0x26b36a(0x123)+_0x26b36a(0x14a)+_0x26b36a(0x124)};let _0x2440bb=_0x56b527[_0x26b36a(0x117)][_0x26b36a(0x10d)+'e']();if(_0x56b527[_0x26b36a(0x128)]&&_0x56b527[_0x26b36a(0x146)])return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x135)](showCustomAlert,_0x407abb[_0x26b36a(0x12d)]),![];if(_0x407abb[_0x26b36a(0x11a)](_0x2440bb,_0x407abb[_0x26b36a(0x116)]))return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x135)](showCustomAlert,_0x407abb[_0x26b36a(0x132)]),![];if(_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x14e)](_0x2440bb,'s')||_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x11a)](_0x2440bb,'p')||_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x13c)](_0x2440bb,'u')||_0x56b527[_0x26b36a(0x128)]&&_0x56b527[_0x26b36a(0x146)]&&_0x407abb[_0x26b36a(0x153)](_0x2440bb,'s')||_0x407abb[_0x26b36a(0x153)](_0x2440bb,_0x407abb[_0x26b36a(0x12f)]))return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x11e)](showCustomAlert,_0x407abb[_0x26b36a(0x148)]),![];}),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x11c),function(_0xf955c7){const _0x561a50=_0x337bda,_0x452c1e={'wtkEt':function(_0x145f31,_0x1fb307){return _0x145f31===_0x1fb307;},'zPZLV':_0x561a50(0x12c)+'n','Rllvb':function(_0x1999fa,_0x465efa){return _0x1999fa(_0x465efa);},'mZqcW':_0x561a50(0x150)+_0x561a50(0x110)+_0x561a50(0x11b)};_0x452c1e[_0x561a50(0x143)](_0xf955c7[_0x561a50(0x117)],_0x452c1e[_0x561a50(0x152)])&&(navigator[_0x561a50(0x113)][_0x561a50(0x115)](''),_0x452c1e[_0x561a50(0x151)](showCustomAlert,_0x452c1e[_0x561a50(0x13a)]));}),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x142)+_0x337bda(0x13f),function(){const _0x3868fa=_0x337bda,_0x3e5233={'QxkmQ':_0x3868fa(0x10b)+')','tEpmF':_0x3868fa(0x120)};document[_0x3868fa(0x130)]?document[_0x3868fa(0x144)][_0x3868fa(0x131)][_0x3868fa(0x157)]=_0x3e5233[_0x3868fa(0x138)]:document[_0x3868fa(0x144)][_0x3868fa(0x131)][_0x3868fa(0x157)]=_0x3e5233[_0x3868fa(0x125)];}));const style=document[_0x337bda(0x140)+_0x337bda(0x12e)](_0x337bda(0x131));style[_0x337bda(0x14b)]=_0x337bda(0x114)+_0x337bda(0x154)+_0x337bda(0x141)+_0x337bda(0x121)+_0x337bda(0x10c)+_0x337bda(0x14d)+_0x337bda(0x11f)+_0x337bda(0x13d)+_0x337bda(0x118)+_0x337bda(0x14f)+_0x337bda(0x10a)+_0x337bda(0x149)+_0x337bda(0x129)+_0x337bda(0x137)+_0x337bda(0x127)+_0x337bda(0x11d)+'\x0a',document[_0x337bda(0x13b)][_0x337bda(0x122)+'d'](style);
+    init: function() {
+        this.disableRightClick();
+        this.disableKeyboardShortcuts();
+    }
+};
+
+// Initialize security measures
+document.addEventListener('DOMContentLoaded', () => {
+    security.init();
+    const uploadFormContainer = document.getElementById('uploadFormContainer');
+    if (uploadFormContainer) {
+        uploadFormContainer.style.position = 'relative';
+        uploadFormContainer.style.zIndex = '10000';
+    }
+});
