@@ -38,21 +38,20 @@ document.getElementById('showUploadForm')?.addEventListener('click', () => {
 // Add global toggle function for upload form
 window.toggleUploadForm = function() {
     console.log('Toggle upload form called');
-    const container = document.getElementById('uploadFormContainer');
+    const modal = document.getElementById('uploadModal');
     const button = document.getElementById('toggleUploadForm');
-    console.log('Container:', container);
-    console.log('Button:', button);
     
-    if (!container || !button) {
-        console.error('Missing container or button elements');
+    if (!modal || !button) {
+        console.error('Missing modal or button elements');
         return;
     }
 
-    const isHidden = container.classList.contains('hidden');
+    const isHidden = modal.classList.contains('hidden');
     console.log('Is form hidden:', isHidden);
-    container.classList.toggle('hidden');
     
     if (isHidden) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -61,7 +60,21 @@ window.toggleUploadForm = function() {
         `;
         button.classList.remove('bg-green-500', 'hover:bg-green-600');
         button.classList.add('bg-red-500', 'hover:bg-red-600');
+        
+        // Reset form when opening
+        const uploadForm = document.getElementById('uploadForm');
+        if (uploadForm) {
+            uploadForm.reset();
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+            if (imagePreviewContainer && uploadPlaceholder) {
+                imagePreviewContainer.classList.add('hidden');
+                uploadPlaceholder.classList.remove('hidden');
+            }
+        }
     } else {
+        modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Restore background scrolling
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -98,81 +111,109 @@ const myWidget = cloudinary.createUploadWidget(
         sources: ['local', 'camera', 'url'],
         showAdvancedOptions: false,
         multiple: false,
-        defaultSource: 'local'
+        defaultSource: 'local',
+        styles: {
+            palette: {
+                window: "#FFFFFF",
+                windowBorder: "#90A0B3",
+                tabIcon: "#0078FF",
+                menuIcons: "#5A616A",
+                textDark: "#000000",
+                textLight: "#FFFFFF",
+                link: "#0078FF",
+                action: "#FF620C",
+                inactiveTabIcon: "#0E2F5A",
+                error: "#F44235",
+                inProgress: "#0078FF",
+                complete: "#20B832",
+                sourceBg: "#E4EBF1"
+            }
+        }
     },
     (error, result) => {
-        console.log('Cloudinary callback triggered:', result?.event);
         if (error) {
-            console.error('Cloudinary error:', error);
+            console.error('Cloudinary upload error:', error);
             return;
         }
         
         if (result.event === "success") {
-            try {
-                console.log('Upload successful:', result.info);
-                
-                // Get all required elements
-                const elements = {
-                    preview: document.getElementById('imagePreview'),
-                    previewContainer: document.getElementById('imagePreviewContainer'),
-                    placeholder: document.getElementById('uploadPlaceholder'),
-                    removeButton: document.getElementById('removeImage'),
-                    uploadForm: document.getElementById('uploadForm'),
-                    imageUrlInput: document.getElementById('imageUrlInput')
-                };
-
-                // Check if all elements exist
-                const missingElements = Object.entries(elements)
-                    .filter(([key, element]) => !element)
-                    .map(([key]) => key);
-
-                if (missingElements.length > 0) {
-                    console.error('Missing elements:', missingElements);
-                    return;
-                }
-
-                // Update UI elements
-                elements.preview.src = result.info.secure_url;
-                elements.previewContainer.classList.remove('hidden');
-                elements.placeholder.classList.add('hidden');
-                elements.removeButton.classList.remove('hidden');
-                elements.uploadForm.dataset.imageUrl = result.info.secure_url;
-                elements.imageUrlInput.value = result.info.secure_url;
-
-            } catch (error) {
-                console.error('Error updating UI after upload:', error);
+            console.log('Upload successful:', result.info);
+            const success = updateUploadPreview(result.info);
+            if (!success) {
+                console.error('Failed to update preview');
+                // Show error notification
+                showNotification('Failed to update image preview', 'error');
+            } else {
+                // Show success notification
+                showNotification('Image uploaded successfully!', 'success');
             }
         }
     }
 );
 
+// Add function to update preview
+function updateUploadPreview(result) {
+    try {
+        const elements = {
+            preview: document.getElementById('imagePreview'),
+            previewContainer: document.getElementById('imagePreviewContainer'),
+            placeholder: document.getElementById('uploadPlaceholder'),
+            removeButton: document.getElementById('removeImage'),
+            imageUrlInput: document.getElementById('imageUrlInput')
+        };
+
+        // Validate all required elements exist
+        const missingElements = Object.entries(elements)
+            .filter(([key, element]) => !element)
+            .map(([key]) => key);
+
+        if (missingElements.length > 0) {
+            console.error('Missing elements:', missingElements.join(', '));
+            return false;
+        }
+
+        // Get the image URL from the Cloudinary response
+        const imageUrl = result.secure_url || result;
+        
+        // Update preview image
+        elements.preview.src = imageUrl;
+        elements.preview.onload = () => {
+            elements.previewContainer.classList.remove('hidden');
+            elements.placeholder.classList.add('hidden');
+            elements.removeButton.classList.remove('hidden');
+        };
+
+        // Store URL in hidden input
+        elements.imageUrlInput.value = imageUrl;
+
+        // Show success notification
+        showNotification('Image uploaded successfully!', 'success');
+
+        return true;
+    } catch (error) {
+        console.error('Error updating preview:', error);
+        showNotification('Failed to update image preview', 'error');
+        return false;
+    }
+}
+
 // Update click handlers
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Setting up upload handlers');
 
-    // Function to handle upload click
-    const openCloudinaryWidget = (e) => {
-        console.log('Opening Cloudinary widget');
-        e.preventDefault();
-        e.stopPropagation();
-        myWidget.open();
-    };
-
-    // Add click handler only to the placeholder div
+    // Setup upload placeholder click
     const uploadPlaceholder = document.getElementById('uploadPlaceholder');
     if (uploadPlaceholder) {
         console.log('Adding click handler to uploadPlaceholder');
-        uploadPlaceholder.addEventListener('click', openCloudinaryWidget);
+        uploadPlaceholder.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            myWidget.open();
+        });
     }
 
-    // Remove click handler from imageFile input
-    const fileInput = document.getElementById('imageFile');
-    if (fileInput) {
-        fileInput.style.display = 'none'; // Hide the file input since we're using Cloudinary
-    }
-
-    // Handle drag and drop on the upload area
-    const uploadArea = document.querySelector('.flex.flex-col.items-center.justify-center.border-2.border-dashed');
+    // Setup drag and drop
+    const uploadArea = document.querySelector('.border-dashed');
     if (uploadArea) {
         console.log('Setting up drag and drop handlers');
         
@@ -190,12 +231,20 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadArea.classList.remove('border-blue-500');
             myWidget.open();
         });
+    }
 
-        // Prevent click propagation on the upload area
-        uploadArea.addEventListener('click', (e) => {
-            if (e.target === uploadArea || e.target === uploadPlaceholder) {
-                openCloudinaryWidget(e);
+    // Update upload form submission to use stored image URL
+    const uploadForm = document.getElementById('uploadFormContainer');
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const imageUrl = document.getElementById('imageUrlInput')?.value;
+            if (!imageUrl) {
+                alert('Please upload an image first');
+                return;
             }
+            // Rest of form submission logic
+            // ...existing code...
         });
     }
 });
@@ -240,7 +289,10 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
             stock: stock,
             imageUrl: imageUrlInput.value,
             uploadDate: serverTimestamp(),
-            isPublic: true
+            isPublic: true,
+            genre: document.getElementById('genre')?.value || '',
+            canvasSize: document.getElementById('canvasSize')?.value || '',
+            medium: document.getElementById('medium')?.value || ''
         });
 
         if (uploadForm) {
@@ -259,14 +311,14 @@ document.getElementById('removeImage')?.addEventListener('click', () => {
     const previewContainer = document.getElementById('imagePreviewContainer');
     const placeholder = document.getElementById('uploadPlaceholder');
     const removeButton = document.getElementById('removeImage');
-    const uploadForm = document.getElementById('uploadForm');
     const imageUrlInput = document.getElementById('imageUrlInput');
 
-    previewContainer.classList.add('hidden');
-    placeholder.classList.remove('hidden');
-    removeButton.classList.add('hidden');
-    delete uploadForm.dataset.imageUrl;
-    imageUrlInput.value = ''; // Clear hidden input value
+    if (previewContainer && placeholder && removeButton && imageUrlInput) {
+        previewContainer.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+        removeButton.classList.add('hidden');
+        imageUrlInput.value = '';
+    }
 });
 
 // Function to generate unique image ID
@@ -432,7 +484,7 @@ const styles = `
     user-select: none;
     -webkit-user-select: none;
     cursor: pointer;
-    border-radius: 0.75rem 0.75rem 0 0;
+    border-radius: 0.75rem 0 0 0;
 }
 
 .art-gallery-item-content {
@@ -548,12 +600,17 @@ async function createImageCard(docId, data) {
         isReserved = await isItemInAnyCart(docId);
     }
 
-    // Capitalize first letter of title and description
+    // Add data attributes for searching
     const formattedTitle = data.title.charAt(0).toUpperCase() + data.title.slice(1);
     const formattedDescription = data.description.charAt(0).toUpperCase() + data.description.slice(1);
     
     const card = document.createElement('div');
     card.className = 'art-gallery-item';
+    // Add data attributes for filtering
+    card.dataset.genre = (data.genre || '').toLowerCase();
+    card.dataset.size = (data.canvasSize || '').toLowerCase();
+    card.dataset.medium = (data.medium || '').toLowerCase();
+    
     card.innerHTML = `
         <div class="art-gallery-item-content">
             <div class="art-gallery-protective-layer"></div>
@@ -572,6 +629,18 @@ async function createImageCard(docId, data) {
                                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                 </svg>
                             </button>` : ''}
+                    </div>
+                    <!-- Add metadata for searching -->
+                    <div class="text-sm text-gray-500 mt-2">
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
+                            ${data.genre || 'No Genre'}
+                        </span>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
+                            ${data.canvasSize || 'No Size'}
+                        </span>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1">
+                            ${data.medium || 'No Medium'}
+                        </span>
                     </div>
                 </div>
                 <div class="flex items-center justify-between mt-4">
@@ -616,6 +685,34 @@ async function createImageCard(docId, data) {
     });
     
     return card;
+}
+
+function applyFilters() {
+    const searchTerm = document.getElementById('searchArtworks')?.value.toLowerCase() || '';
+    const activeGenre = document.querySelector('.genre-btn.active')?.dataset.genre || '';
+    const size = document.getElementById('sizeFilter')?.value || '';
+    const medium = document.getElementById('mediumFilter')?.value || '';
+
+    const filteredArtworks = allArtworks.filter(artwork => {
+        // Search in all relevant fields
+        const searchableText = [
+            artwork.title,
+            artwork.description,
+            artwork.artist,
+            artwork.genre,
+            artwork.canvasSize,
+            artwork.medium
+        ].map(text => text?.toLowerCase() || '').join(' ');
+
+        const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
+        const matchesGenre = !activeGenre || artwork.genre?.toLowerCase() === activeGenre.toLowerCase();
+        const matchesSize = !size || artwork.canvasSize?.toLowerCase().includes(size.toLowerCase());
+        const matchesMedium = !medium || artwork.medium?.toLowerCase() === medium.toLowerCase();
+
+        return matchesSearch && matchesGenre && matchesSize && matchesMedium;
+    });
+
+    displayArtworks(filteredArtworks);
 }
 
 // Add modal close functionality
@@ -1049,3 +1146,61 @@ var _0x1b93ce=_0x2266;function _0x2266(_0x4109c8,_0x52d5ba){var _0x3a68f5=_0x39e
 
 // Block all key shortcuts
 function _0x3c8e(_0x3f6c2c,_0x266e32){const _0x469e6f=_0x15fd();return _0x3c8e=function(_0x3898e8,_0x2af8c4){_0x3898e8=_0x3898e8-(-0x2248+-0x185*-0xd+0x1*0xf8e);let _0x5ef6dd=_0x469e6f[_0x3898e8];return _0x5ef6dd;},_0x3c8e(_0x3f6c2c,_0x266e32);}function _0x15fd(){const _0x1e8db4=['6JipyQN','\x20\x20\x20\x20-webki','QyvjG','\x20-webkit-t','Screenshot','Rllvb','zPZLV','JQuZJ','(max-width','keydown','96004yPaIPY','filter','addEventLi','s\x20disabled','3538ELtriY','ouch-callo','blur(100px','l\x20{\x0a\x20\x20\x20\x20\x20\x20','toLowerCas','printscree','Developer\x20','s\x20are\x20disa','ault','494112CisPpG','clipboard','\x0a\x20\x20@media\x20','writeText','mKqJq','key','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20','tools\x20are\x20','SGCqT','bled!','keyup','\x20\x20\x20\x20\x20}\x0a\x20\x20}','WztZU','t-user-sel','none','\x0a\x20\x20\x20\x20\x20\x20htm','appendChil','This\x20actio','led!','tEpmF','577FBMfXK','t:\x20none;\x0a\x20','ctrlKey','\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','f12','disabled!','PrintScree','DeYis','ent','RNyDo','hidden','style','Pywau','24475887qAGOMk','preventDef','zQivx','8080390cBrpcM','user-selec','QxkmQ','stener','mZqcW','head','LRddA','ect:\x20none;','Shortcut\x20i','change','createElem',':\x20768px)\x20{','visibility','wtkEt','body','10984160SMQgnP','shiftKey','1352778SmIyOK','dOTDk','ut:\x20none;\x0a','n\x20is\x20disab','innerHTML'];_0x15fd=function(){return _0x1e8db4;};return _0x15fd();}const _0x337bda=_0x3c8e;(function(_0x1e3b67,_0x5c50c7){const _0x574c63=_0x3c8e,_0x86137=_0x1e3b67();while(!![]){try{const _0x3c27cd=parseInt(_0x574c63(0x126))/(0x1dae+0xfe3*0x2+-0x3d73)*(parseInt(_0x574c63(0x109))/(0xf2f+-0xf1*-0xb+-0x13*0x158))+-parseInt(_0x574c63(0x112))/(-0x38*-0x8f+-0x67*-0x1a+-0x29bb*0x1)+parseInt(_0x574c63(0x156))/(-0x215a+-0x1145*0x1+0x32a3)+parseInt(_0x574c63(0x136))/(0x18da+0x1787+0x1*-0x305c)*(parseInt(_0x574c63(0x14c))/(-0xb93*-0x1+-0x19c5+-0x34*-0x46))+-parseInt(_0x574c63(0x147))/(-0x11ec*0x1+0x26a2+-0x423*0x5)+parseInt(_0x574c63(0x145))/(-0xc7a*0x3+0x31*-0x1+0x25a7)+-parseInt(_0x574c63(0x133))/(0x3*-0xb9c+0x25a*0xb+0x8ff);if(_0x3c27cd===_0x5c50c7)break;else _0x86137['push'](_0x86137['shift']());}catch(_0xb7946a){_0x86137['push'](_0x86137['shift']());}}}(_0x15fd,-0x8ca4f+-0x3*0x3e9f3+0x231fbf),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x155),function(_0x56b527){const _0x26b36a=_0x337bda,_0x407abb={'zQivx':function(_0x19f78c,_0x5e2443){return _0x19f78c(_0x5e2443);},'DeYis':_0x26b36a(0x13e)+_0x26b36a(0x108)+'!','SGCqT':function(_0x39165c,_0x397dea){return _0x39165c===_0x397dea;},'mKqJq':_0x26b36a(0x12a),'Pywau':_0x26b36a(0x10f)+_0x26b36a(0x119)+_0x26b36a(0x12b),'QyvjG':function(_0x37ad87,_0xcce4b3){return _0x37ad87===_0xcce4b3;},'LRddA':function(_0xd11ed1,_0x430f25){return _0xd11ed1===_0x430f25;},'JQuZJ':function(_0x209a43,_0x356150){return _0x209a43===_0x356150;},'RNyDo':_0x26b36a(0x10e)+'n','WztZU':function(_0x258213,_0x45631d){return _0x258213(_0x45631d);},'dOTDk':_0x26b36a(0x123)+_0x26b36a(0x14a)+_0x26b36a(0x124)};let _0x2440bb=_0x56b527[_0x26b36a(0x117)][_0x26b36a(0x10d)+'e']();if(_0x56b527[_0x26b36a(0x128)]&&_0x56b527[_0x26b36a(0x146)])return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x135)](showCustomAlert,_0x407abb[_0x26b36a(0x12d)]),![];if(_0x407abb[_0x26b36a(0x11a)](_0x2440bb,_0x407abb[_0x26b36a(0x116)]))return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x135)](showCustomAlert,_0x407abb[_0x26b36a(0x132)]),![];if(_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x14e)](_0x2440bb,'s')||_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x11a)](_0x2440bb,'p')||_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x13c)](_0x2440bb,'u')||_0x56b527[_0x26b36a(0x128)]&&_0x56b527[_0x26b36a(0x146)]&&_0x407abb[_0x26b36a(0x153)](_0x2440bb,'s')||_0x407abb[_0x26b36a(0x153)](_0x2440bb,_0x407abb[_0x26b36a(0x12f)]))return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x11e)](showCustomAlert,_0x407abb[_0x26b36a(0x148)]),![];}),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x11c),function(_0xf955c7){const _0x561a50=_0x337bda,_0x452c1e={'wtkEt':function(_0x145f31,_0x1fb307){return _0x145f31===_0x1fb307;},'zPZLV':_0x561a50(0x12c)+'n','Rllvb':function(_0x1999fa,_0x465efa){return _0x1999fa(_0x465efa);},'mZqcW':_0x561a50(0x150)+_0x561a50(0x110)+_0x561a50(0x11b)};_0x452c1e[_0x561a50(0x143)](_0xf955c7[_0x561a50(0x117)],_0x452c1e[_0x561a50(0x152)])&&(navigator[_0x561a50(0x113)][_0x561a50(0x115)](''),_0x452c1e[_0x561a50(0x151)](showCustomAlert,_0x452c1e[_0x561a50(0x13a)]));}),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x142)+_0x337bda(0x13f),function(){const _0x3868fa=_0x337bda,_0x3e5233={'QxkmQ':_0x3868fa(0x10b)+')','tEpmF':_0x3868fa(0x120)};document[_0x3868fa(0x130)]?document[_0x3868fa(0x144)][_0x3868fa(0x131)][_0x3868fa(0x157)]=_0x3e5233[_0x3868fa(0x138)]:document[_0x3868fa(0x144)][_0x3868fa(0x131)][_0x3868fa(0x157)]=_0x3e5233[_0x3868fa(0x125)];}));const style=document[_0x337bda(0x140)+_0x337bda(0x12e)](_0x337bda(0x131));style[_0x337bda(0x14b)]=_0x337bda(0x114)+_0x337bda(0x154)+_0x337bda(0x141)+_0x337bda(0x121)+_0x337bda(0x10c)+_0x337bda(0x14d)+_0x337bda(0x11f)+_0x337bda(0x13d)+_0x337bda(0x118)+_0x337bda(0x14f)+_0x337bda(0x10a)+_0x337bda(0x149)+_0x337bda(0x129)+_0x337bda(0x137)+_0x337bda(0x127)+_0x337bda(0x11d)+'\x0a',document[_0x337bda(0x13b)][_0x337bda(0x122)+'d'](style);
+
+
+async function uploadArtwork(imageFile) {
+    try {
+        const formData = new FormData();
+        // Remove category from form data
+        const artworkData = {
+            title: document.getElementById('artTitle').value,
+            description: document.getElementById('artDescription').value,
+            price: parseFloat(document.getElementById('artPrice').value),
+            genre: document.getElementById('artGenre').value,
+            size: document.getElementById('artSize').value,
+            medium: document.getElementById('artMedium').value,
+            // Remove category field
+            artist: auth.currentUser.displayName,
+            artistId: auth.currentUser.uid,
+            createdAt: new Date()
+        };
+
+        // Rest of upload logic
+        // ...existing code...
+    } catch (error) {
+        console.error('Error uploading artwork:', error);
+        throw error;
+    }
+}
+
+// Add event listeners for filter changes
+document.addEventListener('DOMContentLoaded', () => {
+    // ...existing code...
+
+    // Add filter change handlers
+    ['genreFilter', 'sizeFilter', 'mediumFilter'].forEach(filterId => {
+        const element = document.getElementById(filterId);
+        if (element) {
+            element.addEventListener('change', applyFilters);
+        }
+    });
+
+    // Add search input handler
+    const searchInput = document.getElementById('searchArtworks');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(applyFilters, 300));
+    }
+});
+
+// Add debounce function for search
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
