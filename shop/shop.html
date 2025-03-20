@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="shop.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
+    <!-- Add Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!--Added For Disable Right Click-->
     <script>document.addEventListener('contextmenu', function(e) {
@@ -139,6 +141,45 @@
             transition: all 0.2s ease;
             width: 100%;
         }
+
+        .genre-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: white;
+            color: #374151;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .genre-btn:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+            transform: translateY(-1px);
+        }
+
+        .genre-btn.active {
+            background: #10B981;
+            color: white;
+            border-color: #059669;
+        }
+
+        .genre-btn i {
+            font-size: 1.1em;
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
     </style>
 </head>
 <body class="bg-cover">
@@ -239,7 +280,7 @@
                         <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
+                            </svg> 
                             <span>Cart (<span id="cartCountMobile">0</span>)</span>
                         </a>
                     </li>
@@ -251,86 +292,81 @@
         </div>
     </div>
 
-    <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
-        <div id="loginForm" class="glass-header2 items-center rounded-lg w-96 mx-10">
-            <!-- ...existing login form code... -->
-        </div>
-        <div id="registerForm" class="glass-header2 items-center rounded-lg w-96 mx-10 hidden">
-            <!-- ...existing register form code... -->
-        </div>
-    </div>
-
     <main class="container mx-auto px-4 pt-20">
         <h3 class="text-3xl font-bold text-center mb-8">Art Gallery Shop</h3>
         
         <!-- Advanced Search Section -->
         <div class="glass-header mb-8 p-4 rounded-lg">
-            <div class="flex flex-col md:flex-row gap-4">
-                <!-- Search Input -->
-                <div class="flex-1">
-                    <div class="relative">
-                        <input type="text" 
-                               id="searchArtworks" 
-                               placeholder="Search artworks..." 
-                               class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <button id="searchButton" class="absolute right-2 top-2 text-gray-500 hover:text-gray-700">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </button>
-                    </div>
+            <!-- Search Input -->
+            <div class="flex-1 mb-4">
+                <div class="relative">
+                    <input type="text" 
+                           id="searchArtworks" 
+                           placeholder="Search artworks..." 
+                           class="w-full p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <button id="searchButton" class="absolute right-2 top-2 text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
                 </div>
-                
-                <!-- Filters -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <select id="genreFilter" class="p-2 border border-gray-300 rounded-lg">
-                        <option value="">All Genres</option>
-                        <option value="traditional">Traditional</option>
-                        <option value="contemporary">Contemporary</option>
-                        <option value="abstract">Abstract</option>
-                    </select>
+            </div>
 
-                    <select id="categoryFilter" class="p-2 border border-gray-300 rounded-lg">
-                        <option value="">All Categories</option>
-                        <option value="painting">Painting</option>
-                        <option value="sculpture">Sculpture</option>
-                        <option value="digital">Digital Art</option>
-                    </select>
-
-                    <select id="sizeFilter" class="p-2 border border-gray-300 rounded-lg">
-                        <option value="">All Sizes</option>
-                        <option value="small">Small (< 12")</option>
-                        <option value="medium">Medium (12-24")</option>
-                        <option value="large">Large (> 24")</option>
-                    </select>
-
-                    <select id="mediumFilter" class="p-2 border border-gray-300 rounded-lg">
-                        <option value="">All Mediums</option>
-                        <option value="oil">Oil</option>
-                        <option value="acrylic">Acrylic</option>
-                        <option value="watercolor">Watercolor</option>
-                        <option value="digital">Digital</option>
-                    </select>
+            <!-- Genre Filter Buttons -->
+            <div class="overflow-x-auto whitespace-nowrap mb-6 hide-scrollbar">
+                <div class="inline-flex gap-2">
+                    <button class="genre-btn flex-shrink-0 active" data-genre="">
+                        <i class="fas fa-palette"></i> All Genres
+                    </button>
+                    <button class="genre-btn flex-shrink-0" data-genre="traditional">
+                        <i class="fas fa-paint-brush"></i> Traditional
+                    </button>
+                    <button class="genre-btn flex-shrink-0" data-genre="contemporary">
+                        <i class="fas fa-shapes"></i> Contemporary
+                    </button>
+                    <button class="genre-btn flex-shrink-0" data-genre="abstract">
+                        <i class="fas fa-draw-polygon"></i> Abstract
+                    </button>
+                    <button class="genre-btn flex-shrink-0" data-genre="photography">
+                        <i class="fas fa-camera"></i> Photography
+                    </button>
+                    <button class="genre-btn flex-shrink-0" data-genre="digital">
+                        <i class="fas fa-desktop"></i> Digital
+                    </button>
+                    <button class="genre-btn flex-shrink-0" data-genre="sculpture">
+                        <i class="fas fa-cube"></i> Sculpture
+                    </button>
+                    <button class="genre-btn flex-shrink-0" data-genre="mixed-media">
+                        <i class="fas fa-layer-group"></i> Mixed Media
+                    </button>
                 </div>
+            </div>
+
+            <!-- Other Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <select id="sizeFilter" class="w-full p-2 border border-gray-300 rounded-lg">
+                    <option value="">All Sizes</option>
+                    <option value="small">Small (< 12")</option>
+                    <option value="medium">Medium (12-24")</option>
+                    <option value="large">Large (> 24")</option>
+                </select>
+
+                <select id="mediumFilter" class="w-full p-2 border border-gray-300 rounded-lg">
+                    <option value="">All Mediums</option>
+                    <option value="oil">Oil</option>
+                    <option value="acrylic">Acrylic</option>
+                    <option value="watercolor">Watercolor</option>
+                    <option value="digital">Digital</option>
+                </select>
             </div>
         </div>
 
-        <!-- Sort Section -->
-        <div class="mb-8 flex justify-end">
-            <select id="sortArtworks" class="p-2 rounded-lg border border-gray-300">
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="priceAsc">Price: Low to High</option>
-                <option value="priceDesc">Price: High to Low</option>
-            </select>
-        </div>
-
+        <!-- Gallery Container -->
         <div id="galleryContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Artworks will be loaded here -->
         </div>
     </main>
-    
-    <!-- Settings Modal -->
+
     <div id="settingsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
             <button onclick="closeSettingsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
@@ -348,7 +384,8 @@
                         <div class="text-left">
                             <h3 class="font-bold text-lg">Edit Profile</h3>
                             <p class="text-sm text-gray-600">Update your personal information</p>
-                        </button>
+                        </div>
+                    </button>
                     <button onclick="showPasswordChangeForm()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-blue-500 hover:border-blue-600 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -365,7 +402,6 @@
                 <!-- Add error and success message containers -->
                 <div id="passwordChangeError" class="hidden p-4 mb-4 text-red-700 bg-red-100 rounded-lg"></div>
                 <div id="passwordChangeSuccess" class="hidden p-4 mb-4 text-green-700 bg-green-100 rounded-lg"></div>
-                
                 <form onsubmit="submitPasswordChange(event)" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Current Password</label>
@@ -375,7 +411,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">New Password</label>
                         <input type="password" id="newPassword" required 
-                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$" 
                                class="mt-1 block w-full rounded-md border-2 border-gray-300 p-2 focus:border-green-500 focus:ring focus:ring-green-200">
                         <p class="mt-1 text-sm text-gray-500">
                             Password must be at least 8 characters and include:
@@ -422,9 +458,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 <script type="module" src="../js/firebase-config.js"></script>
 <script type="module" src="../js/auth.js"></script>
 <script type="module" src="../js/navigation.js"></script>
@@ -433,413 +466,25 @@
 <script type="module" src="../js/password-change.js"></script>
 <script type="module" src="../js/profile-navigation.js"></script>
 <script type="module" src="../js/profileDropdown.js"></script>
-
+<!-- Single consolidated module script -->
 <script type="module">
     import { initProfileDropdown } from '../js/profileDropdown.js';
+    import { navToEvent } from '../js/utils.js';
+    import { auth } from '../js/firebase-config.js';
+    window.navToEvent = navToEvent;
+    window.auth = auth;
     document.addEventListener('DOMContentLoaded', function() {
         initProfileDropdown();
-    });
-</script>
-<script type="module">
-    import { navToEvent } from '../js/utils.js';
-    window.navToEvent = navToEvent;
-    
-    // Import other functions
-    import { 
-        toggleLoginFlyout, 
-        submitLogin, 
-        toggleNav, 
-        toggleForms 
-    } from '../profile/profile.js';
-
-    // Make other functions available globally
-    window.toggleLoginFlyout = toggleLoginFlyout;
-    window.submitLogin = submitLogin;
-    window.toggleNav = toggleNav;
-    window.toggleForms = toggleForms;
-
-    // Import auth and Firestore functions from firebase-config
-    import { auth, db } from '../js/firebase-config.js';
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    // Ensure auth is available globally
-    window.auth = auth;
-
-    document.addEventListener('DOMContentLoaded', () => {
-        auth.onAuthStateChanged(async (user) => {
-            const chooseFilesLabel = document.getElementById('chooseFilesLabel');
-            if (!chooseFilesLabel) return;
-
-            if (!user) {
-                chooseFilesLabel.classList.add('hidden');
-                return;
-            }
-
-            try {
-                const currentUserDoc = await getDoc(doc(db, "users", user.uid));
-                const isAdmin = currentUserDoc.exists() && currentUserDoc.data().isAdmin === true;
-                const profileUserId = new URLSearchParams(window.location.search).get('id');
-
-                if (isAdmin || user.uid === profileUserId) {
-                    chooseFilesLabel.classList.remove('hidden');
-                } else {
-                    chooseFilesLabel.classList.add('hidden');
-                }
-            } catch (error) {
-                console.error("Error checking user status:", error);
-                chooseFilesLabel.classList.add('hidden');
-            }
-        });
-    });
-
-    // Add this to debug profile loading
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM loaded, checking profile ID');
-        const urlParams = new URLSearchParams(window.location.search);
-        const profileId = urlParams.get('id');
-        console.log('Profile ID:', profileId);
-        
-        if (!profileId) {
-            console.log('No profile ID in URL, checking for artistId');
-            const artistId = urlParams.get('artistId');
-            if (artistId) {
-                console.log('Found artistId:', artistId);
-                // Redirect to correct URL format if needed
-                window.location.href = `profile.html?id=${artistId}`;
-            }
-        }
-    });
-</script>
-<script>
-    // Fix dropdown functionality
-    function toggleProfileDropdown(event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        
-        const dropdown = document.getElementById('profileDropdown');
-        if (!dropdown) return;
-        
-        dropdown.classList.toggle('hidden');
-        
-        // Close dropdown when clicking outside
-        const closeDropdown = (e) => {
-            if (!dropdown.contains(e.target) && !e.target.matches('.profile-button')) {
-                dropdown.classList.add('hidden');
-                document.removeEventListener('click', closeDropdown);
-            }
-        };
-        
-        if (!dropdown.classList.contains('hidden')) {
-            setTimeout(() => {
-                document.addEventListener('click', closeDropdown);
-            }, 0);
-        }
-    }
-
-    // Make function available globally
-    window.toggleProfileDropdown = toggleProfileDropdown;
-
-    // Initialize dropdown when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        const profileButton = document.querySelector('.profile-button');
-        if (profileButton) {
-            profileButton.addEventListener('click', toggleProfileDropdown);
-        }
-    });
-</script>
-
-<script>
-    function toggleLoginFlyout(event) {
-        if (event) event.preventDefault();
-        const flyout = document.getElementById('LoginFlyout');
-        flyout.classList.toggle('hidden');
-    }
-
-    function toggleForms() {
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        loginForm.classList.toggle('hidden');
-        registerForm.classList.toggle('hidden');
-    }
-
-    document.getElementById('searchArtworks')?.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const artworks = document.querySelectorAll('#galleryContainer .art-gallery-item');
-        
-        artworks.forEach(artwork => {
-            const title = artwork.querySelector('h3').textContent.toLowerCase();
-            const description = artwork.querySelector('p').textContent.toLowerCase();
-            
-            if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                artwork.style.display = '';
+        auth.onAuthStateChanged((user) => {
+            const loginButton = document.querySelector('.login-button');
+            if (user) {
+                loginButton?.classList.remove('visible');
             } else {
-                artwork.style.display = 'none';
+                loginButton?.classList.add('visible');
             }
         });
     });
-
-    document.getElementById('sortArtworks')?.addEventListener('change', (e) => {
-        const sortType = e.target.value;
-        const container = document.getElementById('galleryContainer');
-        const artworks = Array.from(container.children);
-
-        artworks.sort((a, b) => {
-            switch(sortType) {
-                case 'priceAsc':
-                    return getPrice(a) - getPrice(b);
-                case 'priceDesc':
-                    return getPrice(b) - getPrice(a);
-                case 'newest':
-                    return new Date(b.dataset.date) - new Date(a.dataset.date);
-                case 'oldest':
-                    return new Date(a.dataset.date) - new Date(b.dataset.date);
-            }
-        });
-
-        container.innerHTML = '';
-        artworks.forEach(artwork => container.appendChild(artwork));
-    });
-
-    function getPrice(artwork) {
-        const priceText = artwork.querySelector('.text-green-600').textContent;
-        return parseFloat(priceText.replace('₱', ''));
-    }
-
-    function openSettingsModal() {
-        document.getElementById('settingsModal').classList.remove('hidden');
-    }
-
-    function closeSettingsModal() {
-        document.getElementById('settingsModal').classList.add('hidden');
-    }
-
-    function showPasswordChangeForm() {
-        document.getElementById('settingsMainView').classList.add('hidden');
-        document.getElementById('passwordChangeForm').classList.remove('hidden');
-    }
-
-    function hidePasswordChangeForm() {
-        document.getElementById('passwordChangeForm').classList.add('hidden');
-        document.getElementById('settingsMainView').classList.remove('hidden');
-    }
-
-    // Add this function for mobile navigation toggle
-    function toggleNav() {
-        const menu = document.getElementById('flyout-menu');
-        menu.classList.toggle('translate-x-full');
-        document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
-    }
-
-    // Add this function to make sure the navigation is properly initialized
-    document.addEventListener('DOMContentLoaded', function() {
-        // Force the flyout menu to be properly initialized
-        const menu = document.getElementById('flyout-menu');
-        if (menu && !menu.classList.contains('translate-x-full')) {
-            menu.classList.add('translate-x-full');
-        }
-        
-        // Make sure the login button is visible if not logged in
-        const loginButton = document.querySelector('.login-button');
-        const logoutButton = document.querySelector('.logout-button');
-        const profileDropdown = document.querySelector('.profile-dropdown-container');
-        
-        // Until auth state is determined, show the login button
-        if (loginButton && !window.firebaseAuth?.currentUser) {
-            loginButton.style.display = 'block';
-        }
-        
-        if (logoutButton) {
-            logoutButton.style.display = 'none';
-        }
-        
-        if (profileDropdown) {
-            profileDropdown.style.display = 'none';
-        }
-    });
-
-    // Add click event listener to close mobile nav when clicking outside
-    document.addEventListener('click', function(event) {
-        const flyoutMenu = document.getElementById('flyout-menu');
-        const burgerButton = document.querySelector('.burger-icon');
-        
-        if (flyoutMenu && !flyoutMenu.classList.contains('translate-x-full') && // menu is open
-            !flyoutMenu.contains(event.target) && // click not inside menu
-            !burgerButton.contains(event.target)) { // click not on burger button
-            toggleNav(); // close the menu
-        }
-    });
-
-    // Update toggleNav to use stopPropagation
-    function toggleNav() {
-        const menu = document.getElementById('flyout-menu');
-        menu.classList.toggle('translate-x-full');
-        document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
-    }
-
-    // Update the burger button click handler
-    document.querySelector('.burger-icon').addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent the document click handler from firing
-        toggleNav();
-    });
-
-    // Fix burger icon functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const burgerButton = document.querySelector('.burger-icon');
-        const menu = document.getElementById('flyout-menu');
-        
-        // Burger button click handler
-        burgerButton.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent document click handler
-            toggleNav(e);
-        });
-
-        // Document click handler for closing menu
-        document.addEventListener('click', function(event) {
-            if (menu && 
-                !menu.classList.contains('translate-x-full') && // menu is open
-                !menu.contains(event.target) && // click not inside menu
-                !burgerButton.contains(event.target)) { // click not on burger button
-                toggleNav(); // close the menu
-            }
-        });
-
-        // Toggle function
-        function toggleNav(e) {
-            if (e) e.stopPropagation();
-            menu.classList.toggle('translate-x-full');
-            document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
-        }
-
-        // Make toggleNav available globally
-        window.toggleNav = toggleNav;
-    });
 </script>
-<script type="module">
-    import { auth } from '../js/firebase-config.js';
-    
-    // Assign auth to global window object for access in non-module scripts
-    window.firebaseAuth = auth;
-    
-    // Make navigateToUserProfile globally accessible
-    window.navigateToUserProfile = async () => {
-        try {
-            const user = window.firebaseAuth.currentUser;
-            if (!user) {
-                // If no user is signed in, first check if auth is still initializing
-                const authCheck = new Promise((resolve) => {
-                    const unsubscribe = window.firebaseAuth.onAuthStateChanged((user) => {
-                        unsubscribe();
-                        resolve(user);
-                    });
-                });
-                const finalUser = await authCheck;
-                if (!finalUser) {
-                    alert('Please login to view your profile');
-                    toggleLoginFlyout();
-                    return;
-                }
-            }
-            // Get the base URL for GitHub Pages
-            const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                ? '/ArtistHub-BaguioCity'
-                : '';
-            // Construct the profile URL
-            const profileUrl = `${baseUrl}/profile/profile.html?id=${window.firebaseAuth.currentUser.uid}`;
-            window.location.href = profileUrl;
-        } catch (error) {
-            console.error('Profile navigation error:', error);
-            alert('There was an error accessing your profile. Please try again.');
-        }
-    };
 
-    // Make handleEditProfile globally accessible
-    window.handleEditProfile = async () => {
-        try {
-            const user = window.firebaseAuth.currentUser;
-            if (!user) {
-                const authCheck = new Promise((resolve) => {
-                    const unsubscribe = window.firebaseAuth.onAuthStateChanged((user) => {
-                        unsubscribe();
-                        resolve(user);
-                    });
-                });
-                const finalUser = await authCheck;
-                if (!finalUser) {
-                    alert('Please login to edit your profile');
-                    toggleLoginFlyout();
-                    return;
-                }
-            }
-            // Get the base URL for GitHub Pages
-            const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                ? '/ArtistHub-BaguioCity'
-                : '';
-            // Go directly to edit profile page
-            const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${window.firebaseAuth.currentUser.uid}`;
-            window.location.href = editProfileUrl;
-        } catch (error) {
-            console.error('Profile navigation error:', error);
-            alert('There was an error accessing your profile. Please try again.');
-        }
-    };
-
-    // Make handleLogout globally accessible
-    window.handleLogout = async () => {
-        try {
-            await window.firebaseAuth.signOut();
-            alert('You have been logged out successfully.');
-            window.location.reload();
-        } catch (error) {
-            console.error('Logout error:', error);
-            alert('There was an error during logout. Please try again.');
-        }
-    };
-
-    // Ensure cart toggle is initialized
-    document.addEventListener('DOMContentLoaded', function() {
-        // Make sure the cart toggle function is available globally
-        if (typeof window.toggleCart !== 'function') {
-            window.toggleCart = function() {
-                const cartModal = document.getElementById('cartModal');
-                if (cartModal) {
-                    cartModal.classList.toggle('hidden');
-                }
-            }
-        }
-        
-        // Make sure both desktop and mobile cart buttons are visible
-        const cartNav = document.getElementById('cartNav');
-        const cartNavMobile = document.getElementById('cartNavMobile');
-        
-        if (cartNav) cartNav.style.display = 'block';
-        if (cartNavMobile) cartNavMobile.style.display = 'block';
-    });
-</script>
-<script type="module">
-    import { auth } from '../js/firebase-config.js';
-    
-    // Initialize auth state observer
-    auth.onAuthStateChanged((user) => {
-        const loginButton = document.querySelector('.login-button');
-        
-        if (user) {
-            // User is logged in - hide login button
-            loginButton?.classList.remove('visible');
-        } else {
-            // User is logged out - show login button
-            loginButton?.classList.add('visible');
-        }
-    });
-</script>
-<script>
-    // Function to handle navigation events
-    function navToEvent(url) {
-        window.location.href = url;
-    }
-
-    window.navToEvent = navToEvent;
-</script>
-</body>>
+</body>
 </html>
