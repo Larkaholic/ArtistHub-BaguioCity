@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // FOR SECURITY OF THE WEBSITE //
-
+/*
 // Create a custom alert box
 function showCustomAlert(message) {
   let alertBox = document.createElement("div");
@@ -81,13 +81,13 @@ function showCustomAlert(message) {
   document.body.appendChild(alertBox);
   setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
 }
-
+*/
 /* Prevent Right Click, F12, and Ctrl+Shift+I/U/J */
 
 // Disable right-click
 document.addEventListener("contextmenu", function (event) {
-  event.preventDefault();
-  showCustomAlert("RIGHT CLICK IS DISABLE DUE TO PRIVACY CONTENT");
+     event.preventDefault();
+//   showCustomAlert("RIGHT CLICK IS DISABLE DUE TO PRIVACY CONTENT");
 });
 
 // Block all key shortcuts
@@ -96,13 +96,13 @@ document.addEventListener("keydown", function (event) {
 
   if (event.ctrlKey && event.shiftKey) {
       event.preventDefault();
-      showCustomAlert("THIS ACTION IS DISABLED ON THIS WEBSITE DUE TO PRIVACY CONTENT");
+  //  showCustomAlert("THIS ACTION IS DISABLED ON THIS WEBSITE DUE TO PRIVACY CONTENT");
       return false;
   }
 
   if (key === "f12") {
       event.preventDefault();
-      showCustomAlert("DEVELOPER TOOLS ARE DISABLED DUE TO PRIVACY CONTENT");
+  //  showCustomAlert("DEVELOPER TOOLS ARE DISABLED DUE TO PRIVACY CONTENT");
       return false;
   }
 
@@ -111,7 +111,7 @@ document.addEventListener("keydown", function (event) {
       (event.ctrlKey && key === "u") || // Ctrl + U (View Source)
       (key === "printscreen")) { // Print Screen (PrtScn)
       event.preventDefault();
-      showCustomAlert("THIS ACTION IS DISABLED ON THIS WEBSITE DUE TO PRIVACY CONTENT");
+  //  showCustomAlert("THIS ACTION IS DISABLED ON THIS WEBSITE DUE TO PRIVACY CONTENT");
       return false;
   }
 });
