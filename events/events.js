@@ -94,4 +94,3 @@ async function loadEventDetails() {
 
 // load event details when dom is ready
 document.addEventListener('DOMContentLoaded', loadEventDetails);
-

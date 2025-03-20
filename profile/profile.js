@@ -161,4 +161,3 @@ function displayProfile(userData) {
         </div>
     `;
 }
-
