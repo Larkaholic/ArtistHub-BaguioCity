@@ -3,7 +3,9 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    GoogleAuthProvider,
+    signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { 
     doc, 
@@ -486,4 +488,96 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// Handle Google Sign In with role selection
+async function handleGoogleSignIn() {
+    try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        // Check if user already exists
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        
+        if (!userDoc.exists()) {
+            // Show role selection modal for new users
+            const modal = document.getElementById('usertypemodal'); // Changed to match HTML id
+            if (!modal) {
+                console.error('User type modal not found');
+                return;
+            }
+            
+            // Store user data in window object
+            window.tempUserData = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL
+            };
+
+            // Show the modal
+            modal.classList.remove('hidden');
+        } else {
+            // Existing user - redirect based on stored role
+            const userData = userDoc.data();
+            redirectBasedOnRole(userData.userType, user.uid);
+        }
+    } catch (error) {
+        console.error('Error in Google sign-in flow:', error);
+        if (error.code !== 'auth/popup-closed-by-user') {
+            alert('Sign-in failed. Please try again.');
+        }
+    }
+}
+
+// Add role selection handler
+window.selectRole = async function(role) {
+    if (!window.tempUserData) {
+        console.error('No temporary user data found');
+        return;
+    }
+
+    try {
+        // Create user document with selected role
+        await setDoc(doc(db, 'users', window.tempUserData.uid), {
+            email: window.tempUserData.email,
+            displayName: window.tempUserData.displayName,
+            photoURL: window.tempUserData.photoURL,
+            userType: role,
+            status: role === 'artist' ? 'pending' : 'approved',
+            createdAt: serverTimestamp()
+        });
+
+        // Hide modal
+        document.getElementById('usertypemodal').classList.add('hidden');
+        
+        // Clear temp data
+        delete window.tempUserData;
+        
+        // Redirect based on role
+        if (role === 'artist') {
+            window.location.href = `${baseUrl}/profile/edit-profile.html`;
+        } else {
+            window.location.href = `${baseUrl}/profile/profile.html`;
+        }
+    } catch (error) {
+        console.error('Error saving user role:', error);
+        alert('Failed to complete signup. Please try again.');
+    }
+}
+
+// Add cancel handler
+window.cancelUserTypeSelection = function() {
+    const modal = document.getElementById('usertypemodal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+    if (window.tempUserData) {
+        delete window.tempUserData;
+        auth.signOut(); // Sign out if they cancel
+    }
+}
+
+// Make functions globally available
+window.handleGoogleSignIn = handleGoogleSignIn;
 
