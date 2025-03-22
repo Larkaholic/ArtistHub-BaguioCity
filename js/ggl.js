@@ -4,18 +4,23 @@ import { auth, db, provider } from './firebase-config.js';
 
 let pendingGoogleUser = null;
 
-window.showUserTypeModal = function() {
+// Export these functions so they're available in other modules
+export function showUserTypeModal() {
     const modal = document.getElementById('userTypeModal');
     modal.classList.remove('hidden');
 }
 
-window.hideUserTypeModal = function() {
+export function hideUserTypeModal() {
     const modal = document.getElementById('userTypeModal');
     modal.classList.add('hidden');
 }
 
+// Also make them globally accessible via window
+window.showUserTypeModal = showUserTypeModal;
+window.hideUserTypeModal = hideUserTypeModal;
+
 // Update the signInWithGoogle function for login form
-window.signInWithGoogle = async function(isRegistration = false) {
+export async function signInWithGoogle(isRegistration = false) {
     try {
         if (isRegistration) {
             // If this is registration, show user type modal first
@@ -38,6 +43,8 @@ window.signInWithGoogle = async function(isRegistration = false) {
                 if (typeof updateLoginState === 'function') {
                     updateLoginState(user);
                 }
+                // Reload page to update UI state
+                window.location.reload();
             } else {
                 // If user doesn't exist, they need to register first
                 alert('No account found. Please register first.');
@@ -51,8 +58,11 @@ window.signInWithGoogle = async function(isRegistration = false) {
     }
 }
 
+// Make this function globally accessible
+window.signInWithGoogle = signInWithGoogle;
+
 // Update the selectUserType function
-window.selectUserType = async function(userType) {
+export async function selectUserType(userType) {
     try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
@@ -78,20 +88,29 @@ window.selectUserType = async function(userType) {
             alert('Your artist registration is pending approval. We will review your application shortly.');
         }
         
+        // Reload page to update UI state
+        window.location.reload();
+        
     } catch (error) {
         console.error('Error creating user:', error);
         alert('Failed to complete registration. Please try again.');
     }
 }
 
+// Make this function globally accessible
+window.selectUserType = selectUserType;
+
 // Add cancel button handler
-window.cancelUserTypeSelection = function() {
+export function cancelUserTypeSelection() {
     hideUserTypeModal();
     toggleLoginFlyout();
 }
 
+// Make this function globally accessible
+window.cancelUserTypeSelection = cancelUserTypeSelection;
+
 // Registration
-window.handleRegister = async function(event) {
+export async function handleRegister(event) {
     event.preventDefault();
     
     const email = document.getElementById('registerEmail').value;
@@ -120,6 +139,10 @@ window.handleRegister = async function(event) {
         }
         
         console.log('Successfully registered user');
+        
+        // Reload page to update UI state
+        window.location.reload();
+        
         return false; // Prevent form submission
     } catch (error) {
         console.error('Error registering user:', error);
@@ -144,8 +167,11 @@ window.handleRegister = async function(event) {
     }
 }
 
-// Helper functions remain the same
-window.toggleForms = function() {
+// Make this function globally accessible
+window.handleRegister = handleRegister;
+
+// Helper functions remain the same but also make them exportable
+export function toggleForms() {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     
@@ -158,7 +184,10 @@ window.toggleForms = function() {
     }
 }
 
-window.toggleLoginFlyout = function() {
+// Make this function globally accessible
+window.toggleForms = toggleForms;
+
+export function toggleLoginFlyout() {
     const flyout = document.getElementById('LoginFlyout');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
@@ -171,3 +200,6 @@ window.toggleLoginFlyout = function() {
         flyout.classList.add('hidden');
     }
 }
+
+// Make this function globally accessible
+window.toggleLoginFlyout = toggleLoginFlyout;
