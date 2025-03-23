@@ -200,14 +200,16 @@
             border: 1px solid rgba(255, 255, 255, 0.01);
         }
         
-        /* Fix for login button visibility */
+        /* Fix for login button visibility - REMOVE these rules that force display */
         .login-button {
-            display: block !important; /* Force display */
+            /* Remove this line that forces display */
+            /* display: block !important; */
         }
         
         /* Make sure the button is visible and properly sized */
         .login-button button {
-            display: inline-block !important;
+            /* Remove !important to allow JS to control visibility */
+            display: inline-block;
             min-width: 80px;
         }
     </style>
@@ -259,7 +261,7 @@
                 <!-- Add Profile dropdown container -->
                 <li class="profile-dropdown-container" style="display: none;">
                     <div class="relative">
-                        <button class="profile-button flex items-center" onclick="toggleProfileDropdown(event)">
+                        <button class="profile-button flex items-center">
                             <img id="userProfilePic" src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
                                  alt="Profile" 
                                  class="w-10 h-10 rounded-full object-cover border-2 border-green-500">
@@ -640,12 +642,6 @@
             document.body.style.overflow = menu.classList.contains('translate-x-full') ? '' : 'hidden';
         }
 
-        function toggleProfileDropdown(event) {
-            event.preventDefault();
-            const dropdown = document.getElementById('profileDropdown');
-            dropdown.classList.toggle('hidden');
-        }
-
         function openSettingsModal() {
             document.getElementById('settingsModal').classList.remove('hidden');
         }
@@ -806,6 +802,53 @@
                     console.error('Error checking admin status:', error);
                 }
             }
+        });
+    </script>
+
+    <script type="module">
+        import { auth } from '../js/firebase-config.js';
+        import { initNavigation } from '../js/navigation.js';
+
+        // Initialize navigation
+        initNavigation();
+
+        // Make handleProfileClick available globally
+        window.handleProfileClick = function() {
+            if (auth.currentUser) {
+                window.location.href = `../profile/profile.html?id=${auth.currentUser.uid}`;
+            } else {
+                toggleLoginFlyout();
+            }
+        }
+
+        // Update mobile menu profile link
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileProfileLink = document.querySelector('#flyout-menu #profileLink');
+            if (mobileProfileLink) {
+                mobileProfileLink.onclick = () => {
+                    if (auth.currentUser) {
+                        window.location.href = `../profile/profile.html?id=${auth.currentUser.uid}`;
+                    } else {
+                        toggleLoginFlyout();
+                    }
+                };
+            }
+
+            // Hide login button if user is logged in
+            auth.onAuthStateChanged((user) => {
+                const loginButtons = document.querySelectorAll('.login-button');
+                const profileDropdowns = document.querySelectorAll('.profile-dropdown-container');
+                const logoutButtons = document.querySelectorAll('.logout-button');
+                if (user) {
+                    loginButtons.forEach(btn => btn.style.display = 'none');
+                    profileDropdowns.forEach(dropdown => dropdown.style.display = 'block');
+                    logoutButtons.forEach(btn => btn.style.display = 'block');
+                } else {
+                    loginButtons.forEach(btn => btn.style.display = 'block');
+                    profileDropdowns.forEach(dropdown => dropdown.style.display = 'none');
+                    logoutButtons.forEach(btn => btn.style.display = 'none');
+                }
+            });
         });
     </script>
 </body>
