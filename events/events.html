@@ -248,9 +248,9 @@
         </div>
 
         <main class="container mx-auto mt-24 p-4">
-            <!-- Move the Add Event button to center and style it -->
+            <!-- Add Event Request Button -->
             <div class="flex justify-end items-center mb-6">
-                <button onclick="requestAddEvent()" class="glass-header px-6 py-3 rounded-lg text-black font-semibold hover:bg-green-100 transition-all flex items-center shadow-md transform hover:scale-105">
+                <button onclick="openEventRequestModal()" class="glass-header px-6 py-3 rounded-lg text-black font-semibold hover:bg-green-100 transition-all flex items-center shadow-md transform hover:scale-105">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
@@ -268,6 +268,56 @@
                 </div>
             </div>
         </main>
+
+        <!-- Add Event Request Modal -->
+        <div id="eventRequestModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+            <div class="glass-header2 rounded-lg w-full max-w-lg mx-4 p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold">Request to Add Event</h2>
+                    <button onclick="closeEventRequestModal()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="eventRequestForm" onsubmit="submitEventRequest(event)" class="space-y-4">
+                    <div>
+                        <label for="eventTitle" class="block font-medium">Event Title:</label>
+                        <input type="text" id="eventTitle" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                    </div>
+                    
+                    <div>
+                        <label for="eventDate" class="block font-medium">Event Date:</label>
+                        <input type="date" id="eventDate" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                    </div>
+                    
+                    <div>
+                        <label for="eventLocation" class="block font-medium">Event Location:</label>
+                        <input type="text" id="eventLocation" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                    </div>
+                    
+                    <div>
+                        <label for="eventDescription" class="block font-medium">Event Description:</label>
+                        <textarea id="eventDescription" rows="4" class="block mt-1 p-2 border border-gray-400 rounded-md w-full resize-none" required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="contactEmail" class="block font-medium">Contact Email:</label>
+                        <input type="email" id="contactEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="closeEventRequestModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700">
+                            Submit Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- Scripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -337,22 +387,7 @@
 
             // Function to handle event addition request
             function requestAddEvent() {
-                // Check if user is logged in
-                import('../js/firebase-config.js').then(module => {
-                    const { auth } = module;
-                    if (auth.currentUser) {
-                        // If logged in, redirect to event submission form
-                        window.location.href = '../submit-event/index.html';
-                    } else {
-                        // If not logged in, show login modal
-                        alert('Please log in to request adding an event');
-                        toggleLoginFlyout();
-                    }
-                }).catch(error => {
-                    console.error('Error importing auth:', error);
-                    alert('Please log in to request adding an event');
-                    toggleLoginFlyout();
-                });
+                openEventRequestModal();
             }
         </script>
         <script type="module">
@@ -719,5 +754,156 @@
                 position: relative !important;
             }
         </style>
+
+        <script>
+            // Immediately execute to ensure function is defined
+            (function() {
+                // Direct DOM attachment for profile dropdown toggle
+                window.toggleProfileDropdown = function(event) {
+                    console.log("Profile dropdown toggle clicked");
+                    if (event) event.preventDefault();
+                    const dropdown = document.getElementById('profileDropdown');
+                    if (dropdown) {
+                        dropdown.classList.toggle('hidden');
+                        console.log("Dropdown visibility toggled:", !dropdown.classList.contains('hidden'));
+                        
+                        // Add event listener to close dropdown when clicking elsewhere
+                        if (!dropdown.classList.contains('hidden')) {
+                            setTimeout(() => {
+                                document.addEventListener('click', closeDropdownOnClickOutside);
+                            }, 100);
+                        }
+                    } else {
+                        console.error("Profile dropdown element not found");
+                    }
+                };
+                
+                window.closeDropdownOnClickOutside = function(event) {
+                    const dropdown = document.getElementById('profileDropdown');
+                    const profileButton = document.getElementById('profileButton');
+                    
+                    if (dropdown && profileButton && 
+                        !dropdown.contains(event.target) && 
+                        !profileButton.contains(event.target)) {
+                        dropdown.classList.add('hidden');
+                        document.removeEventListener('click', closeDropdownOnClickOutside);
+                    }
+                };
+                
+                // Additional initialization on DOM load
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log("DOM loaded, initializing dropdowns");
+                    
+                    // Ensure profile button has click handler
+                    const profileButton = document.getElementById('profileButton');
+                    if (profileButton) {
+                        console.log("Profile button found, adding click handler");
+                        profileButton.addEventListener('click', toggleProfileDropdown);
+                    } else {
+                        console.error("Profile button element not found");
+                    }
+                    
+                    // Mobile profile button handling
+                    const profileLinkMobile = document.getElementById('profileLinkMobile');
+                    const mobileProfileDropdown = document.getElementById('mobileProfileDropdown');
+                    
+                    if (profileLinkMobile && mobileProfileDropdown) {
+                        console.log("Mobile profile elements found, adding click handler");
+                        profileLinkMobile.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            mobileProfileDropdown.classList.toggle('hidden');
+                        });
+                    }
+                });
+            })();
+        </script>
+
+        <script>
+    // ...existing code...
+
+    // Function to open the event request modal
+    function openEventRequestModal() {
+        // Check if user is logged in
+        import('../js/firebase-config.js').then(module => {
+            const { auth } = module;
+            if (auth.currentUser) {
+                // If logged in, show modal and pre-fill email
+                const modal = document.getElementById('eventRequestModal');
+                const emailField = document.getElementById('contactEmail');
+                
+                // Pre-fill email with user's email
+                emailField.value = auth.currentUser.email || '';
+                
+                // Show the modal
+                modal.classList.remove('hidden');
+            } else {
+                // If not logged in, show login modal
+                alert('Please log in to request adding an event');
+                toggleLoginFlyout();
+            }
+        }).catch(error => {
+            console.error('Error importing auth:', error);
+            alert('Please log in to request adding an event');
+            toggleLoginFlyout();
+        });
+    }
+    
+    // Function to close the event request modal
+    function closeEventRequestModal() {
+        const modal = document.getElementById('eventRequestModal');
+        modal.classList.add('hidden');
+    }
+    
+    // Function to handle form submission
+    async function submitEventRequest(event) {
+        event.preventDefault();
+        
+        try {
+            // Import Firebase modules
+            const { db, auth } = await import('../js/firebase-config.js');
+            const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            
+            // Get form values
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            const location = document.getElementById('eventLocation').value;
+            const description = document.getElementById('eventDescription').value;
+            const email = document.getElementById('contactEmail').value;
+            
+            // Create event request object
+            const eventRequest = {
+                title,
+                date,
+                location,
+                description,
+                contactEmail: email,
+                status: 'pending', // Default status for new requests
+                userId: auth.currentUser ? auth.currentUser.uid : null,
+                createdAt: serverTimestamp()
+            };
+            
+            // Add document to "eventRequests" collection
+            await addDoc(collection(db, 'eventRequests'), eventRequest);
+            
+            // Close modal and show success message
+            closeEventRequestModal();
+            alert('Your event request has been submitted and is pending approval.');
+            
+            // Reset form
+            document.getElementById('eventRequestForm').reset();
+            
+        } catch (error) {
+            console.error('Error submitting event request:', error);
+            alert('There was an error submitting your request. Please try again.');
+        }
+    }
+    
+    // Connect the requestAddEvent function to the openEventRequestModal function
+    function requestAddEvent() {
+        openEventRequestModal();
+    }
+</script>
+
     </body>
 </html>
