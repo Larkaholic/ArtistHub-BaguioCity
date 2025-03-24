@@ -166,6 +166,16 @@
         </div>
 
         <main class="container mx-auto mt-24 p-4">
+            <!-- Add Event Request Button -->
+            <div class="flex justify-end mb-4">
+                <button onclick="requestAddEvent()" class="glass-header px-4 py-2 rounded-lg text-black font-semibold hover:bg-green-100 transition-all flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Request to Add Your Event
+                </button>
+            </div>
+            
             <!-- Event Details Container -->
             <div id="eventDetails" class="eventt glass-header rounded-lg p-8">
                 <!-- Event details will be loaded here -->
@@ -237,6 +247,26 @@
                     ? '/ArtistHub-BaguioCity'
                 : '';   
                 window.location.href = baseUrl + '/' + path;
+            }
+
+            // Function to handle event addition request
+            function requestAddEvent() {
+                // Check if user is logged in
+                import('../js/firebase-config.js').then(module => {
+                    const { auth } = module;
+                    if (auth.currentUser) {
+                        // If logged in, redirect to event submission form
+                        window.location.href = '../submit-event/index.html';
+                    } else {
+                        // If not logged in, show login modal
+                        alert('Please log in to request adding an event');
+                        toggleLoginFlyout();
+                    }
+                }).catch(error => {
+                    console.error('Error importing auth:', error);
+                    alert('Please log in to request adding an event');
+                    toggleLoginFlyout();
+                });
             }
         </script>
         <script type="module">
