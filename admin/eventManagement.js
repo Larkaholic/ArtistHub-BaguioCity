@@ -8,7 +8,8 @@ import {
     getDocs, 
     query, 
     orderBy, 
-    getDoc 
+    getDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
@@ -43,58 +44,136 @@ const myWidget = cloudinary.createUploadWidget(
 document.getElementById('upload_widget').addEventListener('click', () => myWidget.open(), false);
 
 // Load events
-// async function loadEvents() {
-//     const eventsList = document.getElementById('eventsList');
-//     if (!eventsList) return;
-
-//     eventsList.innerHTML = `
-//         <div class="animate-pulse space-y-4">
-//             <div class="h-20 bg-white/10 rounded-lg"></div>
-//             <div class="h-20 bg-white/10 rounded-lg"></div>
-//         </div>
-//     `;
-
-//     try {
-//         const q = query(collection(db, "events"), orderBy("startDate", "desc"));
-//         const querySnapshot = await getDocs(q);
-
-//         if (querySnapshot.empty) {
-//             eventsList.innerHTML = `<p class="text-white text-center">No events found</p>`;
-//             return;
-//         }
-
-//         eventsList.innerHTML = '';
-//         querySnapshot.forEach((doc) => {
-//             const event = doc.data();
-//             const startDate = event.startDate ? new Date(event.startDate.seconds * 1000).toLocaleDateString() : 'N/A';
-//             const endDate = event.endDate ? new Date(event.endDate.seconds * 1000).toLocaleDateString() : 'N/A';
-//             const imageUrl = event.imageUrl ? `<img src="${event.imageUrl}" alt="${event.title}" class="mt-4 w-full h-48 object-cover rounded">` : '';
-
-//             eventsList.innerHTML += `
-//                 <div class="bg-gray-800 rounded-lg p-4 mb-4">
-//                     <div class="flex justify-between items-start">
-//                         <div>
-//                             <h3 class="text-xl font-bold text-white">${event.title}</h3>
-//                             <p class="text-gray-300">Start: ${startDate}</p>
-//                             <p class="text-gray-300">End: ${endDate}</p>
-//                             <p class="text-gray-300">Location: ${event.location || 'N/A'}</p>
-//                             ${event.description ? `<p class="text-gray-300 mt-2">${event.description}</p>` : ''}
-//                             ${event.isFeatured ? '<span class="bg-yellow-500 text-black px-2 py-1 rounded text-sm">Featured</span>' : ''}
-//                         </div>
-//                         <div class="flex space-x-2">
-//                             <button onclick="editEvent('${doc.id}')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
-//                             <button onclick="deleteEvent('${doc.id}')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
-//                         </div>
-//                     </div>
-//                     ${imageUrl}
-//                 </div>
-//             `;
-//         });
-//     } catch (error) {
-//         console.error("Error loading events:", error);
-//         eventsList.innerHTML = `<p class="text-red-500 text-center">Error loading events</p>`;
-//     }
-// }
+export async function loadEvents() {
+    try {
+        const eventsRef = collection(db, "events");
+        // Modified query - don't filter by createdAt since some events might not have it
+        const querySnapshot = await getDocs(eventsRef);
+        
+        const eventsContainer = document.getElementById('eventsList');
+        eventsContainer.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+            eventsContainer.innerHTML = `
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                    <p class="text-gray-400">No events found. Add some events to get started.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Debug: Count how many events we're processing
+        console.log(`Loading ${querySnapshot.size} events`);
+        
+        // Sort manually - events with createdAt first, then others
+        const eventsWithTimestamp = [];
+        const eventsWithoutTimestamp = [];
+        
+        querySnapshot.forEach(doc => {
+            const event = doc.data();
+            if (event.createdAt) {
+                eventsWithTimestamp.push({ id: doc.id, data: event });
+            } else {
+                eventsWithoutTimestamp.push({ id: doc.id, data: event });
+            }
+        });
+        
+        // Sort events with timestamp by timestamp descending
+        eventsWithTimestamp.sort((a, b) => {
+            const timeA = a.data.createdAt?.toMillis?.() || 0;
+            const timeB = b.data.createdAt?.toMillis?.() || 0;
+            return timeB - timeA;
+        });
+        
+        // Combine sorted lists
+        const allEvents = [...eventsWithTimestamp, ...eventsWithoutTimestamp];
+        
+        // Debug: Log final event count
+        console.log(`Displaying ${allEvents.length} events`);
+        
+        // Handle empty results after filtering
+        if (allEvents.length === 0) {
+            eventsContainer.innerHTML = `
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                    <p class="text-gray-400">No events found. Add some events to get started.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Render all events
+        allEvents.forEach(({ id: eventId, data: event }) => {
+            try {
+                // Handle different date field names and formats
+                let displayDate = 'No date specified';
+                if (event.date) {
+                    displayDate = new Date(event.date).toLocaleDateString();
+                } else if (event.startDate) {
+                    displayDate = new Date(event.startDate).toLocaleDateString();
+                }
+                
+                // Improved image handling
+                const hasImage = event.imageUrl && typeof event.imageUrl === 'string' && event.imageUrl.trim() !== '';
+                // Add a default image when none exists
+                const imageThumbnail = hasImage ? `
+                    <div class="mt-2">
+                        <img src="${event.imageUrl}" alt="${event.title}" class="w-20 h-20 object-cover rounded-md" 
+                             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/ibagiw.jpg';">
+                    </div>
+                ` : `
+                    <div class="mt-2">
+                        <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/ibagiw.jpg" 
+                             alt="No image available" class="w-20 h-20 object-cover rounded-md opacity-50">
+                        <p class="text-xs text-gray-500 mt-1">No image available</p>
+                    </div>
+                `;
+                
+                // Check for featured status - handle both isFeatured and featured
+                const isFeatured = event.featured || event.isFeatured;
+                
+                eventsContainer.innerHTML += `
+                    <div class="bg-gray-800 rounded-lg p-4 event-item" data-id="${eventId}">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-lg font-semibold text-white">${event.title || 'Untitled Event'}</h3>
+                                <p class="text-sm text-gray-300 mt-2"><strong>Date:</strong> ${displayDate}</p>
+                                <p class="text-sm text-gray-300"><strong>Location:</strong> ${event.location || 'Not specified'}</p>
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-300"><strong>Description:</strong></p>
+                                    <p class="text-sm text-gray-400">${event.description || 'No description provided'}</p>
+                                </div>
+                                ${imageThumbnail}
+                            </div>
+                            ${isFeatured ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-800 text-yellow-300">Featured</span>' : ''}
+                        </div>
+                        
+                        <div class="flex mt-4 space-x-2 justify-end">
+                            <button onclick="editEvent('${eventId}')" 
+                                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                Edit
+                            </button>
+                            <button onclick="deleteEvent('${eventId}')" 
+                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error("Error rendering event:", error, eventId);
+            }
+        });
+        
+    } catch (error) {
+        console.error("Error loading events:", error);
+        const eventsContainer = document.getElementById('eventsList');
+        eventsContainer.innerHTML = `
+            <div class="bg-red-800 rounded-lg p-4 text-center">
+                <p class="text-white">Error loading events. Please try again.</p>
+            </div>
+        `;
+    }
+}
 
 // Form submission handler
 function handleFormSubmit(e) {
@@ -106,9 +185,11 @@ function handleFormSubmit(e) {
         endDate: document.getElementById('eventEndDate').value,
         location: document.getElementById('eventLocation').value,
         description: document.getElementById('eventDescription').value,
-        isFeatured: document.getElementById('eventFeatured').checked,
-        imageUrl: document.getElementById('eventImageUrl').value,
+        featured: document.getElementById('eventFeatured').checked, // Use 'featured' consistently
+        isFeatured: document.getElementById('eventFeatured').checked, // Keep for backward compatibility
+        imageUrl: document.getElementById('eventImageUrl').value || '', // Ensure imageUrl is never undefined
         updatedAt: new Date().toISOString(),
+        date: document.getElementById('eventStartDate').value, // Add 'date' for compatibility
     };
 
     const eventId = document.getElementById('eventId').value;
@@ -136,6 +217,19 @@ function closeEventModal() {
 // Create, update, delete, and edit event functions
 async function createEvent(eventData) {
     try {
+        // Add necessary fields if missing
+        if (!eventData.imageUrl) {
+            eventData.imageUrl = '';
+        }
+        
+        // Add timestamp for sorting
+        eventData.createdAt = serverTimestamp();
+        
+        // Ensure date field is set for compatibility with older code
+        if (eventData.startDate && !eventData.date) {
+            eventData.date = eventData.startDate;
+        }
+        
         await addDoc(collection(db, "events"), eventData);
         alert("Event created successfully!");
         closeEventModal();
@@ -158,24 +252,50 @@ async function updateEvent(eventId, eventData) {
     }
 }
 
+// Update the edit function to handle different event structures
 async function editEvent(eventId) {
     try {
         const eventDoc = await getDoc(doc(db, "events", eventId));
         if (eventDoc.exists()) {
             const event = eventDoc.data();
             document.getElementById('eventId').value = eventId;
-            document.getElementById('eventTitle').value = event.title;
-            document.getElementById('eventStartDate').value = event.startDate;
-            document.getElementById('eventEndDate').value = event.endDate;
-            document.getElementById('eventLocation').value = event.location;
+            document.getElementById('eventTitle').value = event.title || '';
+            
+            // Handle different date field structures
+            if (event.startDate) {
+                document.getElementById('eventStartDate').value = event.startDate;
+            } else if (event.date) {
+                document.getElementById('eventStartDate').value = event.date;
+            }
+            
+            document.getElementById('eventEndDate').value = event.endDate || '';
+            document.getElementById('eventLocation').value = event.location || '';
             document.getElementById('eventDescription').value = event.description || '';
-            document.getElementById('eventFeatured').checked = event.isFeatured || false;
+            
+            // Handle different featured field names
+            document.getElementById('eventFeatured').checked = event.featured || event.isFeatured || false;
+            
+            // Handle image URL
+            const imageUrlInput = document.getElementById('eventImageUrl');
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if (event.imageUrl) {
+                imageUrlInput.value = event.imageUrl;
+                previewImg.src = event.imageUrl;
+                preview.classList.remove('hidden');
+            } else {
+                imageUrlInput.value = '';
+                preview.classList.add('hidden');
+            }
+            
+            document.getElementById('modalTitle').textContent = 'Edit Event';
             document.getElementById('eventModal').classList.remove('hidden');
             document.getElementById('eventModal').classList.add('flex');
         }
     } catch (error) {
         console.error("Error editing event:", error);
-        alert("Failed to load event data");
+        alert("Failed to load event data: " + error.message);
     }
 }
 
@@ -192,12 +312,25 @@ async function deleteEvent(eventId) {
     }
 }
 
+// Add function to remove image
+function removeImage() {
+    const preview = document.getElementById('imagePreview');
+    const imageUrlInput = document.getElementById('eventImageUrl');
+    imageUrlInput.value = '';
+    preview.classList.add('hidden');
+}
+
 // Initialize page
-window.onload = () => {
-    loadEvents();
+window.onload = function() {
+    loadEvents(); // Now this reference will be valid
     document.getElementById('eventForm').addEventListener('submit', handleFormSubmit);
 };
+
+// Make the function globally accessible
+window.loadEvents = loadEvents;
+
 window.openAddEventModal = openAddEventModal;
 window.closeEventModal = closeEventModal;
 window.editEvent = editEvent;
 window.deleteEvent = deleteEvent;
+window.removeImage = removeImage;
