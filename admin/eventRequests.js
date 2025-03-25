@@ -94,13 +94,16 @@ export async function approveEventRequest(requestId) {
         // Create a new event from the request data
         const eventData = {
             title: requestData.title,
-            date: requestData.date,
+            date: requestData.date,                  // Keep original date format
+            startDate: requestData.date,             // Also add startDate for newer format
             location: requestData.location,
             description: requestData.description,
             organizer: requestData.contactEmail,
+            contactEmail: requestData.contactEmail,  // Add contactEmail field
             createdAt: serverTimestamp(),
-            imageUrl: requestData.imageUrl || "", // Use provided image or empty string
-            featured: false // Default to not featured
+            imageUrl: requestData.imageUrl || "",    // Use provided image or empty string
+            featured: false,                         // Default to not featured
+            isFeatured: false                        // Also add isFeatured for compatibility
         };
         
         // Add as a new event
@@ -124,17 +127,15 @@ export async function approveEventRequest(requestId) {
 // Function to reject event request
 export async function rejectEventRequest(requestId) {
     try {
-        const requestRef = doc(db, "eventRequests", requestId);
-        
-        // Update the request status
-        await updateDoc(requestRef, {
-            status: "rejected",
-            processedAt: serverTimestamp()
-        });
-        
-        alert("Event request rejected");
-        loadEventRequests(); // Reload the requests list
-        
+        if (confirm('Are you sure you want to reject and delete this event request?')) {
+            const requestRef = doc(db, "eventRequests", requestId);
+            
+            // Delete the request document instead of updating status
+            await deleteDoc(requestRef);
+            
+            alert("Event request rejected and removed from the system");
+            loadEventRequests(); // Reload the requests list
+        }
     } catch (error) {
         console.error("Error rejecting event request:", error);
         alert("Failed to reject event request: " + error.message);
