@@ -4,6 +4,52 @@ import {
     query, where, orderBy 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Setup Cloudinary widget for QR code uploads
+let qrCodeUrl = "";
+const qrCodeWidget = cloudinary.createUploadWidget(
+    {
+        cloudName: 'dxeyr4pvf', 
+        uploadPreset: 'artist_profiles',
+        sources: ['local', 'url', 'camera'],
+        multiple: false,
+        maxFiles: 1,
+        maxFileSize: 5000000,
+        folder: 'event_qrcodes',
+        tags: ['qr_code', 'event']
+    },
+    (error, result) => {
+        if (!error && result && result.event === "success") {
+            console.log('QR Code upload successful:', result.info);
+            qrCodeUrl = result.info.secure_url;
+            
+            // Update button to show success
+            const currentRequestId = document.getElementById('currentQrCodeRequestId').value;
+            const qrCodeButton = document.querySelector(`.qr-upload-btn[data-id="${currentRequestId}"]`);
+            
+            if (qrCodeButton) {
+                qrCodeButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    QR Code Added
+                `;
+                qrCodeButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                qrCodeButton.classList.add('bg-green-600', 'hover:bg-green-700');
+            }
+        } else if (error) {
+            console.error('QR Code upload error:', error);
+            alert('Failed to upload QR code. Please try again.');
+        }
+    }
+);
+
+// Function to upload QR code
+export function uploadQRCode(requestId) {
+    // Store the current request ID for reference after upload
+    document.getElementById('currentQrCodeRequestId').value = requestId;
+    qrCodeWidget.open();
+}
+
 // Function to load all event requests
 export async function loadEventRequests() {
     try {
@@ -52,6 +98,13 @@ export async function loadEventRequests() {
                     
                     ${request.status === 'pending' ? `
                         <div class="flex mt-4 space-x-2 justify-end">
+                            <button onclick="uploadQRCode('${requestId}')" 
+                                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center qr-upload-btn" data-id="${requestId}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Upload QR Code
+                            </button>
                             <button onclick="approveEventRequest('${requestId}')" 
                                     class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
                                 Approve
@@ -102,9 +155,13 @@ export async function approveEventRequest(requestId) {
             contactEmail: requestData.contactEmail,  // Add contactEmail field
             createdAt: serverTimestamp(),
             imageUrl: requestData.imageUrl || "",    // Use provided image or empty string
+            qrCodeUrl: qrCodeUrl || "",              // Add the QR code URL if available
             featured: false,                         // Default to not featured
             isFeatured: false                        // Also add isFeatured for compatibility
         };
+        
+        // Reset the global QR code URL for next upload
+        qrCodeUrl = "";
         
         // Add as a new event
         await addDoc(collection(db, "events"), eventData);
@@ -145,8 +202,17 @@ export async function rejectEventRequest(requestId) {
 // Make these functions globally available
 window.approveEventRequest = approveEventRequest;
 window.rejectEventRequest = rejectEventRequest;
+window.uploadQRCode = uploadQRCode;
 
 // Initialize the page by loading requests when script is imported
 document.addEventListener('DOMContentLoaded', function() {
     loadEventRequests();
+    
+    // Add a hidden input to store the current request ID being processed
+    if (!document.getElementById('currentQrCodeRequestId')) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.id = 'currentQrCodeRequestId';
+        document.body.appendChild(input);
+    }
 });
