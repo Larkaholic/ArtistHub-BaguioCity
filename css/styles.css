@@ -1402,3 +1402,13 @@ h2 {
         font-size: 0.8rem;
     }
 }
+
+.typing {
+    position: relative;
+    margin: 0 auto;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3.5s steps(40, end),
+               blink-caret .75s step-end infinite;
+}

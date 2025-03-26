@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>Artist Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -83,9 +83,18 @@
                                     <p class="text-sm font-semibold text-gray-700" id="profileDropdownName">Loading...</p>
                                     <p class="text-xs text-gray-500" id="profileDropdownEmail">Loading...</p>
                                 </div>
-                                <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
-                                <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                                <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
+                                <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">View Profile</a>
+                                <a href="javascript:void(0)" onclick="openNotificationsModal()" class="flex items-center justify-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center relative">
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                        </svg>
+                                        Notifications
+                                    </div>
+                                    <span id="notificationBadge" class="absolute right-3 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden">0</span>
+                                </a>
+                                <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">Settings</a>
+                                <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 text-center">Logout</a>
                             </div>
                         </div>
                     </div>
@@ -374,7 +383,7 @@
                 </div>
             </div>
             <div class="lrk-copyright-section w-full text-center mt-4 md:mt-0">
-                Copyright ©2025, Designed and Made by <a href="https://github.com/Larkaholic" class="lrk-designer-link">Orillos, Lark Dominique J.</a>
+                Copyright ©2025, Designed and built by <a href="https://github.com/Larkaholic" class="lrk-designer-link">Orillos, Lark Dominique J.</a>
             </div>
         </footer>
 
@@ -681,7 +690,7 @@
         });
     </script>
     <!-- User Type Selection Modal -->
-    <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-[99999] hidden">
+    <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden" style="z-index: 3000;">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
             <button onclick="cancelUserTypeSelection()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -922,6 +931,35 @@
                 console.error('Password change failed:', error);
             }
         }
+    </script>
+    <!-- Add Notifications Modal -->
+    <div id="notificationsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
+        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+            <button onclick="closeNotificationsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h2 class="text-center font-bold text-2xl mb-6">Notifications</h2>
+            <div id="notificationsList" class="overflow-y-auto max-h-64">
+                <!-- Notifications will be loaded here -->
+                <div class="text-center text-gray-500 py-4">No new notifications</div>
+            </div>
+        </div>
+    </div>
+    <!-- Add notification functions -->
+    <script>
+        function openNotificationsModal() {
+            document.getElementById('notificationsModal').classList.remove('hidden');
+        }
+
+        function closeNotificationsModal() {
+            document.getElementById('notificationsModal').classList.add('hidden');
+        }
+
+        // Make functions globally accessible
+        window.openNotificationsModal = openNotificationsModal;
+        window.closeNotificationsModal = closeNotificationsModal;
     </script>
 </body>
 </html>
