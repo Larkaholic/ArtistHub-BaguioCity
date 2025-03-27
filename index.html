@@ -207,6 +207,21 @@
                         <option value="artist">Artist</option>
                     </select>
                 </div>
+                
+                <!-- Add ID Upload section -->
+                <!-- <div class="mx-2 mb-4">
+                    <label class="block font-medium">Valid ID for Verification:</label>
+                    <p class="text-xs text-gray-500 mb-1">Please upload a government-issued ID for verification (e.g., driver's license, passport)</p>
+                    <p class="text-xs text-green-600 mb-2 font-medium">Your ID will be automatically deleted after admin confirmation</p>
+                    <button type="button" id="idUploadButton" onclick="uploadId()" class="glass-header flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md hover:bg-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        Upload Valid ID
+                    </button>
+                    <p id="idUploadStatus" class="text-xs text-gray-500 mt-1">No ID uploaded yet</p>
+                </div> -->
+                
                 <div class="flex items-center justify-between mx-20 my-5">
                     <button type="submit" class="glass-header text-black py-2 px-4 rounded-md hover:bg-gray-300">Register</button>
                     <button type="button" class="glass-header text-black py-2 px-4 rounded-md hover:bg-gray-300" onclick="toggleLoginFlyout()">Close</button>
@@ -961,5 +976,7 @@
         window.openNotificationsModal = openNotificationsModal;
         window.closeNotificationsModal = closeNotificationsModal;
     </script>
+    <!-- Add script initialization for Cloudinary -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 </body>
 </html>
