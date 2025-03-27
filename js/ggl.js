@@ -1,5 +1,5 @@
 import { signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { auth, db, provider } from './firebase-config.js';
 
 let pendingGoogleUser = null;
@@ -109,6 +109,53 @@ export function cancelUserTypeSelection() {
 // Make this function globally accessible
 window.cancelUserTypeSelection = cancelUserTypeSelection;
 
+// Add ID upload Cloudinary widget
+const idUploadWidget = cloudinary.createUploadWidget(
+    {
+        cloudName: 'dxeyr4pvf', 
+        uploadPreset: 'user_ids',
+        sources: ['local', 'camera'],
+        multiple: false,
+        maxFiles: 1,
+        maxFileSize: 5000000,
+        folder: 'user_ids',
+        tags: ['id_verification'],
+        resourceType: 'image'
+    },
+    (error, result) => {
+        if (!error && result && result.event === "success") {
+            // Store the uploaded ID URL
+            window.uploadedIdUrl = result.info.secure_url;
+            
+            // Update UI to show upload success
+            const idUploadBtn = document.getElementById('idUploadButton');
+            const idStatusText = document.getElementById('idUploadStatus');
+            
+            if (idUploadBtn && idStatusText) {
+                idUploadBtn.textContent = 'ID Uploaded ✓';
+                idUploadBtn.className = 'glass-header bg-green-100 text-green-700 flex items-center justify-center gap-2 w-full py-2 px-4 rounded-md';
+                idStatusText.textContent = 'Valid ID uploaded successfully';
+                idStatusText.className = 'text-xs text-green-600 mt-1';
+            }
+        } else if (error) {
+            console.error('ID upload error:', error);
+            const idStatusText = document.getElementById('idUploadStatus');
+            if (idStatusText) {
+                idStatusText.textContent = 'Error uploading ID. Please try again.';
+                idStatusText.className = 'text-xs text-red-600 mt-1';
+            }
+        }
+    }
+);
+
+// Function to open ID upload widget
+export function uploadId() {
+    idUploadWidget.open();
+}
+
+window.uploadId = uploadId;
+window.uploadedIdUrl = null;
+
 // Registration
 export async function handleRegister(event) {
     event.preventDefault();
@@ -117,18 +164,35 @@ export async function handleRegister(event) {
     const password = document.getElementById('registerPassword').value;
     const userType = document.getElementById('userType').value;
     
+    // Check if ID has been uploaded
+    if (!window.uploadedIdUrl) {
+        alert('Please upload a valid ID for verification');
+        return false;
+    }
+    
     try {
         // Create user in Firebase Auth
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         
-        // Create user document in Firestore
-        await setDoc(doc(db, 'users', user.uid), {
+        // Add the ID URL and verification status to user data
+        const userData = {
             email: user.email,
             userType: userType,
-            createdAt: new Date(),
-            lastLogin: new Date()
-        });
+            status: 'pending',
+            createdAt: serverTimestamp(),
+            idVerification: {
+                idUrl: window.uploadedIdUrl,
+                status: 'pending',
+                submittedAt: serverTimestamp()
+            }
+        };
+        
+        // Create user document in Firestore
+        await setDoc(doc(db, 'users', user.uid), userData);
+        
+        // Reset the uploaded ID URL
+        window.uploadedIdUrl = null;
         
         // Close the login flyout
         toggleLoginFlyout();
