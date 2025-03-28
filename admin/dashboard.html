@@ -140,32 +140,13 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Address</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID Preview</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Registered Date</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="pendingArtists" class="divide-y divide-gray-700">
                     <!-- Pending registrations will be loaded here -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Add User ID Verification Section after Pending Artist Registrations -->
-        <h2 class="text-2xl font-bold mb-4">Pending ID Verifications</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden">
-                <thead class="bg-gray-700">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User Type</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Submitted Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID Preview</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="pendingIdVerifications" class="divide-y divide-gray-700">
-                    <!-- Pending ID verifications will be loaded here -->
                 </tbody>
             </table>
         </div>
@@ -377,7 +358,6 @@
         import { openAddTimelineEventModal, closeTimelineEventModal, removeTimelineImage } from './timeline.js';
         import { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists, displayCurrentlyFeaturedArtists } from './featuredArtists.js';
         import { loadEventRequests, approveEventRequest, rejectEventRequest, uploadQRCode } from './eventRequests.js';
-        import { loadPendingIdVerifications, approveIdVerification, rejectIdVerification } from './idVerification.js';
         window.openAddTimelineEventModal = openAddTimelineEventModal;
         window.closeTimelineEventModal = closeTimelineEventModal;
         window.removeTimelineImage = removeTimelineImage;
@@ -389,9 +369,6 @@
         window.rejectEventRequest = rejectEventRequest;
         window.uploadQRCode = uploadQRCode;
         window.loadEventRequests = loadEventRequests;
-        window.loadPendingIdVerifications = loadPendingIdVerifications;
-        window.approveIdVerification = approveIdVerification;
-        window.rejectIdVerification = rejectIdVerification;
     </script>
 </body>
 </html>

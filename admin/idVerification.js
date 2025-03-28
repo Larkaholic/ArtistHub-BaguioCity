@@ -13,6 +13,14 @@ import {
 // Load pending ID verifications
 export async function loadPendingIdVerifications() {
     try {
+        const pendingVerificationsTable = document.getElementById('pendingIdVerifications');
+        
+        // Check if the element exists before proceeding
+        if (!pendingVerificationsTable) {
+            console.log('Element #pendingIdVerifications not found in DOM. Skipping ID verifications load.');
+            return;
+        }
+        
         const usersRef = collection(db, "users");
         
         // Query for users with pending ID verification
@@ -23,7 +31,6 @@ export async function loadPendingIdVerifications() {
         
         const querySnapshot = await getDocs(q);
         
-        const pendingVerificationsTable = document.getElementById('pendingIdVerifications');
         pendingVerificationsTable.innerHTML = '';
         
         if (querySnapshot.empty) {
@@ -83,11 +90,14 @@ export async function loadPendingIdVerifications() {
         console.error("Error loading pending ID verifications:", error);
         
         const pendingVerificationsTable = document.getElementById('pendingIdVerifications');
-        pendingVerificationsTable.innerHTML = `
-            <tr>
-                <td colspan="6" class="px-6 py-4 text-center text-red-400">Error loading ID verifications. Please try again.</td>
-            </tr>
-        `;
+        // Check if the element exists before setting innerHTML
+        if (pendingVerificationsTable) {
+            pendingVerificationsTable.innerHTML = `
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-red-400">Error loading ID verifications. Please try again.</td>
+                </tr>
+            `;
+        }
     }
 }
 
@@ -132,5 +142,9 @@ export async function rejectIdVerification(userId) {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    loadPendingIdVerifications();
+    if (document.getElementById('pendingIdVerifications')) {
+        loadPendingIdVerifications();
+    } else {
+        console.log('ID verification section not found in DOM. ID verification module not initialized.');
+    }
 });
