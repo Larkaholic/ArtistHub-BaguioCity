@@ -20,12 +20,184 @@ window.showInstructions = showInstructions;
 window.closeInstructions = closeInstructions;
 
 import { auth, db } from '../js/firebase-config.js';
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { GoogleAuthProvider, linkWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // add your Cloudinary configuration
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'artist_profiles';
+// Change this to use the existing upload preset instead of a non-existent one
+const CLOUDINARY_ID_UPLOAD_PRESET = 'artist_profiles'; // Use the existing preset
+
+// Variable to store the uploaded ID URL
+let uploadedIdUrl = null;
+
+// Set up Cloudinary ID upload widget
+const idUploadWidget = cloudinary.createUploadWidget(
+    {
+        cloudName: 'dxeyr4pvf',
+        uploadPreset: CLOUDINARY_ID_UPLOAD_PRESET,
+        sources: ['local', 'camera'],
+        multiple: false,
+        maxFiles: 1,
+        maxFileSize: 5000000, // 5MB max
+        folder: 'user_ids', // Still save in the user_ids folder
+        tags: ['id_verification'],
+        resourceType: 'image'
+    },
+    (error, result) => {
+        if (!error && result && result.event === "success") {
+            console.log('ID upload successful:', result.info);
+            
+            // Store the uploaded ID URL
+            uploadedIdUrl = result.info.secure_url;
+            
+            // Show the ID preview
+            const idPreviewContainer = document.getElementById('idPreviewContainer');
+            const idPreviewImage = document.getElementById('idPreviewImage');
+            
+            if (idPreviewContainer && idPreviewImage) {
+                idPreviewImage.src = uploadedIdUrl;
+                idPreviewContainer.classList.remove('hidden');
+            }
+            
+            // Update upload button to show success
+            const uploadButton = document.getElementById('uploadIdButton');
+            if (uploadButton) {
+                uploadButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    ID Uploaded Successfully
+                `;
+                uploadButton.className = 'bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 flex items-center gap-2';
+            }
+        } else if (error) {
+            console.error('ID upload error:', error);
+            alert('Error uploading ID. Please try again.');
+        }
+    }
+);
+
+// Function to handle ID upload
+function uploadId() {
+    idUploadWidget.open();
+}
+
+// Function to remove uploaded ID
+function removeUploadedId() {
+    uploadedIdUrl = null;
+    
+    const idPreviewContainer = document.getElementById('idPreviewContainer');
+    const uploadButton = document.getElementById('uploadIdButton');
+    
+    if (idPreviewContainer) {
+        idPreviewContainer.classList.add('hidden');
+    }
+    
+    if (uploadButton) {
+        uploadButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Upload ID for Verification
+        `;
+        uploadButton.className = 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center gap-2';
+    }
+}
+
+// Function to check the user's verification status
+async function checkVerificationStatus(userData) {
+    const verificationStatus = document.getElementById('verificationStatus');
+    const verificationMessage = document.getElementById('verificationMessage');
+    const uploadButton = document.getElementById('uploadIdButton');
+    
+    if (!verificationStatus || !verificationMessage || !uploadButton) {
+        console.error('Verification elements not found');
+        return;
+    }
+    
+    if (!userData.idVerification) {
+        // No verification data - needs to upload ID
+        verificationStatus.textContent = 'Not Verified';
+        verificationStatus.className = 'text-red-600 font-semibold';
+        
+        verificationMessage.innerHTML = `
+            <div class="bg-yellow-100 text-yellow-800 p-3 rounded-md">
+                <p class="font-semibold">Your account requires ID verification.</p>
+                <p class="text-sm">Please upload a valid government ID to complete your registration.</p>
+            </div>
+        `;
+        verificationMessage.classList.remove('hidden');
+        
+        uploadButton.disabled = false;
+        return;
+    }
+    
+    // ID exists, check status
+    switch (userData.idVerification.status) {
+        case 'pending':
+            verificationStatus.textContent = 'Pending Review';
+            verificationStatus.className = 'text-yellow-600 font-semibold';
+            
+            verificationMessage.innerHTML = `
+                <div class="bg-yellow-100 text-yellow-800 p-3 rounded-md">
+                    <p class="font-semibold">Your ID is pending review.</p>
+                    <p class="text-sm">We'll notify you once your verification is complete.</p>
+                </div>
+            `;
+            verificationMessage.classList.remove('hidden');
+            
+            // Disable upload button
+            uploadButton.disabled = true;
+            uploadButton.className = 'bg-gray-400 text-gray-700 px-4 py-2 rounded-md cursor-not-allowed flex items-center gap-2';
+            uploadButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                ID Under Review
+            `;
+            break;
+            
+        case 'approved':
+            verificationStatus.textContent = 'Verified';
+            verificationStatus.className = 'text-green-600 font-semibold';
+            
+            verificationMessage.innerHTML = `
+                <div class="bg-green-100 text-green-800 p-3 rounded-md">
+                    <p class="font-semibold">Your ID has been verified.</p>
+                    <p class="text-sm">Thank you for completing the verification process.</p>
+                </div>
+            `;
+            verificationMessage.classList.remove('hidden');
+            
+            // Hide upload button - no longer needed
+            uploadButton.disabled = true;
+            uploadButton.className = 'hidden';
+            break;
+            
+        case 'rejected':
+            verificationStatus.textContent = 'Rejected';
+            verificationStatus.className = 'text-red-600 font-semibold';
+            
+            verificationMessage.innerHTML = `
+                <div class="bg-red-100 text-red-800 p-3 rounded-md">
+                    <p class="font-semibold">Your ID verification was rejected.</p>
+                    <p class="text-sm">Please upload a new, clearer ID document.</p>
+                </div>
+            `;
+            verificationMessage.classList.remove('hidden');
+            
+            // Enable upload button for re-submission
+            uploadButton.disabled = false;
+            break;
+            
+        default:
+            verificationStatus.textContent = 'Unknown';
+            verificationStatus.className = 'text-gray-600 font-semibold';
+            break;
+    }
+}
 
 // Function to add genre tag
 function addGenreTag() {
@@ -54,6 +226,18 @@ function getGenres() {
 
 // Update the auth state listener at the top of the file
 document.addEventListener('DOMContentLoaded', async () => {
+    // Set up the ID upload button
+    const uploadIdButton = document.getElementById('uploadIdButton');
+    if (uploadIdButton) {
+        uploadIdButton.addEventListener('click', uploadId);
+    }
+    
+    // Set up the remove ID button
+    const removeIdButton = document.getElementById('removeIdButton');
+    if (removeIdButton) {
+        removeIdButton.addEventListener('click', removeUploadedId);
+    }
+    
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
             window.location.href = 'profile.html';
@@ -142,6 +326,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (data.photoURL) {
                     document.getElementById('profileImage').src = data.photoURL;
                 }
+                
+                // Check verification status
+                checkVerificationStatus(data);
+                
+                // If the user has a pending ID verification, show the preview
+                if (data.idVerification && data.idVerification.idUrl) {
+                    const idPreviewContainer = document.getElementById('idPreviewContainer');
+                    const idPreviewImage = document.getElementById('idPreviewImage');
+                    
+                    if (idPreviewContainer && idPreviewImage) {
+                        idPreviewImage.src = data.idVerification.idUrl;
+                        idPreviewContainer.classList.remove('hidden');
+                        
+                        // Store the current ID URL for form submission
+                        uploadedIdUrl = data.idVerification.idUrl;
+                    }
+                }
             }
         } catch (error) {
             console.error("Error:", error);
@@ -159,6 +360,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         try {
+            // Get the user document first to check current verification status
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            const userData = userDoc.exists() ? userDoc.data() : {};
+            
             let updates = {
                 displayName: document.getElementById('displayName').value,
                 artistDetails: {
@@ -173,6 +378,26 @@ document.addEventListener('DOMContentLoaded', async () => {
                     google: document.getElementById('google').value
                 }
             };
+
+            // Handle ID verification updates
+            if (uploadedIdUrl) {
+                // Check if this is a new ID or an update to a rejected one
+                if (!userData.idVerification || 
+                    userData.idVerification.status === 'rejected' || 
+                    !userData.idVerification.idUrl) {
+                    
+                    updates.idVerification = {
+                        idUrl: uploadedIdUrl,
+                        status: 'pending',
+                        submittedAt: serverTimestamp()
+                    };
+                    
+                    // If status was rejected, preserve the rejection reason
+                    if (userData.idVerification && userData.idVerification.rejectionReason) {
+                        updates.idVerification.previousRejectionReason = userData.idVerification.rejectionReason;
+                    }
+                }
+            }
 
             // Handle image upload with Cloudinary
             const imageInput = document.getElementById('imageInput');
@@ -402,3 +627,5 @@ async function updateGoogleBindingStatus(user) {
 window.handleGoogleBinding = handleGoogleBinding;
 window.forceUpdateBindingStatus = forceUpdateBindingStatus;
 window.updateGoogleBindingStatus = updateGoogleBindingStatus;
+window.uploadId = uploadId;
+window.removeUploadedId = removeUploadedId;

@@ -37,6 +37,44 @@
                 </button>
             </div>
 
+            <!-- ID Verification Section - New -->
+            <div id="idVerificationSection" class="mt-6 p-4 border-2 border-gray-300 rounded-lg">
+                <h3 class="font-bold text-black text-stroke mb-2">ID Verification</h3>
+                <div id="idVerificationStatus" class="mb-4">
+                    <p class="text-black text-stroke">Status: <span id="verificationStatus" class="text-yellow-600 font-semibold">Checking...</span></p>
+                </div>
+                
+                <div id="idUploadContainer" class="mb-4">
+                    <p class="text-sm text-gray-700 mb-3">Please upload a valid government ID for account verification. This helps us maintain a trusted community.</p>
+                    <p class="text-xs text-gray-500 italic mb-4">Note: Your ID will be reviewed by our admins and automatically deleted after verification.</p>
+                    
+                    <div id="idPreviewContainer" class="hidden mb-4">
+                        <p class="text-sm font-medium mb-2">Uploaded ID Preview:</p>
+                        <div class="relative w-64 h-40 border border-gray-300 rounded-lg overflow-hidden">
+                            <img id="idPreviewImage" src="" alt="ID Preview" class="w-full h-full object-contain">
+                            <button type="button" id="removeIdButton" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="button" 
+                            id="uploadIdButton" 
+                            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Upload ID for Verification
+                    </button>
+                </div>
+                
+                <div id="verificationMessage" class="hidden p-3 rounded-md">
+                    <!-- Verification messages will be displayed here -->
+                </div>
+            </div>
+
             <!-- basic Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -147,6 +185,7 @@
         </div>
     </div>
 
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="./edit-profile.js"></script>
 </body>
