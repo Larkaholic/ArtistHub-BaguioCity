@@ -208,11 +208,21 @@ nav ul li button,
 }
 
 .gallery-item {
+    height: 650px; /* Increased from 500px to 650px to accommodate more content */
+    display: flex;
+    flex-direction: column;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     overflow: hidden;
     transition: transform 0.3s ease;
     margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-item > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .gallery-item:hover {
@@ -221,9 +231,40 @@ nav ul li button,
 
 .gallery-item img {
     width: 100%;
-    height: 200px;
+    height: 250px; /* Fixed height for images */
     object-fit: cover;
-    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.gallery-item .p-4 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.artwork-title {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    max-height: 3.5rem; /* ~2 lines with some margin */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.artwork-description {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 7; /* Increased from 3 to 7 to show more text */
+    -webkit-box-orient: vertical;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-height: none; /* Remove max-height constraint */
 }
 
 .gallery-item h3,
@@ -815,4 +856,256 @@ header { z-index: 40 !important; }
     background: rgba(255, 255, 255, 0.6);
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
+}
+
+/* Add artwork metadata tag styles */
+.artwork-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.genre-tag, .medium-tag, .size-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.5px;
+}
+
+.genre-tag {
+    background-color: rgba(16, 185, 129, 0.25);
+    color: #064e3b;
+    border: 1.5px solid rgba(16, 185, 129, 0.5);
+}
+
+.genre-tag::before {
+    content: '🎨';
+    margin-right: 0.35rem;
+    font-size: 0.9rem;
+}
+
+.medium-tag {
+    background-color: rgba(79, 70, 229, 0.25);
+    color: #3730a3;
+    border: 1.5px solid rgba(79, 70, 229, 0.5);
+}
+
+.medium-tag::before {
+    content: '✏️';
+    margin-right: 0.35rem;
+    font-size: 0.9rem;
+}
+
+.size-tag {
+    background-color: rgba(245, 158, 11, 0.25);
+    color: #7c2d12;
+    border: 1.5px solid rgba(245, 158, 11, 0.5);
+}
+
+.size-tag::before {
+    content: '📏';
+    margin-right: 0.35rem;
+    font-size: 0.9rem;
+}
+
+/* Metadata Container Styles */
+.artwork-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0;
+    min-height: 2.5rem;
+}
+
+/* Shop-style Card Styles */
+.artwork-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 2rem;
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+}
+
+.artwork-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.artwork-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 0.75rem 0.75rem 0 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.artwork-image:hover {
+    transform: scale(1.03);
+}
+
+.artwork-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 0.5rem;
+}
+
+.price-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+    padding: 0.25rem 0;
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.artwork-price {
+    color: #065f46;
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: rgba(209, 250, 229, 0.95);
+    border: 1px solid #10B981;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.artwork-artist {
+    font-weight: 600;
+    color: #1F2937;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Add metadata tag styles */
+.artwork-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.art-gallery-item-content {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+}
+
+.art-gallery-item-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.art-gallery-card-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 0.75rem 0.75rem 0 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.art-gallery-card-image:hover {
+    transform: scale(1.03);
+}
+
+.art-gallery-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.art-gallery-price {
+    color: #065f46;
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: rgba(209, 250, 229, 0.95);
+    border: 1px solid #10B981;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.art-gallery-description {
+    color: #4B5563;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 1rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.art-gallery-button {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #10B981;
+    color: white;
+}
+
+.art-gallery-button:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.art-gallery-button.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.genre-tag, .medium-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.genre-tag {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.medium-tag {
+    background-color: rgba(79, 70, 229, 0.1);
+    color: #3730a3;
+    border: 1px solid rgba(79, 70, 229, 0.2);
 }

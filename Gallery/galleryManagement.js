@@ -617,104 +617,122 @@ async function isItemInAnyCart(artworkId) {
     );
 }
 
+// Add genre icons mapping
+const genreIcons = {
+    'traditional': '🖌️',
+    'contemporary': '🎨',
+    'abstract': '🔷',
+    'photography': '📸',
+    'digital': '💻',
+    'sculpture': '🗿',
+    'mixed-media': '🎯',
+    'default': '🎨'
+};
+
+// Helper function to format genre tags
+function formatGenreTags(genreString) {
+    if (!genreString) return '<span class="genre-tag">Art</span>';
+    
+    if (genreString.includes(',')) {
+        const genres = genreString.split(',').map(g => g.trim());
+        return genres.map(g => 
+            `<span class="genre-tag">${g.charAt(0).toUpperCase() + g.slice(1)}</span>`
+        ).join('');
+    }
+    
+    return `<span class="genre-tag">${genreString.charAt(0).toUpperCase() + genreString.slice(1)}</span>`;
+}
+
 // Modified createImageCard function to handle async properly
 async function createImageCard(docId, data) {
-    const isLastItem = data.stock === 1;
-    let isReserved = false;
-    
-    if (isLastItem) {
-        isReserved = await isItemInAnyCart(docId);
-    }
+    try {
+        if (!data || !docId) {
+            console.error('Missing data or docId for card creation');
+            return null;
+        }
+        
+        const imageUrl = data.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image';
+        const safeTitle = data.title || 'Untitled Artwork';
+        const safeDescription = data.description || 'No description available.';
+        const price = parseFloat(data.price) || 0;
+        const stock = parseInt(data.stock) || 0;
+        
+        const isLastItem = stock === 1;
+        let isReserved = false;
+        
+        if (isLastItem) {
+            isReserved = await isItemInAnyCart(docId);
+        }
 
-    // Add data attributes for searching
-    const formattedTitle = data.title.charAt(0).toUpperCase() + data.title.slice(1);
-    const formattedDescription = data.description.charAt(0).toUpperCase() + data.description.slice(1);
-    
-    const card = document.createElement('div');
-    card.className = 'art-gallery-item';
-    // Add data attributes for filtering
-    card.dataset.genre = (data.genre || '').toLowerCase();
-    card.dataset.size = (data.canvasSize || '').toLowerCase();
-    card.dataset.medium = (data.medium || '').toLowerCase();
-    
-    card.innerHTML = `
-        <div class="art-gallery-item-content">
-            <div class="art-gallery-protective-layer"></div>
-            <img src="${data.imageUrl}" alt="${formattedTitle}" class="art-gallery-card-image">
-            <div class="p-6">
-                <div class="flex flex-col gap-2">
-                    <h3 class="art-gallery-title">${formattedTitle}</h3>
-                    <div class="price-container">
-                        <p class="artwork-price">${formatPrice(data.price)}</p>
-                        <span class="artwork-artist">${data.artist ? `by ${data.artist}` : ''}</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div class="flex flex-col">
-                            <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
-                            <p class="text-sm text-white mt-1">Stock: ${data.stock || 0}</p>
-                        </div>
-                        ${auth.currentUser && auth.currentUser.uid === artistId ?
-                            `<button onclick="deleteImage('${docId}')" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>` : ''}
-                    </div>
-                    <!-- Add metadata for searching -->
-                    <div class="text-sm text-gray-500 mt-2">
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
-                            ${data.genre || 'No Genre'}
-                        </span>
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
-                            ${data.canvasSize || 'No Size'}
-                        </span>
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1">
-                            ${data.medium || 'No Medium'}
-                        </span>
-                    </div>
+        const formattedTitle = safeTitle.charAt(0).toUpperCase() + safeTitle.slice(1);
+        const formattedDescription = safeDescription.charAt(0).toUpperCase() + safeDescription.slice(1);
+        
+        const card = document.createElement('div');
+        card.className = 'art-gallery-item-content';
+        card.dataset.id = docId;
+        
+        card.innerHTML = `
+            <div class="relative">
+                <img src="${imageUrl}" 
+                     alt="${formattedTitle}" 
+                     class="art-gallery-card-image"
+                     onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error';">
+                <div class="absolute top-2 right-2 bg-white bg-opacity-90 px-2 py-1 rounded-full text-sm">
+                    <span class="text-black font-medium">${data.canvasSize || 'Size not specified'}</span>
                 </div>
-                <div class="flex items-center justify-between mt-4">
+            </div>
+            <div class="p-4">
+                <h3 class="art-gallery-title text-xl font-bold mb-2">${formattedTitle}</h3>
+                
+                <div class="mt-2 mb-3">
+                    <p class="art-gallery-price inline-block">₱${price.toFixed(2)}</p>
+                    <span class="text-sm text-gray-600 ml-2">Stock: ${stock}</span>
+                </div>
+
+                <div class="genre-tags mb-3">
+                    ${data.genre ? `<span class="genre-tag">${data.genre}</span>` : ''}
+                    ${data.medium ? `<span class="medium-tag">${data.medium}</span>` : ''}
+                </div>
+                
+                <p class="art-gallery-description text-gray-600 text-sm mb-4">${formattedDescription}</p>
+                
+                <div class="mt-auto">
                     ${auth.currentUser ? 
                         `<button 
-                            onclick="${data.stock > 0 ? `window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)}, ${data.stock})` : 'void(0)'}" 
+                            onclick="${stock > 0 ? `window.addToCart('${docId}', '${formattedTitle.replace(/'/g, "\\'")}', ${price}, ${stock})` : 'void(0)'}" 
                             id="cartButton-${docId}"
-                            class="art-gallery-button flex-1 ${data.stock === 0 || (isLastItem && isReserved) ? 'bg-gray-500 hover:bg-gray-500 cursor-not-allowed' : ''}"
-                            ${data.stock === 0 || (isLastItem && isReserved) ? 'disabled' : ''}
+                            class="art-gallery-button ${stock === 0 || (isLastItem && isReserved) ? 'disabled bg-gray-400' : ''}"
+                            ${stock === 0 || (isLastItem && isReserved) ? 'disabled' : ''}
                         >
-                            ${data.stock === 0 ? 'Out of Stock' : 
+                            ${stock === 0 ? 'Out of Stock' : 
                               (isLastItem && isReserved) ? 'Item Reserved' : 
-                              'Add this to Cart'}
+                              'Add to Cart'}
                         </button>` : 
-                        `<button disabled class="art-gallery-button opacity-50 cursor-not-allowed w-full">
+                        `<button disabled class="art-gallery-button bg-gray-400">
                             Please login to purchase
                         </button>`
                     }
                 </div>
             </div>
-        </div>
-    `;
-    
-    // Add click event to image
-    const img = card.querySelector('.art-gallery-card-image');
-    img.addEventListener('click', () => {
-        const modalImg = document.querySelector('#art-gallery-modal-img');
-        modalImg.src = data.imageUrl;
-        modal.classList.add('art-modal-active');
-    });
+        `;
 
-    // Add event listeners to prevent right-click and drag
-    const protectiveLayer = card.querySelector('.art-gallery-protective-layer');
-    protectiveLayer.addEventListener('contextmenu', (e) => e.preventDefault());
-    protectiveLayer.addEventListener('dragstart', (e) => e.preventDefault());
-    
-    // Maintain click functionality for modal
-    protectiveLayer.addEventListener('click', () => {
-        const modalImg = document.querySelector('#art-gallery-modal-img');
-        modalImg.src = data.imageUrl;
-        modal.classList.add('art-modal-active');
-    });
-    
-    return card;
+        // Add image modal functionality
+        const img = card.querySelector('.art-gallery-card-image');
+        if (img) {
+            img.addEventListener('click', () => {
+                const modalImg = document.querySelector('#art-gallery-modal-img');
+                if (modalImg) {
+                    modalImg.src = imageUrl;
+                    modal.classList.add('art-modal-active');
+                }
+            });
+        }
+
+        return card;
+    } catch (error) {
+        console.error('Error creating image card:', error);
+        return null;
+    }
 }
 
 function applyFilters() {
@@ -1140,121 +1158,3 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadFormContainer.style.zIndex = '10000';
     }
 });
-
-// Enhance the createArtworkCard function to improve price visibility
-function createArtworkCard(artwork) {
-    // ...existing code...
-    
-    // Format the price with better styling for visibility
-    const priceDisplay = artwork.price 
-        ? `<div class="price-container">
-             <p class="artwork-price">${formatPrice(artwork.price)}</p>
-             <span class="artwork-artist">${artwork.artist ? `by ${artwork.artist}` : ''}</span>
-           </div>`
-        : '';
-        
-    // ...existing code...
-    
-    // Use the enhanced price display in the card HTML
-    const card = document.createElement('div');
-    card.className = 'gallery-item';
-    card.innerHTML = `
-        <div class="relative">
-            <img src="${imageUrl}" alt="${artwork.title || 'Artwork'}" class="artwork-image">
-            ${artwork.genre ? `<div class="genre-tag">${artwork.genre}</div>` : ''}
-        </div>
-        <div class="p-4">
-            <h3 class="artwork-title">${artwork.title || 'Untitled'}</h3>
-            ${priceDisplay}
-            <p class="artwork-description">${artwork.description || 'No description available'}</p>
-            ${actionButtons}
-        </div>
-    `;
-    
-    // ...existing code...
-    
-    return card;
-}
-
-// Helper function to format price consistently
-function formatPrice(price) {
-    if (!price) return '';
-    
-    try {
-        const numPrice = parseFloat(price);
-        return numPrice.toLocaleString('en-PH', {
-            style: 'currency',
-            currency: 'PHP'
-        });
-    } catch (e) {
-        console.warn('Error formatting price:', e);
-        return `₱${price}`;
-    }
-}
-
-// Add these CSS styles to improve price visibility
-function addPriceStyles() {
-    const styleEl = document.createElement('style');
-    styleEl.textContent = `
-        .price-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0.5rem 0;
-            padding: 0.25rem 0;
-            border-top: 1px solid rgba(16, 185, 129, 0.2);
-            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-        }
-        
-        .artwork-price {
-            color: #065f46;
-            font-weight: 700;
-            font-size: 1.25rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            background: rgba(209, 250, 229, 0.95);
-            display: inline-block;
-            border: 1px solid #10B981;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
-        }
-        
-        .artwork-artist {
-            font-weight: 600;
-            color: #1F2937;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-        }
-    `;
-    document.head.appendChild(styleEl);
-}
-
-// Call this function when the gallery is initialized
-document.addEventListener('DOMContentLoaded', function() {
-    // ...existing code...
-    
-    // Add price styles to improve visibility
-    addPriceStyles();
-    
-    // ...existing code...
-});
-
-// Update the loadArtworkDetails function to use the same price styling
-function loadArtworkDetails(artworkId) {
-    // ...existing code...
-    
-    // When displaying artwork details, format price with the same styling
-    modalContent.innerHTML = `
-        // ...existing code...
-        ${artwork.price ? `
-            <div class="price-container mt-4">
-                <p class="artwork-price">${formatPrice(artwork.price)}</p>
-                <span class="artwork-artist">${artwork.artist ? `by ${artwork.artist}` : ''}</span>
-            </div>
-        ` : ''}
-        // ...existing code...
-    `;
-    
-    // ...existing code...
-}
