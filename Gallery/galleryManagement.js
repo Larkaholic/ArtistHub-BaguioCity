@@ -644,6 +644,10 @@ async function createImageCard(docId, data) {
             <div class="p-6">
                 <div class="flex flex-col gap-2">
                     <h3 class="art-gallery-title">${formattedTitle}</h3>
+                    <div class="price-container">
+                        <p class="artwork-price">${formatPrice(data.price)}</p>
+                        <span class="artwork-artist">${data.artist ? `by ${data.artist}` : ''}</span>
+                    </div>
                     <div class="flex justify-between items-center">
                         <div class="flex flex-col">
                             <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
@@ -1136,3 +1140,121 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadFormContainer.style.zIndex = '10000';
     }
 });
+
+// Enhance the createArtworkCard function to improve price visibility
+function createArtworkCard(artwork) {
+    // ...existing code...
+    
+    // Format the price with better styling for visibility
+    const priceDisplay = artwork.price 
+        ? `<div class="price-container">
+             <p class="artwork-price">${formatPrice(artwork.price)}</p>
+             <span class="artwork-artist">${artwork.artist ? `by ${artwork.artist}` : ''}</span>
+           </div>`
+        : '';
+        
+    // ...existing code...
+    
+    // Use the enhanced price display in the card HTML
+    const card = document.createElement('div');
+    card.className = 'gallery-item';
+    card.innerHTML = `
+        <div class="relative">
+            <img src="${imageUrl}" alt="${artwork.title || 'Artwork'}" class="artwork-image">
+            ${artwork.genre ? `<div class="genre-tag">${artwork.genre}</div>` : ''}
+        </div>
+        <div class="p-4">
+            <h3 class="artwork-title">${artwork.title || 'Untitled'}</h3>
+            ${priceDisplay}
+            <p class="artwork-description">${artwork.description || 'No description available'}</p>
+            ${actionButtons}
+        </div>
+    `;
+    
+    // ...existing code...
+    
+    return card;
+}
+
+// Helper function to format price consistently
+function formatPrice(price) {
+    if (!price) return '';
+    
+    try {
+        const numPrice = parseFloat(price);
+        return numPrice.toLocaleString('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        });
+    } catch (e) {
+        console.warn('Error formatting price:', e);
+        return `₱${price}`;
+    }
+}
+
+// Add these CSS styles to improve price visibility
+function addPriceStyles() {
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+        .price-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.5rem 0;
+            padding: 0.25rem 0;
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .artwork-price {
+            color: #065f46;
+            font-weight: 700;
+            font-size: 1.25rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            background: rgba(209, 250, 229, 0.95);
+            display: inline-block;
+            border: 1px solid #10B981;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+        }
+        
+        .artwork-artist {
+            font-weight: 600;
+            color: #1F2937;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+    `;
+    document.head.appendChild(styleEl);
+}
+
+// Call this function when the gallery is initialized
+document.addEventListener('DOMContentLoaded', function() {
+    // ...existing code...
+    
+    // Add price styles to improve visibility
+    addPriceStyles();
+    
+    // ...existing code...
+});
+
+// Update the loadArtworkDetails function to use the same price styling
+function loadArtworkDetails(artworkId) {
+    // ...existing code...
+    
+    // When displaying artwork details, format price with the same styling
+    modalContent.innerHTML = `
+        // ...existing code...
+        ${artwork.price ? `
+            <div class="price-container mt-4">
+                <p class="artwork-price">${formatPrice(artwork.price)}</p>
+                <span class="artwork-artist">${artwork.artist ? `by ${artwork.artist}` : ''}</span>
+            </div>
+        ` : ''}
+        // ...existing code...
+    `;
+    
+    // ...existing code...
+}

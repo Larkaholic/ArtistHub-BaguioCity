@@ -780,3 +780,39 @@ header { z-index: 40 !important; }
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+/* Update gallery artwork price styling for better visibility */
+.gallery-artwork-price {
+    color: #065f46; /* Darker green for better contrast */
+    font-weight: 700; /* Bolder font */
+    font-size: 1.25rem;
+    padding: 0.5rem 0.75rem; /* Slightly more padding */
+    border-radius: 0.5rem;
+    background: rgba(209, 250, 229, 0.95); /* Lighter, more opaque background */
+    display: inline-block;
+    border: 1px solid #10B981; /* Add border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8); /* Text shadow for readability */
+    margin-top: 0.5rem; /* Add some spacing */
+    margin-bottom: 0.5rem; /* Add some spacing */
+}
+
+/* Add gallery price container with improved layout */
+.gallery-price-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+    padding: 0.25rem 0;
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Improve gallery artist attribution styling */
+.gallery-artwork-artist {
+    font-weight: 600;
+    color: #1F2937;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
