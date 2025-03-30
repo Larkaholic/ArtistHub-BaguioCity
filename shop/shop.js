@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { db, auth } from '../js/firebase-config.js';
 
 let allArtworks = []; // Store all artworks for filtering
@@ -634,4 +634,90 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(styleEl);
+});
+
+// Add cart functionality
+let cart = [];
+
+// Cart functions
+window.toggleCart = function() {
+    const cartModal = document.getElementById('cartModal');
+    if (cartModal) {
+        cartModal.classList.toggle('hidden');
+    }
+}
+
+window.removeFromCart = async function(index) {
+    if (!auth.currentUser) return;
+    
+    try {
+        cart.splice(index, 1);
+        const cartRef = collection(db, 'carts');
+        const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+            const cartDoc = querySnapshot.docs[0];
+            await updateDoc(doc(db, 'carts', cartDoc.id), {
+                items: cart,
+                lastUpdated: serverTimestamp()
+            });
+        }
+        
+        updateCartUI();
+        showNotification('Item removed from cart', 'success');
+    } catch (error) {
+        console.error('Error removing item from cart:', error);
+        showNotification('Failed to remove item', 'error');
+    }
+}
+
+function updateCartUI() {
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+    const totalItems = document.getElementById('totalItems');
+    const totalPrice = document.getElementById('totalPrice');
+    
+    if (cartCount) cartCount.textContent = cart.length;
+    
+    if (cartItems) {
+        cartItems.innerHTML = '';
+        let total = 0;
+        
+        cart.forEach((item, index) => {
+            const itemPrice = parseFloat(item.price) || 0;
+            const itemElement = document.createElement('div');
+            itemElement.className = 'flex justify-between items-center p-2 bg-white bg-opacity-10 rounded-lg';
+            itemElement.innerHTML = `
+                <div>
+                    <h3 class="font-semibold text-black">${item.title}</h3>
+                    <p class="text-sm text-black">₱${itemPrice.toFixed(2)}</p>
+                </div>
+                <button onclick="window.removeFromCart(${index})" class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            cartItems.appendChild(itemElement);
+            total += itemPrice;
+        });
+        
+        if (totalItems) totalItems.textContent = cart.length;
+        if (totalPrice) totalPrice.textContent = total.toFixed(2);
+    }
+}
+
+// Initialize cart when user logs in
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        const cartRef = collection(db, 'carts');
+        const q = query(cartRef, where('userId', '==', user.uid));
+        
+        onSnapshot(q, (querySnapshot) => {
+            if (!querySnapshot.empty) {
+                const cartDoc = querySnapshot.docs[0];
+                cart = cartDoc.data().items || [];
+                updateCartUI();
+            }
+        });
+    }
 });
