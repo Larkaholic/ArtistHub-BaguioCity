@@ -239,9 +239,9 @@ function createArtworkCard(id, data, genreIcon) {
                     <i class="fas fa-${genreIcon} text-xl text-gray-600"></i>
                     <h3 class="artwork-title text-xl font-bold">${data.title || 'Untitled artwork'}</h3>
                 </div>
-                <div class="flex justify-between items-center">
-                    <p class="artwork-price text-lg font-semibold text-green-600">${formattedPrice}</p>
-                    <span class="text-sm text-gray-500">
+                <div class="price-container">
+                    <p class="artwork-price">${formattedPrice}</p>
+                    <span class="artwork-artist">
                         ${data.artist ? `by ${data.artist}` : ''}
                     </span>
                 </div>
