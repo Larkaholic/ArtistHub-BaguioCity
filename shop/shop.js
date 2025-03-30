@@ -211,68 +211,79 @@ function displayArtworks(artworks) {
 }
 
 function createArtworkCard(id, data, genreIcon) {
-    const hasImage = data.imageUrl && typeof data.imageUrl === 'string' && data.imageUrl.trim() !== '';
-    const imageUrl = hasImage ? data.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image+Available';
-    const formattedPrice = parseFloat(data.price || 0).toLocaleString('en-PH', {
-        style: 'currency',
-        currency: 'PHP'
-    });
-    
-    // Format genre and other metadata for display with uppercase first letter
-    const genre = data.genre ? data.genre.charAt(0).toUpperCase() + data.genre.slice(1) : 'Art';
-    const medium = data.medium ? data.medium.charAt(0).toUpperCase() + data.medium.slice(1) : '';
-    const size = data.canvasSize || '';
-    
-    const card = document.createElement('div');
-    card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
-    card.innerHTML = `
-        <div class="relative">
-            <img 
-                src="${imageUrl}" 
-                alt="${data.title || 'Untitled artwork'}" 
-                class="artwork-image w-full h-40 object-cover"
-                onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
-                loading="lazy"
-            >
-            <div class="absolute bottom-0 right-0 bg-black bg-opacity-70 text-white px-1 py-0.5 text-xs">
-                ${genre}
+    try {
+        const hasImage = data.imageUrl && typeof data.imageUrl === 'string' && data.imageUrl.trim() !== '';
+        const imageUrl = hasImage ? data.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image+Available';
+        const formattedPrice = parseFloat(data.price || 0).toLocaleString('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        });
+        
+        // Format genre and other metadata for display with uppercase first letter
+        const genre = data.genre ? data.genre.charAt(0).toUpperCase() + data.genre.slice(1) : 'Art';
+        const medium = data.medium ? data.medium.charAt(0).toUpperCase() + data.medium.slice(1) : '';
+        const size = data.canvasSize || '';
+        
+        // Get artist name from artistName or artistEmail
+        const artistName = data.artistName || data.artistEmail?.split('@')[0] || 'Unknown Artist';
+        
+        const card = document.createElement('div');
+        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
+        card.innerHTML = `
+            <div class="relative">
+                <img 
+                    src="${imageUrl}" 
+                    alt="${data.title || 'Untitled artwork'}" 
+                    class="artwork-image w-full h-40 object-cover"
+                    onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
+                    loading="lazy"
+                >
+                <div class="absolute bottom-2 left-4 bg-black bg-opacity-70 text-white px-3 py-1 text-xs rounded-md">
+                    <i class="fas fa-user mr-1"></i>${artistName}
+                </div>
+                <div class="absolute bottom-2 right-4 bg-black bg-opacity-70 text-white px-3 py-1 text-xs rounded-md">
+                    <i class="fas fa-${genreIcon} mr-1"></i>${genre}
+                </div>
             </div>
-        </div>
-        <div class="p-3 flex flex-col h-[300px]">
-            <div class="flex items-center gap-1 mb-1">
-                <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
-                <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
+            <div class="p-3 flex flex-col h-[300px]">
+                <div class="flex items-center gap-1 mb-1">
+                    <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
+                    <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
+                </div>
+                <div class="price-container mb-1">
+                    <p class="artwork-price">${formattedPrice}</p>
+                    <span class="artwork-artist">
+                        ${data.artist ? `by ${data.artist}` : ''}
+                    </span>
+                </div>
+                
+                <div class="artwork-meta flex flex-wrap gap-1">
+                    <span class="genre-tag">${genre}</span>
+                    ${medium ? `<span class="medium-tag">${medium}</span>` : ''}
+                    ${size ? `<span class="size-tag">${size}</span>` : ''}
+                </div>
+                
+                <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
+                
+                <div class="mt-auto pt-1">
+                    ${auth.currentUser ? 
+                        `<button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
+                            class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>` :
+                        `<button onclick="window.toggleLoginFlyout()" 
+                            class="add-to-cart-btn artwork-button w-full bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
+                        </button>`
+                    }
+                </div>
             </div>
-            <div class="price-container mb-1">
-                <p class="artwork-price">${formattedPrice}</p>
-                <span class="artwork-artist">
-                    ${data.artist ? `by ${data.artist}` : ''}
-                </span>
-            </div>
-            
-            <div class="artwork-meta flex flex-wrap gap-1">
-                <span class="genre-tag">${genre}</span>
-                ${medium ? `<span class="medium-tag">${medium}</span>` : ''}
-                ${size ? `<span class="size-tag">${size}</span>` : ''}
-            </div>
-            
-            <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
-            
-            <div class="mt-auto pt-1">
-                ${auth.currentUser ? 
-                    `<button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
-                        class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
-                        <i class="fas fa-cart-plus mr-1"></i> Add to Cart
-                    </button>` :
-                    `<button onclick="window.toggleLoginFlyout()" 
-                        class="add-to-cart-btn artwork-button w-full bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
-                        <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
-                    </button>`
-                }
-            </div>
-        </div>
-    `;
-    return card;
+        `;
+        return card;
+    } catch (error) {
+        console.error('Error creating artwork card:', error);
+        return null;
+    }
 }
 
 // Update the function to check if a user can purchase items, but keep existing implementation
