@@ -23,8 +23,6 @@
     <script type="module">
         import { initNavigation } from './js/navigation.js';
         import { initProfileNavigation } from './js/profile-navigation.js';
-        
-        // Initialize both modules immediately
         initNavigation();
         initProfileNavigation();
     </script>
@@ -32,7 +30,7 @@
 <body class="bg-cover">
     <div id="announcement" class="announcement-banner">
         <span class="new-badge">New!</span>
-        <span>Please update your profiles</span>
+        <span>Everyone, Please update your profiles</span>
         <button class="close-btn" onclick="closeAnnouncement()">×</button>
     </div>
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
