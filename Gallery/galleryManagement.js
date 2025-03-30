@@ -617,16 +617,16 @@ async function isItemInAnyCart(artworkId) {
     );
 }
 
-// Add genre icons mapping
+// Add genre icons mapping to match shop.html
 const genreIcons = {
-    'traditional': '🖌️',
-    'contemporary': '🎨',
-    'abstract': '🔷',
-    'photography': '📸',
-    'digital': '💻',
-    'sculpture': '🗿',
-    'mixed-media': '🎯',
-    'default': '🎨'
+    'traditional': 'paint-brush',
+    'contemporary': 'shapes',
+    'abstract': 'draw-polygon',
+    'photography': 'camera',
+    'digital': 'desktop',
+    'sculpture': 'cube',
+    'mixed-media': 'layer-group',
+    'default': 'palette'
 };
 
 // Helper function to format genre tags
@@ -650,66 +650,66 @@ async function createImageCard(docId, data) {
             console.error('Missing data or docId for card creation');
             return null;
         }
-        
-        const imageUrl = data.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image';
-        const safeTitle = data.title || 'Untitled Artwork';
-        const safeDescription = data.description || 'No description available.';
-        const price = parseFloat(data.price) || 0;
-        const stock = parseInt(data.stock) || 0;
-        
-        const isLastItem = stock === 1;
-        let isReserved = false;
-        
-        if (isLastItem) {
-            isReserved = await isItemInAnyCart(docId);
-        }
 
-        const formattedTitle = safeTitle.charAt(0).toUpperCase() + safeTitle.slice(1);
-        const formattedDescription = safeDescription.charAt(0).toUpperCase() + safeDescription.slice(1);
+        const hasImage = data.imageUrl && typeof data.imageUrl === 'string' && data.imageUrl.trim() !== '';
+        const imageUrl = hasImage ? data.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image+Available';
+        const formattedPrice = parseFloat(data.price || 0).toLocaleString('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        });
+        
+        // Format genre and other metadata for display with uppercase first letter
+        const genre = data.genre ? data.genre.charAt(0).toUpperCase() + data.genre.slice(1) : 'Art';
+        const medium = data.medium ? data.medium.charAt(0).toUpperCase() + data.medium.slice(1) : '';
+        const size = data.canvasSize || '';
+        const genreIcon = genreIcons[genre.toLowerCase()] || genreIcons.default;
         
         const card = document.createElement('div');
-        card.className = 'art-gallery-item-content';
-        card.dataset.id = docId;
-        
+        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
             <div class="relative">
-                <img src="${imageUrl}" 
-                     alt="${formattedTitle}" 
-                     class="art-gallery-card-image"
-                     onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error';">
-                <div class="absolute top-2 right-2 bg-white bg-opacity-90 px-2 py-1 rounded-full text-sm">
-                    <span class="text-black font-medium">${data.canvasSize || 'Size not specified'}</span>
+                <img 
+                    src="${imageUrl}" 
+                    alt="${data.title || 'Untitled artwork'}" 
+                    class="artwork-image w-full h-40 object-cover"
+                    onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
+                    loading="lazy"
+                >
+                <div class="absolute bottom-0 right-0 bg-black bg-opacity-70 text-white px-1 py-0.5 text-xs">
+                    <i class="fas fa-${genreIcon} mr-1"></i>${genre}
                 </div>
             </div>
-            <div class="p-4">
-                <h3 class="art-gallery-title text-xl font-bold mb-2">${formattedTitle}</h3>
-                
-                <div class="mt-2 mb-3">
-                    <p class="art-gallery-price inline-block">₱${price.toFixed(2)}</p>
-                    <span class="text-sm text-gray-600 ml-2">Stock: ${stock}</span>
+            <div class="p-3 flex flex-col h-[300px]">
+                <div class="flex items-center gap-1 mb-1">
+                    <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
+                    <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
                 </div>
-
-                <div class="genre-tags mb-3">
-                    ${data.genre ? `<span class="genre-tag">${data.genre}</span>` : ''}
-                    ${data.medium ? `<span class="medium-tag">${data.medium}</span>` : ''}
+                <div class="price-container mb-1">
+                    <p class="artwork-price">${formattedPrice}</p>
+                    <span class="artwork-artist">
+                        ${data.artist ? `by ${data.artist}` : ''}
+                    </span>
                 </div>
                 
-                <p class="art-gallery-description text-gray-600 text-sm mb-4">${formattedDescription}</p>
+                <div class="artwork-meta flex flex-wrap gap-1">
+                    <span class="genre-tag">
+                        <i class="fas fa-${genreIcon} mr-1"></i>${genre}
+                    </span>
+                    ${medium ? `<span class="medium-tag"><i class="fas fa-pencil-alt mr-1"></i>${medium}</span>` : ''}
+                    ${size ? `<span class="size-tag"><i class="fas fa-ruler mr-1"></i>${size}</span>` : ''}
+                </div>
                 
-                <div class="mt-auto">
+                <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
+                
+                <div class="mt-auto pt-1">
                     ${auth.currentUser ? 
-                        `<button 
-                            onclick="${stock > 0 ? `window.addToCart('${docId}', '${formattedTitle.replace(/'/g, "\\'")}', ${price}, ${stock})` : 'void(0)'}" 
-                            id="cartButton-${docId}"
-                            class="art-gallery-button ${stock === 0 || (isLastItem && isReserved) ? 'disabled bg-gray-400' : ''}"
-                            ${stock === 0 || (isLastItem && isReserved) ? 'disabled' : ''}
-                        >
-                            ${stock === 0 ? 'Out of Stock' : 
-                              (isLastItem && isReserved) ? 'Item Reserved' : 
-                              'Add to Cart'}
-                        </button>` : 
-                        `<button disabled class="art-gallery-button bg-gray-400">
-                            Please login to purchase
+                        `<button onclick="window.addToCart('${docId}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
+                            class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>` :
+                        `<button onclick="window.toggleLoginFlyout()" 
+                            class="add-to-cart-btn artwork-button w-full bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
                         </button>`
                     }
                 </div>
@@ -717,7 +717,7 @@ async function createImageCard(docId, data) {
         `;
 
         // Add image modal functionality
-        const img = card.querySelector('.art-gallery-card-image');
+        const img = card.querySelector('.artwork-image');
         if (img) {
             img.addEventListener('click', () => {
                 const modalImg = document.querySelector('#art-gallery-modal-img');
