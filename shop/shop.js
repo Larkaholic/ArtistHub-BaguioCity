@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where, updateDoc, serverTimestamp, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { db, auth } from '../js/firebase-config.js';
 
 let allArtworks = []; // Store all artworks for filtering
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Update the addToCart function to check eligibility first
+// Update the addToCart function to properly handle cart updates
 window.addToCart = async function(productId, productName, price) {
     const purchaseStatus = await canUserPurchase();
     
@@ -442,14 +442,84 @@ window.addToCart = async function(productId, productName, price) {
                 window.toggleLoginFlyout();
             }
         }
-        
         return;
     }
-    
-    // Original addToCart functionality can continue here
-    alert(`${productName} added to cart!`);
-    // Implement actual cart functionality here
+
+    try {
+        const cartRef = collection(db, 'carts');
+        const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
+        const querySnapshot = await getDocs(q);
+        
+        const cartItem = {
+            productId,
+            title: productName,
+            price: parseFloat(price),
+            addedAt: new Date().toISOString() // Use ISO string instead of serverTimestamp
+        };
+
+        if (querySnapshot.empty) {
+            // Create new cart
+            await addDoc(cartRef, {
+                userId: auth.currentUser.uid,
+                items: [cartItem],
+                lastUpdated: serverTimestamp()
+            });
+        } else {
+            // Update existing cart
+            const cartDoc = querySnapshot.docs[0];
+            const currentItems = cartDoc.data().items || [];
+            await updateDoc(doc(db, 'carts', cartDoc.id), {
+                items: [...currentItems, cartItem],
+                lastUpdated: serverTimestamp()
+            });
+        }
+
+        // Update local cart array and UI
+        cart.push(cartItem);
+        updateCartUI();
+        
+        // Show success message
+        const message = document.createElement('div');
+        message.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50';
+        message.textContent = 'Added to cart!';
+        document.body.appendChild(message);
+        setTimeout(() => message.remove(), 2000);
+
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Failed to add item to cart. Please try again.');
+    }
 }
+
+// Update cart listener to handle real-time updates
+function initializeCartListener() {
+    if (!auth.currentUser) return;
+
+    const cartRef = collection(db, 'carts');
+    const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
+    
+    onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+            const cartDoc = snapshot.docs[0];
+            cart = cartDoc.data().items || [];
+            updateCartUI();
+        } else {
+            cart = [];
+            updateCartUI();
+        }
+    });
+}
+
+// Update the initialization code
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        initializeCartListener();
+    } else {
+        cart = [];
+        updateCartUI();
+    }
+    loadArtworks();
+});
 
 // Ensure toggleLoginFlyout is defined as a global function
 window.toggleLoginFlyout = function() {
@@ -645,6 +715,22 @@ window.toggleCart = function() {
     if (cartModal) {
         cartModal.classList.toggle('hidden');
     }
+}
+
+// Add this function before window.removeFromCart
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
 window.removeFromCart = async function(index) {
