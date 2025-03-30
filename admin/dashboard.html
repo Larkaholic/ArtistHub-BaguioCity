@@ -23,6 +23,7 @@
     <script type="module" src="timeline.js"></script>
     <script type="module" src="featuredArtists.js"></script>
     <script type="module" src="eventRequests.js"></script>
+    <script type="module" src="idVerification.js"></script>
     <script type="module">
         import { openAddTimelineEventModal, closeTimelineEventModal, removeTimelineImage } from './timeline.js';
         import { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists, displayCurrentlyFeaturedArtists } from './featuredArtists.js';
@@ -149,6 +150,31 @@
                     <!-- Pending registrations will be loaded here -->
                 </tbody>
             </table>
+        </div>
+
+        <!-- ID Verification Section -->
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h2 class="text-2xl font-bold text-white mb-4">Pending ID Verifications</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Submitted</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingIdVerifications" class="bg-gray-800 divide-y divide-gray-700">
+                        <!-- Pending ID verifications will be loaded here -->
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-400">Loading ID verifications...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Image Crawler Section -->
