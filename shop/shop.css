@@ -174,6 +174,13 @@
 .cart-item {
     transition: all 0.3s ease;
     margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    padding: 1rem;
+    border-radius: 0.5rem;
 }
 
 .cart-item:hover {
@@ -223,6 +230,9 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
+    height: 650px; /* Increased from 500px to 650px */
+    display: flex;
+    flex-direction: column;
 }
 
 .artwork-card:hover {
@@ -230,9 +240,13 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+.artwork-card > div:first-child {
+    height: 250px; /* Fixed image container height */
+}
+
 .artwork-image {
     width: 100%;
-    height: 16rem;
+    height: 250px; /* Fixed height for images */
     object-fit: cover;
     border-radius: 0.75rem 0.75rem 0 0;
     cursor: pointer;
@@ -243,8 +257,23 @@
     transform: scale(1.03);
 }
 
+.artwork-card .p-6 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
 .artwork-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    max-height: 3.5rem; /* ~2 lines with some margin */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     font-weight: 700;
     color: #1F2937;
     text-shadow: 
@@ -267,6 +296,16 @@
 }
 
 .artwork-description {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 7; /* Increased from 3 to 7 */
+    -webkit-box-orient: vertical;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    min-height: 0;
+    max-height: none; /* Remove max-height to allow more content */
     color: black;
     font-size: 1rem;
     line-height: 1.6;
@@ -275,22 +314,72 @@
     background: rgba(255, 255, 255, 0.05);
     border-radius: 0.5rem;
     border-left: 4px solid #10B981;
-    min-height: 60px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+    max-height: 120px; /* Limit height to prevent pushing button down */
+    overflow-y: auto; /* Allow scrolling for long descriptions */
 }
 
+.artwork-card .flex.justify-center {
+    margin-top: auto; /* Push button to bottom */
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.add-to-cart-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    width: auto;
+    min-width: 80%;
+    margin: 0 auto;
+}
+
+.artwork-card .flex.justify-center {
+    margin-top: auto; /* Push button to bottom */
+}
+
+/* Ensure artwork metadata doesn't push content down too much */
+.artwork-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem 0; /* Reduced margin */
+    max-height: 80px; /* Prevent excessive height */
+    overflow-y: auto; /* Allow scrolling if too many tags */
+}
+
+/* Update the artwork price styling for better visibility */
 .artwork-price {
-    color: #10B981;
-    font-weight: 600;
+    color: #065f46; /* Darker green for better contrast */
+    font-weight: 700; /* Bolder font */
     font-size: 1.25rem;
-    padding: 0.25rem 0.75rem;
+    padding: 0.5rem 0.75rem; /* Slightly more padding */
     border-radius: 0.5rem;
-    background: rgba(16, 185, 129, 0.1);
+    background: rgba(209, 250, 229, 0.95); /* Lighter, more opaque background */
     display: inline-block;
+    border: 1px solid #10B981; /* Add border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8); /* Text shadow for readability */
+    margin-top: 0.5rem; /* Add some spacing */
+    margin-bottom: 0.5rem; /* Add some spacing */
+}
+
+/* Add this to create a price container with improved layout */
+.price-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5rem 0;
+    padding: 0.25rem 0;
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Improve artist attribution styling */
+.artwork-artist {
+    font-weight: 600;
+    color: #1F2937;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
 }
 
 .artwork-button {

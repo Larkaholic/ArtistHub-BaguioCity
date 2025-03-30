@@ -47,6 +47,14 @@
                 </li>
             </ul>
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
+                <li id="cartNav" class="hidden nav-item">
+                    <a href="#" onclick="toggleCart()" class="flex items-center gap-2 text-black hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>Cart (<span id="cartCount">0</span>)</span>
+                    </a>
+                </li>
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
                     <a href="javascript:void(0)" onclick="navToEvent('../admin/dashboard.html')">Admin</a>
                 </li>
@@ -322,5 +330,41 @@
     };
   });
 </script>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+    <div class="items-center rounded-lg w-96 mx-10 p-6 bg-white border-2 border-black">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-black">Shopping Cart</h2>
+            <button onclick="window.toggleCart()" class="text-black hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div id="cartItems" class="space-y-4 max-h-96 overflow-y-auto text-black">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="mt-4 flex justify-between items-center text-black">
+            <div>
+                <p>Total Items: <span id="totalItems">0</span></p>
+                <p>Total Price: ₱<span id="totalPrice">0.00</span></p>
+            </div>
+            <button onclick="window.checkout()" class="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600">
+                Checkout
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Also add this in the mobile menu -->
+<div id="cartNavMobile" class="hidden px-4 py-2">
+    <a href="#" onclick="toggleCart()" class="flex items-center gap-2 text-black hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <span>Cart (<span id="cartCountMobile">0</span>)</span>
+    </a>
+</div>
 </body>
 </html>
