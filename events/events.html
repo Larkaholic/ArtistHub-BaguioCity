@@ -287,9 +287,14 @@
                         <input type="text" id="eventTitle" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
                     </div>
                     
-                    <div>
-                        <label for="eventDate" class="block font-medium">Event Date:</label>
-                        <input type="date" id="eventDate" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                    <div class="mb-4">
+                        <label for="eventStartDate" class="block text-gray-700 font-medium mb-2">Start Date & Time</label>
+                        <input type="datetime-local" id="eventStartDate" name="eventStartDate" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-green-400" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="eventEndDate" class="block text-gray-700 font-medium mb-2">End Date & Time</label>
+                        <input type="datetime-local" id="eventEndDate" name="eventEndDate" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-green-400" required>
                     </div>
                     
                     <div>
@@ -866,7 +871,8 @@
             
             // Get form values
             const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
+            const startDate = document.getElementById('eventStartDate').value;
+            const endDate = document.getElementById('eventEndDate').value;
             const location = document.getElementById('eventLocation').value;
             const description = document.getElementById('eventDescription').value;
             const email = document.getElementById('contactEmail').value;
@@ -874,7 +880,8 @@
             // Create event request object
             const eventRequest = {
                 title,
-                date,
+                startDate,
+                endDate,
                 location,
                 description,
                 contactEmail: email,
