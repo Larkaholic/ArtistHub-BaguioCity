@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    initializeImageModal();
+    addImageClickHandlers();
 });
 
 async function loadArtworks(forceRefresh = false) {
@@ -279,6 +282,16 @@ function createArtworkCard(id, data, genreIcon) {
                 </div>
             </div>
         `;
+
+        // Add image click handler after creating the card
+        card.querySelector('.artwork-image')?.addEventListener('click', function() {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.classList.add('active');
+            modalImg.src = this.src;
+            document.body.style.overflow = 'hidden';
+        });
+
         return card;
     } catch (error) {
         console.error('Error creating artwork card:', error);
@@ -824,3 +837,45 @@ auth.onAuthStateChanged(async (user) => {
         });
     }
 });
+
+// Image Modal functionality
+function initializeImageModal() {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const closeBtn = document.querySelector('.modal-close');
+
+    // Close modal when clicking the close button
+    closeBtn.onclick = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    // Close modal when clicking outside the image
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    };
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
+// Add click handler to artwork images
+function addImageClickHandlers() {
+    document.querySelectorAll('.artwork-image').forEach(img => {
+        img.onclick = function() {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.classList.add('active');
+            modalImg.src = this.src;
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        };
+    });
+}
