@@ -170,4 +170,58 @@ async function displayCurrentlyFeaturedArtists() {
     }
 }
 
-export { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists, removeFeaturedArtist, displayCurrentlyFeaturedArtists };
+async function loadFeaturedArtists() {
+    try {
+        const featuredArtistsList = document.getElementById('featuredArtistsList');
+        if (!featuredArtistsList) return;
+
+        featuredArtistsList.innerHTML = '<div class="text-center p-4"><div class="spinner mx-auto"></div><p class="mt-2 text-gray-400">Loading featured artists...</p></div>';
+
+        const profilesCollection = collection(db, "artist_profiles");
+        const q = query(profilesCollection, where("isFeatured", "==", true));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            featuredArtistsList.innerHTML = '<p class="text-center text-gray-400 p-4">No featured artists found</p>';
+            return;
+        }
+
+        featuredArtistsList.innerHTML = '';
+        querySnapshot.forEach((doc) => {
+            const artist = doc.data();
+            const artistElement = document.createElement('div');
+            artistElement.className = 'bg-gray-800 p-4 rounded-lg mb-4';
+            artistElement.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <img src="${artist.profileImageUrl || 'https://via.placeholder.com/150'}" alt="${artist.name}" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h3 class="text-md font-semibold text-white">${artist.name}</h3>
+                            <p class="text-sm text-gray-400">${artist.bio || 'No bio available'}</p>
+                        </div>
+                    </div>
+                    <button onclick="removeFromFeatured('${doc.id}')" class="text-red-500 hover:text-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+            `;
+            featuredArtistsList.appendChild(artistElement);
+        });
+    } catch (error) {
+        console.error("Error loading featured artists:", error);
+        if (featuredArtistsList) {
+            featuredArtistsList.innerHTML = '<p class="text-center text-red-500 p-4">Error loading featured artists</p>';
+        }
+    }
+}
+
+export { 
+    pickFeaturedArtists, 
+    searchArtistsInDatabase, 
+    featureSelectedArtists, 
+    removeFeaturedArtist, 
+    displayCurrentlyFeaturedArtists,
+    loadFeaturedArtists 
+};
