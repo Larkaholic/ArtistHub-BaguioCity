@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="events.css">
         <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
 
-        <!--Added For Disable Right Click-->
+        <!--Disable Right Click-->
         <script>document.addEventListener('contextmenu', function(e) {
             if (e.target.tagName === 'IMG', 'VIDEO') {
                 e.preventDefault();
@@ -18,7 +18,6 @@
 
     </head>
     <body class="bg-cover">
-        <!-- Header/Navbar - Updated to match index.html -->
         <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
             <div class="flex w-24 ml-16">
                 <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('../index.html')" style="cursor: pointer; height: 50px;">
@@ -54,7 +53,6 @@
                     <li class="login-button">
                         <button onclick="toggleLoginFlyout(event)" class="nav-item bg-blue-500 text-white p-1 px-2 rounded-lg font-semibold hover:bg-blue-600">Login</button>
                     </li>
-                    <!-- Update the profile button to fix click handling -->
                     <li class="profile-dropdown-container" style="display: none;">
                         <div class="relative">
                             <button id="profileButton" class="profile-button flex items-center" onclick="toggleProfileDropdown(event)">
@@ -79,7 +77,7 @@
             </nav>
         </header>
 
-        <!-- Mobile Nav Menu - Updated to match index.html -->
+        <!-- Mobile Nav Menu -->
         <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration:300 ease-in-out z-40 sm:hidden">
             <div class="glass-header h-full p-6">
                 <nav>
@@ -172,7 +170,7 @@
             </div>
         </div>
 
-        <!-- Add Settings Modal from index.html -->
+        <!-- Settings Modal -->
         <div id="settingsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
             <div class="glass-header items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
                 <button onclick="closeSettingsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
@@ -205,7 +203,6 @@
                 </div>
                 <div id="passwordChangeForm" class="hidden">
                     <h2 class="text-center font-bold text-2xl mb-6">Change Password</h2>
-                    <!-- Add error and success message containers -->
                     <div id="passwordChangeError" class="hidden p-4 mb-4 text-red-700 bg-red-100 rounded-lg"></div>
                     <div id="passwordChangeSuccess" class="hidden p-4 mb-4 text-green-700 bg-green-100 rounded-lg"></div>
                     
@@ -300,7 +297,6 @@
                             </div>
                         </div>
 
-                        <!-- Right Column -->
                         <div class="space-y-4">
                             <div>
                                 <label for="eventLocation" class="block font-medium">Event Location:</label>
@@ -403,7 +399,6 @@
             }
         </script>
         <script type="module">
-            // Import auth at the top level of module script
             import { auth } from '../js/firebase-config.js';
 
             // Make handleProfileClick available globally
@@ -430,7 +425,7 @@
             });
         </script>
         <script>
-            // Function to handle navigation events
+            // to handle navigation events
             function navToEvent(url) {
                 window.location.href = url;
             }
@@ -439,9 +434,7 @@
         </script>
 
         <script>
-            // ...existing code...
-
-            // Add profile dropdown functions from index.html
+            // profile dropdown functions
             function toggleProfileDropdown(event) {
                 event.preventDefault();
                 const dropdown = document.getElementById('profileDropdown');
@@ -578,11 +571,7 @@
                 }
             });
         </script>
-
-        <!-- Update the profile-button to ensure the click event works properly -->
         <script>
-            // ...existing code...
-
             // Fix the profile dropdown toggle function
             function toggleProfileDropdown(event) {
                 if (event) event.preventDefault();
@@ -629,7 +618,6 @@
 
         <style>
 
-            /* Ensure the dropdown is visible when shown */
             #profileDropdown {
                 min-width: 200px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -637,7 +625,6 @@
                 z-index: 1000;
             }
             
-            /* Fix for mobile dropdown */
             #mobileProfileDropdown {
                 z-index: 1000;
             }
@@ -667,7 +654,6 @@
         </style>
 
         <script>
-            // Immediately execute to ensure function is defined
             (function() {
                 // Direct DOM attachment for profile dropdown toggle
                 window.toggleProfileDropdown = function(event) {
@@ -746,7 +732,6 @@
                 display: none !important;
             }
             
-            /* Make button clearly interactive */
             .profile-button {
                 position: relative;
                 cursor: pointer !important;
@@ -761,7 +746,6 @@
                 box-shadow: 0 0 5px rgba(0,0,0,0.2);
             }
             
-            /* Container positioning */
             .profile-dropdown-container {
                 position: relative !important;
             }
@@ -832,8 +816,6 @@
         </script>
 
         <script>
-    // ...existing code...
-
     // Function to open the event request modal
     function openEventRequestModal() {
         // Check if user is logged in
@@ -892,7 +874,7 @@
                 location,
                 description,
                 contactEmail: email,
-                status: 'pending', // Default status for new requests
+                status: 'pending',
                 userId: auth.currentUser ? auth.currentUser.uid : null,
                 createdAt: serverTimestamp()
             };
