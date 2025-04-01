@@ -1,4 +1,4 @@
-// import { db } from '../js/firebase-config.js';
+import { db } from '../js/firebase-config.js';
 import { auth } from '../js/firebase-config.js';
 import { 
     getFirestore,
@@ -31,7 +31,7 @@ function openAddEventModal() {
         form.reset();
     }
     document.getElementById('modalTitle').textContent = 'Add New Event';
-    document.getElementById('eventId').value = ''; // Clear any existing ID
+    document.getElementById('eventId').value = '';
     document.getElementById('eventModal').classList.remove('hidden');
     document.getElementById('eventModal').classList.add('flex');
 }
@@ -41,69 +41,26 @@ function closeEventModal() {
     document.getElementById('eventModal').classList.remove('flex');
 }
 
-// Load events function
-async function loadEvents() {
-    const eventsList = document.getElementById('eventsList');
-    if (!eventsList) return;
-
-    try {
-        const q = query(collection(getFirestore(), "events"), orderBy("startDate", "desc"));
-        const querySnapshot = await getDocs(q);
-        
-        if (querySnapshot.empty) {
-            eventsList.innerHTML = '<p class="text-white text-center">No events found</p>';
-            return;
-        }
-
-        eventsList.innerHTML = '';
-        querySnapshot.forEach((doc) => {
-            const event = doc.data();
-            const startDate = event.startDate ? new Date(event.startDate.seconds * 1000) : null;
-            const endDate = event.endDate ? new Date(event.endDate.seconds * 1000) : null;
-            const div = document.createElement('div');
-            div.className = 'bg-gray-800 rounded-lg p-4 mb-4';
-            div.innerHTML = `
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-xl font-bold text-white">${event.title}</h3>
-                        <p class="text-gray-300">Start: ${startDate ? startDate.toLocaleDateString() : 'N/A'}</p>
-                        <p class="text-gray-300">End: ${endDate ? endDate.toLocaleDateString() : 'N/A'}</p>
-                        <p class="text-gray-300">Location: ${event.location}</p>
-                        ${event.description ? `<p class="text-gray-300 mt-2">${event.description}</p>` : ''}
-                        ${event.isFeatured ? '<span class="bg-yellow-500 text-black px-2 py-1 rounded text-sm">Featured</span>' : ''}
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick="editEvent('${doc.id}')" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Edit
-                        </button>
-                        <button onclick="deleteEvent('${doc.id}')" 
-                            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                            Delete
-                        </button>
-                    </div>
-                </div>
-                ${event.imageUrl ? ` 
-                    <img src="${event.imageUrl}" alt="${event.title}" 
-                         class="mt-4 w-full h-48 object-cover rounded">
-                ` : ''}
-            `;
-            eventsList.appendChild(div);
-        });
-    } catch (error) {
-        console.error("Error loading events:", error);
-        eventsList.innerHTML = '<p class="text-red-500 text-center">Error loading events</p>';
-    }
+// Format date for display
+function formatEventDate(date) {
+    if (!date) return 'Not specified';
+    const eventDate = new Date(date.seconds * 1000);
+    return eventDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
-// Form submission handler
+// Handle form submission
 function handleFormSubmit(e) {
     e.preventDefault();
     
     const eventData = {
         title: document.getElementById('eventTitle').value,
-        startDate: document.getElementById('eventStartDate').value,
-        endDate: document.getElementById('eventEndDate').value,
+        startDate: new Date(document.getElementById('eventStartDate').value),
+        endDate: new Date(document.getElementById('eventEndDate').value),
         location: document.getElementById('eventLocation').value,
         description: document.getElementById('eventDescription').value,
         isFeatured: document.getElementById('eventFeatured').checked,
@@ -114,8 +71,7 @@ function handleFormSubmit(e) {
     const eventId = document.getElementById('eventId').value;
 
     if (eventId) {
-        // Update existing event
-        updateDoc(doc(getFirestore(), "events", eventId), eventData)
+        updateDoc(doc(db, "events", eventId), eventData)
             .then(() => {
                 alert('Event updated successfully!');
                 closeEventModal();
@@ -123,20 +79,19 @@ function handleFormSubmit(e) {
             })
             .catch((error) => {
                 console.error('Error updating event:', error);
-                alert('Failed to update event: ' + error.message);
+                alert('Failed to update event');
             });
     } else {
-        // Create new event
         eventData.createdAt = new Date().toISOString();
-        addDoc(collection(getFirestore(), "events"), eventData)
+        addDoc(collection(db, "events"), eventData)
             .then(() => {
-                alert('Event created successfully!');
+                alert('Event added successfully!');
                 closeEventModal();
                 loadEvents();
             })
             .catch((error) => {
-                console.error('Error creating event:', error);
-                alert('Failed to create event: ' + error.message);
+                console.error('Error adding event:', error);
+                alert('Failed to add event');
             });
     }
 }
@@ -168,18 +123,41 @@ async function editEvent(eventId) {
     }
 }
 
-// Delete event function
+// Delete event
 async function deleteEvent(eventId) {
     if (confirm('Are you sure you want to delete this event?')) {
         try {
-            await deleteDoc(doc(getFirestore(), "events", eventId));
-            alert('Event deleted successfully');
+            await deleteDoc(doc(db, "events", eventId));
+            alert('Event deleted successfully!');
             loadEvents();
         } catch (error) {
-            console.error("Error deleting event:", error);
-            alert("Failed to delete event");
+            console.error('Error deleting event:', error);
+            alert('Failed to delete event');
         }
     }
+}
+
+// Get status class
+function getStatusClass(status) {
+    switch(status?.toLowerCase()) {
+        case 'approved':
+            return 'bg-green-100 text-green-800';
+        case 'rejected':
+            return 'bg-red-100 text-red-800';
+        case 'pending':
+        default:
+            return 'bg-yellow-100 text-yellow-800';
+    }
+}
+
+// Combine all initialization into a single loadAllData function
+async function loadAllData() {
+    console.log("Loading all dashboard data...");
+    await loadEvents(); // Load events only once
+    await loadPendingIdVerifications();
+    await loadEventRequests();
+    await loadFeaturedArtists();
+    displayCurrentlyFeaturedArtists();
 }
 
 // Initialize event listeners after DOM content is loaded
@@ -192,26 +170,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('eventForm').addEventListener('submit', handleFormSubmit);
     addRemoveButtonToFeaturedArtists();
     loadPendingArtists();
-    loadEvents();
     
-    // Explicitly call loadPendingIdVerifications and add a console log
     console.log("Loading ID verifications...");
     loadPendingIdVerifications();
     
     loadEventRequests();
     loadFeaturedArtists();
     
-    // Insert the refresh button after the heading in the ID Verification section
-    const idVerificationSection = document.querySelector('.bg-gray-800 h2:contains("Pending ID Verifications")');
+    // Fix the querySelector to use a valid selector
+    const idVerificationSection = document.querySelector('.bg-gray-800 h2[data-section="pending-verifications"]');
     if (idVerificationSection && idVerificationSection.parentNode) {
-        idVerificationSection.parentNode.querySelector('h2').after(refreshVerificationsButton);
-    } else {
-        // Alternative approach if the first selector doesn't work
-        const idVerificationHeading = document.evaluate("//h2[contains(text(), 'Pending ID Verifications')]", 
-                                                      document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-        if (idVerificationHeading) {
-            idVerificationHeading.parentNode.insertBefore(refreshVerificationsButton, idVerificationHeading.nextSibling);
-        }
+        const refreshButton = document.createElement('button');
+        refreshButton.className = 'ml-2 text-sm text-blue-500 hover:text-blue-700';
+        refreshButton.textContent = 'Refresh';
+        refreshButton.onclick = loadPendingIdVerifications;
+        idVerificationSection.appendChild(refreshButton);
     }
 });
 
@@ -387,3 +360,28 @@ function addRemoveButtonToFeaturedArtists() {
         card.appendChild(removeButton);
     });
 }
+
+// Update the date formatting function to include time
+function formatEventDateTime(date) {
+    if (!date) return 'Not specified';
+    const eventDate = new Date(date.seconds ? date.seconds * 1000 : date);
+    return eventDate.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+}
+
+// Export functions
+export {
+    openAddEventModal,
+    closeEventModal,
+    loadEvents,
+    handleFormSubmit,
+    deleteEvent,
+    getStatusClass
+};
