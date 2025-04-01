@@ -15,13 +15,10 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
-/* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-/* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-/* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-/* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-/* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-    background: rgb(214,214,214);
-    background: linear-gradient(90deg, rgba(214,214,214,1) 0%, rgba(255,255,255,0) 51%, rgba(214,214,214,1) 10/* global header */0%);/* global header */
+    background-image: linear-gradient(
+            rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0.4)
+        ), url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/back.jpg?raw=true");
 }
 /* global header */
 .glass-header {
