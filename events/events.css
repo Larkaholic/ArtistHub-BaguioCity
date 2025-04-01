@@ -301,4 +301,74 @@ section#artists {
     font-weight: 400;
     font-style: italic;
 }
-  
+
+/* Modal Styles */
+#eventModal {
+    height: 100vh;
+    padding: 1rem;
+}
+
+#eventModal > div {
+    min-height: min-content;
+}
+
+#eventModal .modal-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+#eventModal form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    #eventModal form {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Improve form field spacing */
+#eventModal .space-y-4 > * {
+    margin-bottom: 1rem;
+}
+
+#eventModal textarea {
+    min-height: 120px;
+}
+
+/* Add specific responsive styling for event request form */
+#eventRequestForm {
+    /* Preserve existing desktop layout */
+}
+
+/* Mobile styles - convert to single column on small screens */
+@media (max-width: 768px) {
+    /* Make event request form single column on mobile */
+    #eventRequestForm {
+        display: grid;
+        grid-template-columns: 1fr !important; /* Force single column */
+        gap: 1rem;
+    }
+    
+    /* Adjust spacing for form elements on mobile */
+    #eventRequestForm > div {
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+    
+    /* Make form buttons full width on mobile */
+    #eventRequestForm button {
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-right: 0;
+    }
+    
+    /* Ensure inputs take full width */
+    #eventRequestForm input,
+    #eventRequestForm select,
+    #eventRequestForm textarea {
+        width: 100%;
+    }
+}

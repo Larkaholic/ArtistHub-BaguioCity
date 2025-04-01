@@ -282,36 +282,43 @@
                 </div>
                 
                 <form id="eventRequestForm" onsubmit="submitEventRequest(event)" class="space-y-4">
-                    <div>
-                        <label for="eventTitle" class="block font-medium">Event Title:</label>
-                        <input type="text" id="eventTitle" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label for="eventStartDate" class="block text-gray-700 font-medium mb-2">Start Date & Time</label>
-                        <input type="datetime-local" id="eventStartDate" name="eventStartDate" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-green-400" required>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="eventTitle" class="block font-medium">Event Title:</label>
+                                <input type="text" id="eventTitle" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                            </div>
+                            
+                            <div>
+                                <label for="eventStartDate" class="block text-gray-700 font-medium mb-2">Start Date & Time</label>
+                                <input type="datetime-local" id="eventStartDate" name="eventStartDate" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-green-400" required>
+                            </div>
+
+                            <div>
+                                <label for="eventEndDate" class="block text-gray-700 font-medium mb-2">End Date & Time</label>
+                                <input type="datetime-local" id="eventEndDate" name="eventEndDate" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-green-400" required>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="space-y-4">
+                            <div>
+                                <label for="eventLocation" class="block font-medium">Event Location:</label>
+                                <input type="text" id="eventLocation" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                            </div>
+                            
+                            <div>
+                                <label for="eventDescription" class="block font-medium">Event Description:</label>
+                                <textarea id="eventDescription" rows="4" class="block mt-1 p-2 border border-gray-400 rounded-md w-full resize-none" required></textarea>
+                            </div>
+                            
+                            <div>
+                                <label for="contactEmail" class="block font-medium">Contact Email:</label>
+                                <input type="email" id="contactEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="eventEndDate" class="block text-gray-700 font-medium mb-2">End Date & Time</label>
-                        <input type="datetime-local" id="eventEndDate" name="eventEndDate" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-green-400" required>
-                    </div>
-                    
-                    <div>
-                        <label for="eventLocation" class="block font-medium">Event Location:</label>
-                        <input type="text" id="eventLocation" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
-                    </div>
-                    
-                    <div>
-                        <label for="eventDescription" class="block font-medium">Event Description:</label>
-                        <textarea id="eventDescription" rows="4" class="block mt-1 p-2 border border-gray-400 rounded-md w-full resize-none" required></textarea>
-                    </div>
-                    
-                    <div>
-                        <label for="contactEmail" class="block font-medium">Contact Email:</label>
-                        <input type="email" id="contactEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
-                    </div>
-                    
                     <div class="flex justify-end space-x-3 pt-4">
                         <button type="button" onclick="closeEventRequestModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
                             Cancel
