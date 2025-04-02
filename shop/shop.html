@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="shop.css">
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
+    
+    <!--Added For Disable Right Click-->
+    <script>document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG', 'VIDEO') {
+            e.preventDefault();
+        }
+    });</script>
 </head>
 <body class="bg-cover">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
@@ -40,6 +47,14 @@
                 </li>
             </ul>
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
+                <li id="cartNav" class="hidden nav-item">
+                    <a href="#" onclick="toggleCart()" class="flex items-center gap-2 text-black hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>Cart (<span id="cartCount">0</span>)</span>
+                    </a>
+                </li>
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
                     <a href="javascript:void(0)" onclick="navToEvent('../admin/dashboard.html')">Admin</a>
                 </li>
@@ -54,7 +69,24 @@
                                  class="w-10 h-10 rounded-full object-cover border-2 border-green-500">
                         </button>
                         <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-50">
-                            <!-- Profile dropdown content goes here -->
+                            <div class="py-2">
+                                <div class="px-4 py-2 border-b border-gray-200">
+                                    <p class="text-sm font-semibold text-gray-700" id="profileDropdownName">Loading...</p>
+                                    <p class="text-xs text-gray-500" id="profileDropdownEmail">Loading...</p>
+                                </div>
+                                <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">View Profile</a>
+                                <a href="javascript:void(0)" onclick="openNotificationsModal()" class="flex items-center justify-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center relative">
+                                    <div class="flex items-center  justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                        </svg>
+                                        Notifications
+                                    </div>
+                                    <span id="notificationBadge" class="absolute right-3 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden">0</span>
+                                </a>
+                                <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">Settings</a>
+                                <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 text-center">Logout</a>
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -156,6 +188,7 @@
     
     <script type="module" src="../js/firebase-config.js"></script>
     <script type="module" src="shop.js"></script>
+    <script type="module" src="../js/profileDropdown.js"></script>
     
     <script>
         // Debugging utilities
@@ -194,6 +227,144 @@
             alert('Please log in from the home page');
             window.location.href = '../index.html';
         }
+
+        function toggleProfileDropdown(event) {
+            event.preventDefault();
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileButton = document.querySelector('.profile-button');
+            
+            if (dropdown && profileButton && !profileButton.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Make functions globally available
+        window.toggleProfileDropdown = toggleProfileDropdown;
     </script>
+
+    <script type="module">
+        import { initProfileDropdown } from '../js/profileDropdown.js';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize profile dropdown
+            initProfileDropdown();
+        });
+        
+        // Make toggleProfileDropdown globally available
+        window.toggleProfileDropdown = function(event) {
+            if (event) event.preventDefault();
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+    </script>
+
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Direct handler for profile dropdown toggle
+    const profileButton = document.querySelector('.profile-button');
+    const profileDropdown = document.getElementById('profileDropdown');
+    
+    if (profileButton && profileDropdown) {
+      // Add click event listener to profile button
+      profileButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        profileDropdown.classList.toggle('hidden');
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', function(event) {
+        if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+          profileDropdown.classList.add('hidden');
+        }
+      });
+    }
+    
+    // Also handle mobile profile dropdown
+    const mobileProfileLink = document.getElementById('profileLinkMobile');
+    const mobileProfileDropdown = document.getElementById('mobileProfileDropdown');
+    
+    if (mobileProfileLink && mobileProfileDropdown) {
+      mobileProfileLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        mobileProfileDropdown.classList.toggle('hidden');
+      });
+      
+      // Close mobile dropdown when clicking elsewhere
+      document.addEventListener('click', function(event) {
+        if (!mobileProfileLink.contains(event.target) && !mobileProfileDropdown.contains(event.target)) {
+          mobileProfileDropdown.classList.add('hidden');
+        }
+      });
+    }
+    
+    // Make the function globally available
+    window.toggleProfileDropdown = function(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      if (profileDropdown) {
+        profileDropdown.classList.toggle('hidden');
+      }
+    };
+    
+    // Make navigation function globally available
+    window.navigateToUserProfile = function() {
+      const auth = window.firebaseAuth || firebase.auth();
+      if (auth.currentUser) {
+        window.location.href = `../profile/profile.html?id=${auth.currentUser.uid}`;
+      } else {
+        alert('Please log in to view your profile');
+        if (typeof window.toggleLoginFlyout === 'function') {
+          window.toggleLoginFlyout();
+        }
+      }
+    };
+  });
+</script>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+    <div class="items-center rounded-lg w-96 mx-10 p-6 bg-white border-2 border-black">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-black">Shopping Cart</h2>
+            <button onclick="window.toggleCart()" class="text-black hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div id="cartItems" class="space-y-4 max-h-96 overflow-y-auto text-black">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="mt-4 flex justify-between items-center text-black">
+            <div>
+                <p>Total Items: <span id="totalItems">0</span></p>
+                <p>Total Price: ₱<span id="totalPrice">0.00</span></p>
+            </div>
+            <button onclick="window.checkout()" class="bg-green-500 text-black px-4 py-2 rounded-lg hover:bg-green-600">
+                Checkout
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Also add this in the mobile menu -->
+<div id="cartNavMobile" class="hidden px-4 py-2">
+    <a href="#" onclick="toggleCart()" class="flex items-center gap-2 text-black hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <span>Cart (<span id="cartCountMobile">0</span>)</span>
+    </a>
+</div>
 </body>
 </html>

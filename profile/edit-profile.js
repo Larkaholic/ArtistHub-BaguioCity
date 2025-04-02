@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Handle form submission
+    // Handle form submission - modified to ensure ID verification works
     document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -360,6 +360,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         try {
+            // Show saving indicator
+            const submitButton = document.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="animate-pulse">Saving...</span>';
+
             // Get the user document first to check current verification status
             const userDoc = await getDoc(doc(db, "users", user.uid));
             const userData = userDoc.exists() ? userDoc.data() : {};
@@ -376,11 +381,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                     instagram: document.getElementById('instagram').value,
                     youtube: document.getElementById('youtube').value,
                     google: document.getElementById('google').value
-                }
+                },
+                // Ensure we also update the userType if it's missing
+                userType: userData.userType || 'user',
+                // Update the timestamp
+                updatedAt: serverTimestamp()
             };
+
+            // Preserve existing artistDetails fields if they exist
+            if (userData.artistDetails) {
+                updates.artistDetails = {
+                    ...userData.artistDetails,
+                    ...updates.artistDetails
+                };
+            }
 
             // Handle ID verification updates
             if (uploadedIdUrl) {
+                console.log('Updating ID verification with URL:', uploadedIdUrl);
+                
                 // Check if this is a new ID or an update to a rejected one
                 if (!userData.idVerification || 
                     userData.idVerification.status === 'rejected' || 
@@ -396,6 +415,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     if (userData.idVerification && userData.idVerification.rejectionReason) {
                         updates.idVerification.previousRejectionReason = userData.idVerification.rejectionReason;
                     }
+
+                    console.log('Setting ID verification to pending:', updates.idVerification);
                 }
             }
 
@@ -440,10 +461,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             await updateDoc(doc(db, "users", user.uid), updates);
             
             alert('Profile updated successfully!');
+            // Reset UI
+            submitButton.disabled = false;
+            submitButton.textContent = 'Save Changes';
+            
+            // Check if idVerification was updated and show appropriate feedback
+            if (updates.idVerification && updates.idVerification.status === 'pending') {
+                alert('Your ID has been submitted for verification. It will be reviewed by an administrator.');
+            }
+            
             window.location.href = 'profile.html';
         } catch (error) {
             console.error("Error updating profile:", error);
             alert(`Error updating profile: ${error.message}`);
+            
+            const submitButton = document.querySelector('button[type="submit"]');
+            submitButton.disabled = false;
+            submitButton.textContent = 'Save Changes';
         }
     });
 

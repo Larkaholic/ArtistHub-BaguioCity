@@ -15,6 +15,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { ImageCrawler } from '../Gallery/imageCrawler.js';
 import { removeFeaturedArtist, displayCurrentlyFeaturedArtists } from './featuredArtists.js';
+import { loadPendingArtists } from './artistRequest.js';
+import { loadEvents } from './eventManagement.js';
+import { loadPendingIdVerifications } from './idVerification.js'; 
+import { loadEventRequests } from './eventRequests.js';
+import { loadFeaturedArtists } from './featuredArtists.js';
 
 // Initialize the image crawler
 const crawler = new ImageCrawler();
@@ -179,12 +184,35 @@ async function deleteEvent(eventId) {
 
 // Initialize event listeners after DOM content is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("Dashboard initializing...");
     initializeImageCrawler();
     initializeArtList();
     loadEvents();
     displayCurrentlyFeaturedArtists();
     document.getElementById('eventForm').addEventListener('submit', handleFormSubmit);
     addRemoveButtonToFeaturedArtists();
+    loadPendingArtists();
+    loadEvents();
+    
+    // Explicitly call loadPendingIdVerifications and add a console log
+    console.log("Loading ID verifications...");
+    loadPendingIdVerifications();
+    
+    loadEventRequests();
+    loadFeaturedArtists();
+    
+    // Insert the refresh button after the heading in the ID Verification section
+    const idVerificationSection = document.querySelector('.bg-gray-800 h2:contains("Pending ID Verifications")');
+    if (idVerificationSection && idVerificationSection.parentNode) {
+        idVerificationSection.parentNode.querySelector('h2').after(refreshVerificationsButton);
+    } else {
+        // Alternative approach if the first selector doesn't work
+        const idVerificationHeading = document.evaluate("//h2[contains(text(), 'Pending ID Verifications')]", 
+                                                      document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (idVerificationHeading) {
+            idVerificationHeading.parentNode.insertBefore(refreshVerificationsButton, idVerificationHeading.nextSibling);
+        }
+    }
 });
 
 function initializeImageCrawler() {

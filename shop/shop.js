@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where, updateDoc, serverTimestamp, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { db, auth } from '../js/firebase-config.js';
 
 let allArtworks = []; // Store all artworks for filtering
@@ -211,59 +211,82 @@ function displayArtworks(artworks) {
 }
 
 function createArtworkCard(id, data, genreIcon) {
-    const hasImage = data.imageUrl && typeof data.imageUrl === 'string' && data.imageUrl.trim() !== '';
-    const imageUrl = hasImage ? data.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image+Available';
-    const formattedPrice = parseFloat(data.price || 0).toLocaleString('en-PH', {
-        style: 'currency',
-        currency: 'PHP'
-    });
-    
-    const card = document.createElement('div');
-    card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
-    card.innerHTML = `
-        <div class="relative">
-            <img 
-                src="${imageUrl}" 
-                alt="${data.title || 'Untitled artwork'}" 
-                class="artwork-image w-full h-48 object-cover"
-                onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
-                loading="lazy"
-            >
-            <div class="absolute bottom-0 right-0 bg-black bg-opacity-70 text-white px-2 py-1 text-sm">
-                ${data.genre || 'Art'}
-            </div>
-        </div>
-        <div class="p-6">
-            <div class="flex flex-col gap-2">
-                <div class="flex items-center gap-2">
-                    <i class="fas fa-${genreIcon} text-xl text-gray-600"></i>
-                    <h3 class="artwork-title text-xl font-bold">${data.title || 'Untitled artwork'}</h3>
+    try {
+        const hasImage = data.imageUrl && typeof data.imageUrl === 'string' && data.imageUrl.trim() !== '';
+        const imageUrl = hasImage ? data.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image+Available';
+        const formattedPrice = parseFloat(data.price || 0).toLocaleString('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        });
+        
+        // Format genre and other metadata for display with uppercase first letter
+        const genre = data.genre ? data.genre.charAt(0).toUpperCase() + data.genre.slice(1) : 'Art';
+        const medium = data.medium ? data.medium.charAt(0).toUpperCase() + data.medium.slice(1) : '';
+        const size = data.canvasSize || '';
+        
+        // Get artist name from artistName or artistEmail
+        const artistName = data.artistName || data.artistEmail?.split('@')[0] || 'Unknown Artist';
+        
+        const card = document.createElement('div');
+        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
+        card.innerHTML = `
+            <div class="relative">
+                <img 
+                    src="${imageUrl}" 
+                    alt="${data.title || 'Untitled artwork'}" 
+                    class="artwork-image w-full h-40 object-cover"
+                    onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
+                    loading="lazy"
+                >
+                <div class="absolute bottom-2 left-4 bg-black bg-opacity-70 text-white px-3 py-1 text-xs rounded-md">
+                    <i class="fas fa-user mr-1"></i>${artistName}
                 </div>
-                <div class="flex justify-between items-center">
-                    <p class="artwork-price text-lg font-semibold text-green-600">${formattedPrice}</p>
-                    <span class="text-sm text-gray-500">
+                <div class="absolute bottom-2 right-4 bg-black bg-opacity-70 text-white px-3 py-1 text-xs rounded-md">
+                    <i class="fas fa-${genreIcon} mr-1"></i>${genre}
+                </div>
+            </div>
+            <div class="p-3 flex flex-col h-[300px]">
+                <div class="flex items-center gap-1 mb-1">
+                    <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
+                    <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
+                </div>
+                <div class="price-container mb-1">
+                    <p class="artwork-price">${formattedPrice}</p>
+                    <span class="artwork-artist">
                         ${data.artist ? `by ${data.artist}` : ''}
                     </span>
                 </div>
+                
+                <div class="artwork-meta flex flex-wrap gap-1">
+                    <span class="genre-tag">${genre}</span>
+                    ${medium ? `<span class="medium-tag">${medium}</span>` : ''}
+                    ${size ? `<span class="size-tag">${size}</span>` : ''}
+                </div>
+                
+                <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
+                
+                <div class="mt-auto pt-1">
+                    ${auth.currentUser ? 
+                        `<button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
+                            class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>` :
+                        `<button onclick="window.toggleLoginFlyout()" 
+                            class="add-to-cart-btn artwork-button w-full bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
+                        </button>`
+                    }
+                </div>
             </div>
-            <p class="artwork-description mt-2 text-gray-600">${data.description || 'No description available.'}</p>
-            <div class="flex justify-center">
-                ${auth.currentUser ? 
-                    `<button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
-                        class="add-to-cart-btn artwork-button mt-4 bg-green-500 text-white rounded hover:bg-green-600 transition duration-200">
-                        <i class="fas fa-cart-plus mr-1"></i> Add to Cart
-                    </button>` :
-                    `<button onclick="window.toggleLoginFlyout()" 
-                        class="add-to-cart-btn artwork-button mt-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
-                        <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
-                    </button>`
-                }
-            </div>
-        </div>
-    `;
-    return card;
+        `;
+        return card;
+    } catch (error) {
+        console.error('Error creating artwork card:', error);
+        return null;
+    }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 // FOR SECURITY OF THE WEBSITE //
 
@@ -298,6 +321,8 @@ function showCustomAlert(message) {
 // Disable right-click
 var _0x1b93ce=_0x2266;function _0x2266(_0x4109c8,_0x52d5ba){var _0x3a68f5=_0x39e2();return _0x2266=function(_0x398c6b,_0x22327d){_0x398c6b=_0x398c6b-(-0x2*0x7be+-0x1e6+0x1285);var _0x141f81=_0x3a68f5[_0x398c6b];return _0x141f81;},_0x2266(_0x4109c8,_0x52d5ba);}(function(_0x2e1921,_0xbded3c){var _0xcefd39=_0x2266,_0x23a468=_0x2e1921();while(!![]){try{var _0x5f4125=-parseInt(_0xcefd39(0x12f))/(-0xc0d*-0x2+-0x19*0x124+0xd*0x57)+-parseInt(_0xcefd39(0x123))/(-0x21f0+0xb*0x28d+0x5e3)*(parseInt(_0xcefd39(0x12e))/(0x257f+-0x1bf+-0x23bd))+parseInt(_0xcefd39(0x125))/(0x865*-0x2+-0xd8c*0x2+0x2be6)*(parseInt(_0xcefd39(0x12c))/(0x16a0+-0x457*-0x9+-0x3daa))+-parseInt(_0xcefd39(0x132))/(-0xc7*-0x13+-0x226*-0x11+0x3345*-0x1)+-parseInt(_0xcefd39(0x126))/(-0x9a4*-0x2+-0x18a0+-0x37*-0x19)*(-parseInt(_0xcefd39(0x12a))/(-0x337*-0x7+0x1*-0x206e+0x9f5*0x1))+-parseInt(_0xcefd39(0x130))/(-0x2*-0x6df+0x1*0xf01+0x32*-0x93)*(parseInt(_0xcefd39(0x128))/(0x328*0x1+0x1758+-0x1a76))+-parseInt(_0xcefd39(0x129))/(-0x1f45+0x10de+-0x739*-0x2)*(-parseInt(_0xcefd39(0x12d))/(-0x10c+-0x336+0x227*0x2));if(_0x5f4125===_0xbded3c)break;else _0x23a468['push'](_0x23a468['shift']());}catch(_0x6dc65e){_0x23a468['push'](_0x23a468['shift']());}}}(_0x39e2,0x1*0x54b3+0x2*-0x5d4+0x1e080),document[_0x1b93ce(0x124)+_0x1b93ce(0x127)](_0x1b93ce(0x133)+'u',function(_0x49bedb){var _0x2f62fd=_0x1b93ce;_0x49bedb[_0x2f62fd(0x131)+_0x2f62fd(0x12b)]();}));function _0x39e2(){var _0x4175f8=['addEventLi','4RKcRIE','1066401DfcYCm','stener','3760cqqYeT','3784fOnuSX','8XcZNzR','ault','309640nLvbHX','26544GTmnyE','607653hPnosl','267910bosEoj','5211jvKpcK','preventDef','871962gZbMQA','contextmen','2uMOIIB'];_0x39e2=function(){return _0x4175f8;};return _0x39e2();}
 =======
+=======
+>>>>>>> cdcbc753bb9e482b690a79d45a1a7a1feede0fd3
 // Update the function to check if a user can purchase items, but keep existing implementation
 async function canUserPurchase() {
     try {
@@ -376,7 +401,10 @@ async function canUserPurchase() {
         };
     }
 }
+<<<<<<< HEAD
 >>>>>>> 0b3e66d650448d12944b05c9764bb956b2e1d024
+=======
+>>>>>>> cdcbc753bb9e482b690a79d45a1a7a1feede0fd3
 
 // Function to update all Add to Cart buttons based on user's purchase eligibility
 async function updateAddToCartButtons() {
@@ -441,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Update the addToCart function to check eligibility first
+// Update the addToCart function to properly handle cart updates
 window.addToCart = async function(productId, productName, price) {
     const purchaseStatus = await canUserPurchase();
     
@@ -455,14 +483,84 @@ window.addToCart = async function(productId, productName, price) {
                 window.toggleLoginFlyout();
             }
         }
-        
         return;
     }
-    
-    // Original addToCart functionality can continue here
-    alert(`${productName} added to cart!`);
-    // Implement actual cart functionality here
+
+    try {
+        const cartRef = collection(db, 'carts');
+        const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
+        const querySnapshot = await getDocs(q);
+        
+        const cartItem = {
+            productId,
+            title: productName,
+            price: parseFloat(price),
+            addedAt: new Date().toISOString() // Use ISO string instead of serverTimestamp
+        };
+
+        if (querySnapshot.empty) {
+            // Create new cart
+            await addDoc(cartRef, {
+                userId: auth.currentUser.uid,
+                items: [cartItem],
+                lastUpdated: serverTimestamp()
+            });
+        } else {
+            // Update existing cart
+            const cartDoc = querySnapshot.docs[0];
+            const currentItems = cartDoc.data().items || [];
+            await updateDoc(doc(db, 'carts', cartDoc.id), {
+                items: [...currentItems, cartItem],
+                lastUpdated: serverTimestamp()
+            });
+        }
+
+        // Update local cart array and UI
+        cart.push(cartItem);
+        updateCartUI();
+        
+        // Show success message
+        const message = document.createElement('div');
+        message.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50';
+        message.textContent = 'Added to cart!';
+        document.body.appendChild(message);
+        setTimeout(() => message.remove(), 2000);
+
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Failed to add item to cart. Please try again.');
+    }
 }
+
+// Update cart listener to handle real-time updates
+function initializeCartListener() {
+    if (!auth.currentUser) return;
+
+    const cartRef = collection(db, 'carts');
+    const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
+    
+    onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+            const cartDoc = snapshot.docs[0];
+            cart = cartDoc.data().items || [];
+            updateCartUI();
+        } else {
+            cart = [];
+            updateCartUI();
+        }
+    });
+}
+
+// Update the initialization code
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        initializeCartListener();
+    } else {
+        cart = [];
+        updateCartUI();
+    }
+    loadArtworks();
+});
 
 // Ensure toggleLoginFlyout is defined as a global function
 window.toggleLoginFlyout = function() {
@@ -483,3 +581,305 @@ auth.onAuthStateChanged(() => {
 
 // Export the loadArtworks function for direct access
 window.loadArtworks = loadArtworks;
+
+// Add this function to initialize enhanced tag styles when document loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Add compact CSS for artwork cards with improved glassmorphism styling
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+        .artwork-card {
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        
+        .artwork-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .artwork-card > div:first-child {
+            height: 200px;
+        }
+        
+        .artwork-card > div:last-child {
+            padding: 0.75rem !important;
+        }
+        
+        .artwork-title {
+            font-size: 1rem;
+            line-height: 1.3;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+            color: rgba(0, 0, 0, 0.85);
+        }
+        
+        .artwork-description {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-height: 2.8rem; /* Height for 2 lines */
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.4);
+            border-left: 3px solid #10B981;
+            color: rgba(0, 0, 0, 0.75);
+            border-radius: 0.25rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Limit to 2 lines */
+            -webkit-box-orient: vertical;
+        }
+        
+        .artwork-meta {
+            position: relative;
+            margin: 0.35rem 0;
+            padding: 0.25rem 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
+            max-width: 100%;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            height: 2rem;
+        }
+        
+        .artwork-meta::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .artwork-meta::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .artwork-meta::-webkit-scrollbar-thumb {
+            background-color: rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+        }
+        
+        .genre-tag, .medium-tag, .size-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+            white-space: nowrap;
+            margin-right: 0.35rem;
+        }
+        
+        .genre-tag {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .medium-tag {
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+        }
+        
+        .size-tag {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .genre-tag::before, .medium-tag::before, .size-tag::before {
+            margin-right: 0.2rem;
+            font-size: 0.7rem;
+        }
+        
+        .price-container {
+            margin: 0.35rem 0;
+            padding: 0.25rem 0;
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .artwork-price {
+            font-size: 1rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(209, 250, 229, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+        
+        .artwork-artist {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        
+        .add-to-cart-btn {
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.9));
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .add-to-cart-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.9), rgba(4, 120, 87, 1));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+    `;
+    document.head.appendChild(styleEl);
+});
+
+// Add cart functionality
+let cart = [];
+
+// Cart functions
+window.toggleCart = function() {
+    const cartModal = document.getElementById('cartModal');
+    if (cartModal) {
+        cartModal.classList.toggle('hidden');
+    }
+}
+
+<<<<<<< HEAD
+// Add this function before window.removeFromCart
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+=======
+// FOR SECURITY OF THE WEBSITE //
+
+// Create a custom alert box
+function showCustomAlert(message) {
+  let alertBox = document.createElement("div");
+  alertBox.innerHTML = `<div style="
+      position: fixed; 
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 10px;
+      width: 50%;
+      max-width: 400px;
+      z-index: 9999;
+      box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
+  ">
+      ${message}
+  </div>`;
+
+  document.body.appendChild(alertBox);
+  setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
+}
+
+/* Prevent Right Click, F12, and Ctrl+Shift+I/U/J */
+// Disable right-click
+var _0x1b93ce=_0x2266;function _0x2266(_0x4109c8,_0x52d5ba){var _0x3a68f5=_0x39e2();return _0x2266=function(_0x398c6b,_0x22327d){_0x398c6b=_0x398c6b-(-0x2*0x7be+-0x1e6+0x1285);var _0x141f81=_0x3a68f5[_0x398c6b];return _0x141f81;},_0x2266(_0x4109c8,_0x52d5ba);}(function(_0x2e1921,_0xbded3c){var _0xcefd39=_0x2266,_0x23a468=_0x2e1921();while(!![]){try{var _0x5f4125=-parseInt(_0xcefd39(0x12f))/(-0xc0d*-0x2+-0x19*0x124+0xd*0x57)+-parseInt(_0xcefd39(0x123))/(-0x21f0+0xb*0x28d+0x5e3)*(parseInt(_0xcefd39(0x12e))/(0x257f+-0x1bf+-0x23bd))+parseInt(_0xcefd39(0x125))/(0x865*-0x2+-0xd8c*0x2+0x2be6)*(parseInt(_0xcefd39(0x12c))/(0x16a0+-0x457*-0x9+-0x3daa))+-parseInt(_0xcefd39(0x132))/(-0xc7*-0x13+-0x226*-0x11+0x3345*-0x1)+-parseInt(_0xcefd39(0x126))/(-0x9a4*-0x2+-0x18a0+-0x37*-0x19)*(-parseInt(_0xcefd39(0x12a))/(-0x337*-0x7+0x1*-0x206e+0x9f5*0x1))+-parseInt(_0xcefd39(0x130))/(-0x2*-0x6df+0x1*0xf01+0x32*-0x93)*(parseInt(_0xcefd39(0x128))/(0x328*0x1+0x1758+-0x1a76))+-parseInt(_0xcefd39(0x129))/(-0x1f45+0x10de+-0x739*-0x2)*(-parseInt(_0xcefd39(0x12d))/(-0x10c+-0x336+0x227*0x2));if(_0x5f4125===_0xbded3c)break;else _0x23a468['push'](_0x23a468['shift']());}catch(_0x6dc65e){_0x23a468['push'](_0x23a468['shift']());}}}(_0x39e2,0x1*0x54b3+0x2*-0x5d4+0x1e080),document[_0x1b93ce(0x124)+_0x1b93ce(0x127)](_0x1b93ce(0x133)+'u',function(_0x49bedb){var _0x2f62fd=_0x1b93ce;_0x49bedb[_0x2f62fd(0x131)+_0x2f62fd(0x12b)]();}));function _0x39e2(){var _0x4175f8=['addEventLi','4RKcRIE','1066401DfcYCm','stener','3760cqqYeT','3784fOnuSX','8XcZNzR','ault','309640nLvbHX','26544GTmnyE','607653hPnosl','267910bosEoj','5211jvKpcK','preventDef','871962gZbMQA','contextmen','2uMOIIB'];_0x39e2=function(){return _0x4175f8;};return _0x39e2();}
+>>>>>>> e722b9e76ceb6e830befc9fbd657323b79f14b54
+
+window.removeFromCart = async function(index) {
+    if (!auth.currentUser) return;
+    
+    try {
+        cart.splice(index, 1);
+        const cartRef = collection(db, 'carts');
+        const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+            const cartDoc = querySnapshot.docs[0];
+            await updateDoc(doc(db, 'carts', cartDoc.id), {
+                items: cart,
+                lastUpdated: serverTimestamp()
+            });
+        }
+        
+        updateCartUI();
+        showNotification('Item removed from cart', 'success');
+    } catch (error) {
+        console.error('Error removing item from cart:', error);
+        showNotification('Failed to remove item', 'error');
+    }
+}
+
+function updateCartUI() {
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+    const totalItems = document.getElementById('totalItems');
+    const totalPrice = document.getElementById('totalPrice');
+    
+    if (cartCount) cartCount.textContent = cart.length;
+    
+    if (cartItems) {
+        cartItems.innerHTML = '';
+        let total = 0;
+        
+        cart.forEach((item, index) => {
+            const itemPrice = parseFloat(item.price) || 0;
+            const itemElement = document.createElement('div');
+            itemElement.className = 'flex justify-between items-center p-2 bg-white bg-opacity-10 rounded-lg';
+            itemElement.innerHTML = `
+                <div>
+                    <h3 class="font-semibold text-black">${item.title}</h3>
+                    <p class="text-sm text-black">₱${itemPrice.toFixed(2)}</p>
+                </div>
+                <button onclick="window.removeFromCart(${index})" class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            cartItems.appendChild(itemElement);
+            total += itemPrice;
+        });
+        
+        if (totalItems) totalItems.textContent = cart.length;
+        if (totalPrice) totalPrice.textContent = total.toFixed(2);
+    }
+}
+
+// Initialize cart when user logs in
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        const cartRef = collection(db, 'carts');
+        const q = query(cartRef, where('userId', '==', user.uid));
+        
+        onSnapshot(q, (querySnapshot) => {
+            if (!querySnapshot.empty) {
+                const cartDoc = querySnapshot.docs[0];
+                cart = cartDoc.data().items || [];
+                updateCartUI();
+            }
+        });
+    }
+});

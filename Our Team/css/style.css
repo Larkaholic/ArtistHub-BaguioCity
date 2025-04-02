@@ -237,10 +237,10 @@ html {
 /* ArtistHub Heading */
 h4{
         font-family: 'Rockybilly', cursive;
-        font-size: 3.3rem;
+        font-size: 4.5rem;
         font-weight: bolder;
         color: black;
-        -webkit-text-stroke: 0.3px white;
+        -webkit-text-stroke: 0.4px white;
         text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.6);
         margin: 0;
         padding: 0;

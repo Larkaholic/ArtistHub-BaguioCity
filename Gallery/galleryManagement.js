@@ -617,100 +617,122 @@ async function isItemInAnyCart(artworkId) {
     );
 }
 
+// Add genre icons mapping to match shop.html
+const genreIcons = {
+    'traditional': 'paint-brush',
+    'contemporary': 'shapes',
+    'abstract': 'draw-polygon',
+    'photography': 'camera',
+    'digital': 'desktop',
+    'sculpture': 'cube',
+    'mixed-media': 'layer-group',
+    'default': 'palette'
+};
+
+// Helper function to format genre tags
+function formatGenreTags(genreString) {
+    if (!genreString) return '<span class="genre-tag">Art</span>';
+    
+    if (genreString.includes(',')) {
+        const genres = genreString.split(',').map(g => g.trim());
+        return genres.map(g => 
+            `<span class="genre-tag">${g.charAt(0).toUpperCase() + g.slice(1)}</span>`
+        ).join('');
+    }
+    
+    return `<span class="genre-tag">${genreString.charAt(0).toUpperCase() + genreString.slice(1)}</span>`;
+}
+
 // Modified createImageCard function to handle async properly
 async function createImageCard(docId, data) {
-    const isLastItem = data.stock === 1;
-    let isReserved = false;
-    
-    if (isLastItem) {
-        isReserved = await isItemInAnyCart(docId);
-    }
+    try {
+        if (!data || !docId) {
+            console.error('Missing data or docId for card creation');
+            return null;
+        }
 
-    // Add data attributes for searching
-    const formattedTitle = data.title.charAt(0).toUpperCase() + data.title.slice(1);
-    const formattedDescription = data.description.charAt(0).toUpperCase() + data.description.slice(1);
-    
-    const card = document.createElement('div');
-    card.className = 'art-gallery-item';
-    // Add data attributes for filtering
-    card.dataset.genre = (data.genre || '').toLowerCase();
-    card.dataset.size = (data.canvasSize || '').toLowerCase();
-    card.dataset.medium = (data.medium || '').toLowerCase();
-    
-    card.innerHTML = `
-        <div class="art-gallery-item-content">
-            <div class="art-gallery-protective-layer"></div>
-            <img src="${data.imageUrl}" alt="${formattedTitle}" class="art-gallery-card-image">
-            <div class="p-6">
-                <div class="flex flex-col gap-2">
-                    <h3 class="art-gallery-title">${formattedTitle}</h3>
-                    <div class="flex justify-between items-center">
-                        <div class="flex flex-col">
-                            <p class="art-gallery-price">₱${parseFloat(data.price || 0).toFixed(2)}</p>
-                            <p class="text-sm text-white mt-1">Stock: ${data.stock || 0}</p>
-                        </div>
-                        ${auth.currentUser && auth.currentUser.uid === artistId ?
-                            `<button onclick="deleteImage('${docId}')" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                            </button>` : ''}
-                    </div>
-                    <!-- Add metadata for searching -->
-                    <div class="text-sm text-gray-500 mt-2">
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
-                            ${data.genre || 'No Genre'}
-                        </span>
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 mr-2">
-                            ${data.canvasSize || 'No Size'}
-                        </span>
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1">
-                            ${data.medium || 'No Medium'}
-                        </span>
-                    </div>
+        const hasImage = data.imageUrl && typeof data.imageUrl === 'string' && data.imageUrl.trim() !== '';
+        const imageUrl = hasImage ? data.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image+Available';
+        const formattedPrice = parseFloat(data.price || 0).toLocaleString('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        });
+        
+        // Format genre and other metadata for display with uppercase first letter
+        const genre = data.genre ? data.genre.charAt(0).toUpperCase() + data.genre.slice(1) : 'Art';
+        const medium = data.medium ? data.medium.charAt(0).toUpperCase() + data.medium.slice(1) : '';
+        const size = data.canvasSize || '';
+        const genreIcon = genreIcons[genre.toLowerCase()] || genreIcons.default;
+        
+        const card = document.createElement('div');
+        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
+        card.innerHTML = `
+            <div class="relative">
+                <img 
+                    src="${imageUrl}" 
+                    alt="${data.title || 'Untitled artwork'}" 
+                    class="artwork-image w-full h-40 object-cover"
+                    onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
+                    loading="lazy"
+                >
+                <div class="absolute bottom-0 right-0 bg-black bg-opacity-70 text-white px-1 py-0.5 text-xs">
+                    <i class="fas fa-${genreIcon} mr-1"></i>${genre}
                 </div>
-                <div class="flex items-center justify-between mt-4">
+            </div>
+            <div class="p-3 flex flex-col h-[300px]">
+                <div class="flex items-center gap-1 mb-1">
+                    <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
+                    <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
+                </div>
+                <div class="price-container mb-1">
+                    <p class="artwork-price">${formattedPrice}</p>
+                    <span class="artwork-artist">
+                        ${data.artist ? `by ${data.artist}` : ''}
+                    </span>
+                </div>
+                
+                <div class="artwork-meta flex flex-wrap gap-1">
+                    <span class="genre-tag">
+                        <i class="fas fa-${genreIcon} mr-1"></i>${genre}
+                    </span>
+                    ${medium ? `<span class="medium-tag"><i class="fas fa-pencil-alt mr-1"></i>${medium}</span>` : ''}
+                    ${size ? `<span class="size-tag"><i class="fas fa-ruler mr-1"></i>${size}</span>` : ''}
+                </div>
+                
+                <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
+                
+                <div class="mt-auto pt-1">
                     ${auth.currentUser ? 
-                        `<button 
-                            onclick="${data.stock > 0 ? `window.addToCart('${docId}', '${formattedTitle}', ${parseFloat(data.price)}, ${data.stock})` : 'void(0)'}" 
-                            id="cartButton-${docId}"
-                            class="art-gallery-button flex-1 ${data.stock === 0 || (isLastItem && isReserved) ? 'bg-gray-500 hover:bg-gray-500 cursor-not-allowed' : ''}"
-                            ${data.stock === 0 || (isLastItem && isReserved) ? 'disabled' : ''}
-                        >
-                            ${data.stock === 0 ? 'Out of Stock' : 
-                              (isLastItem && isReserved) ? 'Item Reserved' : 
-                              'Add this to Cart'}
-                        </button>` : 
-                        `<button disabled class="art-gallery-button opacity-50 cursor-not-allowed w-full">
-                            Please login to purchase
+                        `<button onclick="window.addToCart('${docId}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
+                            class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                        </button>` :
+                        `<button onclick="window.toggleLoginFlyout()" 
+                            class="add-to-cart-btn artwork-button w-full bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
                         </button>`
                     }
                 </div>
             </div>
-        </div>
-    `;
-    
-    // Add click event to image
-    const img = card.querySelector('.art-gallery-card-image');
-    img.addEventListener('click', () => {
-        const modalImg = document.querySelector('#art-gallery-modal-img');
-        modalImg.src = data.imageUrl;
-        modal.classList.add('art-modal-active');
-    });
+        `;
 
-    // Add event listeners to prevent right-click and drag
-    const protectiveLayer = card.querySelector('.art-gallery-protective-layer');
-    protectiveLayer.addEventListener('contextmenu', (e) => e.preventDefault());
-    protectiveLayer.addEventListener('dragstart', (e) => e.preventDefault());
-    
-    // Maintain click functionality for modal
-    protectiveLayer.addEventListener('click', () => {
-        const modalImg = document.querySelector('#art-gallery-modal-img');
-        modalImg.src = data.imageUrl;
-        modal.classList.add('art-modal-active');
-    });
-    
-    return card;
+        // Add image modal functionality
+        const img = card.querySelector('.artwork-image');
+        if (img) {
+            img.addEventListener('click', () => {
+                const modalImg = document.querySelector('#art-gallery-modal-img');
+                if (modalImg) {
+                    modalImg.src = imageUrl;
+                    modal.classList.add('art-modal-active');
+                }
+            });
+        }
+
+        return card;
+    } catch (error) {
+        console.error('Error creating image card:', error);
+        return null;
+    }
 }
 
 function applyFilters() {
