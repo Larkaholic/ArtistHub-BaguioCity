@@ -15,9 +15,10 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
-    /* background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/bg.jpg?raw=true"); */
-    background: rgb(214,214,214);
-    background: linear-gradient(90deg, rgba(214,214,214,1) 0%, rgba(255,255,255,0) 51%, rgba(214,214,214,1) 100%);
+    background-image: linear-gradient(
+            rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0.4)
+        ), url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/back.jpg?raw=true");
 }
 /* global header */
 .glass-header {
@@ -71,7 +72,21 @@ section {
     scroll-snap-align: start;
     height: 100vh;
     display: flex;
-    padding: 20px;
+    padding: 20p/* .flyout {
+    display: none;
+}
+.flyout.active {
+    display: flex;
+} */
+
+x;
+/* .flyout {
+    display: none;
+}
+.flyout.active {
+    display: flex;
+} */
+
 }
 
 /* .flyout {
@@ -83,7 +98,6 @@ section {
 
 .events {
     height: 75vh;
-
 }
 
 .artist-item {
@@ -93,6 +107,8 @@ section {
 .artist-item img {
     height: 90dvh;
 }
+/* events */
+
 
 
 /* events */
@@ -104,7 +120,8 @@ section {
     background-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
+}/* Forum */
+
 
 /* Forum */
 .Forum {
@@ -144,30 +161,25 @@ section {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-    
-    /* responsive grid columns */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-/* ensure 3 columns on larger screens */
 @media (min-width: 1024px) {
     #artistsGrid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-/* adjust for medium screens */
 @media (max-width: 1023px) and (min-width: 768px) {
     #artistsGrid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* adjust for mobile screens */
 @media (max-width: 767px) {
     #artistsGrid {
         grid-template-columns: 1fr;
-        max-height: 600px; /* smaller height for mobile */
+        max-height: 600px;
     }
 }
 
@@ -187,7 +199,7 @@ section {
 
 /* artist cards */
 .artist-card {
-    min-width: 200px; /* slightly smaller for better mobile fit */
+    min-width: 200px;
     transition: transform 0.2s;
     padding: 1.5rem;
 }
@@ -196,30 +208,26 @@ section {
     transform: translateY(-5px);
 }
 
-/* header z-index */
 header.glass-header {
     z-index: 1000;
 }
 
-/* login flyout styles */
 .flyout {
     z-index: 9999;
 }
 
-/* ensure other glass-header elements stay below */
 .glass-header:not(header) {
     z-index: 1;
 }
 
-/* Update the section styles */
 section#landingPage {
-    height: calc(100vh - 64px); /* Subtract header height */
-    padding: 0; /* Remove padding to ensure full width/height */
-    margin-top: 64px; /* Add margin for header */
+    height: calc(100vh - 64px);
+    padding: 0;
+    margin-top: 64px;
 }
 
 .artist-item img {
-    height: 100%; /* Use full height of container */
+    height: 100%;
     width: 100%;
 }
 
@@ -227,7 +235,6 @@ section#landingPage {
     padding: 1rem;
 }
 
-/* Update section styles */
 section#events {
     display: block !important;
     height: auto !important;
@@ -235,10 +242,8 @@ section#events {
     width: 100%;
     padding: 1rem;
     margin-top: 2rem;
-  
 }
 
-/* Update container styles */
 .EvntContainer {
     width: 100%;
     height: auto !important;
@@ -256,7 +261,6 @@ section#events {
     gap: 1rem;
 }
 
-/* Ensure proper scroll behavior */
 main {
     scroll-snap-type: y mandatory;
     height: 100vh;
@@ -264,32 +268,29 @@ main {
     padding-top: 64px;
 }
 
-/* Make sections take full height */
 section {
     min-height: 100vh;
     scroll-snap-align: start;
     position: relative;
 }
 
-/* update the artists grid container */
 .artists-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
     padding: 2rem;
     width: 100%;
-    height: auto; /* changed from fixed height */
+    height: auto;
     min-height: 100vh;
-    overflow: visible; /* changed from hidden/auto */
-    margin-bottom: 2rem; /* added bottom margin */
+    overflow: visible;
+    margin-bottom: 2rem;
 }
 
-/* ensure the section containing the grid is properly sized */
 section#artists {
     min-height: 100vh;
     height: auto;
     overflow: visible;
-    padding-bottom: 4rem; /* added padding at bottom */
+    padding-bottom: 4rem;
 }
 
 .eventt {
@@ -301,4 +302,66 @@ section#artists {
     font-weight: 400;
     font-style: italic;
 }
-  
+
+/* Modal Styles */
+#eventModal {
+    height: 100vh;
+    padding: 1rem;
+}
+
+#eventModal > div {
+    min-height: min-content;
+}
+
+#eventModal .modal-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+#eventModal form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    #eventModal form {
+        grid-template-columns: 1fr;
+    }
+}
+
+#eventModal .space-y-4 > * {
+    margin-bottom: 1rem;
+}
+
+#eventModal textarea {
+    min-height: 120px;
+}
+
+#eventRequestForm {
+}
+
+@media (max-width: 768px) {
+    #eventRequestForm {
+        display: grid;
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+    
+    #eventRequestForm > div {
+        margin-bottom: 1rem;
+        width: 100%;
+    }
+    
+    #eventRequestForm button {
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-right: 0;
+    }
+    
+    #eventRequestForm input,
+    #eventRequestForm select,
+    #eventRequestForm textarea {
+        width: 100%;
+    }
+}

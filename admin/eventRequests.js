@@ -50,83 +50,120 @@ export function uploadQRCode(requestId) {
     qrCodeWidget.open();
 }
 
-// Function to load all event requests
+// Helper function to format date and time properly
+function formatDateTime(timestamp) {
+    if (!timestamp) return 'Date not specified';
+    
+    // Handle various date formats
+    let date;
+    if (timestamp.seconds) {
+        date = new Date(timestamp.seconds * 1000);
+    } else if (typeof timestamp === 'string') {
+        date = new Date(timestamp);
+    } else if (timestamp instanceof Date) {
+        date = timestamp;
+    } else {
+        return 'Invalid date';
+    }
+    
+    if (isNaN(date)) return 'Invalid date';
+    
+    return date.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+}
+
+// Load event requests with proper debugging
 export async function loadEventRequests() {
     try {
-        const eventRequestsRef = collection(db, "eventRequests");
-        const q = query(eventRequestsRef, orderBy("createdAt", "desc"));
+        const requestsList = document.getElementById('eventRequestsList');
+        if (!requestsList) return;
+
+        requestsList.innerHTML = '<tr><td colspan="5" class="text-center py-4">Loading event requests...</td></tr>';
+
+        const requestsRef = collection(db, "eventRequests");
+        const q = query(requestsRef, where("status", "==", "pending"));
         const querySnapshot = await getDocs(q);
-        
-        const requestsContainer = document.getElementById('eventRequestsList');
-        requestsContainer.innerHTML = '';
-        
+
         if (querySnapshot.empty) {
-            requestsContainer.innerHTML = `
-                <div class="bg-gray-800 rounded-lg p-4 text-center">
-                    <p class="text-gray-400">No event addition requests at this time.</p>
-                </div>
-            `;
+            requestsList.innerHTML = '<tr><td colspan="5" class="text-center py-4">No pending event requests</td></tr>';
             return;
         }
-        
+
+        requestsList.innerHTML = '';
+
         querySnapshot.forEach((doc) => {
             const request = doc.data();
-            const requestId = doc.id;
-            const date = request.date ? new Date(request.date).toLocaleDateString() : 'No date specified';
-            const createdAt = request.createdAt ? new Date(request.createdAt.toDate()).toLocaleDateString() : 'Unknown';
+            console.log("Full event request data:", request); // Debug log to see all fields
             
-            requestsContainer.innerHTML += `
-                <div class="bg-gray-800 rounded-lg p-4 request-item" data-id="${requestId}">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-semibold text-white">${request.title}</h3>
-                            <p class="text-sm text-gray-400">Submitted on: ${createdAt}</p>
-                            <p class="text-sm text-gray-300 mt-2"><strong>Date:</strong> ${date}</p>
-                            <p class="text-sm text-gray-300"><strong>Location:</strong> ${request.location || 'Not specified'}</p>
-                            <p class="text-sm text-gray-300"><strong>Contact:</strong> ${request.contactEmail}</p>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-300"><strong>Description:</strong></p>
-                                <p class="text-sm text-gray-400">${request.description || 'No description provided'}</p>
-                            </div>
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-800';
+
+            // Get the requester's email - first check contactEmail field, then fall back to other fields
+            let requesterInfo = request.contactEmail || request.requestedBy || request.createdByEmail || request.createdBy || request.userEmail || 'Unknown';
+
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <img class="h-10 w-10 rounded-full object-cover" 
+                                src="${request.imageUrl || 'https://via.placeholder.com/150'}" 
+                                alt="${request.title}">
                         </div>
-                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${
-                            request.status === 'pending' ? 'bg-yellow-800 text-yellow-300' : 
-                            request.status === 'approved' ? 'bg-green-800 text-green-300' : 
-                            'bg-red-800 text-red-300'
-                        }">${request.status}</span>
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-white">${request.title}</div>
+                            <div class="text-sm text-gray-400">${request.location || 'No location'}</div>
+                        </div>
                     </div>
-                    
-                    ${request.status === 'pending' ? `
-                        <div class="flex mt-4 space-x-2 justify-end">
-                            <button onclick="uploadQRCode('${requestId}')" 
-                                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center qr-upload-btn" data-id="${requestId}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                </svg>
-                                Upload QR Code
-                            </button>
-                            <button onclick="approveEventRequest('${requestId}')" 
-                                    class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
-                                Approve
-                            </button>
-                            <button onclick="rejectEventRequest('${requestId}')" 
-                                    class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
-                                Reject
-                            </button>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="text-sm">
+                        <div class="text-white mb-2">
+                            <div><span class="font-semibold">Start:</span></div>
+                            <div>${formatDateTime(request.startDate)}</div>
                         </div>
-                    ` : ''}
-                </div>
+                        <div class="text-white">
+                            <div><span class="font-semibold">End:</span></div>
+                            <div>${formatDateTime(request.endDate)}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                        Pending
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                    <div class="text-sm">
+                        <div><span class="font-semibold">Requested by:</span></div>
+                        <div>${requesterInfo}</div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button onclick="approveEventRequest('${doc.id}')" 
+                            class="text-green-400 hover:text-green-300 mr-2">
+                        Approve
+                    </button>
+                    <button onclick="rejectEventRequest('${doc.id}')" 
+                            class="text-red-400 hover:text-red-300">
+                        Reject
+                    </button>
+                </td>
             `;
+            requestsList.appendChild(row);
         });
-        
     } catch (error) {
         console.error("Error loading event requests:", error);
-        const requestsContainer = document.getElementById('eventRequestsList');
-        requestsContainer.innerHTML = `
-            <div class="bg-red-800 rounded-lg p-4 text-center">
-                <p class="text-white">Error loading requests. Please try again.</p>
-            </div>
-        `;
+        const requestsList = document.getElementById('eventRequestsList');
+        if (requestsList) {
+            requestsList.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-red-500">Error loading event requests</td></tr>';
+        }
     }
 }
 
