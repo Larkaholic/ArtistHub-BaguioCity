@@ -143,17 +143,17 @@
 }
 
 .baguio-timeline-nav-btn:hover {
-    background: rgba(59, 131, 246, 0.77);
+    background: rgba(244, 169, 0, 0.77);
     transform: translateX(5px);
 }
 
 .baguio-timeline-nav-btn.baguio-timeline-active {
-    background: #3b82f6;
+    background: #F4A900;
     color: white;
     transform: translateX(10px) scale(1.1);
     box-shadow: 
-        0 4px 12px rgba(59, 130, 246, 0.3),
-        0 0 0 3px rgba(59, 130, 246, 0.1);
+        0 4px 12px rgba(255,189,40, 0.3),
+        0 0 0 3px rgba(255, 238, 0, 0.1);
 }
 
 .baguio-timeline-fade-in {
