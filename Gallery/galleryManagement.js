@@ -1117,7 +1117,7 @@ window.navToEvent = function(url) {
 
 // Create a custom alert box
 function showCustomAlert(message) {
-    let alertBox = document.createElement("div");
+    let alertBox = document.createElement("div");``
     alertBox.innerHTML = `<div style="
         position: fixed; 
         top: 50%; 
