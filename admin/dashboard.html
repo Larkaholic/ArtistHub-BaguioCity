@@ -140,6 +140,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Address</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID Preview</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Registered Date</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
                     </tr>
@@ -353,5 +354,21 @@
             </form>
         </div>
     </div>
+    <script type="module">
+        import { openAddTimelineEventModal, closeTimelineEventModal, removeTimelineImage } from './timeline.js';
+        import { pickFeaturedArtists, searchArtistsInDatabase, featureSelectedArtists, displayCurrentlyFeaturedArtists } from './featuredArtists.js';
+        import { loadEventRequests, approveEventRequest, rejectEventRequest, uploadQRCode } from './eventRequests.js';
+        window.openAddTimelineEventModal = openAddTimelineEventModal;
+        window.closeTimelineEventModal = closeTimelineEventModal;
+        window.removeTimelineImage = removeTimelineImage;
+        window.pickFeaturedArtists = pickFeaturedArtists;
+        window.searchArtistsInDatabase = searchArtistsInDatabase;
+        window.featureSelectedArtists = featureSelectedArtists;
+        window.displayCurrentlyFeaturedArtists = displayCurrentlyFeaturedArtists;
+        window.approveEventRequest = approveEventRequest;
+        window.rejectEventRequest = rejectEventRequest;
+        window.uploadQRCode = uploadQRCode;
+        window.loadEventRequests = loadEventRequests;
+    </script>
 </body>
 </html>

@@ -296,18 +296,35 @@
 .artwork-button {
     background: #10B981;
     color: white;
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem; /* Reduced padding from 0.75rem 1.5rem */
     border-radius: 0.5rem;
     font-weight: 600;
+    font-size: 0.875rem; /* Added smaller font size */
     transition: all 0.3s ease;
-    width: 100%;
+    width: auto; /* Changed from 100% to auto */
+    min-width: 70%; /* Added min-width to keep button from being too small */
+    margin: 0 auto; /* Center the button */
+    display: block; /* Changed from inline-block */
     text-align: center;
-    display: inline-block;
 }
 
 .artwork-button:hover {
     background: #059669;
     transform: translateY(-2px);
+}
+
+/* Add new specific styling for the add to cart button */
+.add-to-cart-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.5rem;
+    width: auto;
+    min-width: 80%;
+}
+
+.add-to-cart-btn i {
+    font-size: 0.75rem; /* Make icon slightly smaller */
+    margin-right: 0.25rem; /* Reduce margin around icon */
 }
 
 /* Profile dropdown styles */
@@ -812,4 +829,48 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
 
 #mobileProfileDropdown a:hover {
     background: rgba(0, 0, 0, 0.05);
+}
+
+/* Styling for disabled Add to Cart buttons */
+.add-to-cart-btn.disabled,
+.add-to-cart-btn[disabled] {
+    background-color: #9ca3af !important; /* Gray */
+    cursor: not-allowed !important;
+    opacity: 0.5;
+    transform: none !important;
+    box-shadow: none !important;
+    pointer-events: none; /* Prevent hover effects */
+}
+
+/* Tooltip styling */
+.add-to-cart-btn[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 100;
+}
+
+/* Verification banner animation */
+.verification-banner {
+    animation: slideDown 0.5s ease;
+    transform-origin: top;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
