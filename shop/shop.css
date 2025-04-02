@@ -29,8 +29,8 @@
         font-family: 'Montserrat', sans-serif;
         min-height: 100vh;
         background-image: linear-gradient(
-            rgba(255, 255, 255, 0.4),
-            rgba(255, 255, 255, 0.4)
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0.1)
         ), url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/back.jpg?raw=true");
         background-attachment: fixed;
         background-position: center;
