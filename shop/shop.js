@@ -522,6 +522,9 @@ window.addToCart = async function(productId, productName, price) {
         cart.push(cartItem);
         updateCartUI();
         
+        // Create a visual bounce effect on the cart icon
+        animateCartIcon();
+        
         // Show success message
         const message = document.createElement('div');
         message.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50';
@@ -801,7 +804,7 @@ window.removeFromCart = async function(index) {
         cart.splice(index, 1);
         const cartRef = collection(db, 'carts');
         const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
-        const querySnapshot = await getDocs(q);git 
+        const querySnapshot = await getDocs(q);
         
         if (!querySnapshot.empty) {
             const cartDoc = querySnapshot.docs[0];
@@ -821,11 +824,50 @@ window.removeFromCart = async function(index) {
 
 function updateCartUI() {
     const cartCount = document.getElementById('cartCount');
+    const cartCountMobile = document.getElementById('cartCountMobile');
     const cartItems = document.getElementById('cartItems');
     const totalItems = document.getElementById('totalItems');
     const totalPrice = document.getElementById('totalPrice');
     
+    // Update cart count in navbar
     if (cartCount) cartCount.textContent = cart.length;
+    if (cartCountMobile) cartCountMobile.textContent = cart.length;
+    
+    // Show/hide cart navigation based on cart contents and user authentication
+    const cartNav = document.getElementById('cartNav');
+    if (cartNav) {
+        if (auth.currentUser && cart.length > 0) {
+            cartNav.classList.remove('hidden');
+        } else if (!auth.currentUser) {
+            cartNav.classList.add('hidden');
+        }
+    }
+    
+    const cartNavMobile = document.getElementById('cartNavMobile');
+    if (cartNavMobile) {
+        if (auth.currentUser && cart.length > 0) {
+            cartNavMobile.classList.remove('hidden');
+        } else if (!auth.currentUser) {
+            cartNavMobile.classList.add('hidden');
+        }
+    }
+    
+    // Add visual indicator when items are added to cart
+    if (cart.length > 0) {
+        if (cartCount) {
+            cartCount.classList.add('bg-red-500', 'text-white', 'rounded-full', 'px-2', 'py-1');
+        }
+        if (cartCountMobile) {
+            cartCountMobile.classList.add('bg-red-500', 'text-white', 'rounded-full', 'px-2', 'py-1');
+        }
+    } else {
+        if (cartCount) {
+            cartCount.classList.remove('bg-red-500', 'text-white', 'rounded-full', 'px-2', 'py-1');
+        }
+        if (cartCountMobile) {
+            cartCountMobile.classList.remove('bg-red-500', 'text-white', 'rounded-full', 'px-2', 'py-1');
+        }
+    }
     
     if (cartItems) {
         cartItems.innerHTML = '';
@@ -909,4 +951,43 @@ function addImageClickHandlers() {
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
         };
     });
+}
+
+// Add animation for cart icon
+function animateCartIcon() {
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+        // Add keyframe animation
+        cartCount.classList.add('animate-bounce');
+        // Change background color for visual feedback
+        cartCount.classList.add('bg-green-500');
+        
+        // Reset after animation completes
+        setTimeout(() => {
+            cartCount.classList.remove('animate-bounce');
+            cartCount.classList.remove('bg-green-500');
+            cartCount.classList.add('bg-red-500');
+        }, 1000);
+    }
+    
+    // Also animate mobile cart count if present
+    const cartCountMobile = document.getElementById('cartCountMobile');
+    if (cartCountMobile) {
+        cartCountMobile.classList.add('animate-bounce', 'bg-green-500');
+        setTimeout(() => {
+            cartCountMobile.classList.remove('animate-bounce', 'bg-green-500');
+            cartCountMobile.classList.add('bg-red-500');
+        }, 1000);
+    }
+}
+
+// Function to show notifications
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed bottom-4 right-4 px-6 py-3 rounded shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    }`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 2000);
 }
