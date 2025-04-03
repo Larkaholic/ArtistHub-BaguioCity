@@ -16,6 +16,28 @@
             e.preventDefault();
         }
     });</script>
+    
+    <!-- Add navbar scroll behavior -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const header = document.getElementById('main-header');
+            
+            if (!header) {
+                console.error("ERROR: #main-header not found in the DOM!");
+                return;
+            }
+
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('solid-header');
+                    header.classList.remove('transparent-header');
+                } else {
+                    header.classList.add('transparent-header');
+                    header.classList.remove('solid-header');
+                }
+            });
+        });
+    </script>
 </head>
 <body class="bg-cover">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1 transparent-header" id="main-header">
