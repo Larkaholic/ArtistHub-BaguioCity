@@ -162,7 +162,10 @@ function applyFilters() {
         const matchesSearch = !searchTerm || 
             (artwork.title?.toLowerCase().includes(searchTerm) ||
             artwork.description?.toLowerCase().includes(searchTerm) ||
-            artwork.artist?.toLowerCase().includes(searchTerm));
+            artwork.artist?.toLowerCase().includes(searchTerm) ||
+            artwork.artistName?.toLowerCase().includes(searchTerm) ||
+            (artwork.artistEmail && artwork.artistEmail.split('@')[0].toLowerCase().includes(searchTerm)));
+            
         const matchesGenre = !activeGenre || artwork.genre === activeGenre;
         const matchesSize = !size || artwork.size === size;
         const matchesMedium = !medium || artwork.medium === medium;
