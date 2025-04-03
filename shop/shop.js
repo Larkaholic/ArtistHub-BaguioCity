@@ -804,7 +804,7 @@ window.removeFromCart = async function(index) {
         cart.splice(index, 1);
         const cartRef = collection(db, 'carts');
         const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(q);git 
         
         if (!querySnapshot.empty) {
             const cartDoc = querySnapshot.docs[0];
