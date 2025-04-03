@@ -298,10 +298,7 @@ function createArtworkCard(id, data, genreIcon) {
         return null;
     }
 }
-
-
 // FOR SECURITY OF THE WEBSITE //
-
 // Create a custom alert box
 function showCustomAlert(message) {
   let alertBox = document.createElement("div");
