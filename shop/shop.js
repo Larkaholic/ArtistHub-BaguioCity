@@ -19,10 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const genreButtons = document.querySelectorAll('.genre-btn');
     genreButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            // Remove active class from all buttons
-            genreButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            e.target.closest('.genre-btn').classList.add('active');
+            // Remove active class and styling from all buttons
+            genreButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.backgroundColor = '#FFF2C8';
+            });
+
+            // Add active class and styling to clicked button
+            const clickedButton = e.target.closest('.genre-btn');
+            clickedButton.classList.add('active');
+            clickedButton.style.backgroundColor = '#F4A900';
+
             // Apply filters
             applyFilters();
         });
@@ -76,7 +83,6 @@ async function loadArtworks(forceRefresh = false) {
 
         // Simple collection fetch without ordering
         const artworksRef = collection(db, 'gallery_images');
-        
         // First, check if collection exists and has documents
         const testSnapshot = await getDocs(artworksRef);
         
@@ -84,10 +90,9 @@ async function loadArtworks(forceRefresh = false) {
             showEmptyState(galleryContainer);
             return;
         }
-        
+
         // Now try with a proper query
         let artworksQuery = query(artworksRef, limit(50));
-        
         const querySnapshot = await getDocs(artworksQuery);
         
         if (querySnapshot.empty) {
@@ -97,7 +102,7 @@ async function loadArtworks(forceRefresh = false) {
 
         // Reset our array and populate it
         allArtworks = [];
-        
+                
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             allArtworks.push({ id: doc.id, ...data });
@@ -158,7 +163,6 @@ function applyFilters() {
             (artwork.title?.toLowerCase().includes(searchTerm) ||
             artwork.description?.toLowerCase().includes(searchTerm) ||
             artwork.artist?.toLowerCase().includes(searchTerm));
-
         const matchesGenre = !activeGenre || artwork.genre === activeGenre;
         const matchesSize = !size || artwork.size === size;
         const matchesMedium = !medium || artwork.medium === medium;
@@ -183,11 +187,11 @@ const genreIcons = {
 
 function displayArtworks(artworks) {
     const galleryContainer = document.getElementById('galleryContainer');
-    
+
     if (!galleryContainer) {
         return;
     }
-    
+
     galleryContainer.innerHTML = '';
 
     if (artworks.length === 0) {
@@ -202,7 +206,7 @@ function displayArtworks(artworks) {
         `;
         return;
     }
-    
+
     artworks.forEach((artwork) => {
         const genreIcon = genreIcons[artwork.genre?.toLowerCase()] || genreIcons.default;
         const card = createArtworkCard(artwork.id, artwork, genreIcon);
@@ -226,10 +230,10 @@ function createArtworkCard(id, data, genreIcon) {
         const genre = data.genre ? data.genre.charAt(0).toUpperCase() + data.genre.slice(1) : 'Art';
         const medium = data.medium ? data.medium.charAt(0).toUpperCase() + data.medium.slice(1) : '';
         const size = data.canvasSize || '';
-        
+
         // Get artist name from artistName or artistEmail
         const artistName = data.artistName || data.artistEmail?.split('@')[0] || 'Unknown Artist';
-        
+
         const card = document.createElement('div');
         card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
@@ -237,7 +241,7 @@ function createArtworkCard(id, data, genreIcon) {
                 <img 
                     src="${imageUrl}" 
                     alt="${data.title || 'Untitled artwork'}" 
-                    class="artwork-image w-full h-40 object-cover"
+                    class="artwork-image w-full h-40 object-cover" 
                     onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
                     loading="lazy"
                 >
@@ -267,7 +271,6 @@ function createArtworkCard(id, data, genreIcon) {
                 </div>
                 
                 <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
-                
                 <div class="mt-auto pt-1">
                     ${auth.currentUser ? 
                         `<button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
@@ -298,6 +301,7 @@ function createArtworkCard(id, data, genreIcon) {
         return null;
     }
 }
+
 // FOR SECURITY OF THE WEBSITE //
 // Create a custom alert box
 function showCustomAlert(message) {
@@ -313,7 +317,7 @@ function showCustomAlert(message) {
       font-size: 24px;
       font-weight: bold;
       text-align: center;
-      border-radius: 10px;
+      border-radius: 10px; 
       width: 50%;
       max-width: 400px;
       z-index: 9999;
@@ -321,7 +325,6 @@ function showCustomAlert(message) {
   ">
       ${message}
   </div>`;
-
   document.body.appendChild(alertBox);
   setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
 }
@@ -329,11 +332,12 @@ function showCustomAlert(message) {
 /* Prevent Right Click, F12, and Ctrl+Shift+I/U/J */
 // Disable right-click
 var _0x1b93ce=_0x2266;function _0x2266(_0x4109c8,_0x52d5ba){var _0x3a68f5=_0x39e2();return _0x2266=function(_0x398c6b,_0x22327d){_0x398c6b=_0x398c6b-(-0x2*0x7be+-0x1e6+0x1285);var _0x141f81=_0x3a68f5[_0x398c6b];return _0x141f81;},_0x2266(_0x4109c8,_0x52d5ba);}(function(_0x2e1921,_0xbded3c){var _0xcefd39=_0x2266,_0x23a468=_0x2e1921();while(!![]){try{var _0x5f4125=-parseInt(_0xcefd39(0x12f))/(-0xc0d*-0x2+-0x19*0x124+0xd*0x57)+-parseInt(_0xcefd39(0x123))/(-0x21f0+0xb*0x28d+0x5e3)*(parseInt(_0xcefd39(0x12e))/(0x257f+-0x1bf+-0x23bd))+parseInt(_0xcefd39(0x125))/(0x865*-0x2+-0xd8c*0x2+0x2be6)*(parseInt(_0xcefd39(0x12c))/(0x16a0+-0x457*-0x9+-0x3daa))+-parseInt(_0xcefd39(0x132))/(-0xc7*-0x13+-0x226*-0x11+0x3345*-0x1)+-parseInt(_0xcefd39(0x126))/(-0x9a4*-0x2+-0x18a0+-0x37*-0x19)*(-parseInt(_0xcefd39(0x12a))/(-0x337*-0x7+0x1*-0x206e+0x9f5*0x1))+-parseInt(_0xcefd39(0x130))/(-0x2*-0x6df+0x1*0xf01+0x32*-0x93)*(parseInt(_0xcefd39(0x128))/(0x328*0x1+0x1758+-0x1a76))+-parseInt(_0xcefd39(0x129))/(-0x1f45+0x10de+-0x739*-0x2)*(-parseInt(_0xcefd39(0x12d))/(-0x10c+-0x336+0x227*0x2));if(_0x5f4125===_0xbded3c)break;else _0x23a468['push'](_0x23a468['shift']());}catch(_0x6dc65e){_0x23a468['push'](_0x23a468['shift']());}}}(_0x39e2,0x1*0x54b3+0x2*-0x5d4+0x1e080),document[_0x1b93ce(0x124)+_0x1b93ce(0x127)](_0x1b93ce(0x133)+'u',function(_0x49bedb){var _0x2f62fd=_0x1b93ce;_0x49bedb[_0x2f62fd(0x131)+_0x2f62fd(0x12b)]();}));function _0x39e2(){var _0x4175f8=['addEventLi','4RKcRIE','1066401DfcYCm','stener','3760cqqYeT','3784fOnuSX','8XcZNzR','ault','309640nLvbHX','26544GTmnyE','607653hPnosl','267910bosEoj','5211jvKpcK','preventDef','871962gZbMQA','contextmen','2uMOIIB'];_0x39e2=function(){return _0x4175f8;};return _0x39e2();}
+
 // Update the function to check if a user can purchase items, but keep existing implementation
 async function canUserPurchase() {
     try {
         const user = auth.currentUser;
-        
+
         // If no user is logged in, they cannot purchase
         if (!user) {
             return {
@@ -342,10 +346,10 @@ async function canUserPurchase() {
                 requiresLogin: true
             };
         }
-        
+
         // Get the user document from Firestore
         const userDoc = await getDoc(doc(db, "users", user.uid));
-        
+
         // If user document doesn't exist, they cannot purchase
         if (!userDoc.exists()) {
             return {
@@ -354,9 +358,9 @@ async function canUserPurchase() {
                 requiresLogin: true
             };
         }
-        
+
         const userData = userDoc.data();
-        
+
         // If user is admin or artist, they can purchase without ID verification
         if (userData.userType === 'admin' || (userData.userType === 'artist' && userData.status === 'approved')) {
             return {
@@ -408,7 +412,6 @@ async function canUserPurchase() {
     }
 }
 
-
 // Function to update all Add to Cart buttons based on user's purchase eligibility
 async function updateAddToCartButtons() {
     const purchaseStatus = await canUserPurchase();
@@ -420,7 +423,7 @@ async function updateAddToCartButtons() {
             button.disabled = false;
             button.classList.remove('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
             button.classList.add('bg-green-500', 'hover:bg-green-600');
-            button.title = ''; // Remove any tooltip
+            button.title = ''; // Remove any tooltips
         } else {
             // User cannot purchase: disable button
             button.disabled = true;
@@ -448,7 +451,7 @@ async function updateAddToCartButtons() {
             }
         }
     });
-    
+
     // Also show/hide verification banner based on status
     const verificationBanner = document.querySelector('.verification-banner');
     if (verificationBanner) {
@@ -478,7 +481,6 @@ window.addToCart = async function(productId, productName, price) {
     
     if (!purchaseStatus.canPurchase) {
         alert(purchaseStatus.reason);
-        
         if (purchaseStatus.requiresVerification) {
             window.location.href = '../profile/edit-profile.html';
         } else if (purchaseStatus.requiresLogin) {
@@ -521,10 +523,10 @@ window.addToCart = async function(productId, productName, price) {
         // Update local cart array and UI
         cart.push(cartItem);
         updateCartUI();
-        
+
         // Create a visual bounce effect on the cart icon
         animateCartIcon();
-        
+
         // Show success message
         const message = document.createElement('div');
         message.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg z-50';
@@ -544,7 +546,7 @@ function initializeCartListener() {
 
     const cartRef = collection(db, 'carts');
     const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
-    
+
     onSnapshot(q, (snapshot) => {
         if (!snapshot.empty) {
             const cartDoc = snapshot.docs[0];
@@ -765,7 +767,6 @@ window.toggleCart = function() {
 }
 
 // FOR SECURITY OF THE WEBSITE //
-
 // Create a custom alert box
 // function showCustomAlert(message) {
 //   let alertBox = document.createElement("div");
@@ -780,7 +781,7 @@ window.toggleCart = function() {
 //       font-size: 24px;
 //       font-weight: bold;
 //       text-align: center;
-//       border-radius: 10px;
+//       border-radius: 10px; 
 //       width: 50%;
 //       max-width: 400px;
 //       z-index: 9999;
@@ -788,7 +789,6 @@ window.toggleCart = function() {
 //   ">
 //       ${message}
 //   </div>`;
-
 //   document.body.appendChild(alertBox);
 //   setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
 // }
@@ -799,13 +799,13 @@ window.toggleCart = function() {
 
 window.removeFromCart = async function(index) {
     if (!auth.currentUser) return;
-    
+
     try {
         cart.splice(index, 1);
         const cartRef = collection(db, 'carts');
         const q = query(cartRef, where('userId', '==', auth.currentUser.uid));
         const querySnapshot = await getDocs(q);
-        
+
         if (!querySnapshot.empty) {
             const cartDoc = querySnapshot.docs[0];
             await updateDoc(doc(db, 'carts', cartDoc.id), {
@@ -813,7 +813,7 @@ window.removeFromCart = async function(index) {
                 lastUpdated: serverTimestamp()
             });
         }
-        
+
         updateCartUI();
         showNotification('Item removed from cart', 'success');
     } catch (error) {
@@ -872,7 +872,6 @@ function updateCartUI() {
     if (cartItems) {
         cartItems.innerHTML = '';
         let total = 0;
-        
         cart.forEach((item, index) => {
             const itemPrice = parseFloat(item.price) || 0;
             const itemElement = document.createElement('div');
@@ -889,7 +888,6 @@ function updateCartUI() {
             cartItems.appendChild(itemElement);
             total += itemPrice;
         });
-        
         if (totalItems) totalItems.textContent = cart.length;
         if (totalPrice) totalPrice.textContent = total.toFixed(2);
     }
@@ -900,7 +898,6 @@ auth.onAuthStateChanged(async (user) => {
     if (user) {
         const cartRef = collection(db, 'carts');
         const q = query(cartRef, where('userId', '==', user.uid));
-        
         onSnapshot(q, (querySnapshot) => {
             if (!querySnapshot.empty) {
                 const cartDoc = querySnapshot.docs[0];
@@ -969,7 +966,7 @@ function animateCartIcon() {
             cartCount.classList.add('bg-red-500');
         }, 1000);
     }
-    
+
     // Also animate mobile cart count if present
     const cartCountMobile = document.getElementById('cartCountMobile');
     if (cartCountMobile) {
