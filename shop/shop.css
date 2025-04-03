@@ -84,6 +84,19 @@
             font-weight: 600 !important;
         }
         
+        /* Add transparent and solid header styles for scroll behavior */
+        .transparent-header {
+            background: rgba(255, 255, 255, 0) !important;
+            transition: all 0.3s ease !important;
+            box-shadow: none !important;
+        }
+        
+        .solid-header {
+            background: #FFF2C8 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+        }
+
         /* Glass Effect Styles */
         .glass-header {
             background: rgba(255, 255, 255, 0.5);
@@ -120,16 +133,71 @@
             text-align: center;
         }
         
+        /* Add hover styles for nav items */
+        .nav-item {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item:hover {
+            background-color: #F4A900;
+            transform: translateY(-2px);
+        }
+        
+        .nav-item a {
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover a {
+            transform: translateY(0);
+        }
+        
+        /* Smooth transitions for all interactive elements */
+        a, button, .nav-item, .profile-button, .burger-icon {
+            transition: all 0.3s ease;
+        }
+        
         .login-button {
             margin-right: 10px; /* Adjusted margin */
         }
         
+        .login-button button:hover {
+            background-color: #3b82f6 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
         .burger-icon {
             cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .burger-icon:hover {
+            transform: scale(1.1);
         }
         
         .burger-icon svg {
             fill: white;
+        }
+        
+        /* Add specific styling for nav items in transparent vs solid header */
+        .transparent-header .nav-item a,
+        .transparent-header .nav-item button {
+            color: #333333;
+            text-shadow: 0px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+        
+        .solid-header .nav-item a,
+        .solid-header .nav-item button {
+            color: #333333;
+        }
+
+        /* Ensure mobile menu button is always visible */
+        .burger-icon svg {
+            fill: #333333 !important;
+            transition: fill 0.3s ease;
         }
 
 /* Shop items grid */
@@ -182,7 +250,7 @@
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    padding: 1rem;
+    /* padding: 1rem; */
     border-radius: 0.5rem;
 }
 
