@@ -228,19 +228,14 @@ function createArtworkCard(id, data, genreIcon) {
             style: 'currency',
             currency: 'PHP'
         });
-        
-        // Format genre and other metadata for display with uppercase first letter
-        const genre = data.genre ? data.genre.charAt(0).toUpperCase() + data.genre.slice(1) : 'Art';
-        const medium = data.medium ? data.medium.charAt(0).toUpperCase() + data.medium.slice(1) : '';
-        const size = data.canvasSize || '';
 
-        // Get artist name from artistName or artistEmail
         const artistName = data.artistName || data.artistEmail?.split('@')[0] || 'Unknown Artist';
 
         const card = document.createElement('div');
         card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
             <div class="relative">
+                <div class="artwork-artist">${artistName}</div> <!-- Ensure proper positioning -->
                 <img 
                     src="${imageUrl}" 
                     alt="${data.title || 'Untitled artwork'}" 
@@ -248,11 +243,8 @@ function createArtworkCard(id, data, genreIcon) {
                     onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
                     loading="lazy"
                 >
-                <div class="absolute bottom-2 left-4 bg-black bg-opacity-70 text-white px-3 py-1 text-xs rounded-md">
-                    <i class="fas fa-user mr-1"></i>${artistName}
-                </div>
                 <div class="absolute bottom-2 right-4 bg-black bg-opacity-70 text-white px-3 py-1 text-xs rounded-md">
-                    <i class="fas fa-${genreIcon} mr-1"></i>${genre}
+                    <i class="fas fa-${genreIcon} mr-1"></i>${data.genre || 'Art'}
                 </div>
             </div>
             <div class="p-3 flex flex-col h-[300px]">
@@ -262,41 +254,16 @@ function createArtworkCard(id, data, genreIcon) {
                 </div>
                 <div class="price-container mb-1">
                     <p class="artwork-price">${formattedPrice}</p>
-                    <span class="artwork-artist">
-                        ${data.artist ? `by ${data.artist}` : ''}
-                    </span>
                 </div>
-                
-                <div class="artwork-meta flex flex-wrap gap-1">
-                    <span class="genre-tag">${genre}</span>
-                    ${medium ? `<span class="medium-tag">${medium}</span>` : ''}
-                    ${size ? `<span class="size-tag">${size}</span>` : ''}
-                </div>
-                
                 <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
                 <div class="mt-auto pt-1">
-                    ${auth.currentUser ? 
-                        `<button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
-                            class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
-                            <i class="fas fa-cart-plus mr-1"></i> Add to Cart
-                        </button>` :
-                        `<button onclick="window.toggleLoginFlyout()" 
-                            class="add-to-cart-btn artwork-button w-full bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
-                            <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
-                        </button>`
-                    }
+                    <button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
+                        class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
+                        <i class="fas fa-cart-plus mr-1"></i> Add to Cart
+                    </button>
                 </div>
             </div>
         `;
-
-        // Add image click handler after creating the card
-        card.querySelector('.artwork-image')?.addEventListener('click', function() {
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            modal.classList.add('active');
-            modalImg.src = this.src;
-            document.body.style.overflow = 'hidden';
-        });
 
         return card;
     } catch (error) {

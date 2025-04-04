@@ -444,18 +444,28 @@
     border-bottom: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-/* Improve artist attribution styling */
 .artwork-artist {
-    font-weight: 600;
-    color: #1F2937;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto; /* Adjust width to fit content */
+    max-width: 90%; /* Prevent it from stretching too wide */
+    height: auto; /* Ensure it doesn't take the full height */
+    background: rgba(0, 0, 0, 0.7); /* Darker background for better visibility */
+    color: white;
+    text-align: center;
+    padding: 0.2rem 0.5rem; /* Adjust padding for better spacing */
+    font-size: 0.65rem; /* Smaller font size */
+    font-weight: bold;
+    z-index: 10;
+    border-radius: 0.25rem; /* Slightly rounded corners */
+    margin: 0.25rem; /* Add margin to prevent overlap with edges */
+    line-height: 1; /* Ensure proper text alignment */
+    display: inline-block; /* Prevent it from stretching */
 }
 
 .artwork-card .artwork-artist {
     position: absolute;
-    bottom: 10px;
     left: 10px;
     background: rgba(0, 0, 0, 0.7);
     color: white;
