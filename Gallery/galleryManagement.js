@@ -51,7 +51,7 @@ function toggleUploadForm() {
     
     if (isHidden) {
         modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -93,7 +93,19 @@ window.toggleUploadForm = toggleUploadForm;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Setting up upload form toggle');
     const toggleButton = document.getElementById('toggleUploadForm');
+    
+    // Check if button exists
     if (toggleButton) {
+        // Hide the button if not logged in or not the gallery owner
+        auth.onAuthStateChanged(user => {
+            if (!user || user.uid !== artistId) {
+                toggleButton.classList.add('hidden');
+            } else {
+                toggleButton.classList.remove('hidden');
+            }
+        });
+        
+        // Add click event listener
         toggleButton.addEventListener('click', toggleUploadForm);
     }
 });
