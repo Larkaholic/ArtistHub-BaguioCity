@@ -216,8 +216,8 @@ function displayArtworks(artworks) {
         galleryContainer.appendChild(card);
     });
     
-    // Update cart buttons based on verification status after displaying artwork cards
     updateAddToCartButtons();
+    addImageClickHandlers();
 }
 
 function createArtworkCard(id, data, genreIcon) {
@@ -235,7 +235,7 @@ function createArtworkCard(id, data, genreIcon) {
         card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
             <div class="relative">
-                <div class="artwork-artist">${artistName}</div> <!-- Ensure proper positioning -->
+                <div class="artwork-artist">${artistName}</div>
                 <img 
                     src="${imageUrl}" 
                     alt="${data.title || 'Untitled artwork'}" 
@@ -910,11 +910,16 @@ function initializeImageModal() {
 // Add click handler to artwork images
 function addImageClickHandlers() {
     document.querySelectorAll('.artwork-image').forEach(img => {
-        img.onclick = function() {
+        img.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
-            modal.classList.add('active');
+            
+            // Set the image source and show modal
             modalImg.src = this.src;
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden'; // Prevent background scrolling
         };
     });

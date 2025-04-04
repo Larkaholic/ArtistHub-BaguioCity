@@ -51,7 +51,7 @@ function toggleUploadForm() {
     
     if (isHidden) {
         modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -93,7 +93,19 @@ window.toggleUploadForm = toggleUploadForm;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Setting up upload form toggle');
     const toggleButton = document.getElementById('toggleUploadForm');
+    
+    // Check if button exists
     if (toggleButton) {
+        // Hide the button if not logged in or not the gallery owner
+        auth.onAuthStateChanged(user => {
+            if (!user || user.uid !== artistId) {
+                toggleButton.classList.add('hidden');
+            } else {
+                toggleButton.classList.remove('hidden');
+            }
+        });
+        
+        // Add click event listener
         toggleButton.addEventListener('click', toggleUploadForm);
     }
 });
@@ -903,7 +915,6 @@ window.addToCart = async function(artworkId, title, price, stock) {
         return;
     }
     
-    // Ensure price is a number
     const numericPrice = parseFloat(price);
     if (isNaN(numericPrice)) {
         console.error('Invalid price:', price);
@@ -924,7 +935,7 @@ window.addToCart = async function(artworkId, title, price, stock) {
         artworkId, 
         title, 
         price: numericPrice,
-        addedAt: serverTimestamp() // Add timestamp
+        addedAt: serverTimestamp() // timestamp
     };
     cart.push(item);
     
@@ -947,7 +958,6 @@ window.addToCart = async function(artworkId, title, price, stock) {
             });
         }
         
-        // Update button text and style
         const cartButton = document.getElementById(`cartButton-${artworkId}`);
         if (cartButton && stock === 1) {
             cartButton.textContent = 'Item Reserved';
@@ -981,12 +991,10 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    // Animate in
     setTimeout(() => {
         notification.style.transform = 'translateY(0)';
     }, 100);
     
-    // Remove after delay
     setTimeout(() => {
         notification.style.transform = 'translateY(full)';
         setTimeout(() => {
@@ -1001,7 +1009,6 @@ window.checkout = async function() {
         return;
     }
     
-    // Here you would implement the checkout process
     alert('Checkout functionality will be implemented soon!');
 }
 
@@ -1021,7 +1028,6 @@ function updateCartUI() {
         let total = 0;
         
         cart.forEach((item, index) => {
-            // Ensure price is a number
             const itemPrice = parseFloat(item.price) || 0;
             
             const itemElement = document.createElement('div');
@@ -1044,8 +1050,7 @@ function updateCartUI() {
         if (totalItems) totalItems.textContent = cart.length;
         if (totalPrice) totalPrice.textContent = total.toFixed(2);
     }
-    
-    // Make the cart nav visible if there are items
+
     const cartNav = document.getElementById('cartNav');
     const cartNavMobile = document.getElementById('cartNavMobile');
     
@@ -1111,9 +1116,6 @@ function onSignIn() {
 window.navToEvent = function(url) {
     window.location.href = url;
 }
-
-// Security measures - Keep the code clean and readable
-// FOR SECURITY OF THE WEBSITE //
 
 // Create a custom alert box
 function showCustomAlert(message) {
