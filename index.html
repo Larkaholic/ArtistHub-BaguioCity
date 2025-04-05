@@ -362,7 +362,7 @@
                         <a href="javascript:void(0)" onclick="navToEvent('./index.html#events')" class="text-gray-300 hover:text-white">Events</a>
                         <a href="javascript:void(0)" onclick="navToEvent('./Gallery/gallery.html')" class="text-gray-300 hover:text-white">Gallery</a>
                         <a href="javascript:void(0)" onclick="navToEvent('./index.html#history')" class="text-gray-300 hover:text-white">History</a>
-                        <a href="#contact" class="text-gray-300 hover:text-white">Contact Us</a>
+                        <a href="javascript:void(0)" onclick="openContactModal()" class="text-gray-300 hover:text-white">Contact Us</a>
                         <a href="javascript:void(0)"onclick="navToEvent('./Our Team/OurTeam.html')" class="text-gray-300 hover:text-white">Our Team</a>
                     </nav>
         
@@ -391,6 +391,46 @@
                 Copyright ©2025, Designed and built by <a href="https://github.com/Larkaholic" class="lrk-designer-link">Orillos, Lark Dominique J.</a>
             </div>
         </footer>
+
+        <!-- Contact Us Modal -->
+        <div id="contactModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+            <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+                <button onclick="closeContactModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <h2 class="text-center font-bold text-2xl mb-6">Contact Us</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="contactName" class="block font-medium">Name:</label>
+                        <input type="text" id="contactName" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter your name" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="contactEmail" class="block font-medium">Email:</label>
+                        <input type="email" id="contactEmail" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter your email" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="contactMessage" class="block font-medium">Message:</label>
+                        <textarea id="contactMessage" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" rows="4" placeholder="Enter your message" required></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" onclick="closeContactModal()" class="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 mr-2">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function openContactModal() {
+                document.getElementById('contactModal').classList.remove('hidden');
+            }
+
+            function closeContactModal() {
+                document.getElementById('contactModal').classList.add('hidden');
+            }
+        </script>
 
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
