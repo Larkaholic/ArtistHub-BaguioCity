@@ -204,19 +204,6 @@
                         <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('../shop/shop.html')">Shop</a></li>
-                        <!-- Remove duplicate profile section -->
-                        <li id="cartNavMobile" class="hidden">
-                            <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                Cart (<span id="cartCountMobile">0</span>)
-                            </a>
-                        </li>
-                        <li class="login-button">
-                            <button onclick="toggleLoginFlyout(event)">Login</button>
-                        </li>
-                        <!-- Keep only this profile dropdown -->
                         <li class="relative">
                             <button id="profileLinkMobile" class="flex items-center w-full p-2 hover:bg-gray-100 rounded-lg">
                                 <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
@@ -235,6 +222,17 @@
                                     <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 text-center">Logout</a>
                                 </div>
                             </div>
+                        </li>
+                        <li id="cartNavMobile" class="hidden">
+                            <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                Cart (<span id="cartCountMobile">0</span>)
+                            </a>
+                        </li>
+                        <li class="login-button">
+                            <button onclick="toggleLoginFlyout(event)">Login</button>
                         </li>
                     </ul>
                 </nav>
