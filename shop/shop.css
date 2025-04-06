@@ -231,9 +231,21 @@
     transition: all 0.3s ease;
 }
 
+#searchButton {
+    background-color: #F4A900;
+    color: white;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+}
+
+#searchButton:hover {
+    background-color: #D48A00;
+}
+
 #searchArtworks:focus,
 #sortArtworks:focus {
-    border-color: #48bb78;
+    border-color: #F4A900;
     box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
 }
 
