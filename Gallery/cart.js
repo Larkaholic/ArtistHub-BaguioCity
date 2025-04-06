@@ -258,11 +258,8 @@ async function clearCart() {
 
 // Checkout process
 window.checkout = async function() {
-    console.log('Checkout started');
     try {
         const user = auth.currentUser;
-        console.log('Current user:', user);
-        
         if (!user) {
             alert('Please login to checkout');
             return;
@@ -273,43 +270,17 @@ window.checkout = async function() {
             return;
         }
 
+        // Proceed with checkout logic
+        console.log('Checkout started for user:', user.email);
         console.log('Cart items:', cart);
 
-        const cartDocRef = doc(db, 'carts', user.uid);
-        const cartDoc = await getDoc(cartDocRef);
-        
-        if (!cartDoc.exists()) {
-            alert('Cart not found');
-            return;
-        }
-
-        const items = cartDoc.data().items;
-        console.log('Cart items from Firestore:', items);
-        
-        // Show preview for all items
-        if (items.length > 0) {
-            try {
-                const artworkDoc = await getDoc(doc(db, 'artworks', items[0].artworkId));
-                let ownerEmail = 'artist@example.com'; // Default email
-                
-                if (artworkDoc.exists()) {
-                    const artworkData = artworkDoc.data();
-                    ownerEmail = artworkData.artistEmail || ownerEmail;
-                }
-                
-                showEmailPreview(items, user, ownerEmail);
-            } catch (error) {
-                console.error('Error fetching artwork:', error);
-                // Still show preview even if artwork fetch fails
-                showEmailPreview(items, user, 'artist@example.com');
-            }
-        }
-        
+        // Show email preview instead of alert
+        showEmailPreview(cart, user);
     } catch (error) {
         console.error('Error during checkout:', error);
         alert('An error occurred during checkout. Please try again later.');
     }
-}
+};
 
 // Update cart UI
 function updateCartUI() {

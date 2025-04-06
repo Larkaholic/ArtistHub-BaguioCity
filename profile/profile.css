@@ -72,16 +72,22 @@ main {
 }
 
 .glass-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    height: auto;
-    min-height: fit-content;
-    @supports not (backdrop-filter: blur(12px)) {
-        background: rgba(255, 255, 255, 0.95);
-    }
+    background: rgba(255, 255, 255, 1);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(19.8px);
+    -webkit-backdrop-filter: blur(19.8px);
+    border: 1px solid rgba(255, 255, 255, 0.01);
+    z-index: 1000;
+}
+
+.glass-header2 {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.01);
 }
 /* 
 .flyout {
@@ -176,8 +182,6 @@ main {
     color: #666;
 }
 
-/* Add any other styles you need */
-
 /* Mobile navigation */
 #flyout-menu {
     transition: transform 0.3s ease-in-out;
@@ -188,7 +192,6 @@ main {
     transform: translateX(0);
 }
 
-/* Overlay when menu is open */
 .menu-overlay {
     background-color: rgba(0, 0, 0, 0.5);
     position: fixed;
@@ -202,14 +205,6 @@ main {
 .menu-overlay.active {
     opacity: 1;
     pointer-events: auto;
-}
-
-/* Ensure proper glass effect on mobile menu */
-.glass-header {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* Burger icon styles */
@@ -286,7 +281,6 @@ main {
     }
 }
 
-/* Genre specific styles - separate from highlight-text */
 .genre-container {
     display: flex;
     flex-wrap: wrap;
@@ -359,9 +353,9 @@ main {
     .relative.aspect-\[4\/5\] {
         aspect-ratio: 1/1;
         margin-bottom: 2rem;
-        order: -1; /* Move image to top on mobile */
-        height: 50vh; /* Ensure reasonable height on mobile */
-        min-height: 300px; /* Minimum height */
+        order: -1;
+        height: 50vh;
+        min-height: 300px;
         width: 100%;
     }
 
@@ -370,7 +364,7 @@ main {
         padding: 1.5rem;
     }
 
-    /* Ensure image container is visible */
+    
     .relative.aspect-\[4\/5\] {
         display: block !important;
         visibility: visible !important;
@@ -395,7 +389,6 @@ main {
     }
 }
 
-/* Additional profile section enhancements */
 .profile-section {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
@@ -411,7 +404,7 @@ main {
 
 /* Profile image container */
 .relative.aspect-\[4\/5\] {
-    height: 600px; /* Fixed height */
+    height: 600px;
     min-height: 300px;
     width: 100%;
     position: relative;
@@ -431,7 +424,7 @@ main {
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .relative.aspect-\[4\/5\] {
-        height: 400px; /* Smaller fixed height for mobile */
+        height: 400px;
         margin-bottom: 2rem;
         order: -1;
     }
@@ -444,7 +437,7 @@ main {
 /* Tablet adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
     .relative.aspect-\[4\/5\] {
-        height: 500px; /* Medium height for tablets */
+        height: 500px;
     }
 }
 
@@ -461,7 +454,6 @@ main {
     }
 }
 
-/* Improved touch targets for mobile */
 button, 
 .fa, 
 .nav-item {
@@ -469,7 +461,6 @@ button,
     min-width: 44px;
 }
 
-/* Better spacing for stacked elements on mobile */
 .space-y-4 > * + * {
     margin-top: 1rem;
 }
@@ -481,7 +472,7 @@ button,
 }
 
 .container {
-    padding-bottom: 0; /* Remove bottom padding */
+    padding-bottom: 0;
     min-height: 100%;
 }
 
@@ -492,7 +483,7 @@ button,
     }
     
     main {
-        min-height: calc(100vh - 60px); /* Adjust for smaller header on mobile */
+        min-height: calc(100vh - 60px); /* smaller header on mobile */
     }
 }
 

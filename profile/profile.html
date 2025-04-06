@@ -5,20 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Profile</title>
 
-    <!-- external CSS - load these first -->
+    <!-- external CSS -->
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     
-    <!-- use absolute paths -->
     <style>
-        /* Fallback styles in case CSS doesn't load */
-        .glass-header {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
         body {
             background-image: url('../images/bg.jpg');
             background-size: cover;
@@ -75,7 +67,7 @@
 
 </head>
 <body class="z-10">
-    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-30 p-1 glass-header">
+    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-30 p-1 glass-header2">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')" style="cursor: pointer">
         </div>
@@ -131,7 +123,7 @@
     </header>
 
     <div id="flyout-menu" class="fixed top-0 right-0 w-64 h-screen transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
-        <div class="glass-header h-full p-6">
+        <div class="glass-header2 h-full p-6">
             <nav>
                 <ul class="flex flex-col space-y-4 mt-10">
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a></li>
@@ -168,7 +160,7 @@
 
     <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
         <!-- Login Form -->
-        <div id="loginForm" class="glass-header items-center rounded-lg w-96 mx-10">
+        <div id="loginForm" class="glass-header2 items-center rounded-lg w-96 mx-10">
             <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
             <form onsubmit="handleLogin(event)">
                 <div class="mx-2 mb-4">
@@ -180,8 +172,8 @@
                     <input type="password" id="loginPassword" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter Password" required>
                 </div>
                 <div class="flex items-center justify-between mx-20 my-5">
-                    <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Login</button>
-                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                    <button type="submit" class="glass-header text-black py-2 px-4 rounded-md hover:bg-gray-300">Login</button>
+                    <button type="button" class="glass-header text-black py-2 px-4 rounded-md hover:bg-gray-300" onclick="toggleLoginFlyout()">Close</button>
                 </div>
                 <div class="flex items-center justify-center my-4">
                     <div class="border-t border-gray-300 flex-grow mx-4"></div>
@@ -205,7 +197,7 @@
             </form>
         </div>
         <!-- register -->
-        <div id="registerForm" class="glass-header items-center rounded-lg w-96 mx-10 hidden">
+        <div id="registerForm" class="glass-header2 items-center rounded-lg w-96 mx-10 hidden">
             <h2 class="flex justify-center font-bold text-2xl my-4">Register</h2>
             <form onsubmit="return handleRegister(event)">
                 <div class="mx-2 mb-4">
@@ -224,8 +216,8 @@
                     </select>
                 </div>
                 <div class="flex items-center justify-between mx-20 my-5">
-                    <button type="submit" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Register</button>
-                    <button type="button" class="glass-header text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
+                    <button type="submit" class="glass-header2 text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black">Register</button>
+                    <button type="button" class="glass-header2 text-white py-2 px-4 rounded-md hover:bg-gray-300 hover:text-black" onclick="toggleLoginFlyout()">Close</button>
                 </div>
                 <div class="text-center mb-4">
                     <p>Already have an account? <a href="javascript:void(0)" onclick="toggleForms()" class="underline">LOGIN</a></p>
@@ -251,7 +243,7 @@
                 </div>
                 
                 <!-- Profile Section -->
-                <div class="glass-header rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl order-2 lg:order-1">
+                <div class="glass-header2 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl order-2 lg:order-1">
                     <h1 id="displayName" class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Loading...</h1>
                     
                     <!-- Scrollable content -->
@@ -302,7 +294,7 @@
             </div>
 
             <!-- Achievements Section -->
-            <section id="achievements" class="glass-header rounded-2xl p-4 sm:p-8 mt-6 sm:mt-8 max-w-7xl mx-auto">
+            <section id="achievements" class="glass-header2 rounded-2xl p-4 sm:p-8 mt-6 sm:mt-8 max-w-7xl mx-auto">
                 <h2 class="text-xl sm:text-2xl font-bold mb-4">Achievements</h2>
                 <div class="flex gap-4">
                     <input type="file" id="achievementImages" accept="image/*" multiple class="hidden">
@@ -311,16 +303,6 @@
                     </label>
                 </div>
             </section>
-        </div>
-        <div class="fixed bottom-8 left-8 z-50 mb-4"> 
-            <button 
-                id="editProfileButton"
-                onclick="window.location.href='edit-profile.html?id=' + new URLSearchParams(window.location.search).get('id')"
-                class="glass-header text-white p-4 rounded-full shadow-lg hover:bg-gray-300 hover:text-black transform hover:scale-105 transition-all duration-200 flex items-center space-x-2 cursor-pointer"
-                style="background-color: rgba(0, 0, 0, 0.5); display: none;"
-            >
-                <span>Edit Profile</span>
-            </button>
         </div>
     </main>
     <script type="module">
@@ -401,7 +383,7 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
     
     <div id="userMenu" class="hidden">
-        <div class="glass-header rounded-lg p-4">
+        <div class="glass-header2 rounded-lg p-4">
             <nav>
                 <ul>
                     <li><a href="/profile/profile.html">Profile</a></li>
@@ -522,7 +504,7 @@
     
     <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-20 hidden" style="position: fixed; isolation: isolate;">
-        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl" style="z-index: 999999;">
+        <div class="glass-header22 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl" style="z-index: 999999;">
             <button onclick="closeSettingsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

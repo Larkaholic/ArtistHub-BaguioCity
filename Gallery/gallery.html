@@ -320,9 +320,7 @@
                             </button>
                         </div>
                         <div id="uploadFormContainer" class="p-6">
-                            <!-- Existing form content stays the same -->
                             <div class="grid md:grid-cols-2 gap-6">
-                                <!-- Left Column - Image Upload -->
                                 <div class="space-y-4">
                                     <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 h-80">
                                         <div id="imagePreviewContainer" class="hidden w-full h-full">
@@ -335,7 +333,6 @@
                                             <p class="text-gray-500">Click to upload or drag and drop</p>
                                             <p class="text-sm text-gray-400">PNG, JPG, GIF up to 10MB</p>
                                         </div>
-                                        <!-- Remove required attribute and add hidden input for form validation -->
                                         <input type="file" id="imageFile" accept="image/*" class="hidden">
                                         <input type="hidden" id="imageUrlInput" name="imageUrl" required>
                                     </div>
@@ -353,7 +350,6 @@
                                             <label class="block text-gray-700 text-sm font-bold mb-2" for="price">Price (₱) *</label>
                                             <input type="number" id="price" min="0" step="0.01" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
                                         </div>
-                                        <!-- Add stock field -->
                                         <div>
                                             <label class="block text-gray-700 text-sm font-bold mb-2" for="stock">Stock Available *</label>
                                             <input type="number" id="stock" min="0" step="1" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
@@ -361,7 +357,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Right Column - Details -->
                                 <div class="space-y-4">
                                     <div>
                                         <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Description *</label>
@@ -407,7 +402,6 @@
                                 </div>
                             </div>
 
-                            <!-- Submit Button -->
                             <div class="flex justify-center mt-8">
                                 <button type="submit" class="bg-blue-500 text-white py-3 px-8 rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -421,7 +415,6 @@
                 </div>
             </div>
     
-            <!-- Image Grid -->
             <div id="galleryContainer" class="gallery-container">
                 <!-- Images will be inserted here dynamically -->
             </div>
@@ -489,7 +482,7 @@
 
 <!-- Cart Modal -->
 <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 hidden" style="z-index: 9999;">
-    <!-- ...existing code... -->
+    
 </div>
 
 <script>
