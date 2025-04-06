@@ -84,7 +84,6 @@
             font-weight: 600 !important;
         }
         
-        /* Add transparent and solid header styles for scroll behavior */
         .transparent-header {
             background: rgba(255, 255, 255, 0) !important;
             transition: all 0.3s ease !important;
@@ -133,7 +132,6 @@
             text-align: center;
         }
         
-        /* Add hover styles for nav items */
         .nav-item {
             transition: all 0.3s ease;
             position: relative;
@@ -154,13 +152,12 @@
             transform: translateY(0);
         }
         
-        /* Smooth transitions for all interactive elements */
         a, button, .nav-item, .profile-button, .burger-icon {
             transition: all 0.3s ease;
         }
         
         .login-button {
-            margin-right: 10px; /* Adjusted margin */
+            margin-right: 10px;
         }
         
         .login-button button:hover {
@@ -182,7 +179,6 @@
             fill: white;
         }
         
-        /* Add specific styling for nav items in transparent vs solid header */
         .transparent-header .nav-item a,
         .transparent-header .nav-item button {
             color: #333333;
@@ -194,7 +190,6 @@
             color: #333333;
         }
 
-        /* Ensure mobile menu button is always visible */
         .burger-icon svg {
             fill: #333333 !important;
             transition: fill 0.3s ease;
@@ -224,7 +219,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Search and sort controls */
 #searchArtworks, #sortArtworks {
     background: rgba(255, 255, 255, 0.9);
     border: 2px solid rgba(0, 0, 0, 0.1);
@@ -313,7 +307,7 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
-    height: 650px; /* Increased from 500px to 650px */
+    height: 650px;
     display: flex;
     flex-direction: column;
 }
@@ -324,12 +318,12 @@
 }
 
 .artwork-card > div:first-child {
-    height: 250px; /* Fixed image container height */
+    height: 250px;
 }
 
 .artwork-image {
     width: 100%;
-    height: 250px; /* Fixed height for images */
+    height: 250px;
     object-fit: cover;
     border-radius: 0.75rem 0.75rem 0 0;
     cursor: pointer;
@@ -351,7 +345,7 @@
     font-size: 1.25rem;
     line-height: 1.4;
     margin-bottom: 0.5rem;
-    max-height: 3.5rem; /* ~2 lines with some margin */
+    max-height: 3.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -383,12 +377,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 7; /* Increased from 3 to 7 */
+    -webkit-line-clamp: 7;
     -webkit-box-orient: vertical;
     font-size: 0.9rem;
     line-height: 1.5;
     min-height: 0;
-    max-height: none; /* Remove max-height to allow more content */
+    max-height: none;
     color: black;
     font-size: 1rem;
     line-height: 1.6;
@@ -397,12 +391,12 @@
     background: rgba(255, 255, 255, 0.05);
     border-radius: 0.5rem;
     border-left: 4px solid #10B981;
-    max-height: 120px; /* Limit height to prevent pushing button down */
-    overflow-y: auto; /* Allow scrolling for long descriptions */
+    max-height: 120px; /* limit height to prevent pushing button down */
+    overflow-y: auto;
 }
 
 .artwork-card .flex.justify-center {
-    margin-top: auto; /* Push button to bottom */
+    margin-top: auto;
     padding-top: 0.5rem;
     border-top: 1px solid rgba(16, 185, 129, 0.1);
 }
@@ -416,36 +410,33 @@
 }
 
 .artwork-card .flex.justify-center {
-    margin-top: auto; /* Push button to bottom */
+    margin-top: auto;
 }
 
-/* Ensure artwork metadata doesn't push content down too much */
 .artwork-meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin: 0.5rem 0; /* Reduced margin */
-    max-height: 80px; /* Prevent excessive height */
-    overflow-y: auto; /* Allow scrolling if too many tags */
+    margin: 0.5rem 0;
+    max-height: 80px;
+    overflow-y: auto;
 }
 
-/* Update the artwork price styling for better visibility */
 .artwork-price {
-    color: #065f46; /* Darker green for better contrast */
-    font-weight: 700; /* Bolder font */
+    color: #065f46;
+    font-weight: 700;
     font-size: 1.25rem;
-    padding: 0.5rem 0.75rem; /* Slightly more padding */
+    padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
-    background: rgba(209, 250, 229, 0.95); /* Lighter, more opaque background */
+    background: rgba(209, 250, 229, 0.95);
     display: inline-block;
-    border: 1px solid #10B981; /* Add border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
-    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8); /* Text shadow for readability */
-    margin-top: 0.5rem; /* Add some spacing */
-    margin-bottom: 0.5rem; /* Add some spacing */
+    border: 1px solid #10B981;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
-/* Add this to create a price container with improved layout */
 .price-container {
     display: flex;
     justify-content: space-between;
@@ -460,20 +451,20 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: auto; /* Adjust width to fit content */
-    max-width: 90%; /* Prevent it from stretching too wide */
-    height: auto; /* Ensure it doesn't take the full height */
-    background: rgba(0, 0, 0, 0.7); /* Darker background for better visibility */
+    width: auto;
+    max-width: 90%;
+    height: auto;
+    background: rgba(0, 0, 0, 0.7);
     color: white;
     text-align: center;
-    padding: 0.2rem 0.5rem; /* Adjust padding for better spacing */
-    font-size: 0.65rem; /* Smaller font size */
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
     font-weight: bold;
     z-index: 10;
-    border-radius: 0.25rem; /* Slightly rounded corners */
-    margin: 0.25rem; /* Add margin to prevent overlap with edges */
-    line-height: 1; /* Ensure proper text alignment */
-    display: inline-block; /* Prevent it from stretching */
+    border-radius: 0.25rem;
+    margin: 0.25rem;
+    line-height: 1;
+    display: inline-block;
 }
 
 .artwork-card .artwork-artist {
@@ -490,15 +481,15 @@
 .artwork-button {
     background: #10B981;
     color: white;
-    padding: 0.5rem 1rem; /* Reduced padding from 0.75rem 1.5rem */
+    padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     font-weight: 600;
-    font-size: 0.875rem; /* Added smaller font size */
+    font-size: 0.875rem;
     transition: all 0.3s ease;
-    width: auto; /* Changed from 100% to auto */
-    min-width: 70%; /* Added min-width to keep button from being too small */
-    margin: 0 auto; /* Center the button */
-    display: block; /* Changed from inline-block */
+    width: auto;
+    min-width: 70%;
+    margin: 0 auto;
+    display: block;
     text-align: center;
 }
 
@@ -507,7 +498,6 @@
     transform: translateY(-2px);
 }
 
-/* Add new specific styling for the add to cart button */
 .add-to-cart-btn {
     font-size: 0.875rem;
     padding: 0.5rem 0.75rem;
@@ -517,8 +507,8 @@
 }
 
 .add-to-cart-btn i {
-    font-size: 0.75rem; /* Make icon slightly smaller */
-    margin-right: 0.25rem; /* Reduce margin around icon */
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
 }
 
 /* Profile dropdown styles */
@@ -536,33 +526,33 @@
     position: absolute;
     top: 100%;
     right: 0;
-    width: 16rem; /* Increased width */
+    width: 16rem;
     background-color: white;
-    border-radius: 0.75rem; /* Slightly larger radius */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     z-index: 999;
-    margin-top: 0.75rem; /* Added space from button */
-    padding: 0.5rem 0; /* Added internal padding */
+    margin-top: 0.75rem;
+    padding: 0.5rem 0;
 }
 
 #profileDropdown .py-2 {
-    padding: 0.75rem 0; /* Increased vertical padding */
+    padding: 0.75rem 0;
 }
 
 #profileDropdown .px-4 {
-    padding: 0.75rem 1.25rem; /* Increased horizontal padding */
+    padding: 0.75rem 1.25rem;
 }
 
 #profileDropdown .border-b {
-    padding: 1.25rem; /* Increased padding for header section */
-    margin-bottom: 0.5rem; /* Added space after header */
+    padding: 1.25rem;
+    margin-bottom: 0.5rem;
 }
 
 #profileDropdown a {
     display: flex;
     align-items: center;
-    padding: 0.75rem 1.25rem; /* Increased padding */
-    margin: 0.25rem 0; /* Added vertical spacing between items */
+    padding: 0.75rem 1.25rem;
+    margin: 0.25rem 0;
     color: #374151;
     font-size: 0.875rem;
     transition: all 0.2s ease;
@@ -654,7 +644,6 @@
     padding: 1rem;
 }
 
-/* Mobile Profile Dropdown Styles */
 #profileLinkMobile {
     width: 100%;
     text-align: left;
@@ -691,13 +680,11 @@
     padding: 1rem;
 }
 
-/* Make sure the dropdown appears above other elements */
 .profile-dropdown-container {
   position: relative;
   z-index: 50;
 }
 
-/* Fixed styles for the dropdown */
 .profile-dropdown-container .profile-button {
   cursor: pointer;
   transition: transform 0.2s;
@@ -707,12 +694,10 @@
   transform: scale(1.05);
 }
 
-/* When dropdown is hidden via the 'hidden' class, make sure it's actually hidden */
 .hidden {
   display: none !important;
 }
 
-/* Profile dropdown styles - match index.html */
 .profile-dropdown-overlay {
   position: fixed;
   top: 0;
@@ -738,7 +723,6 @@
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Ensure hidden class works properly */
 .hidden {
   display: none !important;
 }
@@ -748,7 +732,6 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Fix navigation buttons */
 .login-button {
   display: block !important;
 }
@@ -775,7 +758,6 @@
   color: white !important;
 }
 
-/* Make navigation items properly visible */
 nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
   display: flex !important;
 }
@@ -786,7 +768,6 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
   }
 }
 
-/* Make sure mobile and desktop login/logout buttons follow auth state */
 .login-button, .logout-button {
   transition: display 0.3s ease;
 }
@@ -796,13 +777,11 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
   display: inline-block !important;
 }
 
-/* Fix flyout menu button styles */
 #flyout-menu .login-button button,
 #flyout-menu .logout-button button {
   width: 100%;
 }
 
-/* Critical fixes for login button and dropdown */
 .login-button {
     display: block;
 }
@@ -896,7 +875,6 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
   overflow-y: auto;
 }
 
-/* Make sure cart count is properly sized */
 #cartCount, #cartCountMobile {
   font-weight: bold;
 }
@@ -910,9 +888,8 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
     z-index: 100 !important;
 }
 
-/* Fix login/logout button visibility */
 .login-button {
-    display: none !important; /* Hide by default */
+    display: none !important;
 }
 
 .login-button.visible {
@@ -1025,15 +1002,14 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
     background: rgba(0, 0, 0, 0.05);
 }
 
-/* Styling for disabled Add to Cart buttons */
 .add-to-cart-btn.disabled,
 .add-to-cart-btn[disabled] {
-    background-color: #9ca3af !important; /* Gray */
+    background-color: #9ca3af !important;
     cursor: not-allowed !important;
     opacity: 0.5;
     transform: none !important;
     box-shadow: none !important;
-    pointer-events: none; /* Prevent hover effects */
+    pointer-events: none;
 }
 
 /* Tooltip styling */
@@ -1052,7 +1028,6 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
     z-index: 100;
 }
 
-/* Verification banner animation */
 .verification-banner {
     animation: slideDown 0.5s ease;
     transform-origin: top;
@@ -1069,7 +1044,6 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
     }
 }
 
-/* Image Modal Styles */
 .image-modal {
     display: none;
     position: fixed;

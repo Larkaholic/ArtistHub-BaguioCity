@@ -1,7 +1,7 @@
 import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where, updateDoc, serverTimestamp, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { db, auth } from '../js/firebase-config.js';
 
-let allArtworks = []; // Store all artworks for filtering
+let allArtworks = [];
 let isLoading = true;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,14 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    // Initial load
     loadArtworks();
 
     // Add event listeners for genre buttons
     const genreButtons = document.querySelectorAll('.genre-btn');
     genreButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            // Remove active class and styling from all buttons
             genreButtons.forEach(btn => {
                 btn.classList.remove('active');
                 btn.style.backgroundColor = '#FFF2C8';
@@ -30,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             clickedButton.classList.add('active');
             clickedButton.style.backgroundColor = '#F4A900';
 
-            // Apply filters
             applyFilters();
         });
     });
@@ -91,7 +88,6 @@ async function loadArtworks(forceRefresh = false) {
             return;
         }
 
-        // Now try with a proper query
         let artworksQuery = query(artworksRef, limit(50));
         const querySnapshot = await getDocs(artworksQuery);
         
@@ -108,7 +104,8 @@ async function loadArtworks(forceRefresh = false) {
             allArtworks.push({ id: doc.id, ...data });
         });
         
-        applyFilters(); // Initial display with filters
+        applyFilters();
+        
     } catch (error) {
         galleryContainer.innerHTML = `
             <div class="col-span-full text-center py-8">
@@ -272,7 +269,6 @@ function createArtworkCard(id, data, genreIcon) {
     }
 }
 
-// FOR SECURITY OF THE WEBSITE //
 // Create a custom alert box
 function showCustomAlert(message) {
   let alertBox = document.createElement("div");
@@ -296,7 +292,7 @@ function showCustomAlert(message) {
       ${message}
   </div>`;
   document.body.appendChild(alertBox);
-  setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
+  setTimeout(() => alertBox.remove(), 1000);
 }
 
 /* Prevent Right Click, F12, and Ctrl+Shift+I/U/J */
@@ -393,7 +389,7 @@ async function updateAddToCartButtons() {
             button.disabled = false;
             button.classList.remove('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
             button.classList.add('bg-green-500', 'hover:bg-green-600');
-            button.title = ''; // Remove any tooltips
+            button.title = '';
         } else {
             // User cannot purchase: disable button
             button.disabled = true;
@@ -470,7 +466,7 @@ window.addToCart = async function(productId, productName, price) {
             productId,
             title: productName,
             price: parseFloat(price),
-            addedAt: new Date().toISOString() // Use ISO string instead of serverTimestamp
+            addedAt: new Date().toISOString()
         };
 
         if (querySnapshot.empty) {
@@ -554,15 +550,13 @@ window.toggleLoginFlyout = function() {
 
 // Initialize auth state listener
 auth.onAuthStateChanged(() => {
-    loadArtworks(); // Reload artworks when auth state changes
+    loadArtworks();
 });
 
 // Export the loadArtworks function for direct access
 window.loadArtworks = loadArtworks;
 
-// Add this function to initialize enhanced tag styles when document loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Add compact CSS for artwork cards with improved glassmorphism styling
     const styleEl = document.createElement('style');
     styleEl.textContent = `
         .artwork-card {
@@ -920,7 +914,7 @@ function addImageClickHandlers() {
             // Set the image source and show modal
             modalImg.src = this.src;
             modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden';
         };
     });
 }
@@ -931,7 +925,6 @@ function animateCartIcon() {
     if (cartCount) {
         // Add keyframe animation
         cartCount.classList.add('animate-bounce');
-        // Change background color for visual feedback
         cartCount.classList.add('bg-green-500');
         
         // Reset after animation completes
