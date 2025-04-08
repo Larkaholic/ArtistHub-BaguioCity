@@ -23,11 +23,9 @@ import { auth, db } from '../js/firebase-config.js';
 import { doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { GoogleAuthProvider, linkWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// add your Cloudinary configuration
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dxeyr4pvf/image/upload';
 const CLOUDINARY_UPLOAD_PRESET = 'artist_profiles';
-// Change this to use the existing upload preset instead of a non-existent one
-const CLOUDINARY_ID_UPLOAD_PRESET = 'artist_profiles'; // Use the existing preset
+const CLOUDINARY_ID_UPLOAD_PRESET = 'artist_profiles';
 
 // Variable to store the uploaded ID URL
 let uploadedIdUrl = null;
@@ -40,7 +38,7 @@ const idUploadWidget = cloudinary.createUploadWidget(
         sources: ['local', 'camera'],
         multiple: false,
         maxFiles: 1,
-        maxFileSize: 5000000, // 5MB max
+        maxFileSize: 5000000, // 5MB
         folder: 'user_ids', // Still save in the user_ids folder
         tags: ['id_verification'],
         resourceType: 'image'
@@ -171,7 +169,7 @@ async function checkVerificationStatus(userData) {
             `;
             verificationMessage.classList.remove('hidden');
             
-            // Hide upload button - no longer needed
+            // Hide upload button
             uploadButton.disabled = true;
             uploadButton.className = 'hidden';
             break;
@@ -213,7 +211,7 @@ function addGenreTag() {
         removeBtn.className = 'remove-genre-btn';
         removeBtn.onclick = () => genreContainer.removeChild(genreTag);
         genreTag.appendChild(removeBtn);
-        genreContainer.appendChild(genreTag); // Add the new genre tag at the end
+        genreContainer.appendChild(genreTag);
         genreInput.value = '';
     }
 }
@@ -349,7 +347,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Handle form submission - modified to ensure ID verification works
+    // Handle form to ensure ID verification works
     document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -483,8 +481,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Handle cancel button click
     document.getElementById('cancelButton').addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent form submission
-        window.location.href = 'profile.html'; // Redirect to profile page
+        e.preventDefault(); 
+        window.location.href = 'profile.html';
     });
 
     // Improve image preview handling
