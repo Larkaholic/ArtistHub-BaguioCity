@@ -229,7 +229,7 @@
     <main class="pt-20 px-4 sm:px-6 lg:px-8 min-h-screen">
         <div class="container mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
-                <!-- Image Section - Always on top for mobile -->
+                <!-- Image Section -->
                 <div class="relative w-full h-[350px] sm:h-[400px] lg:h-[600px] order-1 lg:order-2 overflow-hidden rounded-2xl">
                     <img
                         id="profileImage"
@@ -306,13 +306,10 @@
         </div>
     </main>
     <script type="module">
-        // Import navigation function
         import { navToEvent } from '../js/utils.js';
         
-        // Make navigation function available globally
         window.navToEvent = navToEvent;
         
-        // Import other functions
         import { 
             toggleLoginFlyout, 
             submitLogin, 
@@ -320,17 +317,14 @@
             toggleForms 
         } from './profile.js';
 
-        // Make other functions available globally
         window.toggleLoginFlyout = toggleLoginFlyout;
         window.submitLogin = submitLogin;
         window.toggleNav = toggleNav;
         window.toggleForms = toggleForms;
 
-        // Import auth and Firestore functions from firebase-config
         import { auth, db } from '../js/firebase-config.js';
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Ensure auth is available globally
         window.auth = auth;
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -360,7 +354,6 @@
             });
         });
 
-        // Add this to debug profile loading
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM loaded, checking profile ID');
             const urlParams = new URLSearchParams(window.location.search);
@@ -372,7 +365,6 @@
                 const artistId = urlParams.get('artistId');
                 if (artistId) {
                     console.log('Found artistId:', artistId);
-                    // Redirect to correct URL format if needed
                     window.location.href = `profile.html?id=${artistId}`;
                 }
             }
@@ -408,7 +400,6 @@
             try {
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
                 console.log('Login successful:', userCredential);
-                // Redirect to profile page or show success message
                 window.location.href = 'profile.html';
             } catch (error) {
                 console.error('Login failed:', error);
@@ -421,7 +412,6 @@
             try {
                 await firebase.auth().signOut();
                 console.log('Logout successful');
-                // Redirect to home page or show success message
                 window.location.href = 'index.html';
             } catch (error) {
                 console.error('Logout failed:', error);
@@ -586,11 +576,9 @@
         function hidePasswordChangeForm() {
             document.getElementById('settingsMainView').classList.remove('hidden');
             document.getElementById('passwordChangeForm').classList.add('hidden');
-            // Clear form fields when going back
             document.getElementById('currentPassword').value = '';
             document.getElementById('newPassword').value = '';
             document.getElementById('confirmPassword').value = '';
-            // Clear any error messages
             const errorDiv = document.getElementById('passwordChangeError');
             const successDiv = document.getElementById('passwordChangeSuccess');
             if (errorDiv) errorDiv.classList.add('hidden');
