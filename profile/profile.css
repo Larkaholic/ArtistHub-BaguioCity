@@ -68,7 +68,7 @@ main {
     position: relative;
     z-index: 1;
     margin: 0;
-    padding-top: 80px; /* Account for fixed header */
+    padding-top: 80px;
 }
 
 .glass-header {
@@ -301,7 +301,6 @@ main {
     font-weight: 500;
 }
 
-/* Genre specific styles */
 #genreLabel {
     font-size: 1.25rem;
     font-weight: 600;
@@ -344,7 +343,6 @@ main {
     }
 }
 
-/* Mobile-first grid layout */
 @media (max-width: 768px) {
     .grid.grid-cols-1.md\:grid-cols-2 {
         grid-template-columns: 1fr;
@@ -382,7 +380,6 @@ main {
     }
 }
 
-/* Medium screens and up */
 @media (min-width: 769px) {
     .relative.aspect-\[4\/5\] {
         height: auto;
@@ -411,7 +408,6 @@ main {
     overflow: hidden;
 }
 
-/* Profile image */
 #profileImage {
     position: absolute;
     width: 100%;
@@ -434,7 +430,6 @@ main {
     }
 }
 
-/* Tablet adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
     .relative.aspect-\[4\/5\] {
         height: 500px;
@@ -483,7 +478,7 @@ button,
     }
     
     main {
-        min-height: calc(100vh - 60px); /* smaller header on mobile */
+        min-height: calc(100vh - 60px);
     }
 }
 
@@ -491,7 +486,7 @@ button,
 .relative.aspect-\[4\/5\] {
     position: relative;
     width: 100%;
-    height: 350px; /* Default height for mobile */
+    height: 350px;
     min-height: 300px;
     overflow: hidden;
     border-radius: 1rem;
@@ -512,7 +507,6 @@ button,
     opacity: 1 !important;
 }
 
-/* Mobile adjustments */
 @media (max-width: 768px) {
     .relative.aspect-\[4\/5\] {
         height: 350px;
@@ -533,7 +527,6 @@ button,
         z-index: 2;
     }
 
-    /* Force grid layout */
     .grid {
         display: grid !important;
         gap: 1rem;
@@ -548,7 +541,6 @@ button,
     }
 }
 
-/* Fix profile image visibility on mobile */
 @media (max-width: 768px) {
     .grid {
         display: grid !important;
@@ -636,7 +628,6 @@ button,
     z-index: 99 !important;
 }
 
-/* Update dropdown styles */
 .profile-dropdown-container {
     position: relative;
     z-index: 1000;
@@ -687,7 +678,6 @@ button,
     padding: 1rem;
 }
 
-/* Mobile Profile Dropdown Styles */
 #profileLinkMobile {
     width: 100%;
     text-align: left;
