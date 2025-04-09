@@ -26,7 +26,7 @@ async function isUserAdmin(userId) {
 
 // Dynamic gallery link update
 document.addEventListener('DOMContentLoaded', () => {
-    const artistId = getArtistIdFromProfile(); // Replace this with actual logic to fetch artist ID
+    const artistId = getArtistIdFromProfile();
 
     if (artistId) {
         const galleryButton = document.getElementById('dynamicGalleryButton');
@@ -47,7 +47,6 @@ function goToEditProfile() {
     window.location.href = `${basePath}/profile/edit-profile.html?id=${profileId}`;
 }
 
-// Make edit profile navigation globally accessible
 window.goToEditProfile = goToEditProfile;
 
 // Load artist profile data
@@ -166,7 +165,7 @@ async function loadProfile() {
             // Check user permissions and handle button visibility
             onAuthStateChanged(auth, async (user) => {
                 const editButton = document.getElementById('editProfileButton');
-                const buttonContainer = document.querySelector('.fixed.bottom-8.right-8'); // Make sure this matches your HTML
+                const buttonContainer = document.querySelector('.fixed.bottom-8.right-8');
             
                 // Hide edit button by default
                 if (editButton) editButton.style.display = 'none';
@@ -185,7 +184,7 @@ async function loadProfile() {
                             editButton.onclick = goToEditProfile;
                         }
                     } else {
-                        // Check if user is admin viewing someone else's profile
+                        // Check if user is admin viewing someone elses profile
                         const currentUserDoc = await getDoc(doc(db, "users", user.uid));
                         const isAdmin = currentUserDoc.exists() && currentUserDoc.data().isAdmin === true;
             
@@ -289,7 +288,6 @@ window.navigateToGallery = function() {
                   new URLSearchParams(window.location.search).get('artistId');
     
     if (userId) {
-        // Force direct navigation to gallery
         document.location.href = `/gallery/gallery.html?artistId=${userId}`;
     }
 };
