@@ -118,7 +118,7 @@ function displayArtists(artists) {
         const img = new Image();
         img.className = 'w-32 h-32 rounded-full object-cover mb-4 border-4 border-black text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]';
         img.alt = artist.displayName || 'Artist';
-        img.src = defaultImage; // Start with default image
+        img.src = defaultImage;
 
         // Only try to load the actual image if it exists
         if (artist.photoURL && artist.photoURL.trim()) {
@@ -204,7 +204,7 @@ async function initializeSearch() {
             searchTimeout = setTimeout(() => {
                 const searchTerm = e.target.value;
                 if (!searchTerm || searchTerm.trim() === '') {
-                    loadArtists(); // Reset to featured artists
+                    loadArtists();
                 } else {
                     performSearch(searchTerm);
                 }
@@ -221,7 +221,6 @@ async function initializeSearch() {
     }
 }
 
-// Make displayFilteredResults available globally
 window.displayFilteredResults = displayFilteredResults;
 
 document.addEventListener('DOMContentLoaded', initializeSearch);
