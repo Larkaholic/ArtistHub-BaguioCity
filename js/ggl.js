@@ -4,7 +4,7 @@ import { auth, db, provider } from './firebase-config.js';
 
 let pendingGoogleUser = null;
 
-// Export these functions so they're available in other modules
+// Export these functions so they available in other modules
 export function showUserTypeModal() {
     const modal = document.getElementById('userTypeModal');
     modal.classList.remove('hidden');
@@ -15,11 +15,11 @@ export function hideUserTypeModal() {
     modal.classList.add('hidden');
 }
 
-// Also make them globally accessible via window
+// make them globally accessible via window
 window.showUserTypeModal = showUserTypeModal;
 window.hideUserTypeModal = hideUserTypeModal;
 
-// Update the signInWithGoogle function for login form
+// signInWithGoogle function for login form
 export async function signInWithGoogle(isRegistration = false) {
     try {
         if (isRegistration) {
@@ -58,7 +58,6 @@ export async function signInWithGoogle(isRegistration = false) {
     }
 }
 
-// Make this function globally accessible
 window.signInWithGoogle = signInWithGoogle;
 
 // Update the selectUserType function
@@ -77,7 +76,6 @@ export async function selectUserType(userType) {
             lastLogin: new Date()
         });
 
-        // Hide modals
         hideUserTypeModal();
         
         if (typeof updateLoginState === 'function') {
@@ -97,7 +95,6 @@ export async function selectUserType(userType) {
     }
 }
 
-// Make this function globally accessible
 window.selectUserType = selectUserType;
 
 // Add cancel button handler
@@ -106,10 +103,8 @@ export function cancelUserTypeSelection() {
     toggleLoginFlyout();
 }
 
-// Make this function globally accessible
 window.cancelUserTypeSelection = cancelUserTypeSelection;
 
-// Add ID upload Cloudinary widget
 const idUploadWidget = cloudinary.createUploadWidget(
     {
         cloudName: 'dxeyr4pvf', 
@@ -234,7 +229,7 @@ export async function handleRegister(event) {
 // Make this function globally accessible
 window.handleRegister = handleRegister;
 
-// Helper functions remain the same but also make them exportable
+// Helper functions remain the same but also make them exportablebleblel
 export function toggleForms() {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
@@ -248,7 +243,6 @@ export function toggleForms() {
     }
 }
 
-// Make this function globally accessible
 window.toggleForms = toggleForms;
 
 export function toggleLoginFlyout() {
@@ -265,5 +259,4 @@ export function toggleLoginFlyout() {
     }
 }
 
-// Make this function globally accessible
 window.toggleLoginFlyout = toggleLoginFlyout;
