@@ -6,7 +6,7 @@ const passwordChangeAttempts = {
     count: 0,
     lastAttempt: 0,
     maxAttempts: 3,
-    resetTimeInMs: 300000 // 5 minutes
+    resetTimeInMs: 300000 // 5 minutes?
 };
 
 function validatePassword(password) {
@@ -70,7 +70,7 @@ export async function handlePasswordChange(currentPassword, newPassword) {
             throw new Error('New password must be different from current password');
         }
 
-        // Re-authenticate user
+        // Re authenticate user
         const credential = EmailAuthProvider.credential(user.email, currentPassword);
         await reauthenticateWithCredential(user, credential);
 
@@ -108,5 +108,5 @@ export async function handlePasswordChange(currentPassword, newPassword) {
     }
 }
 
-// Make function globally available with rate limiting protection
+// with rate limiting protection
 window.handlePasswordChange = handlePasswordChange;
