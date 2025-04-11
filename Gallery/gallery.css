@@ -208,7 +208,7 @@ nav ul li button,
 }
 
 .gallery-item {
-    height: 650px; /* Increased from 500px to 650px to accommodate more content */
+    height: 650px;
     display: flex;
     flex-direction: column;
     background: rgba(255, 255, 255, 0.1);
@@ -231,7 +231,7 @@ nav ul li button,
 
 .gallery-item img {
     width: 100%;
-    height: 250px; /* Fixed height for images */
+    height: 250px;
     object-fit: cover;
     flex-shrink: 0;
 }
@@ -247,7 +247,7 @@ nav ul li button,
     font-size: 1.25rem;
     line-height: 1.4;
     margin-bottom: 0.5rem;
-    max-height: 3.5rem; /* ~2 lines with some margin */
+    max-height: 3.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -260,11 +260,11 @@ nav ul li button,
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 7; /* Increased from 3 to 7 to show more text */
+    -webkit-line-clamp: 7;
     -webkit-box-orient: vertical;
     font-size: 0.9rem;
     line-height: 1.5;
-    max-height: none; /* Remove max-height constraint */
+    max-height: none;
 }
 
 .gallery-item h3,
@@ -524,7 +524,6 @@ nav ul li button,
     border-color: #059669;
 }
 
-/* Critical fixes for login button and dropdown */
 .login-button {
     display: block;
 }
@@ -646,7 +645,7 @@ header { z-index: 40 !important; }
     background: white !important;
     border-radius: 0.5rem !important;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
-    z-index: 9999 !important; /* Higher z-index to ensure visibility */
+    z-index: 9999 !important;
     transition: opacity 0.2s ease, transform 0.2s ease !important;
 }
 
@@ -793,7 +792,7 @@ header { z-index: 40 !important; }
 /* Floating dropdown styles */
 #profileDropdown {
     position: fixed !important;
-    top: 5rem !important; /* Adjust based on header height */
+    top: 5rem !important;
     right: 1rem !important;
     min-width: 12rem !important;
     background: white !important;
@@ -824,21 +823,20 @@ header { z-index: 40 !important; }
 
 /* Update gallery artwork price styling for better visibility */
 .gallery-artwork-price {
-    color: #065f46; /* Darker green for better contrast */
-    font-weight: 700; /* Bolder font */
+    color: #065f46;
+    font-weight: 700;
     font-size: 1.25rem;
-    padding: 0.5rem 0.75rem; /* Slightly more padding */
+    padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
-    background: rgba(209, 250, 229, 0.95); /* Lighter, more opaque background */
+    background: rgba(209, 250, 229, 0.95);
     display: inline-block;
-    border: 1px solid #10B981; /* Add border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
-    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8); /* Text shadow for readability */
-    margin-top: 0.5rem; /* Add some spacing */
-    margin-bottom: 0.5rem; /* Add some spacing */
+    border: 1px solid #10B981;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+    margin-top: 0.5rem; 
+    margin-bottom: 0.5rem;
 }
 
-/* Add gallery price container with improved layout */
 .gallery-price-container {
     display: flex;
     justify-content: space-between;
@@ -849,7 +847,6 @@ header { z-index: 40 !important; }
     border-bottom: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-/* Improve gallery artist attribution styling */
 .gallery-artwork-artist {
     font-weight: 600;
     color: #1F2937;
@@ -858,7 +855,6 @@ header { z-index: 40 !important; }
     border-radius: 0.25rem;
 }
 
-/* Add artwork metadata tag styles */
 .artwork-meta {
     display: flex;
     flex-wrap: wrap;
