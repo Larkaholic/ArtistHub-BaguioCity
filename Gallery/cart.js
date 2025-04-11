@@ -232,7 +232,6 @@ window.sendEmail = function(ownerEmail, buyerInfo, cartItems) {
     window.open(`mailto:${ownerEmail}?subject=${subject}&body=${body}`);
     closeEmailPreview();
 
-    // Clear cart after sending email
     clearCart();
 }
 

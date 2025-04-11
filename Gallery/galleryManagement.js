@@ -74,7 +74,7 @@ function toggleUploadForm() {
         }
     } else {
         modal.classList.add('hidden');
-        document.body.style.overflow = ''; // Restore background scrolling
+        document.body.style.overflow = ''; // background scrolling
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -105,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Add click event listener
         toggleButton.addEventListener('click', toggleUploadForm);
     }
 });
@@ -437,7 +436,7 @@ async function loadImages() {
             return;
         }
 
-        container.innerHTML = ''; // Clear loading message
+        container.innerHTML = '';
         
         // Use Promise.all to handle async card creation
         const cards = await Promise.all(
@@ -1141,7 +1140,7 @@ function showCustomAlert(message) {
     </div>`;
   
     document.body.appendChild(alertBox);
-    setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
+    setTimeout(() => alertBox.remove(), 1000);
   }
   
   /* Prevent Right Click, F12, and Ctrl+Shift+I/U/J */
