@@ -771,27 +771,5 @@ function hidePasswordChangeForm() {
         window.toggleProfileDropdown = toggleProfileDropdown;
     </script>
 
-  <div class="fixed bottom-4 left-4 z-50" id="debugSection" style="display: none;">
-    <button onclick="debugGallery()" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">
-      Debug Gallery
-    </button>
-  </div>
-
-  <script>
-    function debugGallery() {
-      console.log('Debug button clicked');
-      // Force reload images
-      if (typeof loadImages === 'function') {
-        loadImages();
-      } else {
-        console.error('loadImages function not available');
-      }
-    }
-
-    // Show debug section in development environments
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      document.getElementById('debugSection').style.display = 'block';
-    }
-  </script>
 </body>
 </html>
