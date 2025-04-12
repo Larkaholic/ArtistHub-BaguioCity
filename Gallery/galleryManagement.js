@@ -1193,39 +1193,40 @@ async function openEditModal(artworkId) {
     const modal = document.getElementById('editArtworkModal');
     if (!modal) {
         console.error('Edit modal not found in the DOM');
+        showNotification('Error: Edit modal not found', 'error');
         return;
     }
     
     try {
+        // Check if the form exists
+        const form = document.getElementById('editArtworkForm');
+        if (!form) {
+            console.error('Edit form not found in the DOM');
+            showNotification('Error: Edit form not found', 'error');
+            return;
+        }
+        
         const docRef = doc(db, 'gallery_images', artworkId);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
             const data = docSnap.data();
             
-            // Ensure hidden input for artwork ID exists
-            let idInput = document.getElementById('editArtworkId');
+            // Set the artwork ID in the hidden input
+            const idInput = document.getElementById('editArtworkId');
             if (!idInput) {
-                console.log('Creating missing editArtworkId input');
-                idInput = document.createElement('input');
-                idInput.type = 'hidden';
-                idInput.id = 'editArtworkId';
-                const form = document.getElementById('editArtworkForm');
-                if (form) {
-                    form.prepend(idInput);
-                } else {
-                    console.error('Edit form not found');
-                    return;
-                }
+                console.error('Edit artwork ID input not found');
+                showNotification('Error: Form is missing required fields', 'error');
+                return;
             }
             
             // Set the artwork ID
             idInput.value = artworkId;
             
-            // Log all form elements to debug
-            console.log('Setting form values for:', data);
+            // Log data for debugging
+            console.log('Setting form values for artwork:', data);
             
-            // Set form values with error handling
+            // Define all fields to update
             const fields = [
                 {id: 'editTitle', field: 'title'},
                 {id: 'editPrice', field: 'price'},
@@ -1236,23 +1237,34 @@ async function openEditModal(artworkId) {
                 {id: 'editDescription', field: 'description'}
             ];
             
+            // Set form values with detailed error reporting
+            let missingFields = [];
             fields.forEach(({id, field}) => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.value = data[field] !== undefined ? data[field] : '';
+                    console.log(`Set ${id} = ${element.value}`);
                 } else {
+                    missingFields.push(id);
                     console.error(`Form element ${id} not found`);
                 }
             });
+            
+            if (missingFields.length > 0) {
+                console.error('Missing form fields:', missingFields.join(', '));
+                showNotification('Warning: Some form fields could not be found', 'error');
+            }
             
             // Show modal
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         } else {
             console.error('No artwork found with ID:', artworkId);
+            showNotification('Error: Artwork not found', 'error');
         }
     } catch (error) {
         console.error('Error opening edit modal:', error);
+        showNotification('Error loading artwork details', 'error');
     }
 }
 
@@ -1268,13 +1280,25 @@ function closeEditModal() {
 window.openEditModal = openEditModal;
 window.closeEditModal = closeEditModal;
 
+// Fix the form submit event listener
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Setting up edit form handler');
+    
     // Add form submission handler for edit form
-    const editForm = document.querySelector('#editArtworkModal form');
+    const editForm = document.getElementById('editArtworkForm');
     if (editForm) {
+        console.log('Edit form found, attaching submit event');
+        
         editForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            console.log('Edit form submitted');
+            
             const artworkId = document.getElementById('editArtworkId').value;
+            if (!artworkId) {
+                console.error('No artwork ID found in form');
+                showNotification('Error: Missing artwork ID', 'error');
+                return;
+            }
             
             try {
                 const updates = {
@@ -1288,15 +1312,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     lastUpdated: serverTimestamp()
                 };
 
+                console.log('Updating artwork with data:', updates);
+                
                 const docRef = doc(db, 'gallery_images', artworkId);
                 await updateDoc(docRef, updates);
+                
                 closeEditModal();
-                loadImages(); // Refresh the gallery
+                await loadImages(); // Refresh the gallery
                 showNotification('Artwork updated successfully!', 'success');
             } catch (error) {
                 console.error('Error updating artwork:', error);
-                showNotification('Failed to update artwork', 'error');
+                showNotification('Failed to update artwork: ' + error.message, 'error');
             }
         });
+    } else {
+        console.error('Edit form not found on DOMContentLoaded');
     }
 });
