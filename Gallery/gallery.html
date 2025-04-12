@@ -14,6 +14,7 @@
   <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
   <script type="module" src="../js/firebase-config.js"></script>
   <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   <!-- scripts -->
   <script src="carousel.js"></script>
@@ -50,7 +51,7 @@
         
 </head>
 
-<body class="overflow-hidden">
+<body class="overflow-x-hidden overflow-y-auto">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1" id="main-header">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" 
@@ -293,8 +294,8 @@
       </div>
     
 
-    <main class="overflow-y-auto">
-        <div class="container mx-auto px-4 py-8 mt-10">
+    <main class="overflow-y-auto min-h-screen pt-16 pb-8">
+        <div class="container mx-auto px-4 py-8">
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl text-black font-bold text-center">My Gallery</h1>
                 <button id="toggleUploadForm" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2 hidden">
@@ -481,6 +482,73 @@
 <!-- Cart Modal -->
 <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 hidden" style="z-index: 9999;">
     
+</div>
+
+<!-- Edit Artwork Modal -->
+<div id="editArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 hidden" style="z-index: 9999;">
+    <div class="flex items-center justify-center min-h-screen pt-20 p-4">
+        <div class="bg-white rounded-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white" style="z-index: 70;">
+                <h2 class="text-2xl font-bold text-gray-800">Edit Artwork</h2>
+                <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editTitle">Title *</label>
+                            <input type="text" id="editTitle" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editPrice">Price (₱) *</label>
+                            <input type="number" id="editPrice" min="0" step="0.01" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editStock">Stock Available *</label>
+                            <input type="number" id="editStock" min="0" step="1" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editGenre">Genre *</label>
+                            <select id="editGenre" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                                <option value="abstract">Abstract</option>
+                                <option value="contemporary">Contemporary</option>
+                                <option value="realism">Realism</option>
+                                <option value="impressionism">Impressionism</option>
+                                <option value="surrealism">Surrealism</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editCanvasSize">Canvas Size *</label>
+                            <input type="text" id="editCanvasSize" placeholder="e.g., 24x36 inches" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editMedium">Medium *</label>
+                            <input type="text" id="editMedium" placeholder="e.g., Oil on Canvas" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editDescription">Description *</label>
+                            <textarea id="editDescription" rows="5" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-8">
+                    <button type="submit" class="bg-blue-500 text-white py-3 px-8 rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -701,5 +769,28 @@ function hidePasswordChangeForm() {
         // Make functions available globally
         window.toggleProfileDropdown = toggleProfileDropdown;
     </script>
+
+  <div class="fixed bottom-4 left-4 z-50" id="debugSection" style="display: none;">
+    <button onclick="debugGallery()" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors">
+      Debug Gallery
+    </button>
+  </div>
+
+  <script>
+    function debugGallery() {
+      console.log('Debug button clicked');
+      // Force reload images
+      if (typeof loadImages === 'function') {
+        loadImages();
+      } else {
+        console.error('loadImages function not available');
+      }
+    }
+
+    // Show debug section in development environments
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      document.getElementById('debugSection').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
