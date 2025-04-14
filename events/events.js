@@ -33,8 +33,6 @@ async function loadEventDetails() {
             throw new Error('No event ID provided');
         }
 
-        console.log('loading event with id:', eventId); // debug log
-
         // get event details
         const eventRef = doc(db, "events", eventId);
         const eventDoc = await getDoc(eventRef);
@@ -44,7 +42,6 @@ async function loadEventDetails() {
         }
 
         const event = eventDoc.data();
-        console.log('event data:', event); // debug log
 
         const eventDetails = document.getElementById('eventDetails');
 
