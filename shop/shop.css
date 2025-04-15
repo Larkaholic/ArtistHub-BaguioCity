@@ -28,6 +28,7 @@
     body {
         font-family: 'Montserrat', sans-serif;
         min-height: 100vh;
+        min-width: 100vw;
         background-image: linear-gradient(
             rgba(255, 255, 255, 0.1),
             rgba(255, 255, 255, 0.1)
@@ -36,6 +37,22 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+        position: relative;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 0;
+        pointer-events: none;
     }
     
     /* ==========================================================================
