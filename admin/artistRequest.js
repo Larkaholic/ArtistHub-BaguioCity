@@ -261,7 +261,7 @@ export async function rejectArtist(artistId) {
             // Due to security restrictions, we cannot delete Cloudinary images directly from the browser
             
             alert("Artist rejected and removed from the system");
-            loadPendingArtists(); // Reload the list
+            loadPendingArtists();
         }
     } catch (error) {
         console.error("Error rejecting artist:", error);
