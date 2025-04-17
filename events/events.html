@@ -315,6 +315,16 @@
 
                         <div class="space-y-4">
                             <div>
+                                <label for="eventImage" class="block font-medium">Event Image:</label>
+                                <input type="file" id="eventImage" accept="image/*" 
+                                       class="block mt-1 p-2 border border-gray-400 rounded-md w-full"
+                                       onchange="previewImage(event)">
+                                <div id="imagePreview" class="mt-2 hidden">
+                                    <img src="" alt="Preview" class="max-w-full h-40 object-cover rounded-lg">
+                                </div>
+                            </div>
+                            
+                            <div>
                                 <label for="eventLocation" class="block font-medium">Event Location:</label>
                                 <input type="text" id="eventLocation" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" required>
                             </div>
