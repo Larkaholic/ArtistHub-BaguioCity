@@ -2,7 +2,6 @@ import { VOICEFLOW_API_KEY } from './config.js';
 import { auth } from './firebase-config.js';
 
 export function initNavigation() {
-    // Make navToEvent globally available
     window.navToEvent = function(path) {
         try {
             if (path.startsWith('/ArtistHub-BaguioCity/')) {
@@ -36,7 +35,6 @@ export function initNavigation() {
     };
 }
 
-// Voiceflow chat initialization
 (function(d, t) {
     var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
     v.onload = function() {
