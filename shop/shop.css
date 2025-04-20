@@ -842,6 +842,8 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
 /* Cart button styling */
 #cartNav {
   display: block !important;
+  margin-left: 0;
+  margin-right: auto;
 }
 
 #cartNav a {
@@ -852,17 +854,7 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
   font-weight: 600;
   transition: all 0.2s ease;
   padding: 0.5rem 1rem;
-}
-
-#cartNav svg {
-  width: 24px !important;
-  height: 24px !important;
-  margin-right: 8px;
-}
-
-#cartNav span {
-  display: inline-flex;
-  align-items: center;
+  margin-right: 30px;
 }
 
 /* Mobile cart button */
