@@ -466,6 +466,7 @@
         </div>
     </div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <script type="module">
         import { ensureStylesLoaded } from './js/utils.js';
         
@@ -590,13 +591,14 @@
     <script type="module" src="./js/profileDropdown.js"></script>
     <script type="module" src="./js/voiceflow-integration.js"></script>
     <script type="module" src="./js/profile-navigation.js"></script>
-    <!-- Place this initialization at the end to ensure all modules are loaded -->
+
     <script type="module">
         import { initProfileDropdown } from './js/profileDropdown.js';
         document.addEventListener('DOMContentLoaded', function() {
             initProfileDropdown();
         });
     </script>
+
     <script type="module">
         import { VOICEFLOW_API_KEY } from './js/config.js';
         (function(d, t) {
@@ -644,6 +646,7 @@
             s.parentNode.insertBefore(v, s);
         })(document, 'script');
     </script>
+
     <script type="module">
         import { auth } from './js/firebase-config.js';
         // Make handleProfileNavigation available globally
@@ -689,6 +692,7 @@
             }
         });
     </script>
+
     <script type="module">
         import { auth } from './js/firebase-config.js';
         // Update the profile navigation function
@@ -733,6 +737,7 @@
             }
         });
     </script>
+
     <!-- User Type Selection Modal -->
     <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden" style="z-index: 3000;">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
@@ -754,11 +759,12 @@
             </div>
         </div>
     </div>
+
     <script type="module">
         import { initProfileDropdown } from './js/profileDropdown.js';
         document.addEventListener('DOMContentLoaded', initProfileDropdown);
     </script>
-    <!-- Place this before all module scripts to create a global auth variable -->
+
     <script>   
         // Global variable to store Firebase auth instance
         window.firebaseAuth = null;
@@ -812,6 +818,7 @@
             }
         });
     </script>
+
     <script type="module">
         import { auth } from './js/firebase-config.js';
         // Update the profile navigation function
@@ -856,6 +863,7 @@
             }
         });
     </script>
+    
     <script type="module">
         import { auth } from './js/firebase-config.js';
         // Make handleLogout globally accessible
@@ -870,6 +878,7 @@
             }
         };
     </script>
+
     <div class="profile-dropdown-overlay" id="profileDropdownOverlay"></div>
     <!-- Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
@@ -944,7 +953,9 @@
             </div>
         </div>
     </div>
+
     <script type="module" src="./js/password-change.js"></script>
+
     <script>
         function showPasswordChangeForm() {
             document.getElementById('settingsMainView').classList.add('hidden');
@@ -976,6 +987,7 @@
             }
         }
     </script>
+
     <!-- Add Notifications Modal -->
     <div id="notificationsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
@@ -991,6 +1003,7 @@
             </div>
         </div>
     </div>
+
     <!-- Add notification functions -->
     <script>
         function openNotificationsModal() {
@@ -1005,8 +1018,10 @@
         window.openNotificationsModal = openNotificationsModal;
         window.closeNotificationsModal = closeNotificationsModal;
     </script>
+
     <!-- Add script initialization for Cloudinary -->
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+    
     <div id="termsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
             <button onclick="closeTermsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
