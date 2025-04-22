@@ -19,7 +19,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// Add feature detection and fallback
+// feature detection and fallback
 const checkFirebaseConnection = async () => {
     try {
         // Test Firestore connection

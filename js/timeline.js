@@ -13,7 +13,7 @@ async function fetchTimelineData() {
         querySnapshot.forEach((doc) => {
             data.push({ id: doc.id, ...doc.data() });
         });
-        // Sort by year and month in descending order (newest first)
+        // Sort by year and month in descending order (new first)
         return data.sort((a, b) => {
             const yearA = parseInt(a.year.split('-')[1]);
             const yearB = parseInt(b.year.split('-')[1]);
@@ -21,9 +21,9 @@ async function fetchTimelineData() {
             const monthB = parseInt(b.year.split('-')[0]);
             
             if (yearA !== yearB) {
-                return yearB - yearA; // Reverse year sort
+                return yearB - yearA;
             }
-            return monthB - monthA; // Reverse month sort
+            return monthB - monthA;
         });
     } catch (error) {
         console.error("Error fetching timeline data:", error);
@@ -53,13 +53,12 @@ function initializeElements() {
 
 async function initializeTimeline() {
     try {
-        // Initialize elements first
         initializeElements();
 
         // Fetch data with error handling
         timelineData = await fetchTimelineData();
         if (timelineData.length === 0) {
-            return; // Exit if no data
+            return;
         }
 
         backgrounds.innerHTML = '';

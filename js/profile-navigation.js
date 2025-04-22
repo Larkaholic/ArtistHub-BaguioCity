@@ -1,13 +1,5 @@
-/**
- * Profile Navigation Module
- * Handles all profile-related navigation and authentication functionality
- */
-
 import { auth } from './firebase-config.js';
 
-/**
- * Make auth available globally
- */
 window.firebaseAuth = auth;
 
 /**
@@ -166,9 +158,8 @@ export function openSettingsModal() {
     }
 }
 
-/**
- * Close settings modal
- */
+
+// Close settings modal
 export function closeSettingsModal() {
     const modal = document.getElementById('settingsModal');
     if (modal) {
@@ -177,9 +168,8 @@ export function closeSettingsModal() {
     }
 }
 
-/**
- * Initialize profile navigation functionality
- */
+
+// Initialize profile navigation functionality
 export function initProfileNavigation() {
     // Make functions available globally
     window.handleProfileNavigation = handleProfileNavigation;
@@ -201,7 +191,6 @@ export function initProfileNavigation() {
     });
 }
 
-// Initialize the module
 initProfileNavigation();
 
 // Export functions for external use

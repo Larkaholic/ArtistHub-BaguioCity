@@ -501,7 +501,7 @@ async function handleGoogleSignIn() {
         
         if (!userDoc.exists()) {
             // Show role selection modal for new users
-            const modal = document.getElementById('usertypemodal'); // Changed to match HTML id
+            const modal = document.getElementById('usertypemodal');
             if (!modal) {
                 console.error('User type modal not found');
                 return;
@@ -548,7 +548,6 @@ window.selectRole = async function(role) {
             createdAt: serverTimestamp()
         });
 
-        // Hide modal
         document.getElementById('usertypemodal').classList.add('hidden');
         
         // Clear temp data
@@ -574,7 +573,7 @@ window.cancelUserTypeSelection = function() {
     }
     if (window.tempUserData) {
         delete window.tempUserData;
-        auth.signOut(); // Sign out if they cancel
+        auth.signOut();
     }
 }
 

@@ -14,6 +14,8 @@
   <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
   <script type="module" src="../js/firebase-config.js"></script>
   <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
+  <!-- Add FontAwesome for delete icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- scripts -->
   <script src="carousel.js"></script>
@@ -50,7 +52,7 @@
         
 </head>
 
-<body class="overflow-hidden">
+<body class="overflow-x-hidden overflow-y-auto">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-50 p-1" id="main-header">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" 
@@ -83,10 +85,10 @@
                 </li>
             </ul>
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
+                <li class="nav-item hover:bg-green-500 p-1 mt-2 rounded-lg admin-button" style="display: none;">
                     <a href="../admin/dashboard.html">Admin</a>
                 </li>
-                <li id="cartNav" class="p-1">
+                <li id="cartNav" class="p-1 mt-2">
                     <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -204,19 +206,6 @@
                         <li><a href="javascript:void(0)" onclick="navToEvent('../index.html')">Home</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('../index.html#events')">Events</a></li>
                         <li><a href="javascript:void(0)" onclick="navToEvent('../shop/shop.html')">Shop</a></li>
-                        <!-- Remove duplicate profile section -->
-                        <li id="cartNavMobile" class="hidden">
-                            <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                Cart (<span id="cartCountMobile">0</span>)
-                            </a>
-                        </li>
-                        <li class="login-button">
-                            <button onclick="toggleLoginFlyout(event)">Login</button>
-                        </li>
-                        <!-- Keep only this profile dropdown -->
                         <li class="relative">
                             <button id="profileLinkMobile" class="flex items-center w-full p-2 hover:bg-gray-100 rounded-lg">
                                 <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
@@ -235,6 +224,17 @@
                                     <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 text-center">Logout</a>
                                 </div>
                             </div>
+                        </li>
+                        <li id="cartNavMobile" class="hidden">
+                            <a href="javascript:void(0)" onclick="window.toggleCart()" class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                Cart (<span id="cartCountMobile">0</span>)
+                            </a>
+                        </li>
+                        <li class="login-button">
+                            <button onclick="toggleLoginFlyout(event)">Login</button>
                         </li>
                     </ul>
                 </nav>
@@ -295,11 +295,11 @@
       </div>
     
 
-    <main class="overflow-y-auto">
-        <div class="container mx-auto px-4 py-8 mt-10">
+    <main class="overflow-y-auto min-h-screen pt-16 pb-8">
+        <div class="container mx-auto px-4 py-8">
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl text-black font-bold text-center">My Gallery</h1>
-                <button id="toggleUploadForm" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2">
+                <button id="toggleUploadForm" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2 hidden">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -309,8 +309,8 @@
 
             <!-- Upload Form Modal -->
             <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden" style="z-index: 9999;">
-                <div class="flex items-center justify-center min-h-screen pt-20 p-4"> <!-- Add pt-20 for top padding -->
-                    <div class="bg-white rounded-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto"> <!-- Reduce max-height -->
+                <div class="flex items-center justify-center min-h-screen pt-20 p-4"> 
+                    <div class="bg-white rounded-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto">
                         <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white" style="z-index: 70;">
                             <h2 class="text-2xl font-bold text-gray-800">Upload Artwork</h2>
                             <button onclick="toggleUploadForm()" class="text-gray-500 hover:text-gray-700">
@@ -320,9 +320,7 @@
                             </button>
                         </div>
                         <div id="uploadFormContainer" class="p-6">
-                            <!-- Existing form content stays the same -->
                             <div class="grid md:grid-cols-2 gap-6">
-                                <!-- Left Column - Image Upload -->
                                 <div class="space-y-4">
                                     <div class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 h-80">
                                         <div id="imagePreviewContainer" class="hidden w-full h-full">
@@ -335,7 +333,6 @@
                                             <p class="text-gray-500">Click to upload or drag and drop</p>
                                             <p class="text-sm text-gray-400">PNG, JPG, GIF up to 10MB</p>
                                         </div>
-                                        <!-- Remove required attribute and add hidden input for form validation -->
                                         <input type="file" id="imageFile" accept="image/*" class="hidden">
                                         <input type="hidden" id="imageUrlInput" name="imageUrl" required>
                                     </div>
@@ -353,7 +350,6 @@
                                             <label class="block text-gray-700 text-sm font-bold mb-2" for="price">Price (₱) *</label>
                                             <input type="number" id="price" min="0" step="0.01" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
                                         </div>
-                                        <!-- Add stock field -->
                                         <div>
                                             <label class="block text-gray-700 text-sm font-bold mb-2" for="stock">Stock Available *</label>
                                             <input type="number" id="stock" min="0" step="1" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
@@ -361,7 +357,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Right Column - Details -->
                                 <div class="space-y-4">
                                     <div>
                                         <label class="block text-gray-700 text-sm font-bold mb-2" for="description">Description *</label>
@@ -407,7 +402,6 @@
                                 </div>
                             </div>
 
-                            <!-- Submit Button -->
                             <div class="flex justify-center mt-8">
                                 <button type="submit" class="bg-blue-500 text-white py-3 px-8 rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -421,7 +415,6 @@
                 </div>
             </div>
     
-            <!-- Image Grid -->
             <div id="galleryContainer" class="gallery-container">
                 <!-- Images will be inserted here dynamically -->
             </div>
@@ -489,7 +482,76 @@
 
 <!-- Cart Modal -->
 <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 hidden" style="z-index: 9999;">
-    <!-- ...existing code... -->
+    
+</div>
+
+<!-- Edit Artwork Modal -->
+<div id="editArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 hidden" style="z-index: 9999;">
+    <div class="flex items-center justify-center min-h-screen pt-20~ p-4">
+        <div class="bg-white rounded-lg w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center p-6 border-b sticky top-0 bg-white" style="z-index: 70;">
+                <h2 class="text-2xl font-bold text-gray-800">Edit Artwork</h2>
+                <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Add form element with id="editArtworkForm" -->
+            <form id="editArtworkForm" class="p-6">
+                <input type="hidden" id="editArtworkId">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editTitle">Title *</label>
+                            <input type="text" id="editTitle" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editPrice">Price (₱) *</label>
+                            <input type="number" id="editPrice" min="0" step="0.01" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editStock">Stock Available *</label>
+                            <input type="number" id="editStock" min="0" step="1" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editGenre">Genre *</label>
+                            <select id="editGenre" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                                <option value="abstract">Abstract</option>
+                                <option value="contemporary">Contemporary</option>
+                                <option value="realism">Realism</option>
+                                <option value="impressionism">Impressionism</option>
+                                <option value="surrealism">Surrealism</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editCanvasSize">Canvas Size *</label>
+                            <input type="text" id="editCanvasSize" placeholder="e.g., 24x36 inches" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editMedium">Medium *</label>
+                            <input type="text" id="editMedium" placeholder="e.g., Oil on Canvas" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="editDescription">Description *</label>
+                            <textarea id="editDescription" rows="5" class="w-full p-2 border rounded text-black focus:ring focus:ring-blue-200" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-8">
+                    <button type="submit" class="bg-blue-500 text-white py-3 px-8 rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -710,5 +772,6 @@ function hidePasswordChangeForm() {
         // Make functions available globally
         window.toggleProfileDropdown = toggleProfileDropdown;
     </script>
+
 </body>
 </html>

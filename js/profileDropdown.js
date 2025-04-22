@@ -21,7 +21,7 @@ function initProfileDropdown() {
         const dropdown = document.getElementById('profileDropdown');
         const button = document.querySelector('.profile-button');
         
-        // Add null check
+        // null check boss
         if (!dropdown || !button) {
             console.warn('Profile dropdown elements not found');
             return;
@@ -106,7 +106,7 @@ function initProfileDropdown() {
                         if (mobileDropdown.classList.contains('hidden')) {
                             mobileDropdown.style.display = 'none';
                         }
-                    }, 150); // Match transition duration
+                    }, 150); // match transition duration here
                 }
                 isDropdownVisible = !isDropdownVisible;
             }
@@ -139,9 +139,6 @@ function initProfileDropdown() {
         });
     }
 
-    // Remove the setupSettingsMenu function call since we're using a modal now
-    // setupSettingsMenu(); - removing this line
-
     // Update mobile flyout menu profile
     const updateFlyoutProfile = (userData) => {
         const flyoutProfileLink = document.getElementById('profileLinkMobile');
@@ -153,7 +150,7 @@ function initProfileDropdown() {
             imgElement.src = userData.photoURL || 'https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png';
             imgElement.alt = "Profile";
             imgElement.classList.add('w-10', 'h-10', 'rounded-full', 'object-cover', 'border-2', 'border-green-500');
-            flyoutProfileLink.innerHTML = ''; // Clear existing content
+            flyoutProfileLink.innerHTML = '';
             flyoutProfileLink.appendChild(imgElement);
         }
 
@@ -327,5 +324,4 @@ window.toggleProfileDropdown = function(event) {
 
 window.navigateToUserProfile = navigateToUserProfile;
 
-// Export the initialization function
 export { initProfileDropdown, navigateToUserProfile };

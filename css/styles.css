@@ -122,7 +122,7 @@
         }
         
         .login-button {
-            margin-right: 10px; /* Adjusted margin */
+            margin-right: 10px;
         }
         
         .burger-icon {
@@ -134,7 +134,7 @@
         }
 
         .header img {
-            height: 50px; /* Adjust the height to make the logo smaller */
+            height: 50px;
             width: auto;
         }
     
@@ -730,16 +730,14 @@
     }
 }
 
-/* Mobile flyout menu improvements */
 #flyout-menu {
     z-index: 9999;
 }
 
 #flyout-menu .logout-button {
-    display: none; /* Initially hidden, controlled by JS */
+    display: none;
 }
 
-/* Improved handling for profile link on mobile */
 #profileLinkMobile {
     display: flex;
     align-items: center;

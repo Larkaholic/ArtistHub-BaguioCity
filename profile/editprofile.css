@@ -58,13 +58,13 @@ body {
 
 input, textarea {
     color: black;
-    border-color: #4B5563; /* gray-600 */
+    border-color: #4B5563;
 }
 
 input:focus, textarea:focus {
     outline: none;
     border-color: #2563EB; /* blue-600 */
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); /* blue-600 with opacity */
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
 .genre-tag {
@@ -76,7 +76,7 @@ input:focus, textarea:focus {
     border-radius: 0.25rem;
     margin: 0.125rem;
     font-size: 0.75rem;
-    border: none; /* Removed border */
+    border: none;
 }
 
 #genreContainer {
@@ -90,13 +90,13 @@ input:focus, textarea:focus {
     border-radius: 0.25rem;
     margin-top: 0.25rem;
     margin-bottom: 1rem;
-    background: transparent; /* Removed background */
+    background: transparent;
 }
 
 .remove-genre-btn {
     margin-left: 0.25rem;
     padding: 0 0.125rem;
-    color: #e5e7eb; /* Changed to lighter color for contrast */
+    color: #e5e7eb;
     font-size: 0.75rem;
     font-weight: bold;
     cursor: pointer;

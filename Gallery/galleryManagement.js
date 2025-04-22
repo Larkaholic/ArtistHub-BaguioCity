@@ -51,7 +51,7 @@ function toggleUploadForm() {
     
     if (isHidden) {
         modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -74,7 +74,7 @@ function toggleUploadForm() {
         }
     } else {
         modal.classList.add('hidden');
-        document.body.style.overflow = ''; // Restore background scrolling
+        document.body.style.overflow = ''; // background scrolling
         button.innerHTML = `
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -93,7 +93,18 @@ window.toggleUploadForm = toggleUploadForm;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Setting up upload form toggle');
     const toggleButton = document.getElementById('toggleUploadForm');
+    
+    // Check if button exists
     if (toggleButton) {
+        // Hide the button if not logged in or not the gallery owner
+        auth.onAuthStateChanged(user => {
+            if (!user || user.uid !== artistId) {
+                toggleButton.classList.add('hidden');
+            } else {
+                toggleButton.classList.remove('hidden');
+            }
+        });
+        
         toggleButton.addEventListener('click', toggleUploadForm);
     }
 });
@@ -406,6 +417,7 @@ async function addWatermark(imageFile) {
 
 // Load images
 async function loadImages() {
+    console.log('Loading images function called');
     const container = document.getElementById('galleryContainer');
     if (!container) {
         console.error('Gallery container not found');
@@ -415,24 +427,44 @@ async function loadImages() {
     container.innerHTML = '<p class="text-center text-gray-500">Loading gallery...</p>';
 
     try {
+        console.log('Querying gallery_images collection for profileId:', artistId);
         const galleryCollection = collection(db, 'gallery_images');
         let q = query(galleryCollection, where('profileId', '==', artistId));
 
+        console.log('Executing query...');
         const querySnapshot = await getDocs(q);
+        console.log('Query complete, documents found:', querySnapshot.size);
 
         if (querySnapshot.empty) {
+            console.log('No gallery images found');
             container.innerHTML = '<p class="text-center text-gray-500">No images found in the gallery.</p>';
             return;
         }
 
-        container.innerHTML = ''; // Clear loading message
+        container.innerHTML = '';
         
-        // Use Promise.all to handle async card creation
-        const cards = await Promise.all(
-            querySnapshot.docs.map(doc => createImageCard(doc.id, doc.data()))
-        );
+        // Create array of promises for card creation
+        const cardPromises = querySnapshot.docs.map(doc => {
+            console.log('Processing document:', doc.id);
+            return createImageCard(doc.id, doc.data());
+        });
         
-        cards.forEach(card => container.appendChild(card));
+        // Wait for all cards to be created
+        console.log('Waiting for all cards to be created...');
+        const cards = await Promise.all(cardPromises);
+        
+        // Filter out any null results from failed card creation
+        const validCards = cards.filter(card => card !== null);
+        console.log('Valid cards created:', validCards.length);
+        
+        if (validCards.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-500">Failed to load gallery images.</p>';
+            return;
+        }
+        
+        // Append valid cards to container
+        validCards.forEach(card => container.appendChild(card));
+        console.log('Gallery successfully loaded');
         
     } catch (error) {
         console.error('Error loading images:', error);
@@ -646,12 +678,18 @@ function formatGenreTags(genreString) {
 // Modified createImageCard function to handle async properly
 async function createImageCard(docId, data) {
     try {
+        console.log('Creating card for:', docId);
+        
         if (!data || !docId) {
             console.error('Missing data or docId for card creation');
             return null;
         }
 
         const hasImage = data.imageUrl && typeof data.imageUrl === 'string' && data.imageUrl.trim() !== '';
+        if (!hasImage) {
+            console.warn('No image URL found for document:', docId);
+        }
+        
         const imageUrl = hasImage ? data.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image+Available';
         const formattedPrice = parseFloat(data.price || 0).toLocaleString('en-PH', {
             style: 'currency',
@@ -665,7 +703,7 @@ async function createImageCard(docId, data) {
         const genreIcon = genreIcons[genre.toLowerCase()] || genreIcons.default;
         
         const card = document.createElement('div');
-        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
+        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden mb-6';
         card.innerHTML = `
             <div class="relative">
                 <img 
@@ -682,55 +720,48 @@ async function createImageCard(docId, data) {
             <div class="p-3 flex flex-col h-[300px]">
                 <div class="flex items-center gap-1 mb-1">
                     <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
-                    <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
+                    <h3 class="artwork-title text-lg font-semibold">${data.title || 'Untitled artwork'}</h3>
                 </div>
                 <div class="price-container mb-1">
-                    <p class="artwork-price">${formattedPrice}</p>
-                    <span class="artwork-artist">
+                    <p class="artwork-price font-bold text-green-600">${formattedPrice}</p>
+                    <span class="artwork-artist text-sm text-gray-600">
                         ${data.artist ? `by ${data.artist}` : ''}
                     </span>
                 </div>
                 
                 <div class="artwork-meta flex flex-wrap gap-1">
-                    <span class="genre-tag">
+                    <span class="genre-tag bg-gray-100 text-xs px-2 py-1 rounded">
                         <i class="fas fa-${genreIcon} mr-1"></i>${genre}
                     </span>
-                    ${medium ? `<span class="medium-tag"><i class="fas fa-pencil-alt mr-1"></i>${medium}</span>` : ''}
-                    ${size ? `<span class="size-tag"><i class="fas fa-ruler mr-1"></i>${size}</span>` : ''}
+                    ${medium ? `<span class="medium-tag bg-gray-100 text-xs px-2 py-1 rounded"><i class="fas fa-pencil-alt mr-1"></i>${medium}</span>` : ''}
+                    ${size ? `<span class="size-tag bg-gray-100 text-xs px-2 py-1 rounded"><i class="fas fa-ruler mr-1"></i>${size}</span>` : ''}
                 </div>
                 
-                <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
+                <p class="artwork-description text-gray-600 text-sm h-20 overflow-y-auto my-2">${data.description || 'No description available.'}</p>
                 
                 <div class="mt-auto pt-1">
-                    ${auth.currentUser ? 
-                        `<button onclick="window.addToCart('${docId}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
-                            class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
+                    ${auth.currentUser && auth.currentUser.uid === data.artistId ? 
+                        `<div class="flex space-x-2">
+                            <button onclick="openEditModal('${docId}')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex-1">
+                                <i class="fas fa-edit mr-1"></i> Edit
+                            </button>
+                            <button onclick="deleteImage('${docId}')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                                <i class="fas fa-trash mr-1"></i>
+                            </button>
+                        </div>` :
+                        `<button id="cartButton-${docId}" onclick="window.addToCart('${docId}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
+                            class="add-to-cart-btn w-full bg-green-500 py-2 px-4 text-white rounded hover:bg-green-600 transition duration-200">
                             <i class="fas fa-cart-plus mr-1"></i> Add to Cart
-                        </button>` :
-                        `<button onclick="window.toggleLoginFlyout()" 
-                            class="add-to-cart-btn artwork-button w-full bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
-                            <i class="fas fa-sign-in-alt mr-1"></i> Login to Add to Cart
                         </button>`
                     }
                 </div>
             </div>
         `;
 
-        // Add image modal functionality
-        const img = card.querySelector('.artwork-image');
-        if (img) {
-            img.addEventListener('click', () => {
-                const modalImg = document.querySelector('#art-gallery-modal-img');
-                if (modalImg) {
-                    modalImg.src = imageUrl;
-                    modal.classList.add('art-modal-active');
-                }
-            });
-        }
-
+        console.log('Card created successfully for:', docId);
         return card;
     } catch (error) {
-        console.error('Error creating image card:', error);
+        console.error('Error creating image card for document:', docId, error);
         return null;
     }
 }
@@ -903,7 +934,6 @@ window.addToCart = async function(artworkId, title, price, stock) {
         return;
     }
     
-    // Ensure price is a number
     const numericPrice = parseFloat(price);
     if (isNaN(numericPrice)) {
         console.error('Invalid price:', price);
@@ -924,7 +954,7 @@ window.addToCart = async function(artworkId, title, price, stock) {
         artworkId, 
         title, 
         price: numericPrice,
-        addedAt: serverTimestamp() // Add timestamp
+        addedAt: serverTimestamp() // timestamp
     };
     cart.push(item);
     
@@ -947,7 +977,6 @@ window.addToCart = async function(artworkId, title, price, stock) {
             });
         }
         
-        // Update button text and style
         const cartButton = document.getElementById(`cartButton-${artworkId}`);
         if (cartButton && stock === 1) {
             cartButton.textContent = 'Item Reserved';
@@ -981,12 +1010,10 @@ function showNotification(message, type = 'success') {
     
     document.body.appendChild(notification);
     
-    // Animate in
     setTimeout(() => {
         notification.style.transform = 'translateY(0)';
     }, 100);
     
-    // Remove after delay
     setTimeout(() => {
         notification.style.transform = 'translateY(full)';
         setTimeout(() => {
@@ -1001,7 +1028,6 @@ window.checkout = async function() {
         return;
     }
     
-    // Here you would implement the checkout process
     alert('Checkout functionality will be implemented soon!');
 }
 
@@ -1021,7 +1047,6 @@ function updateCartUI() {
         let total = 0;
         
         cart.forEach((item, index) => {
-            // Ensure price is a number
             const itemPrice = parseFloat(item.price) || 0;
             
             const itemElement = document.createElement('div');
@@ -1044,8 +1069,7 @@ function updateCartUI() {
         if (totalItems) totalItems.textContent = cart.length;
         if (totalPrice) totalPrice.textContent = total.toFixed(2);
     }
-    
-    // Make the cart nav visible if there are items
+
     const cartNav = document.getElementById('cartNav');
     const cartNavMobile = document.getElementById('cartNavMobile');
     
@@ -1082,17 +1106,28 @@ function initializeCartTracking() {
 
 // Initialize gallery
 auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        console.log('User logged in:', user.email);
-        const admin = await isAdmin(user.email);
-        updateUIForUserRole(user);
-        loadImages();
-        initializeCart(user.uid);
-        initializeCartTracking();
-    } else {
-        console.log('No user logged in');
-        updateUIForUserRole(null);
-        loadImages();
+    console.log('Auth state changed, user:', user?.email || 'No user');
+    try {
+        if (user) {
+            console.log('User logged in:', user.email);
+            const admin = await isAdmin(user.email);
+            console.log('User is admin:', admin);
+            updateUIForUserRole(user);
+            await loadImages();
+            initializeCart(user.uid);
+            initializeCartTracking();
+        } else {
+            console.log('No user logged in');
+            updateUIForUserRole(null);
+            await loadImages();
+        }
+    } catch (error) {
+        console.error('Error in auth state change handler:', error);
+        // Ensure gallery container shows error message
+        const container = document.getElementById('galleryContainer');
+        if (container) {
+            container.innerHTML = '<p class="text-center text-red-500">An error occurred while loading the gallery. Please refresh the page and try again.</p>';
+        }
     }
 });
 
@@ -1111,9 +1146,6 @@ function onSignIn() {
 window.navToEvent = function(url) {
     window.location.href = url;
 }
-
-// Security measures - Keep the code clean and readable
-// FOR SECURITY OF THE WEBSITE //
 
 // Create a custom alert box
 function showCustomAlert(message) {
@@ -1139,16 +1171,9 @@ function showCustomAlert(message) {
     </div>`;
   
     document.body.appendChild(alertBox);
-    setTimeout(() => alertBox.remove(), 1000); // Hide after 1 second
+    setTimeout(() => alertBox.remove(), 1000);
   }
-  
-  /* Prevent Right Click, F12, and Ctrl+Shift+I/U/J */
-  // Disable right-click
-  var _0x1b93ce=_0x2266;function _0x2266(_0x4109c8,_0x52d5ba){var _0x3a68f5=_0x39e2();return _0x2266=function(_0x398c6b,_0x22327d){_0x398c6b=_0x398c6b-(-0x2*0x7be+-0x1e6+0x1285);var _0x141f81=_0x3a68f5[_0x398c6b];return _0x141f81;},_0x2266(_0x4109c8,_0x52d5ba);}(function(_0x2e1921,_0xbded3c){var _0xcefd39=_0x2266,_0x23a468=_0x2e1921();while(!![]){try{var _0x5f4125=-parseInt(_0xcefd39(0x12f))/(-0xc0d*-0x2+-0x19*0x124+0xd*0x57)+-parseInt(_0xcefd39(0x123))/(-0x21f0+0xb*0x28d+0x5e3)*(parseInt(_0xcefd39(0x12e))/(0x257f+-0x1bf+-0x23bd))+parseInt(_0xcefd39(0x125))/(0x865*-0x2+-0xd8c*0x2+0x2be6)*(parseInt(_0xcefd39(0x12c))/(0x16a0+-0x457*-0x9+-0x3daa))+-parseInt(_0xcefd39(0x132))/(-0xc7*-0x13+-0x226*-0x11+0x3345*-0x1)+-parseInt(_0xcefd39(0x126))/(-0x9a4*-0x2+-0x18a0+-0x37*-0x19)*(-parseInt(_0xcefd39(0x12a))/(-0x337*-0x7+0x1*-0x206e+0x9f5*0x1))+-parseInt(_0xcefd39(0x130))/(-0x2*-0x6df+0x1*0xf01+0x32*-0x93)*(parseInt(_0xcefd39(0x128))/(0x328*0x1+0x1758+-0x1a76))+-parseInt(_0xcefd39(0x129))/(-0x1f45+0x10de+-0x739*-0x2)*(-parseInt(_0xcefd39(0x12d))/(-0x10c+-0x336+0x227*0x2));if(_0x5f4125===_0xbded3c)break;else _0x23a468['push'](_0x23a468['shift']());}catch(_0x6dc65e){_0x23a468['push'](_0x23a468['shift']());}}}(_0x39e2,0x1*0x54b3+0x2*-0x5d4+0x1e080),document[_0x1b93ce(0x124)+_0x1b93ce(0x127)](_0x1b93ce(0x133)+'u',function(_0x49bedb){var _0x2f62fd=_0x1b93ce;_0x49bedb[_0x2f62fd(0x131)+_0x2f62fd(0x12b)]();}));function _0x39e2(){var _0x4175f8=['addEventLi','4RKcRIE','1066401DfcYCm','stener','3760cqqYeT','3784fOnuSX','8XcZNzR','ault','309640nLvbHX','26544GTmnyE','607653hPnosl','267910bosEoj','5211jvKpcK','preventDef','871962gZbMQA','contextmen','2uMOIIB'];_0x39e2=function(){return _0x4175f8;};return _0x39e2();}
-  
-  // Block all key shortcuts
-  function _0x3c8e(_0x3f6c2c,_0x266e32){const _0x469e6f=_0x15fd();return _0x3c8e=function(_0x3898e8,_0x2af8c4){_0x3898e8=_0x3898e8-(-0x2248+-0x185*-0xd+0x1*0xf8e);let _0x5ef6dd=_0x469e6f[_0x3898e8];return _0x5ef6dd;},_0x3c8e(_0x3f6c2c,_0x266e32);}function _0x15fd(){const _0x1e8db4=['6JipyQN','\x20\x20\x20\x20-webki','QyvjG','\x20-webkit-t','Screenshot','Rllvb','zPZLV','JQuZJ','(max-width','keydown','96004yPaIPY','filter','addEventLi','s\x20disabled','3538ELtriY','ouch-callo','blur(100px','l\x20{\x0a\x20\x20\x20\x20\x20\x20','toLowerCas','printscree','Developer\x20','s\x20are\x20disa','ault','494112CisPpG','clipboard','\x0a\x20\x20@media\x20','writeText','mKqJq','key','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20','tools\x20are\x20','SGCqT','bled!','keyup','\x20\x20\x20\x20\x20}\x0a\x20\x20}','WztZU','t-user-sel','none','\x0a\x20\x20\x20\x20\x20\x20htm','appendChil','This\x20actio','led!','tEpmF','577FBMfXK','t:\x20none;\x0a\x20','ctrlKey','\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','f12','disabled!','PrintScree','DeYis','ent','RNyDo','hidden','style','Pywau','24475887qAGOMk','preventDef','zQivx','8080390cBrpcM','user-selec','QxkmQ','stener','mZqcW','head','LRddA','ect:\x20none;','Shortcut\x20i','change','createElem',':\x20768px)\x20{','visibility','wtkEt','body','10984160SMQgnP','shiftKey','1352778SmIyOK','dOTDk','ut:\x20none;\x0a','n\x20is\x20disab','innerHTML'];_0x15fd=function(){return _0x1e8db4;};return _0x15fd();}const _0x337bda=_0x3c8e;(function(_0x1e3b67,_0x5c50c7){const _0x574c63=_0x3c8e,_0x86137=_0x1e3b67();while(!![]){try{const _0x3c27cd=parseInt(_0x574c63(0x126))/(0x1dae+0xfe3*0x2+-0x3d73)*(parseInt(_0x574c63(0x109))/(0xf2f+-0xf1*-0xb+-0x13*0x158))+-parseInt(_0x574c63(0x112))/(-0x38*-0x8f+-0x67*-0x1a+-0x29bb*0x1)+parseInt(_0x574c63(0x156))/(-0x215a+-0x1145*0x1+0x32a3)+parseInt(_0x574c63(0x136))/(0x18da+0x1787+0x1*-0x305c)*(parseInt(_0x574c63(0x14c))/(-0xb93*-0x1+-0x19c5+-0x34*-0x46))+-parseInt(_0x574c63(0x147))/(-0x11ec*0x1+0x26a2+-0x423*0x5)+parseInt(_0x574c63(0x145))/(-0xc7a*0x3+0x31*-0x1+0x25a7)+-parseInt(_0x574c63(0x133))/(0x3*-0xb9c+0x25a*0xb+0x8ff);if(_0x3c27cd===_0x5c50c7)break;else _0x86137['push'](_0x86137['shift']());}catch(_0xb7946a){_0x86137['push'](_0x86137['shift']());}}}(_0x15fd,-0x8ca4f+-0x3*0x3e9f3+0x231fbf),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x155),function(_0x56b527){const _0x26b36a=_0x337bda,_0x407abb={'zQivx':function(_0x19f78c,_0x5e2443){return _0x19f78c(_0x5e2443);},'DeYis':_0x26b36a(0x13e)+_0x26b36a(0x108)+'!','SGCqT':function(_0x39165c,_0x397dea){return _0x39165c===_0x397dea;},'mKqJq':_0x26b36a(0x12a),'Pywau':_0x26b36a(0x10f)+_0x26b36a(0x119)+_0x26b36a(0x12b),'QyvjG':function(_0x37ad87,_0xcce4b3){return _0x37ad87===_0xcce4b3;},'LRddA':function(_0xd11ed1,_0x430f25){return _0xd11ed1===_0x430f25;},'JQuZJ':function(_0x209a43,_0x356150){return _0x209a43===_0x356150;},'RNyDo':_0x26b36a(0x10e)+'n','WztZU':function(_0x258213,_0x45631d){return _0x258213(_0x45631d);},'dOTDk':_0x26b36a(0x123)+_0x26b36a(0x14a)+_0x26b36a(0x124)};let _0x2440bb=_0x56b527[_0x26b36a(0x117)][_0x26b36a(0x10d)+'e']();if(_0x56b527[_0x26b36a(0x128)]&&_0x56b527[_0x26b36a(0x146)])return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x135)](showCustomAlert,_0x407abb[_0x26b36a(0x12d)]),![];if(_0x407abb[_0x26b36a(0x11a)](_0x2440bb,_0x407abb[_0x26b36a(0x116)]))return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x135)](showCustomAlert,_0x407abb[_0x26b36a(0x132)]),![];if(_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x14e)](_0x2440bb,'s')||_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x11a)](_0x2440bb,'p')||_0x56b527[_0x26b36a(0x128)]&&_0x407abb[_0x26b36a(0x13c)](_0x2440bb,'u')||_0x56b527[_0x26b36a(0x128)]&&_0x56b527[_0x26b36a(0x146)]&&_0x407abb[_0x26b36a(0x153)](_0x2440bb,'s')||_0x407abb[_0x26b36a(0x153)](_0x2440bb,_0x407abb[_0x26b36a(0x12f)]))return _0x56b527[_0x26b36a(0x134)+_0x26b36a(0x111)](),_0x407abb[_0x26b36a(0x11e)](showCustomAlert,_0x407abb[_0x26b36a(0x148)]),![];}),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x11c),function(_0xf955c7){const _0x561a50=_0x337bda,_0x452c1e={'wtkEt':function(_0x145f31,_0x1fb307){return _0x145f31===_0x1fb307;},'zPZLV':_0x561a50(0x12c)+'n','Rllvb':function(_0x1999fa,_0x465efa){return _0x1999fa(_0x465efa);},'mZqcW':_0x561a50(0x150)+_0x561a50(0x110)+_0x561a50(0x11b)};_0x452c1e[_0x561a50(0x143)](_0xf955c7[_0x561a50(0x117)],_0x452c1e[_0x561a50(0x152)])&&(navigator[_0x561a50(0x113)][_0x561a50(0x115)](''),_0x452c1e[_0x561a50(0x151)](showCustomAlert,_0x452c1e[_0x561a50(0x13a)]));}),document[_0x337bda(0x107)+_0x337bda(0x139)](_0x337bda(0x142)+_0x337bda(0x13f),function(){const _0x3868fa=_0x337bda,_0x3e5233={'QxkmQ':_0x3868fa(0x10b)+')','tEpmF':_0x3868fa(0x120)};document[_0x3868fa(0x130)]?document[_0x3868fa(0x144)][_0x3868fa(0x131)][_0x3868fa(0x157)]=_0x3e5233[_0x3868fa(0x138)]:document[_0x3868fa(0x144)][_0x3868fa(0x131)][_0x3868fa(0x157)]=_0x3e5233[_0x3868fa(0x125)];}));const style=document[_0x337bda(0x140)+_0x337bda(0x12e)](_0x337bda(0x131));style[_0x337bda(0x14b)]=_0x337bda(0x114)+_0x337bda(0x154)+_0x337bda(0x141)+_0x337bda(0x121)+_0x337bda(0x10c)+_0x337bda(0x14d)+_0x337bda(0x11f)+_0x337bda(0x13d)+_0x337bda(0x118)+_0x337bda(0x14f)+_0x337bda(0x10a)+_0x337bda(0x149)+_0x337bda(0x129)+_0x337bda(0x137)+_0x337bda(0x127)+_0x337bda(0x11d)+'\x0a',document[_0x337bda(0x13b)][_0x337bda(0x122)+'d'](style);
-  
+
 
 // Initialize security measures
 document.addEventListener('DOMContentLoaded', () => {
@@ -1157,5 +1182,150 @@ document.addEventListener('DOMContentLoaded', () => {
     if (uploadFormContainer) {
         uploadFormContainer.style.position = 'relative';
         uploadFormContainer.style.zIndex = '10000';
+    }
+});
+
+// Edit artwork functionality
+async function openEditModal(artworkId) {
+    console.log('Opening edit modal for artwork ID:', artworkId);
+    
+    // Check if modal exists first
+    const modal = document.getElementById('editArtworkModal');
+    if (!modal) {
+        console.error('Edit modal not found in the DOM');
+        showNotification('Error: Edit modal not found', 'error');
+        return;
+    }
+    
+    try {
+        // Check if the form exists
+        const form = document.getElementById('editArtworkForm');
+        if (!form) {
+            console.error('Edit form not found in the DOM');
+            showNotification('Error: Edit form not found', 'error');
+            return;
+        }
+        
+        const docRef = doc(db, 'gallery_images', artworkId);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            
+            // Set the artwork ID in the hidden input
+            const idInput = document.getElementById('editArtworkId');
+            if (!idInput) {
+                console.error('Edit artwork ID input not found');
+                showNotification('Error: Form is missing required fields', 'error');
+                return;
+            }
+            
+            // Set the artwork ID
+            idInput.value = artworkId;
+            
+            // Log data for debugging
+            console.log('Setting form values for artwork:', data);
+            
+            // Define all fields to update
+            const fields = [
+                {id: 'editTitle', field: 'title'},
+                {id: 'editPrice', field: 'price'},
+                {id: 'editStock', field: 'stock'},
+                {id: 'editGenre', field: 'genre'},
+                {id: 'editCanvasSize', field: 'canvasSize'},
+                {id: 'editMedium', field: 'medium'},
+                {id: 'editDescription', field: 'description'}
+            ];
+            
+            // Set form values with detailed error reporting
+            let missingFields = [];
+            fields.forEach(({id, field}) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.value = data[field] !== undefined ? data[field] : '';
+                    console.log(`Set ${id} = ${element.value}`);
+                } else {
+                    missingFields.push(id);
+                    console.error(`Form element ${id} not found`);
+                }
+            });
+            
+            if (missingFields.length > 0) {
+                console.error('Missing form fields:', missingFields.join(', '));
+                showNotification('Warning: Some form fields could not be found', 'error');
+            }
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        } else {
+            console.error('No artwork found with ID:', artworkId);
+            showNotification('Error: Artwork not found', 'error');
+        }
+    } catch (error) {
+        console.error('Error opening edit modal:', error);
+        showNotification('Error loading artwork details', 'error');
+    }
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editArtworkModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+}
+
+// Make functions globally available
+window.openEditModal = openEditModal;
+window.closeEditModal = closeEditModal;
+
+// Fix the form submit event listener
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Setting up edit form handler');
+    
+    // Add form submission handler for edit form
+    const editForm = document.getElementById('editArtworkForm');
+    if (editForm) {
+        console.log('Edit form found, attaching submit event');
+        
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Edit form submitted');
+            
+            const artworkId = document.getElementById('editArtworkId').value;
+            if (!artworkId) {
+                console.error('No artwork ID found in form');
+                showNotification('Error: Missing artwork ID', 'error');
+                return;
+            }
+            
+            try {
+                const updates = {
+                    title: document.getElementById('editTitle').value,
+                    price: parseFloat(document.getElementById('editPrice').value),
+                    stock: parseInt(document.getElementById('editStock').value),
+                    genre: document.getElementById('editGenre').value,
+                    canvasSize: document.getElementById('editCanvasSize').value,
+                    medium: document.getElementById('editMedium').value,
+                    description: document.getElementById('editDescription').value,
+                    lastUpdated: serverTimestamp()
+                };
+
+                console.log('Updating artwork with data:', updates);
+                
+                const docRef = doc(db, 'gallery_images', artworkId);
+                await updateDoc(docRef, updates);
+                
+                closeEditModal();
+                await loadImages(); // Refresh the gallery
+                showNotification('Artwork updated successfully!', 'success');
+            } catch (error) {
+                console.error('Error updating artwork:', error);
+                showNotification('Failed to update artwork: ' + error.message, 'error');
+            }
+        });
+    } else {
+        console.error('Edit form not found on DOMContentLoaded');
     }
 });

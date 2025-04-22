@@ -67,9 +67,11 @@ async function loadEvents() {
                     </div>
                 `;
             } else {
+                // Limit to 6 events
+                const limitedEvents = updatedNonFeaturedEvents.slice(0, 6);
                 eventsContainer.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overscroll-y-auto" style="max-height: 100%;">
-                        ${updatedNonFeaturedEvents.map(event => `
+                        ${limitedEvents.map(event => `
                             <div class="artist-card border-2 border-black rounded-lg p-4 mb-4 event-card relative"
                             style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px;" data-id="${event.id}">
                                 <div class="event-content flex-grow" style="position: relative; z-index: 12;">
@@ -89,6 +91,13 @@ async function loadEvents() {
                             </div>
                         `).join('')}
                     </div>
+                    ${updatedNonFeaturedEvents.length > 6 ? `
+                        <div class="text-center mt-4">
+                            <a href="./events/all-events.html" class="inline-block px-6 py-2 text-black rounded" style="background: #F4A900;">
+                                View All Events
+                            </a>
+                        </div>
+                    ` : ''}
                 `;
                 AOS.refresh();
             }

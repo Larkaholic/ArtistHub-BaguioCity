@@ -33,8 +33,6 @@ async function loadEventDetails() {
             throw new Error('No event ID provided');
         }
 
-        console.log('loading event with id:', eventId); // debug log
-
         // get event details
         const eventRef = doc(db, "events", eventId);
         const eventDoc = await getDoc(eventRef);
@@ -44,7 +42,6 @@ async function loadEventDetails() {
         }
 
         const event = eventDoc.data();
-        console.log('event data:', event); // debug log
 
         const eventDetails = document.getElementById('eventDetails');
 
@@ -478,4 +475,81 @@ export {
     loadEventDetails,
     initializeAddEventForm,
     loadFeaturedEvents
+};
+
+async function submitEventRequest(event) {
+    event.preventDefault();
+    
+    try {
+        // Import Firebase modules
+        const { db, auth, storage } = await import('../js/firebase-config.js');
+        const { collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const { ref, uploadBytes, getDownloadURL } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+        
+        // Get form values
+        const title = document.getElementById('eventTitle').value;
+        const startDate = document.getElementById('eventStartDate').value;
+        const endDate = document.getElementById('eventEndDate').value;
+        const location = document.getElementById('eventLocation').value;
+        const description = document.getElementById('eventDescription').value;
+        const email = document.getElementById('contactEmail').value;
+        const imageFile = document.getElementById('eventImage').files[0];
+
+        let imageUrl = '';
+        
+        // Upload image if one was selected
+        if (imageFile) {
+            const imageRef = ref(storage, `event-requests/${Date.now()}_${imageFile.name}`);
+            const snapshot = await uploadBytes(imageRef, imageFile);
+            imageUrl = await getDownloadURL(snapshot.ref);
+        }
+        
+        // Create event request object
+        const eventRequest = {
+            title,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
+            location,
+            description,
+            contactEmail: email,
+            imageUrl,
+            status: 'pending',
+            userId: auth.currentUser ? auth.currentUser.uid : null,
+            createdAt: serverTimestamp()
+        };
+        
+        // Add document to "eventRequests" collection
+        await addDoc(collection(db, 'eventRequests'), eventRequest);
+        
+        // Close modal and show success message
+        closeEventRequestModal();
+        alert('Your event request has been submitted and is pending approval.');
+        
+        // Reset form
+        document.getElementById('eventRequestForm').reset();
+        document.getElementById('imagePreview').classList.add('hidden');
+        
+    } catch (error) {
+        console.error('Error submitting event request:', error);
+        alert('There was an error submitting your request. Please try again.');
+    }
+}
+
+// Add image preview function
+window.previewImage = function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    const previewImg = preview.querySelector('img');
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    } else {
+        preview.classList.add('hidden');
+        previewImg.src = '';
+    }
 };
