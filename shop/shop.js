@@ -909,9 +909,28 @@ function addImageClickHandlers() {
             
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalArtist = document.getElementById('modalArtist');
+            const modalPrice = document.getElementById('modalPrice');
+            const modalDescription = document.getElementById('modalDescription');
             
-            // Set the image source and show modal
+            // Get the parent artwork card
+            const artworkCard = this.closest('.artwork-card');
+            
+            // Get artwork details from the card
+            const title = artworkCard.querySelector('.artwork-title').textContent;
+            const artist = artworkCard.querySelector('.artwork-artist').textContent;
+            const price = artworkCard.querySelector('.artwork-price').textContent;
+            const description = artworkCard.querySelector('.artwork-description').textContent;
+            
+            // Set modal content
             modalImg.src = this.src;
+            modalTitle.textContent = title;
+            modalArtist.textContent = `Artist: ${artist}`;
+            modalPrice.textContent = price;
+            modalDescription.textContent = description;
+            
+            // Show modal
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         };
