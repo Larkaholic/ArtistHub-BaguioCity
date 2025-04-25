@@ -318,13 +318,13 @@
 /* Shop Card Styles */
 .artwork-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
     margin-bottom: 2rem;
-    height: 650px;
+    min-height: 450px;
     display: flex;
     flex-direction: column;
 }
@@ -355,7 +355,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    justify-content: space-between; /* Distribute space evenly */
+    height: 100%;
 }
 
 .artwork-title {
@@ -391,25 +392,9 @@
 
 .artwork-description {
     flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 7;
-    -webkit-box-orient: vertical;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    min-height: 0;
-    max-height: none;
-    color: black;
-    font-size: 1rem;
-    line-height: 1.6;
     margin: 1rem 0;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 0.5rem;
-    border-left: 4px solid #10B981;
-    max-height: 120px; /* limit height to prevent pushing button down */
     overflow-y: auto;
+    max-height: 150px; /* Limit description height */
 }
 
 .artwork-card .flex.justify-center {
@@ -421,9 +406,10 @@
 .add-to-cart-btn {
     font-size: 0.875rem;
     padding: 0.5rem 0.75rem;
-    width: auto;
-    min-width: 80%;
-    margin: 0 auto;
+    width: 100%;
+    margin-top: auto;
+    position: relative;
+    bottom: 0;
 }
 
 .artwork-card .flex.justify-center {
@@ -503,11 +489,10 @@
     font-weight: 600;
     font-size: 0.875rem;
     transition: all 0.3s ease;
-    width: auto;
-    min-width: 70%;
-    margin: 0 auto;
-    display: block;
-    text-align: center;
+    width: 100%;
+    margin-top: auto; /* Push button to bottom */
+    position: relative;
+    bottom: 0;
 }
 
 .artwork-button:hover {
@@ -518,9 +503,10 @@
 .add-to-cart-btn {
     font-size: 0.875rem;
     padding: 0.5rem 0.75rem;
-    margin-top: 0.5rem;
-    width: auto;
-    min-width: 80%;
+    width: 100%;
+    margin-top: auto;
+    position: relative;
+    bottom: 0;
 }
 
 .add-to-cart-btn i {

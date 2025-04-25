@@ -240,20 +240,19 @@ function createArtworkCard(id, data, genreIcon) {
                     onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
                     loading="lazy"
                 >
-                <div class="absolute bottom-2 right-4 bg-black bg-opacity-70 text-white px-3 py-1 text-xs rounded-md">
-                    <i class="fas fa-${genreIcon} mr-1"></i>${data.genre || 'Art'}
-                </div>
             </div>
-            <div class="p-3 flex flex-col h-[300px]">
-                <div class="flex items-center gap-1 mb-1">
-                    <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
-                    <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
+            <div class="p-6 flex flex-col h-full">
+                <div class="flex-grow">
+                    <div class="flex items-center gap-1 mb-1">
+                        <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
+                        <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
+                    </div>
+                    <div class="price-container mb-1">
+                        <p class="artwork-price">${formattedPrice}</p>
+                    </div>
+                    <p class="artwork-description text-gray-600">${data.description || 'No description available.'}</p>
                 </div>
-                <div class="price-container mb-1">
-                    <p class="artwork-price">${formattedPrice}</p>
-                </div>
-                <p class="artwork-description text-gray-600 h-20 overflow-y-auto mb-auto">${data.description || 'No description available.'}</p>
-                <div class="mt-auto pt-1">
+                <div class="mt-auto">
                     <button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
                         class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
                         <i class="fas fa-cart-plus mr-1"></i> Add to Cart
