@@ -1007,7 +1007,7 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
     pointer-events: none;
 }
 
-/* Tooltip styling */
+/* Tooltip */
 .add-to-cart-btn[title]:hover::after {
     content: attr(title);
     position: absolute;
@@ -1090,7 +1090,6 @@ nav.sm\:flex.sm\:items-center.sm\:space-x-5 {
     opacity: 1;
 }
 
-/* Make artwork images clickable */
 .artwork-image {
     cursor: pointer;
     transition: transform 0.3s ease;
