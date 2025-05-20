@@ -21,7 +21,7 @@
     html, body {
         scroll-behavior: smooth;
         font-family: Arial, sans-serif;
-        scroll-snap-type: y mandatory; /* Ensure this line is present */
+        scroll-snap-type: y mandatory;
         background-color: #F4F8FF;
     }
     
@@ -31,7 +31,7 @@
     main {
         position: relative;
         z-index: 1;
-        scroll-snap-type: y mandatory; /* Ensure this line is present */
+        scroll-snap-type: y mandatory; 
         overflow-x: hidden;
         height: auto !important;
     }
@@ -39,7 +39,7 @@
     section {
         position: relative;
         z-index: 1;
-        scroll-snap-align: start; /* Ensure this line is present */
+        scroll-snap-align: start;
         height: 100vh;
         min-height: 100vh;
         display: flex;
@@ -143,8 +143,8 @@
         ========================================================================== */
     #landingPage {
         width: 100%;
-        height: 100vh; /* Ensure this line is present */
-        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/back.jpg?raw=true");
+        height: 100vh;
+        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/934fab3b32333e471ae7b9bd18d55278d63b7da0.png?raw=true");
         backdrop-filter: blur(1px);
         z-index: -0.5;
         background-attachment: fixed;
