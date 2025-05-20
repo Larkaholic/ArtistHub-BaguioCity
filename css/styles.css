@@ -62,8 +62,13 @@
         nav ul li,
         nav ul li button,
         .nav-item,
-        .nav-item button {
+        .nav-item button,
+        .nav-login {
             font-weight: 600 !important;
+        }
+        
+        .nav-login {
+            background-color: #f76400;
         }
 
         .nav-item:hover {
