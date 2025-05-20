@@ -50,12 +50,7 @@
         4. HEADER AND NAVIGATION
         ========================================================================== */
         .header {
-            background: linear-gradient(90deg, rgba(181,181,181,0.9668) 5%, rgba(232,232,232,1) 100%);
-            color: white;
-            padding: 10px 0;
-            box-shadow: 0 4px 2px -2px gray;
             transition: background 0.3s ease;
-            width: 100%;
         }
         
         .headerR {
