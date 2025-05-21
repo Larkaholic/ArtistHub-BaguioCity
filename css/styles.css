@@ -160,6 +160,26 @@
         background-attachment: fixed;
         background-size: cover;
         padding: 0;
+        margin: 0;
+    }
+
+    .banner {
+        width: 700px;
+        height: 340px;
+    }
+    
+    .banner-span {
+        color: #f76400;
+    }
+
+    .banner-text {
+        font-size:xxx-large;
+        font-weight: 700;
+    }
+
+    .bannerSub {
+        font-weight: 100;
+        font-size: 1.3rem;
     }
     
     
@@ -865,7 +885,7 @@
     align-items: center;
 }
 
-h1, h2 {
+/* h1, h2 {
     font-family: "Rockybilly", cursive;
     font-size: 5rem; 
     color: rgb(0, 0, 0);
@@ -883,7 +903,7 @@ h2 {
     font-size: 3rem;
     margin-top: 70%;
     padding: 20px;
-}
+} */
 
 /* Settings Modal Styles */
 #settingsModal {
