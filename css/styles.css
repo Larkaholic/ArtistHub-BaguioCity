@@ -204,8 +204,21 @@
         6. SYSTEM INTRODUCTION
         ========================================================================== */
         .introduction {
-            /* height: 100px; */
-            background-color: #F4F8FF;
+            max-height: 100dvh;
+            height: 70dvh;
+            background-color: rgb(255, 255, 255);
+        }
+
+        .floatingEvent {
+            
+        }
+
+        .head {
+            color: #000000;
+        }
+
+        .headSub {
+            color: #000000;
         }
 
 
