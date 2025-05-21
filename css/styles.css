@@ -72,6 +72,16 @@
             color: white;
         }
 
+        /* .conform:hover {
+            background-color: #fff8ec;
+            color: #f76400;
+        }
+
+        .decline:hover {
+            background-color: #f76400;
+            color: white;
+        } */
+
        .decline {
             background-color: #fff8ec;
             color: #f76400;
@@ -82,7 +92,7 @@
         }
 
         .nav-item:hover {
-            background-color: #F4A900;
+            background-color: #fff8ec;
         }
         
         /* Glass Effect Styles */
