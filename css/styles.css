@@ -182,17 +182,6 @@
         color: #f76400;
     }
 
-    .banner-span::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        width: 100%;
-        height: 12px;
-        background: url('images/underline.png') no-repeat center;
-        background-size: contain;
-        pointer-events: none;
-    }
-
     .underline-artistry {
         position: relative;
         color: #f76400;
@@ -200,19 +189,6 @@
         z-index: 1;
     }
 
-    .underline-artistry::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -6px;
-        width: 100%;
-        height: 18px;
-        background: url('images/underline.png') no-repeat center bottom;
-        background-size: 100% 100%;
-        pointer-events: none;
-        z-index: -1;
-    }
 
     .banner-text {
         font-size:xxx-large;
@@ -256,6 +232,10 @@
 
         .headSub {
             color: #000000;
+        }
+
+        .dataText {
+            color: #f76400;
         }
 
 
