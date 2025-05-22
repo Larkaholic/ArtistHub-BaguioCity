@@ -193,7 +193,6 @@
         pointer-events: none;
     }
 
-    /* Underline for "local artistry" */
     .underline-artistry {
         position: relative;
         color: #f76400;
@@ -521,6 +520,10 @@
 
         footer {
             scroll-snap-align: start;
+        }
+
+        .footerLogo {
+            filter: drop-shadow(0 0 .75rem rgb(255, 255, 255));        
         }
         
     .lrk-footer-wrapper {
