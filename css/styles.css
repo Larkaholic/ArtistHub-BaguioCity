@@ -166,7 +166,7 @@
         height: 100vh;
         background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/934fab3b32333e471ae7b9bd18d55278d63b7da0.png?raw=true");
         backdrop-filter: blur(1px);
-        z-index: -0.5;
+        z-index: 1;
         background-attachment: fixed;
         background-size: cover;
         padding: 0;
@@ -180,6 +180,39 @@
     
     .banner-span {
         color: #f76400;
+    }
+
+    .banner-span::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        width: 100%;
+        height: 12px;
+        background: url('images/underline.png') no-repeat center;
+        background-size: contain;
+        pointer-events: none;
+    }
+
+    /* Underline for "local artistry" */
+    .underline-artistry {
+        position: relative;
+        color: #f76400;
+        display: inline-block;
+        z-index: 1;
+    }
+
+    .underline-artistry::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -6px;
+        width: 100%;
+        height: 18px;
+        background: url('images/underline.png') no-repeat center bottom;
+        background-size: 100% 100%;
+        pointer-events: none;
+        z-index: -1;
     }
 
     .banner-text {
@@ -204,8 +237,25 @@
         6. SYSTEM INTRODUCTION
         ========================================================================== */
         .introduction {
-            /* height: 100px; */
-            background-color: #F4F8FF;
+            max-height: 100dvh;
+            height: 70dvh;
+            background-color: rgb(255, 255, 255);
+        }
+
+        .floatingEvent {
+            position: relative;
+            z-index: 2;
+            margin-top: -80px;
+            width: 85%;
+            height: 11rem;
+        }
+
+        .head {
+            color: #000000;
+        }
+
+        .headSub {
+            color: #000000;
         }
 
 
@@ -1051,369 +1101,700 @@ h2 {
     }
 
     .profile-dropdown-overlay {
+        display: none;
         position: fixed;
-        inset: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease;
-        backdrop-filter: blur(4px);
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 40;
     }
-
+    
     .profile-dropdown-overlay.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    #profileDropdown.hidden {
-        opacity: 0;
-        visibility: hidden;
-        transform: translate(-50%, -40%) scale(0.95);
-    }
-
-    /* Enhanced mobile touch targets */
-    #profileDropdown button,
-    #profileDropdown a {
-        min-height: 44px;
-        width: 100%;
-        text-align: left;
-        font-size: 1rem;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: block;
+        z-index: 998;
+        animation: fadeIn 0.2s ease-out;
     }
 }
 
-/* Animation keyframes */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -40%) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
+#flyout-menu {
+    z-index: 9999;
 }
 
-/* Mobile Flyout Profile Dropdown */
-#flyoutProfileDropdown {
-    background: white;
-    border-radius: 0.75rem;
-    margin: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-#flyoutProfileDropdown.hidden {
+#flyout-menu .logout-button {
     display: none;
 }
 
-#flyoutProfileDropdown .user-info {
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    background-color: #f8fafc;
-}
-
-#flyoutProfileDropdown .user-name {
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #1f2937;
-}
-
-#flyoutProfileDropdown .user-email {
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-#flyoutProfileDropdown .dropdown-menu {
-    padding: 0.5rem;
-}
-
-#flyoutProfileDropdown .dropdown-item {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: #374151;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s ease;
-}
-
-#flyoutProfileDropdown .dropdown-item:hover {
-    background-color: #f3f4f6;
-}
-
-/* Adjust profile link in flyout menu */
 #profileLinkMobile {
     display: flex;
-    justify-content: center;
-    cursor: pointer;
-    padding: 0.5rem;
+    align-items: center;
 }
 
 #profileLinkMobile img {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
     object-fit: cover;
+    margin-right: 0.5rem;
     border: 2px solid #4CAF50;
-    transition: border-color 0.2s ease;
 }
 
-#profileLinkMobile img:hover {
-    border-color: #45a049;
-}
-
-/* Mobile Flyout Profile Dropdown */
-#flyoutProfileDropdown {
-    position: absolute;
-    left: 0;
-    right: 0;
-    background: white;
-    margin: 0.5rem;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    z-index: 1001;
-    opacity: 1;
-    visibility: visible;
-    transition: all 0.3s ease;
-}
-
-#flyoutProfileDropdown.hidden {
-    display: none;
+/* Settings Modal Styles */
+#settingsModal {
     opacity: 0;
-    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
 }
 
-#flyoutProfileDropdown .user-info {
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    background-color: #f8fafc;
+#settingsModal.hidden {
+    display: none;
+}
+
+#settingsModal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.settings-btn {
+    position: relative;
+}
+
+/* Settings Modal Styles */
+.settings-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+.settings-modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.settings-modal .content {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 24rem;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.2s ease-out;
+}
+
+.settings-modal:not(.hidden) .content {
+    transform: scale(1);
+}
+
+.settings-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+/* Update Profile Dropdown Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/*=================================================================================
+14 . LOGO FONT 
+===================================================================================*/
+
+@font-face {
+    font-family: 'Rockybilly';
+    src: url('../font/Rockybilly.ttf') format('truetype'); 
+}
+
+.typing-container {
+    text-align: center;
+    display: block;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* h1, h2 {
+    font-family: "Rockybilly", cursive;
+    font-size: 5rem; 
+    color: rgb(0, 0, 0);
+    margin: 20; 
+    
+}
+h1{
+    transform: scale(5.5);
+    margin-bottom: 100%;
+    white-space: nowrap;
+    -webkit-text-stroke: 0.1.5px white;
+}
+
+h2 {
+    font-size: 3rem;
+    margin-top: 70%;
+    padding: 20px;
+} */
+
+/* Settings Modal Styles */
+#settingsModal {
+    transition: opacity 0.2s ease-out;
+}
+
+#settingsModal:not(.hidden) {
+    animation: fadeIn 0.2s ease-out;
+}
+
+#settingsModal button {
+    transition: all 0.2s ease;
+}
+
+#settingsModal button:hover {
+    transform: translateY(-2px);
 }
 
 /* Mobile Profile Dropdown Styles */
 @media (max-width: 768px) {
+    .profile-button {
+        display: flex;
+        align-items: center;
+        padding: 0;
+        border: none;
+        background: none;
+    }
+
+    .profile-button img {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
     #profileDropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        width: 100%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        width: 90%;
+        max-width: 320px;
         background: white;
-        margin-top: 0.5rem;
-        border-radius: 0.75rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        z-index: 1001;
-    }
-
-    #profileDropdown.hidden {
-        display: none;
-    }
-
-    #profileDropdown .py-2 {
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        opacity: 1;
+        visibility: visible;
+        transition: all 0.3s ease;
         padding: 1rem;
     }
 
-    #profileDropdown .px-4 {
-        padding: 0.75rem 1rem;
-    }
-
-    #profileDropdown .border-b {
+    #profileDropdown .user-info {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
         border-bottom: 1px solid #e5e7eb;
     }
 
-    #profileDropdown a {
+    #profileDropdown .user-info img {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4CAF50;
+        margin-right: 1rem;
+    }
+
+    #profileDropdown .user-details {
+        flex: 1;
+    }
+
+    #profileDropdown .user-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #1f2937;
+    }
+
+    #profileDropdown .user-email {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    #profileDropdown .dropdown-menu {
+        padding: 0.5rem 0;
+    }
+
+    #profileDropdown .dropdown-item {
         display: flex;
         align-items: center;
         padding: 0.75rem 1rem;
         color: #374151;
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
+        border-radius: 0.5rem;
+        margin: 0.25rem 0;
     }
 
-    #profileDropdown a:hover {
+    #profileDropdown .dropdown-item:hover {
         background-color: #f3f4f6;
     }
+
+    #profileDropdown .dropdown-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+        color: #6b7280;
+    }
+
+    #profileDropdown .dropdown-item.danger {
+        color: #dc2626;
+    }
+
+    #profileDropdown .dropdown-item.danger svg {
+        color: #dc2626;
+    }
+
+    .profile-dropdown-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 40;
+    }
+    
+    .profile-dropdown-overlay.visible {
+        background-color: rgba(0, 0, 0, 0.7);
+        display: block;
+        z-index: 998;
+        animation: fadeIn 0.2s ease-out;
+    }
 }
 
-/* Mobile Profile Dropdown in Flyout */
-#mobileProfileDropdown {
+#flyout-menu {
+    z-index: 9999;
+}
+
+#flyout-menu .logout-button {
     display: none;
-    background: white;
-    margin: 0.5rem 0;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-#mobileProfileDropdown.hidden {
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-}
-
-#mobileProfileDropdown .border-b {
-    border-bottom: 1px solid #e5e7eb;
-}
-
-#mobileProfileDropdown a {
-    display: block;
-    padding: 0.75rem 1rem;
-    color: #374151;
-    transition: background-color 0.2s ease;
-}
-
-#mobileProfileDropdown a:hover {
-    background-color: #f3f4f6;
 }
 
 #profileLinkMobile {
     display: flex;
     align-items: center;
-    width: 100%;
-    padding: 0.5rem;
-    transition: background-color 0.2s ease;
 }
 
-#profileLinkMobile:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Mobile Profile Dropdown in Flyout */
-#mobileProfileDropdown {
-    display: none;
-    background: white;
-    margin: 0.5rem 0;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-#mobileProfileDropdown.hidden {
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-}
-
-#mobileProfileDropdown .border-b {
-    border-bottom: 1px solid #e5e7eb;
-}
-
-#mobileProfileDropdown a {
-    transition: background-color 0.2s ease;
-}
-
-#profileLinkMobile {
-    text-align: left;
-    width: 100%;
-    padding: 0.5rem;
-    transition: background-color 0.2s ease;
-}
-
-#profileLinkMobile:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Timeline Search Styles - Update this section */
-.timeline-search-btn {
-    background: #FFF2C8;
+#profileLinkMobile img {
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 20;
-    position: absolute;
-    right: 20px;
-    transition: opacity 0.3s ease, background-color 0.3s ease;
-    border: 2px solid #d4c689;
+    object-fit: cover;
+    margin-right: 0.5rem;
+    border: 2px solid #4CAF50;
 }
 
-.timeline-search-btn:hover {
-    background: #f7e4a0;
-}
-
-.search-input-container {
-    position: absolute;
-    right: 20px;  /* Adjusted right positioning */
-    top: 0;
-    height: 40px;
-    width: 40px;
-    opacity: 0;
-    visibility: hidden;
-    background: #FFF2C8;
-    border-radius: 20px;
-    z-index: 10;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    border: 2px solid #d4c689;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.search-input-container.expanded {
-    width: 300px;
-    opacity: 1;
-    visibility: visible;
-}
-
-.timeline-search-input {
-    width: 100%;
-    height: 100%;
-    border: none;
-    outline: none;
-    padding: 0 40px 0 20px;
-    font-size: 16px;
-    background: transparent;
-    color: #333;
-    opacity: 0;
-    transition: opacity 0.2s ease 0.2s;
-}
-
-.timeline-search-input::placeholder {
-    color: #806b2d;
-    opacity: 0.7;
-}
-
-.search-input-container.expanded .timeline-search-input {
-    opacity: 1;
-}
-
-.search-close-btn {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    padding: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;  /* Changed to black */
-    font-size: 18px;  /* Make it slightly larger */
-    font-weight: bold;  /* Make it bolder */
-}
-
-.search-input-container.expanded .search-close-btn {
-    opacity: 1;
-}
-
-.search-close-btn:hover {
-    color: #333;  /* Darker on hover */
-}
-
-.timeline-search-btn.hidden {
+/* Settings Modal Styles */
+#settingsModal {
     opacity: 0;
     pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+#settingsModal.hidden {
+    display: none;
+}
+
+#settingsModal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.settings-btn {
+    position: relative;
+}
+
+/* Settings Modal Styles */
+.settings-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+.settings-modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.settings-modal .content {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 24rem;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.2s ease-out;
+}
+
+.settings-modal:not(.hidden) .content {
+    transform: scale(1);
+}
+
+.settings-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+/* Update Profile Dropdown Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/*=================================================================================
+14 . LOGO FONT 
+===================================================================================*/
+
+@font-face {
+    font-family: 'Rockybilly';
+    src: url('../font/Rockybilly.ttf') format('truetype'); 
+}
+
+.typing-container {
+    text-align: center;
+    display: block;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* h1, h2 {
+    font-family: "Rockybilly", cursive;
+    font-size: 5rem; 
+    color: rgb(0, 0, 0);
+    margin: 20; 
+    
+}
+h1{
+    transform: scale(5.5);
+    margin-bottom: 100%;
+    white-space: nowrap;
+    -webkit-text-stroke: 0.1.5px white;
+}
+
+h2 {
+    font-size: 3rem;
+    margin-top: 70%;
+    padding: 20px;
+} */
+
+/* Settings Modal Styles */
+#settingsModal {
+    transition: opacity 0.2s ease-out;
+}
+
+#settingsModal:not(.hidden) {
+    animation: fadeIn 0.2s ease-out;
+}
+
+#settingsModal button {
+    transition: all 0.2s ease;
+}
+
+#settingsModal button:hover {
+    transform: translateY(-2px);
+}
+
+/* Mobile Profile Dropdown Styles */
+@media (max-width: 768px) {
+    .profile-button {
+        display: flex;
+        align-items: center;
+        padding: 0;
+        border: none;
+        background: none;
+    }
+
+    .profile-button img {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease;
+    }
+
+    #profileDropdown {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1);
+        width: 90%;
+        max-width: 320px;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        opacity: 1;
+        visibility: visible;
+        transition: all 0.3s ease;
+        padding: 1rem;
+    }
+
+    #profileDropdown .user-info {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    #profileDropdown .user-info img {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4CAF50;
+        margin-right: 1rem;
+    }
+
+    #profileDropdown .user-details {
+        flex: 1;
+    }
+
+    #profileDropdown .user-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #1f2937;
+    }
+
+    #profileDropdown .user-email {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    #profileDropdown .dropdown-menu {
+        padding: 0.5rem 0;
+    }
+
+    #profileDropdown .dropdown-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: #374151;
+        transition: all 0.2s ease;
+        border-radius: 0.5rem;
+        margin: 0.25rem 0;
+    }
+
+    #profileDropdown .dropdown-item:hover {
+        background-color: #f3f4f6;
+    }
+
+    #profileDropdown .dropdown-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+        color: #6b7280;
+    }
+
+    #profileDropdown .dropdown-item.danger {
+        color: #dc2626;
+    }
+
+    #profileDropdown .dropdown-item.danger svg {
+        color: #dc2626;
+    }
+
+    .profile-dropdown-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 40;
+    }
+    
+    .profile-dropdown-overlay.visible {
+        background-color: rgba(0, 0, 0, 0.7);
+        display: block;
+        z-index: 998;
+        animation: fadeIn 0.2s ease-out;
+    }
+}
+
+#flyout-menu {
+    z-index: 9999;
+}
+
+#flyout-menu .logout-button {
+    display: none;
+}
+
+#profileLinkMobile {
+    display: flex;
+    align-items: center;
+}
+
+#profileLinkMobile img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.5rem;
+    border: 2px solid #4CAF50;
+}
+
+/* Settings Modal Styles */
+#settingsModal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+#settingsModal.hidden {
+    display: none;
+}
+
+#settingsModal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.settings-btn {
+    position: relative;
+}
+
+/* Settings Modal Styles */
+.settings-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+.settings-modal:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.settings-modal .content {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 24rem;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.2s ease-out;
+}
+
+.settings-modal:not(.hidden) .content {
+    transform: scale(1);
+}
+
+.settings-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+/* Update Profile Dropdown Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/*=================================================================================
+14 . LOGO FONT 
+===================================================================================*/
+
+@font-face {
+    font-family: 'Rockybilly';
+    src: url('../font/Rockybilly.ttf') format('truetype'); 
 }
 
 .typing-container {
