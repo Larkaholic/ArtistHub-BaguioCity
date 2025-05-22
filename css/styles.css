@@ -67,6 +67,10 @@
             font-weight: 600 !important;
         }
 
+        .termsNcondition {
+            color: #f76400;
+        }
+
         .confirm {
             background-color: #f76400;
             color: white;
