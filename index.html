@@ -238,7 +238,6 @@
 
     <main class="hero-section max-w-full h-screen">
         <!-- hero section -->
-
         <section id="landingPage" class="">
             <div class="banner mt-36 ml-2 sm:ml-36 sm:mt-72 bg-white rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-40 border border-gray-100">
                 <h1 class="banner-text p-2 tracking-wide ml-5">
@@ -280,20 +279,22 @@
             </div>
         </section> -->
 
-        <div class="introduction flex justify-center">
-            <div class="floatingEvent">
+        <div class="introduction flex-col">
+            <div class="floatingEvent flex bg-black rounded-lg max-w-full justify-self-center">
                 <!-- events go here -->
             </div>
-            <div class="mt-72">
-                <h1 class="head font-bold text-4xl md:text-6xl sm:text-5xl text-center">
+            <div class="mt-32 ">
+                <h1 class="head font-bold text-4xl md:text-6xl sm:text-5xl text-center" style="position:relative;">
                     A Platform Built to Celebrate and <br>
-                    Uplift <span class="banner-span font-mono tracking-tighter">Local Artistry</span>
+                    Uplift <span class="underline-artistry font-mono tracking-tighter">Local Artistry</span>
                 </h1>
-                <h2 class="headSub text-center break-keep">
-                    Artisthub is a digital platform designed to empower Cordilleran artists by
-                    providing a centralized web space to showcase their talents, connect with
-                    communities, and make more opportunities in the creative industry.
-                </h2>
+                <div class="flex max-w-full sm:mx-32 justify-center mt-4">
+                    <h2 class="headSub text-center max-w-96 break-keep">
+                        Artisthub is a digital platform designed to empower Cordilleran artists by
+                        providing a centralized web space to showcase their talents, connect with
+                        communities, and make more opportunities in the creative industry.
+                    </h2>
+                </div>
             </div>
         </div>
     
@@ -771,7 +772,7 @@
             }
         });
     </script>
-
+    
     <!-- User Type Selection Modal -->
     <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden" style="z-index: 3000;">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
@@ -932,7 +933,8 @@
                         <div class="text-left">
                             <h3 class="font-bold text-lg">Edit Profile</h3>
                             <p class="text-sm text-gray-600">Update your personal information</p>
-                        </button>
+                        </div>
+                    </button>
                     <button onclick="showPasswordChangeForm()" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-blue-500 hover:border-blue-600 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
