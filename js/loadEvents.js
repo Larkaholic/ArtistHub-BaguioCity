@@ -12,6 +12,9 @@ async function loadEvents() {
             events.push({ id: doc.id, ...doc.data() });
         });
 
+        // Load floating events first
+        loadFloatingEvents(events);
+
         const currentDate = new Date();
 
         // Split events into featured and non-featured
@@ -122,6 +125,38 @@ async function loadEvents() {
             }
         });
     }
+}
+
+function loadFloatingEvents(events, limit = 3) {
+    const floatingEventContainer = document.querySelector('.dataDiv');
+    if (!floatingEventContainer) return;
+
+    // Get the most recent events
+    const recentEvents = events.slice(0, limit);
+
+    floatingEventContainer.innerHTML = recentEvents.map(event => `
+        <div class="event-preview-card overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" data-id="${event.id}">
+            <img src="${event.imageUrl || 'images/events/default-event.jpg'}" 
+                 alt="${event.title}" 
+                 class="w-full h-48 object-cover">
+            <div class="p-4 bg-white">
+                <h3 class="text-lg font-semibold text-gray-800">${event.title}</h3>
+                <p class="text-sm text-gray-600">${event.location}</p>
+            </div>
+        </div>
+    `).join('');
+
+    // Add click handlers for the preview cards
+    const previewCards = floatingEventContainer.querySelectorAll('.event-preview-card');
+    previewCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const eventId = card.getAttribute('data-id');
+            if (eventId) {
+                const basePath = getBasePath();
+                window.location.href = `${basePath}/events/events.html?id=${eventId}`;
+            }
+        });
+    });
 }
 
 function getBasePath() {
