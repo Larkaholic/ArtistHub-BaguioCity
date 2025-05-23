@@ -1,19 +1,34 @@
 import { db } from './firebase-config.js';
 import { doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-export function ensureStylesLoaded(requiredStyles) {
-    requiredStyles.forEach(style => {
-        const existingLink = document.querySelector(`link[href$="${style}"]`);
-        if (!existingLink) {
+// Ensures that all required stylesheets are loaded
+export function ensureStylesLoaded(stylesheetUrls) {
+    const loadedStylesheets = Array.from(document.styleSheets).map(sheet => {
+        try {
+            return sheet.href;
+        } catch (e) {
+            return null;
+        }
+    }).filter(Boolean);
+    
+    stylesheetUrls.forEach(url => {
+        // Get just the filename for local styles
+        const fileName = url.includes('/') ? url.split('/').pop() : url;
+        
+        // Check if this style is already loaded
+        const isLoaded = loadedStylesheets.some(href => 
+            href && (href.includes(url) || href.includes(fileName))
+        );
+        
+        if (!isLoaded) {
+            console.warn(`Style not loaded: ${url}. Attempting to load it now.`);
             const link = document.createElement('link');
             link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.href = style;
+            link.href = url.startsWith('http') ? url : `./css/${url}`;
             document.head.appendChild(link);
         }
     });
 }
-
 
 // function to check if user is admin
 export async function isUserAdmin(userId) {
@@ -210,3 +225,64 @@ export function navigateTo(path) {
     const basePath = getBasePath();
     window.location.href = `${basePath}${path}`;
 }
+
+/**
+ * Safely parses JSON with error handling
+ * @param {string} jsonString - The JSON string to parse
+ * @param {*} fallback - Fallback value if parsing fails
+ * @returns {*} Parsed object or fallback value
+ */
+export function safeJsonParse(jsonString, fallback = {}) {
+    try {
+        return JSON.parse(jsonString);
+    } catch (e) {
+        console.error('JSON parse error:', e);
+        return fallback;
+    }
+}
+
+/**
+ * Creates a debounced function
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Wait time in milliseconds
+ * @returns {Function} Debounced function
+ */
+export function debounce(func, wait = 300) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+/**
+ * Formats a date string to a readable format
+ * @param {string|Date} dateString - Date string or Date object
+ * @param {object} options - Intl.DateTimeFormat options
+ * @returns {string} Formatted date string
+ */
+export function formatDate(dateString, options = {}) {
+    try {
+        const date = typeof dateString === 'string' ? new Date(dateString) : dateString;
+        if (isNaN(date.getTime())) throw new Error('Invalid date');
+        
+        const defaultOptions = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        
+        return new Intl.DateTimeFormat('en-US', { ...defaultOptions, ...options }).format(date);
+    } catch (e) {
+        console.warn('Date formatting error:', e);
+        return dateString || 'Invalid date';
+    }
+}
+
+// Export other common utility functions as needed

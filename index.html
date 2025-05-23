@@ -323,7 +323,10 @@
                     </div>
                 </div>
                 <div class="sampleArts">
-                    <!-- arts would be dynamically loaded here -->
+                    <!-- Artwork cards will be dynamically loaded here -->
+                    <div class="loading-spinner my-10 flex justify-center">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -520,6 +523,7 @@
     <script type="module" src="./js/search.js"></script>
     <script type="module" src="./js/navigation.js"></script>
     <script src="./script.js" defer></script>
+    <script type="module" src="./js/shop-preview.js"></script>
 
     <div id="userMenu" class="hidden">
         <div class="glass-header rounded-lg p-4">
@@ -530,7 +534,7 @@
             </nav>
         </div>
     </div>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script type="module">
         import { ensureStylesLoaded } from './js/utils.js';

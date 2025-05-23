@@ -326,7 +326,7 @@
     .sampleArts {
         margin-top: 2rem;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(550px, 2fr));
         gap: 1.5rem;
     }
 
