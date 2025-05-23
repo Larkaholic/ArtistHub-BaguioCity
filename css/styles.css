@@ -217,7 +217,7 @@
         ========================================================================== */
         .introduction {
             max-height: 100dvh;
-            height: 70dvh;
+            height: 80dvh;
             background-color: rgb(255, 255, 255);
         }
 
@@ -226,7 +226,8 @@
             z-index: 2;
             margin-top: -80px;
             width: 85%;
-            height: auto; /* Changed from fixed height */
+            min-height: 12rem;
+            height: 21.5rem;
             border: #f76400 2px solid;
             padding: 1rem;
         }
@@ -998,4 +999,43 @@
     overflow: hidden;
     animation: typing 3.5s steps(40, end),
                blink-caret .75s step-end infinite;
+}
+
+.event-preview-card {
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem; /* Added margin to separate cards better */
+}
+
+.event-preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.event-preview-card img {
+    height: 180px; /* Slightly reduced from 200px */
+    object-fit: cover;
+    width: 100%;
+}
+
+.event-preview-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    color: #f76400;
+    display: -webkit-box; /* For text truncation */
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Add padding to the card content area */
+.event-preview-card .p-4 {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
