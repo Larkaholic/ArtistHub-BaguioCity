@@ -300,13 +300,14 @@
             </div>
         </div>
 
+        <!-- shop section -->
         <section class="shopPrev h-full">
-            <div class="shopHeader max-w-full mt-24">
-                <div class="shopSearch sm:flex">
-                    <h1 class="explore font-bold text-4xl">Explore</h1>
-                    <div class="searchContainer flex items-center gap-5">
-                        <input class="p-2 rounded-2xl border border-gray-300 mt-2" type="text" name="generalSearch" id="generalSearch" placeholder="Search artworks, artists, genres..." class="searchInput">
-                        <select class="p-3 rounded-2xl border border-gray-300 mt-2" name="categ" id="categ" placeholder="categories">
+            <div class="shopHeader max-w-full mt-24 px-4 md:px-8">
+                <div class="shopSearch flex flex-row justify-evenly items-center mb-6">
+                    <h1 class="explore font-bold text-4xl mb-0">Explore</h1>
+                    <div class="searchContainer flex flex-row items-center gap-3 sm:gap-5 w-auto">
+                        <input class="p-2 rounded-2xl border border-gray-300 w-full sm:w-auto" type="text" name="generalSearch" id="generalSearch" placeholder="Search artworks, artists, genres...">
+                        <select class="p-3 rounded-2xl border border-gray-300 w-full sm:w-auto mt-0" name="categ" id="categ" placeholder="categories">
                             <option value="" disabled selected>Categories</option>
                             <!-- options to be dynamically loaded here -->
                         </select>
