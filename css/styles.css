@@ -244,9 +244,108 @@
             color: #f76400;
         }
 
+        .artworksDropdown {
+            color: #f76400;
+        }
 
 
 
+
+
+    /* ==========================================================================
+        INDEX SHOP SECTION
+        ========================================================================== */
+    .shopPrev {
+        margin-bottom: 2rem;
+    }
+
+    .shopHeader {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .shopSearch {
+        width: 100%;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eaeaea;
+    }
+
+    .explore {
+        color: #000000;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+
+    .searchContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+        width: auto;
+        margin-top: 0;
+    }
+
+    .searchContainer input, 
+    .searchContainer select {
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #d1d5db;
+    }
+
+    .searchContainer input:focus, 
+    .searchContainer select:focus {
+        outline: none;
+        border-color: #f76400;
+        box-shadow: 0 0 0 2px rgba(247, 100, 0, 0.2);
+    }
+
+    .shopFilter {
+        margin-top: 1.5rem;
+        position: relative;
+    }
+
+    .artworksDropdown {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .artworksDropdown i {
+        margin-left: 0.5rem;
+        font-size: 1.25rem;
+    }
+
+    .dropdownFilter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .sampleArts {
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .shopSearch {
+        }
+        .searchContainer {
+            width: auto;
+            margin-top: 0;
+            flex-direction: row;
+        }
+        .explore {
+            font-size: 2rem;
+        }
+        .searchContainer input, 
+        .searchContainer select {
+            width: auto;
+        }
+    }
 
     /* ==========================================================================
         7. ARTISTS SECTION
