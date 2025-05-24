@@ -2,7 +2,7 @@ import { collection, getDocs, query, limit, orderBy, where } from 'https://www.g
 import { db, auth } from './firebase-config.js';
 
 // Set maximum number of artworks to show in preview
-const MAX_PREVIEW_ARTWORKS = 6;
+const MAX_PREVIEW_ARTWORKS = 8;
 
 // Genre icons mapping
 const genreIcons = {

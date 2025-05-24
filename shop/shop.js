@@ -88,7 +88,8 @@ async function loadArtworks(forceRefresh = false) {
             return;
         }
 
-        let artworksQuery = query(artworksRef, limit(50));
+        // Change limit from 50 to 8
+        let artworksQuery = query(artworksRef, limit(8));
         const querySnapshot = await getDocs(artworksQuery);
         
         if (querySnapshot.empty) {
