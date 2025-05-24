@@ -104,7 +104,9 @@ async function loadArtworkPreview() {
         }
         
         // Build HTML for artwork cards
-        let artworksHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">`;
+        let artworksHTML = `
+            <div class="sampleArts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-h-full overflow-x-auto overflow-y-visible max-w-full w-full">
+        `;
         
         querySnapshot.forEach((doc) => {
             const data = doc.data();
@@ -162,16 +164,7 @@ async function loadArtworkPreview() {
         });
         
         artworksHTML += `</div>`;
-        
-        // Add "View All" button
-        artworksHTML += `
-            <div class="text-center mt-8">
-                <a href="./shop/shop.html" class="inline-block bg-[#f76400] text-white py-2 px-6 rounded-lg text-lg hover:bg-amber-600 transition duration-200">
-                    View All Artworks
-                </a>
-            </div>
-        `;
-        
+                
         sampleArtsContainer.innerHTML = artworksHTML;
         console.log("Artwork preview loaded successfully!");
         
