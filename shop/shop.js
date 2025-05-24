@@ -88,7 +88,8 @@ async function loadArtworks(forceRefresh = false) {
             return;
         }
 
-        let artworksQuery = query(artworksRef, limit(50));
+        // Change limit from 50 to 8
+        let artworksQuery = query(artworksRef, limit(8));
         const querySnapshot = await getDocs(artworksQuery);
         
         if (querySnapshot.empty) {
@@ -225,11 +226,13 @@ function createArtworkCard(id, data, genreIcon) {
             style: 'currency',
             currency: 'PHP'
         });
-
         const artistName = data.artistName || data.artistEmail?.split('@')[0] || 'Unknown Artist';
+        const genre = data.genre || 'Unknown';
+        const stock = typeof data.stock !== 'undefined' ? data.stock : 'N/A';
 
         const card = document.createElement('div');
-        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden';
+        card.className = 'artwork-card bg-white rounded-lg shadow-lg overflow-hidden flex flex-col';
+
         card.innerHTML = `
             <div class="relative">
                 <div class="artwork-artist">${artistName}</div>
@@ -242,17 +245,18 @@ function createArtworkCard(id, data, genreIcon) {
                 >
             </div>
             <div class="p-6 flex flex-col h-full">
-                <div class="flex-grow">
-                    <div class="flex items-center gap-1 mb-1">
-                        <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
-                        <h3 class="artwork-title">${data.title || 'Untitled artwork'}</h3>
-                    </div>
-                    <div class="price-container mb-1">
-                        <p class="artwork-price">${formattedPrice}</p>
-                    </div>
-                    <p class="artwork-description text-gray-600">${data.description || 'No description available.'}</p>
+                <h3 class="artwork-title mb-1">${data.title || 'Untitled artwork'}</h3>
+                <p class="artwork-description text-gray-600 mb-2">${data.description || 'No description available.'}</p>
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
+                    <span class="artwork-genre text-xs text-gray-700">${genre}</span>
                 </div>
-                <div class="mt-auto">
+                <hr class="my-2">
+                <div class="flex justify-between items-center mt-auto">
+                    <span class="artwork-price">${formattedPrice}</span>
+                    <span class="artwork-stock text-xs text-gray-500">Stock: ${stock}</span>
+                </div>
+                <div class="mt-3">
                     <button onclick="window.addToCart('${id}', '${(data.title || 'Untitled artwork').replace(/'/g, "\\'")}', ${parseFloat(data.price || 0)})" 
                         class="add-to-cart-btn artwork-button w-full text-white rounded hover:bg-green-600 transition duration-200">
                         <i class="fas fa-cart-plus mr-1"></i> Add to Cart

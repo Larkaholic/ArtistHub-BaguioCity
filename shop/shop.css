@@ -360,16 +360,9 @@
 }
 
 .artwork-title {
-    font-size: 1.25rem;
-    line-height: 1.4;
-    margin-bottom: 0.5rem;
-    max-height: 3.5rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    font-size: 1.15rem;
     font-weight: 700;
+    margin-bottom: 0.25rem;
     color: #1F2937;
     text-shadow: 
         -1px -1px 0 rgba(255, 255, 255, 0.5),
@@ -391,10 +384,43 @@
 }
 
 .artwork-description {
+    font-size: 0.95rem;
+    color: #444;
+    margin-bottom: 0.5rem;
     flex: 1;
-    margin: 1rem 0;
     overflow-y: auto;
     max-height: 150px; /* Limit description height */
+}
+
+.artwork-genre {
+    font-size: 0.9rem;
+    color: #f76400;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.artwork-price {
+    color: #065f46;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: rgba(209, 250, 229, 0.95);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #10B981;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.artwork-stock {
+    font-size: 0.95rem;
+    color: #888;
+    font-weight: 500;
+    margin-left: 1rem;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 0.5rem 0;
 }
 
 .artwork-card .flex.justify-center {

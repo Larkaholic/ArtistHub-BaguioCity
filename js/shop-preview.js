@@ -2,7 +2,7 @@ import { collection, getDocs, query, limit, orderBy, where } from 'https://www.g
 import { db, auth } from './firebase-config.js';
 
 // Set maximum number of artworks to show in preview
-const MAX_PREVIEW_ARTWORKS = 6;
+const MAX_PREVIEW_ARTWORKS = 8;
 
 // Genre icons mapping
 const genreIcons = {
@@ -133,9 +133,8 @@ async function loadArtworkPreview() {
             
             // Create artwork card HTML
             artworksHTML += `
-                <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
                     <div class="relative">
-                        <div class="artwork-artist">${artistName}</div>
                         <img 
                             src="${imageUrl}" 
                             alt="${artwork.title || 'Untitled artwork'}" 
@@ -143,21 +142,20 @@ async function loadArtworkPreview() {
                             onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200?text=Image+Error'; this.classList.add('img-error');"
                             loading="lazy"
                         >
+                        <div class="artwork-artist">${artistName}</div>
                     </div>
-                    <div class="p-4 flex flex-col h-full">
-                        <div class="flex-grow">
-                            <div class="flex items-center gap-1 mb-1">
-                                <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
-                                <h3 class="artwork-title">${artwork.title || 'Untitled artwork'}</h3>
-                            </div>
-                            <div class="price-container mb-1">
-                                <p class="artwork-price">${formattedPrice}</p>
-                            </div>
-                            <p class="artwork-description text-gray-600">${artwork.description || 'No description available.'}</p>
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="artwork-title mb-1">${artwork.title || 'Untitled artwork'}</h3>
+                        <p class="artwork-description text-gray-600 mb-2">${artwork.description || 'No description available.'}</p>
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
+                            <span class="artwork-genre text-xs">${genre.charAt(0).toUpperCase() + genre.slice(1)}</span>
                         </div>
-                        <a href="./shop/shop.html" class="mt-auto bg-[#f76400] text-white py-2 px-4 rounded text-center hover:bg-amber-600 transition duration-200">
-                            <i class="fas fa-shopping-cart mr-1"></i> View in Shop
-                        </a>
+                        <hr class="my-2">
+                        <div class="flex justify-between items-center">
+                            <span class="artwork-price">${formattedPrice}</span>
+                            <span class="text-xs text-gray-500">Stock: ${artwork.stock !== undefined ? artwork.stock : 'N/A'}</span>
+                        </div>
                     </div>
                 </div>
             `;
@@ -236,6 +234,10 @@ function addArtworkCardStyles() {
             width: 100%;
             border-radius: 0.5rem 0.5rem 0 0;
         }
+
+        .artwork-genre {
+            color: #f76400;
+        }
         
         .artwork-title {
             font-size: 1rem;
@@ -261,12 +263,11 @@ function addArtworkCardStyles() {
         }
         
         .artwork-price {
-            color: #065f46;
+            color: #f76400;
             font-weight: 700;
             display: inline-block;
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
-            background: rgba(16, 185, 129, 0.1);
         }
         
         .price-container {
