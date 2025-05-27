@@ -55,7 +55,7 @@ export async function loadArtists() {
             card.innerHTML = `
             <img src="${artistData.photoURL}" alt="${artistData.displayName}" 
                 class="w-32 h-32 rounded-full object-cover mb-4 border-4"
-                style="border-color: #f76400;">
+                style="border-color: black;">
             <h3 class="text-3xl font-bold mb-2 text-black">${artistData.displayName}</h3>
             <p class="text-center mb-4 text-black text-lg">${specialization}</p>
             <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2"
