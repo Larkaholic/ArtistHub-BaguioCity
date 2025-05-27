@@ -46,8 +46,8 @@ export async function loadArtists() {
             const artistData = artistDoc.data();
             const card = document.createElement('div');
             card.className = `
-             rounded-lg p-6 flex flex-col items-center border-2 border-orange-500
-            min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1
+             rounded-lg p-6 flex flex-col items-center bg-white shadow-lg
+            min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1"
             `;
             card.style.borderColor = '#f76400';
 
