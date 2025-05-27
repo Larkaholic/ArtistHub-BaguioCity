@@ -148,7 +148,7 @@ async function loadArtworkPreview() {
                         <h3 class="artwork-title mb-1">${artwork.title || 'Untitled artwork'}</h3>
                         <p class="artwork-description text-gray-600 mb-2">${artwork.description || 'No description available.'}</p>
                         <div class="flex items-center gap-2 mb-2">
-                            <div class="border-2 rounded-full px-3">
+                            <div class="border-2 rounded-full px-3 pb-1">
                                 <span class="artwork-genre text-xs">${genre.charAt(0).toUpperCase() + genre.slice(1)}</span>
                             </div>                            
                         </div>
