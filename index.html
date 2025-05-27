@@ -328,7 +328,7 @@
                         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
                     </div>
                     <!-- Added two more sample cards for demonstration -->
-                    <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden border-2" style="border-color: #f76400;">
                         <div class="relative">
                             <div class="artwork-artist">Sample Artist 1</div>
                             <img 
@@ -354,7 +354,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden border-2" style="border-color: #f76400;">
                         <div class="relative">
                             <div class="artwork-artist">Sample Artist 2</div>
                             <img 
@@ -392,10 +392,10 @@
             </div>
 
             <div class="relative w-full flex justify-end pr-5">
-                <button class="artist-search-btn border-2 border-black" onclick="toggleArtistSearch()">
+                <button class="artist-search-btn border-2" style="border-color: #f76400;" onclick="toggleArtistSearch()">
                     <i class="fas fa-search"></i>
                 </button>
-                <div class="artist-search-container border-2 border-black">
+                <div class="artist-search-container border-2" style="border-color: #f76400;">
                     <input type="text" 
                            id="searchInput" 
                            placeholder="Search artists, specializations, genres..." 
@@ -476,7 +476,7 @@
                 <!-- Navigation and Social Links -->
                 <div class="footer-socials-nav flex flex-row items-center md:items-center mr-10 gap-10">
                     <!-- Navigation Links -->
-                    <nav class="lrk-nav-container f lex flex-col md:flex-col md:space-x-4 mb-4 md:mb-0">
+                    <nav class="lrk-nav-container f flex flex-col md:flex-col md:space-x-4 mb-4 md:mb-0">
                         <h3 class="font-bold mb-2 md:mb-0">Useful Links</h3>
                         <a href="javascript:void(0)" onclick="navToEvent('./index.html')" class="text-gray-300 hover:text-white">Home</a>
                         <a href="javascript:void(0)" onclick="navToEvent('./index.html#events')" class="text-gray-300 hover:text-white">Events</a>
