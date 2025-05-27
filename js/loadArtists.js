@@ -46,23 +46,25 @@ export async function loadArtists() {
             const artistData = artistDoc.data();
             const card = document.createElement('div');
             card.className = `
-                 rounded-lg p-6 flex flex-col items-center border-4 border-black
-                min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1
-            `;
-            
-            const specialization = artistData.artistDetails?.specialization ?? 'artist';
-            
-            card.innerHTML = `
-                <img src="${artistData.photoURL}" alt="${artistData.displayName}" 
-                    class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-black text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                <h3 class="text-3xl font-bold mb-2 text-black">${artistData.displayName}</h3>
-                <p class="text-center mb-4 text-black text-lg">${specialization}</p>
-                <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2 border-black">
-                    View Profile
-                </button>
-                
+             rounded-lg p-6 flex flex-col items-center border-2 border-orange-500
+            min-w-[200px] transform transition-transform duration-200 hover:-translate-y-1
             `;
 
+            const specialization = artistData.artistDetails?.specialization ?? 'artist';
+
+            card.innerHTML = `
+            <img src="${artistData.photoURL}" alt="${artistData.displayName}" 
+                class="w-32 h-32 rounded-full object-cover mb-4 border-4"
+                style="border-color: #f76400;">
+            <h3 class="text-3xl font-bold mb-2 text-black">${artistData.displayName}</h3>
+            <p class="text-center mb-4 text-black text-lg">${specialization}</p>
+            <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2"
+                style="border-color: #f76400;">
+                View Profile
+            </button>
+            `;
+
+            card.style.borderColor = '#f76400';
             card.querySelector('button').onclick = () => {
                 window.location.href = `${baseUrl}/profile/profile.html?id=${artist.id}`;
             };

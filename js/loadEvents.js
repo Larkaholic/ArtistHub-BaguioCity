@@ -41,7 +41,7 @@ async function loadEvents() {
             } else {
                 importantEventsContainer.innerHTML = upcomingFeaturedEvents.map(event => `
                     <div class="glass-header2 rounded-lg p-4 m-4 event-card relative" 
-                        data-id="${event.id}" data-aos="fade-left" style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px;">
+                        data-id="${event.id}" data-aos="fade-left" style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px; border: 2px solid #f76400;">
                         <div class="event-content flex-grow">
                             <h3 class="rubik-dirt-regular font-custom text-2xl font-bold mb-2">${event.title}</h3>
                             <p class="text-sm font-bold">Start: ${event.startDate}</p>
@@ -75,8 +75,8 @@ async function loadEvents() {
                 eventsContainer.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overscroll-y-auto" style="max-height: 100%;">
                         ${limitedEvents.map(event => `
-                            <div class="artist-card border-2 border-black rounded-lg p-4 mb-4 event-card relative"
-                            style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px;" data-id="${event.id}">
+                            <div class="artist-card rounded-lg p-4 mb-4 event-card relative"
+                            style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px; border: 2px solid #f76400;" data-id="${event.id}">
                                 <div class="event-content flex-grow" style="position: relative; z-index: 12;">
                                     <h3 class="rubik-dirt-regular text-2xl font-bold mb-2 text-black">${event.title}</h3>
                                     <p class="text-sm text-black">Start: ${event.startDate}</p>
@@ -139,7 +139,7 @@ function loadFloatingEvents(events, limit = 3) {
     const recentEvents = events.slice(0, itemsToShow);
 
     floatingEventContainer.innerHTML = recentEvents.map(event => `
-        <div class="event-preview-card overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" data-id="${event.id}">
+        <div class="event-preview-card overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" data-id="${event.id}" style="border: 2px solid #f76400;">
             <img src="${event.imageUrl || 'images/events/default-event.jpg'}" 
                  alt="${event.title}" 
                  class="w-full h-48 object-cover">
