@@ -96,7 +96,8 @@
         }
 
         .nav-item:hover {
-            background-color: #fff8ec;
+            background-color: #f76400;
+            color: #fff8ec;
         }
         
         /* Glass Effect Styles */
@@ -246,10 +247,6 @@
         .artworksDropdown {
             color: #f76400;
         }
-
-
-
-
 
     /* ==========================================================================
         INDEX SHOP SECTION
@@ -1144,7 +1141,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem; /* Added margin to separate cards better */
+    margin-bottom: 1rem;
 }
 
 .event-preview-card:hover {
@@ -1153,7 +1150,7 @@
 }
 
 .event-preview-card img {
-    height: 180px; /* Slightly reduced from 200px */
+    height: 180px;
     object-fit: cover;
     width: 100%;
 }
@@ -1163,9 +1160,9 @@
     font-weight: 600;
     margin-bottom: 0.5rem;
     line-height: 1.2;
-    color: #f76400;
-    display: -webkit-box; /* For text truncation */
-    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    /* color: #f76400; */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
