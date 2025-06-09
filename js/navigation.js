@@ -74,7 +74,6 @@ export function initNavigation() {
             }
         });
     }
-    v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
     v.type = "text/javascript";
     s.parentNode.insertBefore(v, s);
 })(document, 'script');

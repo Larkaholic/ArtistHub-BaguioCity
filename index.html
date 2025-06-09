@@ -43,7 +43,7 @@
         <nav class="hidden sm:flex sm:items-center sm:space-x-5">
             <ul class="text-black text-md flex space-x-10 text-xl font-semibold justify-self-center">
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a>
+                    <a href="javascript:1d(0)" onclick="navToEvent('./index.html')">Home</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
                     <a href="javascript:void(0)" onclick="navToEvent('./index.html#events')">Events</a>
@@ -413,16 +413,7 @@
                 </div>
             </div>
         </section>
-
-        <!-- Events Seciton-->
-        <section id="events" class="EvntPage max-h-screen w-full min-h-screen p-6 overflow-auto">
-            <div class="header text-center py-1 mt-10 w-full flex ml-4 justify-start items-center">
-                <h3 class="text-3xl font-bold text-black ml-5">UPCOMING EVENTS</h3>
-            </div>
-            <div class="EvntContainer max-w-full mx-auto overflow-y-auto" style="max-height: 100vh;">
-                <!-- events will load here -->
-            </div>
-        </section>
+   
         
         <!-- through the years -->
         <section class="baguio-timeline-section my-8">
@@ -711,7 +702,6 @@
     </script>
     <script type="module" src="./js/loadEvents.js"></script>
     <script type="module" src="./js/profileDropdown.js"></script>
-    <script type="module" src="./js/voiceflow-integration.js"></script>
     <script type="module" src="./js/profile-navigation.js"></script>
 
     <script type="module">
@@ -721,54 +711,7 @@
         });
     </script>
 
-    <script type="module">
-        import { VOICEFLOW_API_KEY } from './js/config.js';
-        (function(d, t) {
-            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-            v.onload = function() {
-                window.voiceflow.chat.load({
-                    verify: {
-                        projectID: '6706887ba2382c6fe907495e',
-                        apiKey: VOICEFLOW_API_KEY
-                    },
-                    url: 'https://general-runtime.voiceflow.com',
-                    versionID: 'production',
-                    voice: {
-                        url: "https://runtime-api.voiceflow.com"
-                    },
-                    // Updated styling configuration
-                    theme: {
-                        button: {
-                            size: 56,
-                            radius: 28,
-                            backgroundColor: '#4CAF50',
-                            iconColor: '#FFFFFF'
-                        },
-                        chat: {
-                            backgroundColor: '#F4F8FF',
-                            width: 400,
-                            height: 600,
-                            borderRadius: 16,
-                            poweredBy: false,
-                        },
-                        messages: {
-                            fontFamily: 'Montserrat, sans-serif',
-                            fontSize: 16,
-                            textColor: '#000000',
-                            userBackgroundColor: '#4CAF50',
-                            userTextColor: '#FFFFFF',
-                            assistantBackgroundColor: '#FFFFFF',
-                            assistantTextColor: '#000000'
-                        }
-                    }
-                });
-            }
-            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
-            v.type = "text/javascript";
-            s.parentNode.insertBefore(v, s);
-        })(document, 'script');
-    </script>
-
+  
     <script type="module">
         import { auth } from './js/firebase-config.js';
         // Make handleProfileNavigation available globally
