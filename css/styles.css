@@ -375,6 +375,7 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        background-color: #fff8ec;
     }
 
     .artwork-card .p-4 {
