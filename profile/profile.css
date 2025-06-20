@@ -801,29 +801,31 @@ button,
     #artistBio { font-size: 0.85rem; }
 }
 
-/* Profile card matching the exact design */
+/* Profile card matching the exact design in the image */
 .profile-card-custom {
     background: #181818;
     border-radius: 1.5rem !important;
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    padding: 2rem 1rem 1.5rem 1rem;
+    padding: 0;
     color: #fff;
-    min-width: 280px;
-    max-width: 320px;
+    min-width: 260px;
+    max-width: 290px;
     position: relative;
-    overflow: hidden;
+    overflow: visible !important; /* Allow the image to overflow */
     display: flex;
     flex-direction: column;
+    margin-top: 3rem; /* Give space for the protruding image */
 }
 
-/* Profile image - circular and centered */
+/* Profile image - circular and centered, overlapping the top edge */
 .profile-card-custom .w-24, 
 .profile-card-custom .h-24 {
-    width: 5rem;
-    height: 5rem;
-    margin-top: -3rem;
-    border: 4px solid #181818;
+    width: 6rem;
+    height: 6rem;
+    margin-top: -3rem; /* Negative margin to position above the card */
+    border: none;
     z-index: 10;
+    background-color: #e5e5e5;
 }
 
 .profile-card-custom img#profileImage {
@@ -892,9 +894,10 @@ button,
 /* Location and years info */
 .profile-card-custom .fa-map-marker,
 .profile-card-custom .fa-certificate {
-    min-width: 1.5rem;
+    min-width: 1.25rem;
     display: inline-flex;
-    justify-content: flex-start;
+    justify-content: center;
+    font-size: 1rem;
 }
 
 /* Artist bio text */
@@ -911,4 +914,9 @@ button,
     margin: 0 !important;
     inset: auto !important;
     border-radius: 50% !important;
+}
+
+/* Fix parent container to accommodate overlapping image */
+.lg\:col-span-2.flex.items-center.justify-center {
+    padding-top: 1rem;
 }
