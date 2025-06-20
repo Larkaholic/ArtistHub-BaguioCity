@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Profile</title>
-
-    <!-- external CSS -->
     <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
     <style>
         body {
             background-image: url('../images/bg.jpg');
@@ -20,8 +17,6 @@
         }
     </style>
      <link rel="stylesheet" href="profile.css" type="text/css">
-    
-    <!-- Favicon -->
     <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon">
     
     <script>
@@ -66,7 +61,7 @@
         });</script>
 
 </head>
-<body class="z-10">
+<body class="bg-[#ededed] z-10">
     <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-30 p-1 glass-header2">
         <div class="flex w-24 ml-16">
             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')" style="cursor: pointer">
@@ -97,7 +92,7 @@
                         Login
                     </button>
                 </li>
-                <!-- Add Profile dropdown container -->
+                <!-- Profile dropdown container -->
                 <li class="profile-dropdown-container" style="display: none;">
                     <div class="relative">
                         <button class="profile-button flex items-center" onclick="toggleProfileDropdown(event)">
@@ -226,83 +221,114 @@
         </div>
     </div>
 
-    <main class="pt-20 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <main class="pt-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-[#ededed]">
         <div class="container mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto">
-                <!-- Image Section -->
-                <div class="relative w-full h-[350px] sm:h-[400px] lg:h-[600px] order-1 lg:order-2 overflow-hidden rounded-2xl">
-                    <img
-                        id="profileImage"
-                        src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true"
-                        alt="Profile Image"
-                        class="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-lg"
-                        loading="eager"
-                        style="visibility: visible !important; display: block !important; z-index: 10 !important;"
-                    />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-7xl mx-auto bg-white rounded-[2.5rem] p-8">
+                <!-- Profile Card Container -->
+                <div class="lg:col-span-2 flex items-center justify-center">
+                    <div class="profile-card-custom bg-black rounded-3xl flex flex-col items-center shadow-xl w-full max-w-[290px] mx-auto overflow-visible">
+    <!-- Circular Image - positioned to overlap the top edge -->
+    <div class="w-24 h-24 rounded-full bg-gray-200 -mt-12 flex items-center justify-center overflow-hidden relative z-10">
+        <img
+            id="profileImage"
+            src="https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true"
+            alt="Profile Image"
+            class="w-full h-full object-cover"
+        />
+    </div>
+    
+    <!-- Card Content -->
+    <div class="flex flex-col items-center px-6 pt-3 pb-6 w-full">
+            <h1 id="displayName" class="text-xl font-bold text-white mb-1 text-center">Maria Bulawan</h1>
+            <div id="specialization" class="text-sm text-gray-300 mb-4 text-center">Weaver | Textiles | Painter</div>
+            
+            <!-- Buttons -->
+            <div class="flex gap-2 mb-4 w-full justify-center">
+                <button class="bg-[#FF6B1A] hover:bg-orange-700 text-white font-medium py-2 rounded-md w-1/2 flex items-center justify-center text-sm">
+                    <i class="fa fa-user-plus mr-2"></i>Follow
+                </button>
+                <button class="bg-[#333333] hover:bg-gray-700 text-white font-medium py-2 rounded-md w-1/2 flex items-center justify-center text-sm">
+                    <i class="fa fa-envelope mr-2"></i>Message
+                </button>
+            </div>
+            
+            <hr class="w-full border-gray-800 my-3">
+            
+            <!-- Location & Years -->
+            <div class="flex flex-col gap-2 w-full mb-2">
+                <div class="flex items-center text-gray-300 text-sm">
+                    <i class="fa fa-map-marker text-[#FF6B1A] w-5 text-center"></i>
+                    <span id="locationText">Baguio City, Philippines</span>
                 </div>
-                
-                <!-- Profile Section -->
-                <div class="glass-header2 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl order-2 lg:order-1">
-                    <h1 id="displayName" class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Loading...</h1>
-                    
-                    <!-- Scrollable content -->
-                    <div class="space-y-4 mb-6">
-                        <div class="flex items-center gap-2 text-black">
-                            <i class="fa fa-paint-brush w-6"></i>
-                            <span id="specialization" class="text-sm sm:text-base">Loading...</span>
-                        </div>
-                        
-                        <div class="flex items-center gap-2 text-black">
-                            <i class="fa fa-map-marker w-6"></i>
-                            <span class="text-sm sm:text-base">Baguio City</span>
-                        </div>
-                        
-                        <hr class="border-gray-300 my-4">
-                        
-                        <div class="flex justify-center text-black mb-2">
-                            <span id="genreLabel" class="text-sm sm:text-base">Genre</span>
-                        </div>
-                        
-                        <div id="genre" class="flex flex-wrap justify-center gap-2 bg-transparent">
-                            <!-- Genre tags will be populated here -->
-                        </div>
-                        
-                        <div class="prose max-w-none">
-                            <p id="artistBio" class="text-black text-sm sm:text-base whitespace-pre-wrap max-h-[200px] sm:max-h-[300px] overflow-y-auto pr-4">Loading...</p>
+                <div class="flex items-center text-gray-300 text-sm">
+                    <i class="fa fa-certificate text-[#FF6B1A] w-5 text-center"></i>
+                    <span id="yearsText">Artisan for 20 years</span>
+                </div>
+            </div>
+            
+            <hr class="w-full border-gray-800 my-3">
+            
+            <!-- Bio -->
+            <div class="w-full mb-2">
+                <p id="artistBio" class="text-gray-300 text-xs text-left leading-relaxed">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+            </div>
+            
+            <hr class="w-full border-gray-800 my-3">
+            
+            <!-- Social Links -->
+            <div class="w-full flex flex-col items-start">
+                <span class="text-gray-300 text-xs font-semibold mb-2">Follow me On</span>
+                <div class="flex gap-2">
+                    <a id="facebookLink" href="#" class="social-btn-custom"><i class="fa fa-facebook"></i></a>
+                    <a id="instagramLink" href="#" class="social-btn-custom"><i class="fa fa-instagram"></i></a>
+                    <a id="twitterLink" href="#" class="social-btn-custom"><i class="fa fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+                </div>
+                <!-- Featured Artworks (4/5) -->
+                <div class="lg:col-span-3 grid grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Artwork 1" class="w-full h-48 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-semibold text-lg mb-1">Sunset Over Pines</h3>
+                                <p class="text-gray-500 text-sm">Acrylic on Canvas</p>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Bottom section -->
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <button 
-                            id="dynamicGalleryButton"
-                            onclick="navToEvent('Gallery/gallery.html')"
-                            class="bg-green-600 text-white text-base sm:text-xl px-4 sm:px-6 py-3 sm:py-5 rounded-lg hover:bg-green-700 transition-colors duration-300 w-full"
-                        >
-                            View My Gallery
-                        </button>
-                        
-                        <div class="flex flex-wrap gap-4 mt-4 justify-center sm:justify-start">
-                            <a id="facebookLink" href="#" class="fa fa-facebook"></a>
-                            <a id="instagramLink" href="#" class="fa fa-instagram"></a>
-                            <a id="youtubeLink" href="#" class="fa fa-youtube"></a>
-                            <a id="googleLink" href="#" class="fa fa-google"></a>
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+                        <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Artwork 2" class="w-full h-48 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-semibold text-lg mb-1">Mountain Mist</h3>
+                                <p class="text-gray-500 text-sm">Oil on Canvas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+                        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80" alt="Artwork 3" class="w-full h-48 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-semibold text-lg mb-1">City Lights</h3>
+                                <p class="text-gray-500 text-sm">Digital Art</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+                        <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Artwork 4" class="w-full h-48 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-semibold text-lg mb-1">Forest Dream</h3>
+                                <p class="text-gray-500 text-sm">Watercolor</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Achievements Section -->
-            <section id="achievements" class="glass-header2 rounded-2xl p-4 sm:p-8 mt-6 sm:mt-8 max-w-7xl mx-auto">
-                <h2 class="text-xl sm:text-2xl font-bold mb-4">Achievements</h2>
-                <div class="flex gap-4">
-                    <input type="file" id="achievementImages" accept="image/*" multiple class="hidden">
-                    <label id="chooseFilesLabel" for="achievementImages" class="bg-green-600 text-white px-4 sm:px-6 py-2 rounded-lg cursor-pointer hover:bg-green-700 transition-colors text-sm sm:text-base hidden">
-                        Choose Files
-                    </label>
-                </div>
-            </section>
         </div>
     </main>
     <script type="module">
