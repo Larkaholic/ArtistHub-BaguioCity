@@ -133,7 +133,7 @@ async function loadArtworkPreview() {
             
             // Create artwork card HTML
             artworksHTML += `
-                <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                <div class="artwork-card bg-[#fff8ec] rounded-3xl shadow-lg overflow-hidden flex flex-col">
                     <div class="relative">
                         <img 
                             src="${imageUrl}" 

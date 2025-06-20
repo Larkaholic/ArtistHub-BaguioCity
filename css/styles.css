@@ -92,7 +92,7 @@
        } 
 
         .nav-login {
-            background-color: #f76400;
+            /* background-color: #f76400; */
         }
 
         .nav-item:hover {
@@ -261,7 +261,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* Center all content inside shopHeader */
     }
 
     .shopSearch {
@@ -329,10 +328,8 @@
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 1.5rem;
         overflow-x: auto;
-        overflow-y: visible;
         width: 100%;
         max-width: 100vw;
-        /* Remove fixed minmax(850px, 5fr) for better responsiveness */
     }
 
     @media (max-width: 1024px) {
