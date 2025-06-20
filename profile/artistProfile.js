@@ -6,62 +6,33 @@ import { getBasePath } from '../js/utils.js';
 // Debugging: Verify the script is loaded
 console.log('artistProfile.js loaded');
 
-// Extract profile ID from the URL
+// Extract profile ID from the URL or use current user's ID if not specified
 const urlParams = new URLSearchParams(window.location.search);
 const profileId = urlParams.get('id');
-
-// Function to check if a user is an admin
-async function isUserAdmin(userId) {
-    try {
-        const userDoc = await getDoc(doc(db, "users", userId));
-        if (userDoc.exists()) {
-            return userDoc.data().isAdmin === true;
-        }
-        return false;
-    } catch (error) {
-        console.error("Error checking admin status:", error);
-        return false;
-    }
-}
-
-// Dynamic gallery link update
-document.addEventListener('DOMContentLoaded', () => {
-    const artistId = getArtistIdFromProfile();
-
-    if (artistId) {
-        const galleryButton = document.getElementById('dynamicGalleryButton');
-        galleryButton.setAttribute('onclick', `navToEvent('Gallery/gallery.html?artistId=${artistId}')`);
-    } else {
-        console.error("Artist ID not found.");
-    }
-});
-
-// Placeholder for getting artist ID
-function getArtistIdFromProfile() {
-    return profileId;
-}
-
-// Navigate to Edit Profile page
-function goToEditProfile() {
-    const basePath = getBasePath();
-    window.location.href = `${basePath}/profile/edit-profile.html?id=${profileId}`;
-}
-
-window.goToEditProfile = goToEditProfile;
 
 // Load artist profile data
 async function loadProfile() {
     console.log('loadProfile called');
     try {
-        if (!profileId) {
-            console.log('No profile ID found');
-            window.location.href = '../index.html';
-            return;
+        let userIdToLoad = profileId;
+        
+        // If no profile ID is specified, use the current logged-in user's ID
+        if (!userIdToLoad) {
+            const currentUser = auth.currentUser;
+            if (currentUser) {
+                userIdToLoad = currentUser.uid;
+                console.log('Using current user ID:', userIdToLoad);
+            } else {
+                console.log('No user is logged in and no profile ID provided');
+                // Optional: redirect to login page or show a message
+                return;
+            }
         }
 
-        const userDoc = await getDoc(doc(db, "users", profileId));
+        const userDoc = await getDoc(doc(db, "users", userIdToLoad));
         if (userDoc.exists()) {
             const userData = userDoc.data();
+            console.log('User data loaded:', userData);
 
             // Profile Image
             const profileImage = document.getElementById('profileImage');
@@ -109,22 +80,70 @@ async function loadProfile() {
             updateSocialLink('instagram', userData.socialLinks?.instagram);
             updateSocialLink('twitter', userData.socialLinks?.twitter);
 
-            // Check if user has proper icons
-            const instagramLink = document.getElementById('instagramLink');
-            const twitterLink = document.getElementById('twitterLink');
-            
-            if (instagramLink && instagramLink.querySelector('i')) {
-                instagramLink.querySelector('i').className = 'fa fa-instagram';
-            }
-            
-            if (twitterLink && twitterLink.querySelector('i')) {
-                twitterLink.querySelector('i').className = 'fa fa-twitter';
-            }
+            // Fix social media icons
+            ensureSocialIcons();
+        } else {
+            console.log('No user data found');
         }
     } catch (error) {
         console.error("Error loading profile:", error);
     }
 }
+
+// Ensure social media icons have the correct classes
+function ensureSocialIcons() {
+    const socialIcons = {
+        'facebook': 'fa fa-facebook',
+        'instagram': 'fa fa-instagram',
+        'twitter': 'fa fa-twitter'
+    };
+    
+    Object.entries(socialIcons).forEach(([platform, iconClass]) => {
+        const link = document.getElementById(`${platform}Link`);
+        if (link && link.querySelector('i')) {
+            link.querySelector('i').className = iconClass;
+        }
+    });
+}
+
+// Function to check if a user is an admin
+async function isUserAdmin(userId) {
+    try {
+        const userDoc = await getDoc(doc(db, "users", userId));
+        if (userDoc.exists()) {
+            return userDoc.data().isAdmin === true;
+        }
+        return false;
+    } catch (error) {
+        console.error("Error checking admin status:", error);
+        return false;
+    }
+}
+
+// Dynamic gallery link update
+document.addEventListener('DOMContentLoaded', () => {
+    const artistId = getArtistIdFromProfile();
+
+    if (artistId) {
+        const galleryButton = document.getElementById('dynamicGalleryButton');
+        galleryButton.setAttribute('onclick', `navToEvent('Gallery/gallery.html?artistId=${artistId}')`);
+    } else {
+        console.error("Artist ID not found.");
+    }
+});
+
+// Placeholder for getting artist ID
+function getArtistIdFromProfile() {
+    return profileId;
+}
+
+// Navigate to Edit Profile page
+function goToEditProfile() {
+    const basePath = getBasePath();
+    window.location.href = `${basePath}/profile/edit-profile.html?id=${profileId}`;
+}
+
+window.goToEditProfile = goToEditProfile;
 
 // Update social links dynamically
 function updateSocialLink(platform, url) {
@@ -219,39 +238,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-    } catch (error) {
-        console.error("Error loading profile:", error);
-    }
-}
 
-// Update social links dynamically
-function updateSocialLink(platform, url) {
-    const link = document.getElementById(`${platform}Link`);
-    if (link) {
-        if (url && url.trim() !== '') {
-            link.href = url;
-            link.classList.remove('hidden');
-        } else {
-            link.classList.add('hidden');
+// Initialize profile when auth state changes
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        console.log('User is signed in:', user.uid);
+        // If no specific profile is requested, load the current user's profile
+        if (!profileId) {
+            loadProfile();
         }
+    } else {
+        console.log('No user is signed in');
+        // Handle not logged in state if needed
     }
-}
-
-// Handle admin actions
-window.handleAdminAction = async function(profileId) {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    const isAdmin = await isUserAdmin(user.uid);
-    if (!isAdmin) {
-        alert('You do not have admin privileges');
-        return;
-    }
-
-    const action = prompt('Admin controls: \n1. Manage User Profile\n2. Manage Content\n3. View Reports');
-    switch (action) {
-        case '1':
-            navToEvent('admin/manage-users.html');
+});
             break;
         case '2':
             navToEvent('admin/manage-content.html');
