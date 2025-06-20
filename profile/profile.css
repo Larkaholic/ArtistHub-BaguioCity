@@ -6,12 +6,10 @@
     -ms-overflow-style: none; /* IE/Edge */
 }
 
-/* Hide scrollbar for Chrome/Safari/Opera */
 *::-webkit-scrollbar {
     display: none;
 }
 
-/* Only enable scrolling where specifically needed */
 .overflow-y-auto {
     scrollbar-width: none;
     -ms-overflow-style: none;
