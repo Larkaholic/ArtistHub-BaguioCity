@@ -252,6 +252,19 @@ auth.onAuthStateChanged((user) => {
         // Handle not logged in state if needed
     }
 });
+//             break;
+//         case '2':
+//             navToEvent('admin/manage-content.html');
+//             break;
+//         case '3':
+//             navToEvent('admin/view-reports.html');
+//             break;
+//         default:
+//             if (action !== null) {
+//                 alert('Invalid option');
+//             }
+//     }
+// };
 
 // Ensure profile loads on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
