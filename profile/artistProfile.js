@@ -55,11 +55,12 @@ async function loadProfile() {
                 specialization.textContent = Array.isArray(specs) ? specs.join(' | ') : specs;
             }
 
-            // Years (Artisan for X years)
-            const yearsText = document.getElementById('yearsText');
-            if (yearsText) {
-                const years = userData.artistDetails?.years || 0;
-                yearsText.textContent = years ? `Artisan for ${years} year${years > 1 ? 's' : ''}` : '';
+            // Email
+            const emailText = document.getElementById('emailText');
+            if (emailText) {
+                // Prefer userData.email, fallback to userData.artistDetails?.email
+                const email = userData.email || userData.artistDetails?.email || '';
+                emailText.textContent = email ? email : 'No email provided';
             }
 
             // Location
