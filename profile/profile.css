@@ -811,18 +811,17 @@ button,
     min-width: 260px;
     max-width: 290px;
     position: relative;
-    overflow: visible !important; /* Allow the image to overflow */
+    overflow: visible !important;
     display: flex;
     flex-direction: column;
-    margin-top: 3rem; /* Give space for the protruding image */
+    margin-top: 3rem;
 }
 
-/* Profile image - circular and centered, overlapping the top edge */
 .profile-card-custom .w-24, 
 .profile-card-custom .h-24 {
     width: 6rem;
     height: 6rem;
-    margin-top: -3rem; /* Negative margin to position above the card */
+    margin-top: 1rem;
     border: none;
     z-index: 10;
     background-color: #e5e5e5;
@@ -908,7 +907,6 @@ button,
     margin: 0;
 }
 
-/* Override any conflicting styles */
 #profileImage {
     position: static !important;
     margin: 0 !important;
@@ -916,7 +914,6 @@ button,
     border-radius: 50% !important;
 }
 
-/* Fix parent container to accommodate overlapping image */
 .lg\:col-span-2.flex.items-center.justify-center {
     padding-top: 1rem;
 }
