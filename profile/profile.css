@@ -40,8 +40,6 @@ body {
     -webkit-overflow-scrolling: touch;
     padding-bottom: 2rem;
 }
-/* global header */
-
 
 /* nav */
 .nav-item button,
@@ -879,8 +877,6 @@ button,
 }
 
 .hidden {
-    display: none !important;
-
     line-height: 1.4;
     color: #bbb;
     margin: 0;
