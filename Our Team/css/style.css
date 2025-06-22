@@ -1,268 +1,295 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: auto;
-    padding: auto;
-    background: url("../img/bg.jpg") no-repeat center center fixed;
-    background-size: cover;
-    text-align: center;
-}
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
 
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    z-index: -1;
-}
-html {
-    scroll-behavior: smooth;
-}
-.back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background: #391d0f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-.back-button:hover {
-    background: #955428;
-    box-shadow: #cb8f35;
-    transform: scale(1.1);
-}
+    body {
+      min-height: 100vh;
+      background: url('/images/background.png') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      flex-direction: column;
+    }
 
-.team-container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
 
-.member-container {
-    display: flex;
-    justify-content: center;
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #391d0f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      z-index: 1000;
+    }
+
+    .back-button:hover {
+      background: #955428;
+      transform: scale(1.1);
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 2rem 1rem;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .title h4 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: bold;
+      color: black;
+      -webkit-text-stroke: 0.4px white;
+      margin-bottom: 1rem;
+    }
+
+    .logo {
+      max-width: 280px;
+      width: 100%;
+      height: auto;
+    }
+
+    .card_Container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-    flex-wrap: wrap;
     width: 100%;
-    margin-bottom: 20px;
-    align-items: center;
-}
+    max-width: 1200px;
+    padding: 1rem;
+    }
 
-.member {
-    width: 280px;
-    height: 350px;
-    perspective: 1000px; 
-}
-
-
-
-.member.large {
-    width: 300px;
-    height: 400px;
-}
-
-
-.member .flip-card-inner {
+    .card {
     position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-}
-
-
-.member:hover .flip-card-inner {
-    transform: rotateY(180deg);
-}
-
-
-.flip-card-front, .flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
+    height: 395px;
+    overflow: hidden;
     border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.flip-card {
-    cursor: pointer;
-}
-
-
-.flip-card-front {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 30px 30px -20px rgba(0, 0, 0, 1),
+                inset 0 0 0 1000px rgba(153, 71, 23, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-}
+    transition: transform 0.3s ease-in-out;
+    }
 
-.flip-card-front img {
+
+    .card .imbBx,
+    .card .imbBx img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 15px;
-}
+    display: block;
+    }
 
-.flip-card-back {
-    background: #391d0f;
-    color: white;
+
+    .card .content {
+    position: absolute;
+    bottom: -160px;
+    width: 100%;
+    height: 160px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    transform: rotateY(180deg);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); 
-    transition: background 0.3s ease-in-out; 
-}
-
-
-.member:hover .flip-card-back {
-    background: #955428;
-}
-
-.flip-card-back p {
-    margin: 10px 0;
-    font-size: 1.2em;
-    text-align: center;
-}
-
-
-.button-container {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-
-.map-button, .link-button {
-    background-color: #e0cba8;
-    border: none;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.map-button:hover, .link-button:hover {
-    background: #331a15;
-}
-
-.link-button img, .map-button img {
-    width: 22px;
-    height: 22px;
-}
-
-.link-button img {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.link-button:hover img {
-    transform: scale(1.2);
-    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.5);
-}
-
-
-.category {
-    width: 100%;
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 2.2em;
-    background: url(../img/wood.jpg);
-    border-radius: 40%;
-}
-@keyframes fadeInSlide {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.category {
-    animation: fadeInSlide 1s ease-in-out;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Soft shadow for better visibility */
-}
-
-/*============================
-        Loader Screen
-==============================*/
-
-@font-face {
-    font-family: 'Rockybilly';
-    src: url('../font/Rockybilly.ttf') format('truetype'); 
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Rockybilly.ttf';
-    src: url('../font/Rockybilly.ttf') format('truetype'); 
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* Loader Text */
-#typing {
-    font-family: 'Rockybilly';
-    font-size: 3.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    line-height:5.2;
-}
-
-/* ArtistHub Heading */
-h4{
-        font-family: 'Rockybilly', cursive;
-        font-size: 4.5rem;
-        font-weight: bolder;
-        color: black;
-        -webkit-text-stroke: 0.4px white;
-        text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.6);
-        margin: 0;
-        padding: 0;
-        line-height: 4.5;
-        display: inline-block;
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    transition: bottom 0.5s ease-in-out;
+    pointer-events: none;
     }
 
-/* Loader Container */
-#loader {
-    position: fixed;
-    top: 0;
-    left: 0;
+    .card:hover .content {
+    bottom: 0;
+    pointer-events: auto;
+    }
+
+    /* Fix content text animation */
+    .card .content .contentBx h3,
+    .card .content .sci li {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-in-out;
+    }
+
+    .card:hover .content .contentBx h3,
+    .card:hover .content .sci li {
+    opacity: 1;
+    transform: translateY(0);
+    }
+
+    /* Prevent mobile tap from expanding everything */
+    @media (max-width: 768px) {
+    .card .content {
+        bottom: -160px !important;
+    }
+
+    .card:hover .content {
+        bottom: 0;
+    }
+    }
+
+    .content .contentBx h3 {
+      color: #000;
+      font-size: 18px;
+      text-transform: uppercase;
+      text-align: center;
+      margin: 20px 0 10px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.5s ease 0.6s;
+    }
+
+    .card .imbBx img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    }
+    
+    .content .sci {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    }
+
+    .card:hover .content .contentBx h3 {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .content .contentBx h3 span {
+      font-size: 12px;
+      font-weight: 300;
+      text-transform: initial;
+    }
+
+    .sci {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .sci li {
+      list-style: none;
+      transform: translateY(40px);
+      opacity: 0;
+      transition: all 0.5s ease;
+      transition-delay: calc(0.2s * var(--i));
+    }
+
+    .card:hover .sci li {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .sci li a {
+      color: white;
+      font-size: 24px;
+    }
+
+    .divider {
+      width: 100%;
+      text-align: center;
+      margin: 3rem 0 1rem;
+    }
+
+    .divider h4 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #391d0f;
+      background-color: #ffffffcc;
+      padding: 0.75rem 2rem;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    #loader {
+    position: fixed;
+    inset: 0;
     background: white;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    transition: transform 1s ease, opacity 1s ease;
-}
+    overflow: hidden;
+    }
 
+    .sketch-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: drawImage 4s ease-out forwards;
+    z-index: 1;
+    }
 
+    .sketch-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+    @keyframes drawImage {
+      from {
+        clip-path: inset(0 100% 0 0);
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+      }
+    }
 
+    #typing {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    color: #000;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    white-space: pre-line;
+    text-align: center;
+    z-index: 2;
+    }
 
+     #content {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+     width: 100%;
+    }
+
+    @media (max-width: 768px) {
+    .card {
+    height: auto;
+    }
+    .card .content {
+    position: static;
+    height: auto;
+    }
+    }
