@@ -40,8 +40,6 @@ body {
     -webkit-overflow-scrolling: touch;
     padding-bottom: 2rem;
 }
-/* global header */
-
 
 /* nav */
 .nav-item button,
@@ -746,7 +744,6 @@ button,
 }
 
 #locationText {
-    color: #6b7280;
     font-size: 1rem;
     font-weight: 500;
 }
@@ -806,8 +803,9 @@ button,
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     padding: 0;
     color: #fff;
-    min-width: 260px;
-    max-width: 290px;
+    min-width: 340px;
+    max-width: 420px;
+    width: 100%;
     position: relative;
     overflow: visible !important;
     display: flex;
@@ -879,8 +877,6 @@ button,
 }
 
 .hidden {
-    display: none !important;
-
     line-height: 1.4;
     color: #bbb;
     margin: 0;
@@ -895,4 +891,40 @@ button,
 
 .lg\:col-span-2.flex.items-center.justify-center {
     padding-top: 1rem;
+}
+
+header {
+    z-index: 30 !important;
+}
+
+#flyout-menu {
+    z-index: 40 !important;
+}
+
+/* Center flyout menu items and profile row */
+#flyout-menu ul {
+    align-items: center;
+    text-align: center;
+}
+
+#flyout-menu ul li {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#profileLinkMobile {
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.5rem;
+}
+
+#profileLinkMobile img {
+    margin-right: 0.5rem;
+}
+
+#flyout-menu .logout-button,
+#flyout-menu .login-button {
+    display: flex;
+    justify-content: center;
 }
