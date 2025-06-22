@@ -68,14 +68,14 @@
         </div>
 
         <div class="sm:hidden flex items-center">
-            <button onclick="toggleNav()" class="burger-icon">
+            <button onclick="toggleNav()" class="burger-icon" id="burgerIcon">
                 <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
         </div>
 
-        <nav class="flex items-center space-x-5" style="display:flex !important;">
+        <nav class="hidden md:flex items-center space-x-5 justify-items-center">
             <ul class="text-black text-md flex space-x-10 text-xl font-semibold justify-self-center">
                 <li class="nav-item p-1 rounded-lg">
                     <a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a>
@@ -92,7 +92,7 @@
             </ul>
             
         </nav>
-        <nav class="flex items-center space-x-5" style="display:flex !important;">
+        <nav class="hidden md:flex items-center space-x-5">
             <ul class="text-black text-md flex space-x-28 text-xl font-semibold">
                 <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
                     <a href="javascript:void(0)" onclick="navToEvent('./admin/dashboard.html')">Admin</a>

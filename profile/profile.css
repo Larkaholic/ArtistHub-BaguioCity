@@ -896,3 +896,39 @@ button,
 .lg\:col-span-2.flex.items-center.justify-center {
     padding-top: 1rem;
 }
+
+header {
+    z-index: 30 !important;
+}
+
+#flyout-menu {
+    z-index: 40 !important;
+}
+
+/* Center flyout menu items and profile row */
+#flyout-menu ul {
+    align-items: center;
+    text-align: center;
+}
+
+#flyout-menu ul li {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#profileLinkMobile {
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.5rem;
+}
+
+#profileLinkMobile img {
+    margin-right: 0.5rem;
+}
+
+#flyout-menu .logout-button,
+#flyout-menu .login-button {
+    display: flex;
+    justify-content: center;
+}
