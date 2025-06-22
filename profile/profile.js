@@ -1,6 +1,8 @@
 import { auth } from '../js/firebase-config.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { isUserAdmin, setupAdminUI, navToEvent } from '../js/utils.js';
+import { db } from '../js/firebase-config.js';
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 export function toggleLoginFlyout(event) {
     if (event) event.preventDefault();
@@ -161,3 +163,131 @@ function displayProfile(userData) {
         </div>
     `;
 }
+
+// Show an empty modal
+export function showEmptyModal() {
+    let modal = document.getElementById('emptyModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'emptyModal';
+        modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50';
+        modal.innerHTML = `
+            <div class="bg-white rounded-lg shadow-lg p-8 relative min-w-[300px] min-h-[150px] flex flex-col items-center justify-center">
+                <button onclick="closeEmptyModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                <h1 class="">Feature an Artwork</h1>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    } else {
+        modal.style.display = '';
+    }
+    // Ensure modal is visible (remove hidden if present)
+    modal.classList.remove('hidden');
+}
+
+// Close the empty modal
+export function closeEmptyModal() {
+    const modal = document.getElementById('emptyModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Show the "Feature Artwork" modal with all artworks uploaded by the current artist
+export async function showFeatureArtworkModal() {
+    let modal = document.getElementById('featureArtworkModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'featureArtworkModal';
+        modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50';
+        modal.innerHTML = `
+            <div class="bg-white rounded-lg shadow-lg p-8 relative min-w-[900px] min-h-[400px] max-w-5xl w-full flex flex-col items-center justify-center max-h-[90vh] overflow-y-auto">
+                <button onclick="closeFeatureArtworkModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                <h1 class="mb-4 text-2xl font-bold">Feature an Artwork</h1>
+                <form id="featureArtworkForm" class="w-full">
+                    <div id="featureArtworkList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+                    <div class="flex justify-end mt-6">
+                        <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-semibold shadow">Save Featured Artworks</button>
+                    </div>
+                </form>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    } else {
+        modal.style.display = '';
+    }
+    modal.classList.remove('hidden');
+
+    // Fetch and display artworks for the logged-in artist
+    const listContainer = document.getElementById('featureArtworkList');
+    if (listContainer) {
+        listContainer.innerHTML = '<div class="text-gray-500 text-center w-full">Loading artworks...</div>';
+    }
+
+    // Get current user
+    const user = auth.currentUser;
+    if (!user) {
+        if (listContainer) listContainer.innerHTML = '<div class="text-red-500 text-center w-full">Not logged in.</div>';
+        return;
+    }
+
+    try {
+        // Query artworks where artistId == user.uid
+        const q = query(collection(db, "artworks"), where("artistId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            if (listContainer) listContainer.innerHTML = '<div class="text-gray-500 text-center w-full">No artworks found.</div>';
+            return;
+        }
+
+        let html = '';
+        querySnapshot.forEach(docSnap => {
+            const art = docSnap.data();
+            const artId = docSnap.id;
+            html += `
+                <label class="relative flex flex-col items-center border rounded-lg p-3 cursor-pointer hover:shadow-lg transition group">
+                    <input type="checkbox" name="featuredArtworks" value="${artId}" class="absolute top-2 left-2 w-5 h-5 accent-orange-500 rounded border-gray-300 focus:ring-2 focus:ring-orange-400" />
+                    <div class="w-32 h-32 mb-2 rounded-full overflow-hidden border flex items-center justify-center bg-gray-100">
+                        <img src="${art.imageUrl || ''}" alt="${art.title || 'Artwork'}" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="font-semibold text-center">${art.title || 'Untitled'}</div>
+                    <div class="text-xs text-gray-500 text-center">${art.medium || ''}</div>
+                </label>
+            `;
+        });
+        if (listContainer) listContainer.innerHTML = html;
+    } catch (err) {
+        if (listContainer) listContainer.innerHTML = '<div class="text-red-500 text-center w-full">Failed to load artworks.</div>';
+        console.error('Error loading artworks:', err);
+    }
+
+    // Optionally, handle form submission for saving featured artworks
+    const form = document.getElementById('featureArtworkForm');
+    if (form) {
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            // Collect checked artwork IDs
+            const checked = Array.from(form.elements['featuredArtworks'])
+                .filter(input => input.checked)
+                .map(input => input.value);
+            // TODO: Save the checked artwork IDs as featured (implement as needed)
+            alert('Selected featured artworks: ' + checked.join(', '));
+            closeFeatureArtworkModal();
+        };
+    }
+}
+
+// Close the "Feature Artwork" modal
+export function closeFeatureArtworkModal() {
+    const modal = document.getElementById('featureArtworkModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+// Make available globally
+window.showEmptyModal = showEmptyModal;
+window.closeEmptyModal = closeEmptyModal;
+window.showFeatureArtworkModal = showFeatureArtworkModal;
+window.closeFeatureArtworkModal = closeFeatureArtworkModal;
