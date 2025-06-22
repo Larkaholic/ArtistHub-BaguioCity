@@ -62,38 +62,45 @@
 
 </head>
 <body class="bg-[#ededed] z-10">
-    <header class="fixed flex justify-between items-center top-0 left-0 right-0 z-30 p-1 glass-header2">
-        <div class="flex w-24 ml-16">
-            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubLogo.png" alt="HeaderLogo" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')" style="cursor: pointer">
+    <header class="flex fixed z-50 max-w-full max-h-full bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-70 backdrop-saturate-100 backdrop-contrast-125 bg-blend-overlay rounded-full right-10 left-10 mt-5 p-2 justify-evenly">
+        <div class="flex">
+            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubOrange.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer; height: 70px;">
         </div>
 
-        <div class="sm:hidden flex items-center mr-5">
-            <button onclick="toggleNav()" class="burger-icon p-2 hover:bg-gray-200 rounded-lg">
-                <svg class="w-6 h-6 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="sm:hidden flex items-center">
+            <button onclick="toggleNav()" class="burger-icon">
+                <svg class="w-8 h-8 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
         </div>
 
-        <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-5">
-            <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a>
+        <nav class="flex items-center space-x-5" style="display:flex !important;">
+            <ul class="text-black text-md flex space-x-10 text-xl font-semibold justify-self-center">
+                <li class="nav-item p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./index.html')">Home</a>
                 </li>
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a>
+                <li class="nav-item p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./index.html#events')">Events</a>
                 </li>
-                <li class="nav-item hover:bg-green-500 p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a>
+                <li class="nav-item p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="navToEvent('./shop/shop.html')">Shop</a>
+                </li>
+                <li class="nav-item p-1 rounded-lg">
+                    <a href="javascript:void(0)" onclick="handleEditProfile()">Profile</a>
+                </li>
+            </ul>
+            
+        </nav>
+        <nav class="flex items-center space-x-5" style="display:flex !important;">
+            <ul class="text-black text-md flex space-x-28 text-xl font-semibold">
+                <li class="nav-item hover:bg-green-500 p-1 rounded-lg admin-button" style="display: none;">
+                    <a href="javascript:void(0)" onclick="navToEvent('./admin/dashboard.html')">Admin</a>
                 </li>
                 <li class="login-button">
-                    <button onclick="toggleLoginFlyout(event)" 
-                            class="nav-item bg-blue-500 text-white p-2 px-2 rounded-lg font-semibold hover:bg-blue-600">
-                        Login
-                    </button>
+                    <button onclick="toggleLoginFlyout(event)" class="nav-login bg-[#f76400] text-white p-1 px-2 rounded-lg font-semibold">Join Community</button>
                 </li>
-                <!-- Profile dropdown container -->
-                <li class="profile-dropdown-container" style="display: none;">
+                <li class="profile-dropdown-container" style="">
                     <div class="relative">
                         <button class="profile-button flex items-center" onclick="toggleProfileDropdown(event)">
                             <img id="userProfilePic" src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
@@ -106,9 +113,18 @@
                                     <p class="text-sm font-semibold text-gray-700" id="profileDropdownName">Loading...</p>
                                     <p class="text-xs text-gray-500" id="profileDropdownEmail">Loading...</p>
                                 </div>
-                                <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
-                                <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                                <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
+                                <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">View Profile</a>
+                                <a href="javascript:void(0)" onclick="openNotificationsModal()" class="flex items-center justify-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center relative">
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                        </svg>
+                                        Notifications
+                                    </div>
+                                    <span id="notificationBadge" class="absolute right-3 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden">0</span>
+                                </a>
+                                <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center">Settings</a>
+                                <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 text-center">Logout</a>
                             </div>
                         </div>
                     </div>
@@ -222,8 +238,8 @@
     </div>
 
     <main class="pt-20 px-4 sm:px-6 lg:px-8 min-h-screen bg-[#ededed]">
-        <div class="container mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 max-w-full w-full mx-auto bg-white rounded-[2.5rem] p-8">
+        <div class="container mx-auto w-full px-0">
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 w-full mx-auto p-8">
                 <!-- Profile Card Container -->
                 <div class="lg:col-span-2 flex items-center justify-center h-full">
                     <div class="profile-card-custom bg-black rounded-3xl flex flex-col items-center shadow-xl w-full max-w-full h-full mx-0 md:mx-32 overflow-visible">
