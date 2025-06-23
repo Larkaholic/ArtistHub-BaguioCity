@@ -89,15 +89,11 @@ export async function handleAdminAction() {
 document.addEventListener('DOMContentLoaded', async () => {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            console.log('User is logged in:', user.uid);
             const isAdmin = await isUserAdmin(user.uid);
-            console.log('is admin:', isAdmin); // check if user is admin
             
             const adminButton = document.querySelector('.admin-only');
-            console.log('admin button element:', adminButton); // check if button exists
             
             if (isAdmin) {
-                console.log('showing admin controls');
                 if (adminButton) {
                     adminButton.style.display = 'flex';
                 }
@@ -259,7 +255,6 @@ export async function showFeatureArtworkModal() {
         if (listContainer) listContainer.innerHTML = html;
     } catch (err) {
         if (listContainer) listContainer.innerHTML = '<div class="text-red-500 text-center w-full">Failed to load artworks.</div>';
-        console.error('Error loading artworks:', err);
     }
 
     // Optionally, handle form submission for saving featured artworks
@@ -286,8 +281,92 @@ export function closeFeatureArtworkModal() {
     }
 }
 
+// change the name in profile rest of the artworks
+document.addEventListener('DOMContentLoaded', () => {
+    const displayName = document.getElementById('displayName');
+    const artistNameArtworks = document.getElementById('artistNameArtworks');
+    function updateArtistNameArtworks() {
+        if (displayName && artistNameArtworks) {
+            const name = displayName.textContent.trim();
+            if (name && name.length > 0) {
+                artistNameArtworks.textContent = name.endsWith('s') ? name + "'" : name + "'s";
+            }
+        }
+    }
+    setTimeout(updateArtistNameArtworks, 300);
+    const observer = new MutationObserver(updateArtistNameArtworks);
+    if (displayName) {
+        observer.observe(displayName, { childList: true, subtree: true });
+    }
+});
+
+// Populate the "rest of the artworks" section with the artist's artworks
+document.addEventListener('DOMContentLoaded', () => {
+    onAuthStateChanged(auth, async (user) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const artistId = urlParams.get('id') || urlParams.get('artistId') || (user && user.uid);
+        if (!artistId) return;
+
+        // Find the container for the artworks grid
+        const parent = document.getElementById('allArtworksTitle');
+        if (!parent) return;
+
+        // Remove any previous grid
+        let existingGrid = parent.parentElement.querySelector('#allArtworksGrid');
+        if (existingGrid) existingGrid.remove();
+
+        // Create the grid container and append it
+        const artworksContainer = document.createElement('div');
+        artworksContainer.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full";
+        artworksContainer.id = "allArtworksGrid";
+        parent.parentElement.appendChild(artworksContainer);
+
+        artworksContainer.innerHTML = `<div class="col-span-full text-gray-500 text-center w-full">Loading artworks...</div>`;
+
+        try {
+            // Fetch from gallery_images instead of artworks
+            const snapshot = await getDocs(collection(db, "gallery_images"));
+            let found = false;
+            let html = '';
+            snapshot.forEach(docSnap => {
+                const art = docSnap.data();
+                if (
+                    (art.artistId && (art.artistId === artistId || art.artistId === user?.uid)) ||
+                    (art.userId && (art.userId === artistId || art.userId === user?.uid))
+                ) {
+                    found = true;
+                    html += `
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+                            <div class="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+                                <img src="${art.imageUrl || ''}" alt="${art.title || 'Artwork'}" class="w-full h-full object-cover" />
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="font-semibold text-lg mb-1">${art.title || 'Untitled'}</h3>
+                                    <p class="text-gray-500 text-sm">${art.medium || ''}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            if (!found) {
+                artworksContainer.innerHTML = `<div class="col-span-full text-gray-500 text-center w-full">No artworks found.</div>`;
+            } else {
+                artworksContainer.innerHTML = html;
+            }
+        } catch (err) {
+            artworksContainer.innerHTML = `<div class="col-span-full text-red-500 text-center w-full">Failed to load artworks.</div>`;
+        }
+    });
+});
+
 // Make available globally
 window.showEmptyModal = showEmptyModal;
+window.closeEmptyModal = closeEmptyModal;
+window.showFeatureArtworkModal = showFeatureArtworkModal;
+window.closeFeatureArtworkModal = closeFeatureArtworkModal;
 window.closeEmptyModal = closeEmptyModal;
 window.showFeatureArtworkModal = showFeatureArtworkModal;
 window.closeFeatureArtworkModal = closeFeatureArtworkModal;

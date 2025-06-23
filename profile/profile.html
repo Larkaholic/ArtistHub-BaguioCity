@@ -44,7 +44,6 @@
                 }
                 
                 if (!allStylesLoaded) {
-                    console.log('Styles not loaded properly, reloading...');
                     window.location.reload();
                 } else {
                     clearInterval(styleCheck);
@@ -251,7 +250,7 @@
                 <!-- Profile Card Container -->
                 <div class="lg:col-span-2 flex items-center justify-center h-full">
                     <div class="profile-card-custom bg-black rounded-3xl flex flex-col items-center shadow-xl w-full max-w-full h-full mx-0 md:mx-32 overflow-visible relative">
-                        <!-- Edit button for profile card (make sure it's rounded) -->
+                        <!-- Edit button for profile card -->
                         <button id="editProfileBtn" 
                             onclick="handleEditProfile()"
                             class="absolute -top-6 -right-6 z-20 bg-white rounded-full border border-orange-500 p-3 shadow hover:bg-gray-100 transition-all flex items-center justify-center"
@@ -322,7 +321,6 @@
                 </div>
                 <!-- featured artworks -->
                 <div class="lg:col-span-3 grid grid-cols-2 gap-6 relative mt-5">
-                    <!-- edit button -->
                     <button id="editArtworksBtn"
                         class="absolute -top-6 -right-6 z-20 bg-white rounded-full border border-orange-500 p-3 shadow hover:bg-gray-100 transition-all flex items-center justify-center"
                         title="Edit Artworks"
@@ -366,6 +364,15 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <!-- rest of the artworks -->
+            <div class="w-full flex justify-center mt-8">
+                <div class="bg-white rounded-2xl shadow-lg flex flex-col items-center py-10 px-8 max-w-full w-full">
+                    <h2 class="text-2xl font-bold mb-6" id="allArtworksTitle">
+                        <span id="artistNameArtworks">Artist's</span> artworks
+                    </h2>
+                    <!-- artworks grid/list here -->
                 </div>
             </div>
         </div>
@@ -413,23 +420,18 @@
                         chooseFilesLabel.classList.add('hidden');
                     }
                 } catch (error) {
-                    console.error("Error checking user status:", error);
                     chooseFilesLabel.classList.add('hidden');
                 }
             });
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOM loaded, checking profile ID');
             const urlParams = new URLSearchParams(window.location.search);
             const profileId = urlParams.get('id');
-            console.log('Profile ID:', profileId);
             
             if (!profileId) {
-                console.log('No profile ID in URL, checking for artistId');
                 const artistId = urlParams.get('artistId');
                 if (artistId) {
-                    console.log('Found artistId:', artistId);
                     window.location.href = `profile.html?id=${artistId}`;
                 }
             }
@@ -464,10 +466,8 @@
 
             try {
                 const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-                console.log('Login successful:', userCredential);
                 window.location.href = 'profile.html';
             } catch (error) {
-                console.error('Login failed:', error);
                 alert('Login failed: ' + error.message);
             }
         }
@@ -476,10 +476,8 @@
         async function handleLogout() {
             try {
                 await firebase.auth().signOut();
-                console.log('Logout successful');
                 window.location.href = 'index.html';
             } catch (error) {
-                console.error('Logout failed:', error);
                 alert('Logout failed: ' + error.message);
             }
         }
@@ -677,7 +675,6 @@
                 event.target.reset();
                 hidePasswordChangeForm();
             } catch (error) {
-                console.error('Password change failed:', error);
             }
         }
 
