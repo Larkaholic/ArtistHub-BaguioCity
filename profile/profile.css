@@ -804,8 +804,6 @@ button,
     padding: 0;
     color: #fff;
     min-width: 340px;
-    max-width: 420px;
-    width: 100%;
     position: relative;
     overflow: visible !important;
     display: flex;
