@@ -299,26 +299,72 @@
                     </h2>
                 </div>
             </div>
-        </div>
-
+        </div>        
         <!-- shop section -->
         <section class="shopPrev h-full">
-            <div class="shopHeader max-w-full mt-24 px-4 md:px-8">
-                <div class="shopSearch flex flex-row justify-evenly items-center mb-6">
-                    <h1 class="explore font-bold text-4xl mb-0">Explore</h1>
-                    <div class="searchContainer flex flex-row items-center gap-3 sm:gap-5 w-auto">
-                        <input class="p-2 rounded-2xl border border-gray-300 w-full sm:w-auto" type="text" name="generalSearch" id="generalSearch" placeholder="Search artworks, artists, genres...">
-                        <select class="p-3 rounded-2xl border border-gray-300 w-full sm:w-auto mt-0" name="categ" id="categ" placeholder="categories">
-                            <option value="" disabled selected>Categories</option>
-                            <!-- options to be dynamically loaded here -->
-                        </select>
+            <div class="shopHeader max-w-7xl mx-auto mt-24 px-4 md:px-8">
+                <!-- Header with Explore title and dropdown -->
+                <div class="flex flex-col mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h1 class="text-4xl font-bold text-gray-900 md:mr-10">Explore</h1>
+                        
+                        <!-- Search and Categories section -->
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <input class="px-4 py-3 pl-12 rounded-full border border-gray-300 w-80 text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                                       type="text" 
+                                       name="generalSearch" 
+                                       id="generalSearch" 
+                                       placeholder="Search Artists, Artworks, or Events">
+                                <svg class="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="relative">
+                                <select class="px-4 py-3 pr-10 rounded-full border border-gray-300 text-gray-600 bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent cursor-pointer" 
+                                        name="categ" 
+                                        id="categ">
+                                    <option value="" disabled selected>Categories</option>
+                                    <!-- options to be dynamically loaded here -->
+                                </select>
+                                <svg class="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="shopFilter justify-start items-center">
-                    <h1 class="artworksDropdown font-bold text-4xl">
-                        Artworks
-                        <i class="fas fa-caret-down"></i>
-                    </h1>
+                
+                <!-- Filter buttons section -->
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="dropdown-container relative">
+                        <button id="dropdownButton" class="text-4xl font-bold text-orange-500 flex items-center cursor-pointer transition-colors hover:text-orange-600 mr-10" onclick="toggleDropdown()">
+                            <span id="dropdownText">Artworks</span>
+                            <svg class="w-4 h-4 ml-2 transition-transform duration-200" id="dropdownIcon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <div id="dropdownMenu" class="dropdown-menu absolute top-full left-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 w-32 z-50 hidden">
+                            <div class="py-1">
+                                <button class="dropdown-item active w-full text-left px-4 py-2 hover:bg-gray-100" data-category="artworks" onclick="selectCategory('artworks')">
+                                    <span>Artworks</span>
+                                </button>
+                                <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-100" data-category="artists" onclick="selectCategory('artists')">
+                                    <span>Artists</span>
+                                </button>
+                                <button class="dropdown-item w-full text-left px-4 py-2 hover:bg-gray-100" data-category="events" onclick="selectCategory('events')">
+                                    <span>Events</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="px-6 py-2 bg-orange-500 text-white rounded-full font-medium hover:bg-orange-600 transition-colors">Paintings</button>
+                    <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">Textiles</button>
+                    <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">Crafts</button>
+                    <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">Digital Art</button>
+                </div>
+                
+                <div class="shopFilter">
                     <div class="dropdownFilter">
                         <!-- filter buttons is to be dynamically loaded here -->
                     </div>
@@ -1022,40 +1068,6 @@
         </div>
     </div>
 
-    <script type="module" src="./js/password-change.js"></script>
-
-    <script>
-        function showPasswordChangeForm() {
-            document.getElementById('settingsMainView').classList.add('hidden');
-            document.getElementById('passwordChangeForm').classList.remove('hidden');
-        }
-
-        function hidePasswordChangeForm() {
-            document.getElementById('settingsMainView').classList.remove('hidden');
-            document.getElementById('passwordChangeForm').classList.add('hidden');
-        }
-
-        async function submitPasswordChange(event) {
-            event.preventDefault();
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            if (newPassword !== confirmPassword) {
-                alert('New passwords do not match');
-                return;
-            }
-
-            try {
-                await handlePasswordChange(currentPassword, newPassword);
-                event.target.reset();
-                hidePasswordChangeForm();
-            } catch (error) {
-                console.error('Password change failed:', error);
-            }
-        }
-    </script>
-
     <!-- Add Notifications Modal -->
     <div id="notificationsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
         <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
@@ -1117,7 +1129,7 @@
                 </ul>
                 <h3 class="font-bold mt-4">4. Use of the Platform</h3>
                 <ul class="list-disc ml-5">
-                    <li>Use the Platform for lawful purposes only.</li>
+                                       <li>Use the Platform for lawful purposes only.</li>
                     <li>Not post or distribute harmful, offensive, or copyrighted materials without permission.</li>
                     <li>Not use the site to harass, threaten, or impersonate others.</li>
                 </ul>

@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        /* Remove or comment out body styles that conflict with Tailwind */
         /*
         body {
             background-image: url('../images/bg.jpg');
@@ -249,13 +248,12 @@
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 w-full mx-auto p-8 mt-10">
                 <!-- Profile Card Container -->
                 <div class="lg:col-span-2 flex items-center justify-center h-full">
-                    <div class="profile-card-custom bg-black rounded-3xl flex flex-col items-center shadow-xl w-full max-w-full h-full mx-0 md:mx-32 overflow-visible relative">
-                        <!-- Edit button for profile card -->
+                    <div class="profile-card-custom bg-black rounded-3xl flex flex-col items-center shadow-xl w-full max-w-full h-full mx-0 md:mx-2 overflow-visible relative">                        <!-- Edit button for profile card -->
                         <button id="editProfileBtn" 
                             onclick="handleEditProfile()"
                             class="absolute -top-6 -right-6 z-20 bg-white rounded-full border border-orange-500 p-3 shadow hover:bg-gray-100 transition-all flex items-center justify-center"
                             title="Edit Profile"
-                            style="width:48px;height:48px;"
+                            style="width:48px;height:48px;display:none;"
                         >
                             <i class="fa fa-pencil text-black text-xl bg-transparent hover:bg-transparent md:mr-3 hover:text-orange-500 rounded-full"></i>
                         </button>
@@ -320,16 +318,16 @@
                     </div>
                 </div>
                 <!-- featured artworks -->
-                <div class="lg:col-span-3 grid grid-cols-2 gap-6 relative mt-5">
-                    <button id="editArtworksBtn"
+                <div class="lg:col-span-3 grid grid-cols-2 gap-6 relative mt-5">                    <button id="editArtworksBtn"
                         class="absolute -top-6 -right-6 z-20 bg-white rounded-full border border-orange-500 p-3 shadow hover:bg-gray-100 transition-all flex items-center justify-center"
                         title="Edit Artworks"
-                        style="width:48px;height:48px;"
+                        style="width:48px;height:48px;display:none;"
                         onclick="showFeatureArtworkModal()">
                         <i class="fa fa-pencil text-black text-xl bg-transparent hover:bg-transparent md:mr-3 hover:text-orange-500"></i>
-                    </button>
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
-                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Artwork 1" class="w-full h-48 object-cover">
+                    </button><div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
+                        <div class="cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageModal('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80', 'Sunset Over Pines', 'Acrylic on Canvas', 'A beautiful sunset painting over pine trees, capturing the golden hour in the mountains.')">
+                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Artwork 1" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
                         <div class="p-4 flex-1 flex flex-col justify-between">
                             <div>
                                 <h3 class="font-semibold text-lg mb-1">Sunset Over Pines</h3>
@@ -338,7 +336,9 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
-                        <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Artwork 2" class="w-full h-48 object-cover">
+                        <div class="cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageModal('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80', 'Mountain Mist', 'Oil on Canvas', 'A mystical mountain landscape shrouded in morning mist, painted with rich oil colors.')">
+                            <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Artwork 2" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
                         <div class="p-4 flex-1 flex flex-col justify-between">
                             <div>
                                 <h3 class="font-semibold text-lg mb-1">Mountain Mist</h3>
@@ -347,7 +347,9 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
-                        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80" alt="Artwork 3" class="w-full h-48 object-cover">
+                        <div class="cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageModal('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80', 'City Lights', 'Digital Art', 'A vibrant digital artwork showcasing the bustling energy of city lights at night.')">
+                            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=400&q=80" alt="Artwork 3" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
                         <div class="p-4 flex-1 flex flex-col justify-between">
                             <div>
                                 <h3 class="font-semibold text-lg mb-1">City Lights</h3>
@@ -356,7 +358,9 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
-                        <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Artwork 4" class="w-full h-48 object-cover">
+                        <div class="cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageModal('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80', 'Forest Dream', 'Watercolor', 'A dreamy watercolor painting of a serene forest scene with soft, flowing colors.')">
+                            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Artwork 4" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
                         <div class="p-4 flex-1 flex flex-col justify-between">
                             <div>
                                 <h3 class="font-semibold text-lg mb-1">Forest Dream</h3>
@@ -381,18 +385,19 @@
         import { navToEvent } from '../js/utils.js';
         
         window.navToEvent = navToEvent;
-        
-        import { 
+          import { 
             toggleLoginFlyout, 
             submitLogin, 
             toggleNav, 
-            toggleForms 
+            toggleForms,
+            checkProfileOwnership 
         } from './profile.js';
 
         window.toggleLoginFlyout = toggleLoginFlyout;
         window.submitLogin = submitLogin;
         window.toggleNav = toggleNav;
         window.toggleForms = toggleForms;
+        window.checkProfileOwnership = checkProfileOwnership;
 
         import { auth, db } from '../js/firebase-config.js';
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -423,9 +428,7 @@
                     chooseFilesLabel.classList.add('hidden');
                 }
             });
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
+        });        document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const profileId = urlParams.get('id');
             
@@ -434,6 +437,11 @@
                 if (artistId) {
                     window.location.href = `profile.html?id=${artistId}`;
                 }
+            }
+            
+            // Check profile ownership for edit button visibility
+            if (window.checkProfileOwnership) {
+                window.checkProfileOwnership();
             }
         });
     </script>

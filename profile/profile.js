@@ -87,6 +87,9 @@ export async function handleAdminAction() {
 
 // update your existing code
 document.addEventListener('DOMContentLoaded', async () => {
+    // Check profile ownership for edit button visibility
+    checkProfileOwnership();
+    
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             const isAdmin = await isUserAdmin(user.uid);
@@ -195,35 +198,83 @@ export async function showFeatureArtworkModal() {
     if (!modal) {
         modal = document.createElement('div');
         modal.id = 'featureArtworkModal';
-        modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50';
+        modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50 backdrop-blur-sm';
         modal.innerHTML = `
-            <div class="bg-white rounded-lg shadow-lg p-8 relative min-w-[900px] min-h-[400px] max-w-5xl w-full flex flex-col items-center justify-center max-h-[90vh] overflow-y-auto">
-                <button onclick="closeFeatureArtworkModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-                <h1 class="mb-4 text-2xl font-bold">Feature an Artwork</h1>
-                <form id="featureArtworkForm" class="w-full">
-                    <div id="featureArtworkList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
-                    <div class="flex justify-end mt-6">
-                        <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded font-semibold shadow">Save Featured Artworks</button>
+            <div class="glass-header2 rounded-3xl shadow-2xl p-8 relative min-w-[900px] min-h-[500px] max-w-6xl w-full flex flex-col items-center justify-center max-h-[90vh] overflow-hidden border border-white border-opacity-20" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);">
+                <!-- Close button -->
+                <button onclick="closeFeatureArtworkModal()" class="absolute top-4 right-4 bg-[#f76400] bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 text-[#fff8ec] hover:text-gray-800 text-xl transition-all hover:scale-110 backdrop-blur-sm border border-white border-opacity-30">
+                    <i class="fa fa-times bg-transparent"></i>
+                </button>
+                
+                <!-- Header Section -->
+                <div class="text-center mb-8">
+                    <div class="inline-block p-4 rounded-full mb-4" style="background: linear-gradient(135deg, #f76400, #ff8c42);">
+                        <i class="fa fa-star text-white text-3xl bg-transparent"></i>
                     </div>
-                </form>
+                    <h1 class="text-4xl font-bold mb-3" style="background: linear-gradient(135deg, #f76400, #ff8c42); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        Feature Your Artworks
+                    </h1>
+                    <p class="text-gray-600 text-lg">Select up to 4 artworks to showcase on your profile</p>
+                </div>
+                
+                <!-- Content Container -->
+                <div class="w-full flex-1 overflow-y-auto px-4" style="max-height: calc(90vh - 250px);">
+                    <form id="featureArtworkForm" class="w-full">
+                        <div id="featureArtworkList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8"></div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex justify-center gap-4 mt-8 pt-6 border-t border-gray-200">
+                            <button type="button" onclick="closeFeatureArtworkModal()" class="px-8 py-3 rounded-xl font-semibold text-gray-600 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-8 py-3 rounded-xl font-semibold text-white border-2 transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #f76400, #ff8c42); border-color: #f76400; box-shadow: 0 4px 15px rgba(247, 100, 0, 0.3);">
+                                <i class="fa fa-star mr-2 bg-transparent"></i>Save Featured Artworks
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         `;
         document.body.appendChild(modal);
+        
+        // Add entrance animation
+        modal.style.opacity = '0';
+        modal.style.transform = 'scale(0.9)';
+        requestAnimationFrame(() => {
+            modal.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+            modal.style.opacity = '1';
+            modal.style.transform = 'scale(1)';
+        });
     } else {
-        modal.style.display = '';
+        modal.style.display = 'flex';
+        modal.classList.remove('hidden');
     }
-    modal.classList.remove('hidden');
 
     // Fetch and display artworks for the logged-in artist
     const listContainer = document.getElementById('featureArtworkList');
     if (listContainer) {
-        listContainer.innerHTML = '<div class="text-gray-500 text-center w-full">Loading artworks...</div>';
+        listContainer.innerHTML = `
+            <div class="col-span-full flex flex-col items-center justify-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2" style="border-color: #f76400;"></div>
+                <p class="text-gray-500 mt-4 text-lg">Loading your artworks...</p>
+            </div>
+        `;
     }
 
     // Get current user
     const user = auth.currentUser;
     if (!user) {
-        if (listContainer) listContainer.innerHTML = '<div class="text-red-500 text-center w-full">Not logged in.</div>';
+        if (listContainer) {
+            listContainer.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-12">
+                    <div class="p-4 rounded-full mb-4 bg-red-100">
+                        <i class="fa fa-exclamation-triangle text-red-500 text-3xl"></i>
+                    </div>
+                    <p class="text-red-500 text-lg font-semibold">Not logged in</p>
+                    <p class="text-gray-500">Please log in to feature your artworks</p>
+                </div>
+            `;
+        }
         return;
     }
 
@@ -233,7 +284,17 @@ export async function showFeatureArtworkModal() {
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-            if (listContainer) listContainer.innerHTML = '<div class="text-gray-500 text-center w-full">No artworks found.</div>';
+            if (listContainer) {
+                listContainer.innerHTML = `
+                    <div class="col-span-full flex flex-col items-center justify-center py-12">
+                        <div class="p-4 rounded-full mb-4 bg-gray-100">
+                            <i class="fa fa-image text-gray-400 text-3xl"></i>
+                        </div>
+                        <p class="text-gray-500 text-lg font-semibold">No artworks found</p>
+                        <p class="text-gray-400">Upload some artworks to feature them on your profile</p>
+                    </div>
+                `;
+            }
             return;
         }
 
@@ -242,22 +303,51 @@ export async function showFeatureArtworkModal() {
             const art = docSnap.data();
             const artId = docSnap.id;
             html += `
-                <label class="relative flex flex-col items-center border rounded-lg p-3 cursor-pointer hover:shadow-lg transition group">
-                    <input type="checkbox" name="featuredArtworks" value="${artId}" class="absolute top-2 left-2 w-5 h-5 accent-orange-500 rounded border-gray-300 focus:ring-2 focus:ring-orange-400" />
-                    <div class="w-32 h-32 mb-2 rounded-full overflow-hidden border flex items-center justify-center bg-gray-100">
-                        <img src="${art.imageUrl || ''}" alt="${art.title || 'Artwork'}" class="w-full h-full object-cover" />
+                <label class="relative flex flex-col items-center p-4 cursor-pointer transition-all duration-300 transform hover:scale-105 group">
+                    <div class="artwork-card-container relative w-full">
+                        <input type="checkbox" name="featuredArtworks" value="${artId}" class="absolute top-3 left-3 w-6 h-6 rounded-lg border-2 border-white shadow-lg transition-all duration-300 z-10" style="accent-color: #f76400;" />
+                        
+                        <!-- Artwork Image -->
+                        <div class="w-full aspect-square rounded-2xl overflow-hidden border-3 border-white shadow-lg group-hover:shadow-xl transition-all duration-300 bg-white">
+                            <img src="${art.imageUrl || ''}" alt="${art.title || 'Artwork'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        </div>
+                        
+                        <!-- Selection Overlay -->
+                        <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                            <div class="text-white">
+                                <div class="w-8 h-8 rounded-full flex items-center justify-center mb-2" style="background: #f76400;">
+                                    <i class="fa fa-star text-sm bg-transparent"></i>
+                                </div>
+                                <p class="text-sm font-semibold">Click to feature</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="font-semibold text-center">${art.title || 'Untitled'}</div>
-                    <div class="text-xs text-gray-500 text-center">${art.medium || ''}</div>
+                    
+                    <!-- Artwork Info -->
+                    <div class="w-full text-center mt-4">
+                        <h3 class="font-bold text-lg mb-1 text-gray-800 line-clamp-1">${art.title || 'Untitled'}</h3>
+                        <p class="text-sm text-gray-500 line-clamp-1">${art.medium || ''}</p>
+                    </div>
                 </label>
             `;
         });
         if (listContainer) listContainer.innerHTML = html;
     } catch (err) {
-        if (listContainer) listContainer.innerHTML = '<div class="text-red-500 text-center w-full">Failed to load artworks.</div>';
+        console.error('Error loading artworks:', err);
+        if (listContainer) {
+            listContainer.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-12">
+                    <div class="p-4 rounded-full mb-4 bg-red-100">
+                        <i class="fa fa-exclamation-circle text-red-500 text-3xl"></i>
+                    </div>
+                    <p class="text-red-500 text-lg font-semibold">Failed to load artworks</p>
+                    <p class="text-gray-500">Please try again later</p>
+                </div>
+            `;
+        }
     }
 
-    // Optionally, handle form submission for saving featured artworks
+    // Handle form submission for saving featured artworks
     const form = document.getElementById('featureArtworkForm');
     if (form) {
         form.onsubmit = function(e) {
@@ -266,8 +356,19 @@ export async function showFeatureArtworkModal() {
             const checked = Array.from(form.elements['featuredArtworks'])
                 .filter(input => input.checked)
                 .map(input => input.value);
+            
+            if (checked.length === 0) {
+                alert('Please select at least one artwork to feature.');
+                return;
+            }
+            
+            if (checked.length > 4) {
+                alert('You can only feature up to 4 artworks.');
+                return;
+            }
+            
             // TODO: Save the checked artwork IDs as featured (implement as needed)
-            alert('Selected featured artworks: ' + checked.join(', '));
+            alert(`Successfully featured ${checked.length} artwork${checked.length > 1 ? 's' : ''}!`);
             closeFeatureArtworkModal();
         };
     }
@@ -277,7 +378,15 @@ export async function showFeatureArtworkModal() {
 export function closeFeatureArtworkModal() {
     const modal = document.getElementById('featureArtworkModal');
     if (modal) {
-        modal.style.display = 'none';
+        // Add exit animation
+        modal.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+        modal.style.opacity = '0';
+        modal.style.transform = 'scale(0.9)';
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+        }, 300);
     }
 }
 
@@ -334,11 +443,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     (art.artistId && (art.artistId === artistId || art.artistId === user?.uid)) ||
                     (art.userId && (art.userId === artistId || art.userId === user?.uid))
                 ) {
-                    found = true;
-                    html += `
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
-                            <div class="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-                                <img src="${art.imageUrl || ''}" alt="${art.title || 'Artwork'}" class="w-full h-full object-cover" />
+                    found = true;                    html += `
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col artwork-item" data-artwork-id="${docSnap.id}">
+                            <div class="w-full h-48 bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageModal('${art.imageUrl || ''}', '${(art.title || 'Untitled').replace(/'/g, "\\'")}', '${(art.medium || '').replace(/'/g, "\\'")}', '${(art.description || '').replace(/'/g, "\\'")}')">
+                                <img src="${art.imageUrl || ''}" alt="${art.title || 'Artwork'}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                             </div>
                             <div class="p-4 flex-1 flex flex-col justify-between">
                                 <div>
@@ -362,11 +470,139 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Image Modal Functions
+export function openImageModal(imageUrl, title, medium, description) {
+    let modal = document.getElementById('imageModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'imageModal';
+        modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50 backdrop-blur-sm';
+        modal.innerHTML = `
+            <div class="relative max-w-6xl max-h-[95vh] w-full h-full flex items-center justify-center p-4">
+                <!-- Close button -->
+                <button onclick="closeImageModal()" class="absolute top-4 right-4 z-60 bg-[#f76400] hover:bg-opacity-30 rounded-full p-3 text-[#fff8ec] text-2xl transition-all hover:scale-110 backdrop-blur-sm">
+                    <i class="fa fa-times bg-transparent"></i>
+                </button>
+                
+                <!-- Image container -->
+                <div class="flex flex-col items-center justify-center w-full h-full">
+                    <div class="flex-1 flex items-center justify-center w-full max-h-[75vh]">
+                        <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-fadeIn" />
+                    </div>
+                    
+                    <!-- Image info -->
+                    <div class="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-6 mt-6 max-w-2xl w-full text-center border border-white border-opacity-20">
+                        <h3 id="modalTitle" class="text-white text-2xl font-bold mb-3"></h3>
+                        <p id="modalMedium" class="text-orange-300 text-lg mb-2 font-medium"></p>
+                        <p id="modalDescription" class="text-gray-200 text-sm leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Animation styles -->
+            <style>
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: scale(0.9); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 0.3s ease-out;
+                }
+            </style>
+        `;
+        document.body.appendChild(modal);
+        
+        // Close modal when clicking outside the image
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeImageModal();
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeImageModal();
+            }
+        });
+    }
+    
+    // Update modal content
+    document.getElementById('modalImage').src = imageUrl;
+    document.getElementById('modalImage').alt = title;
+    document.getElementById('modalTitle').textContent = title || 'Untitled';
+    document.getElementById('modalMedium').textContent = medium || '';
+    document.getElementById('modalDescription').textContent = description || '';
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent body scroll
+    
+    // Add entrance animation
+    requestAnimationFrame(() => {
+        modal.style.opacity = '0';
+        modal.style.transform = 'scale(0.9)';
+        modal.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+        requestAnimationFrame(() => {
+            modal.style.opacity = '1';
+            modal.style.transform = 'scale(1)';
+        });
+    });
+}
+
+export function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        // Add exit animation
+        modal.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+        modal.style.opacity = '0';
+        modal.style.transform = 'scale(0.9)';
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            document.body.style.overflow = ''; // Restore body scroll
+        }, 300);
+    }
+}
+
+// Function to control edit button visibility based on profile ownership
+export function checkProfileOwnership() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const profileId = urlParams.get('id');
+    
+    onAuthStateChanged(auth, async (user) => {
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editArtworksBtn = document.getElementById('editArtworksBtn');
+        
+        if (!user) {
+            // User not logged in - hide edit buttons
+            if (editProfileBtn) editProfileBtn.style.display = 'none';
+            if (editArtworksBtn) editArtworksBtn.style.display = 'none';
+            return;
+        }
+        
+        // Check if user is the owner of the profile or an admin
+        const isOwner = !profileId || profileId === user.uid;
+        const isAdmin = await isUserAdmin(user.uid);
+        const canEdit = isOwner || isAdmin;
+        
+        // Show/hide edit buttons based on ownership or admin status
+        if (editProfileBtn) {
+            editProfileBtn.style.display = canEdit ? 'flex' : 'none';
+        }
+        if (editArtworksBtn) {
+            editArtworksBtn.style.display = canEdit ? 'flex' : 'none';
+        }
+    });
+}
+
 // Make available globally
 window.showEmptyModal = showEmptyModal;
 window.closeEmptyModal = closeEmptyModal;
 window.showFeatureArtworkModal = showFeatureArtworkModal;
 window.closeFeatureArtworkModal = closeFeatureArtworkModal;
-window.closeEmptyModal = closeEmptyModal;
-window.showFeatureArtworkModal = showFeatureArtworkModal;
-window.closeFeatureArtworkModal = closeFeatureArtworkModal;
+window.openImageModal = openImageModal;
+window.closeImageModal = closeImageModal;
+window.checkProfileOwnership = checkProfileOwnership;
