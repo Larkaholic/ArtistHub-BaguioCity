@@ -202,8 +202,8 @@ export async function showFeatureArtworkModal() {
         modal.innerHTML = `
             <div class="glass-header2 rounded-3xl shadow-2xl p-8 relative min-w-[900px] min-h-[500px] max-w-6xl w-full flex flex-col items-center justify-center max-h-[90vh] overflow-hidden border border-white border-opacity-20" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);">
                 <!-- Close button -->
-                <button onclick="closeFeatureArtworkModal()" class="absolute top-4 right-4 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 text-gray-600 hover:text-gray-800 text-xl transition-all hover:scale-110 backdrop-blur-sm border border-white border-opacity-30">
-                    <i class="fa fa-times"></i>
+                <button onclick="closeFeatureArtworkModal()" class="absolute top-4 right-4 bg-[#f76400] bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 text-[#fff8ec] hover:text-gray-800 text-xl transition-all hover:scale-110 backdrop-blur-sm border border-white border-opacity-30">
+                    <i class="fa fa-times bg-transparent"></i>
                 </button>
                 
                 <!-- Header Section -->
@@ -480,8 +480,8 @@ export function openImageModal(imageUrl, title, medium, description) {
         modal.innerHTML = `
             <div class="relative max-w-6xl max-h-[95vh] w-full h-full flex items-center justify-center p-4">
                 <!-- Close button -->
-                <button onclick="closeImageModal()" class="absolute top-4 right-4 z-60 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-3 text-white text-2xl transition-all hover:scale-110 backdrop-blur-sm">
-                    <i class="fa fa-times"></i>
+                <button onclick="closeImageModal()" class="absolute top-4 right-4 z-60 bg-[#f76400] hover:bg-opacity-30 rounded-full p-3 text-[#fff8ec] text-2xl transition-all hover:scale-110 backdrop-blur-sm">
+                    <i class="fa fa-times bg-transparent"></i>
                 </button>
                 
                 <!-- Image container -->
