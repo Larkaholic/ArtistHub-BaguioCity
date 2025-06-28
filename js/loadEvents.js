@@ -137,25 +137,71 @@ function loadFloatingEvents(events, limit = 3) {
     
     // Get the most recent events limited by screen size
     const recentEvents = events.slice(0, itemsToShow);
+// Render floating event cards with individual hover-based dropdowns
+floatingEventContainer.innerHTML = recentEvents.map(event => {
+  const title = event.title || "Untitled Event";
+  const location = event.location || "No location specified";
+  const date = event.startDate || "No date available";
+  const description = event.description || "No description available";
+  const imageUrl = event.imageUrl || 'images/events/default-event.jpg';
 
-    floatingEventContainer.innerHTML = recentEvents.map(event => `
-        <div class="event-preview-card overflow-hidden rounded-lg  hover:shadow-xl transition-shadow duration-300 cursor-pointer" data-id="${event.id}" style="border: 2px solid #f76400;">
-            <img src="${event.imageUrl || 'images/events/default-event.jpg'}" 
-                 alt="${event.title}" 
-                 class="w-full h-40 md:h-48 object-cover">
-            <div class="p-4 bg-white">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">${event.title}</h3>
-                <div class="flex items-center text-sm text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <p>${event.location}</p>
-                </div>
-                
-            </div>
+  return `
+    <div class="event-preview-card rounded-lg shadow transition-all duration-300 cursor-pointer border-2 border-orange-500 group relative">
+
+      <!-- Event Image -->
+      <img 
+        src="${imageUrl}" 
+        alt="${title}" 
+        class="w-full h-40 md:h-48 object-cover border-b-2 border-orange-500">
+
+      <!-- Event Title -->
+      <div class="p-4 bg-white border-b-2 border-orange-500">
+        <h3 class="text-2xl font-bold text-gray-800 mb-2 text-center">${title}</h3>
+      </div>
+
+      <div class="absolute left-0 top-full w-full bg-white border-t-2 border-orange-500 px-6 py-6 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto max-h-0 group-hover:max-h-[400px] overflow-hidden transition-all duration-300 ease-in-out text-sm shadow-xl rounded-b-lg z-10">
+        <div class="grid gap-4 text-gray-700">
+          <div class="flex items-start">
+            <span class="w-28 font-semibold text-orange-600">Date:</span>
+            <span class="flex-1">${date}</span>
+          </div>
+          <div class="flex items-start">
+            <span class="w-28 font-semibold text-orange-600">Location:</span>
+            <span class="flex items-center flex-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              ${location}
+            </span>
+          </div>
+          <div class="flex items-start">
+            <span class="w-28 font-semibold text-orange-600">Description:</span>
+            <span class="flex-1">${description}</span>
+          </div>
         </div>
-    `).join('');
+      </div>
+    </div>
+  `;
+}).join('');
+
+// Enable toggling of dropdowns
+floatingEventContainer.querySelectorAll('.toggle-details-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const content = btn.nextElementSibling;
+    if (content.classList.contains('hidden')) {
+      content.classList.remove('hidden');
+      btn.textContent = 'Hide Details';
+    } else {
+      content.classList.add('hidden');
+      btn.textContent = 'Show Details';
+    }
+  });
+});
+
 
     // Add click handlers for the preview cards
     const previewCards = floatingEventContainer.querySelectorAll('.event-preview-card');
