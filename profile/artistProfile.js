@@ -3,16 +3,12 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getBasePath } from '../js/utils.js';
 
-// Debugging: Verify the script is loaded
-console.log('artistProfile.js loaded');
-
 // Extract profile ID from the URL or use current user's ID if not specified
 const urlParams = new URLSearchParams(window.location.search);
 const profileId = urlParams.get('id');
 
 // Load artist profile data
 async function loadProfile() {
-    console.log('loadProfile called');
     try {
         let userIdToLoad = profileId;
         
@@ -21,10 +17,7 @@ async function loadProfile() {
             const currentUser = auth.currentUser;
             if (currentUser) {
                 userIdToLoad = currentUser.uid;
-                console.log('Using current user ID:', userIdToLoad);
             } else {
-                console.log('No user is logged in and no profile ID provided');
-                // Optional: redirect to login page or show a message
                 return;
             }
         }
@@ -32,7 +25,6 @@ async function loadProfile() {
         const userDoc = await getDoc(doc(db, "users", userIdToLoad));
         if (userDoc.exists()) {
             const userData = userDoc.data();
-            console.log('User data loaded:', userData);
 
             // Profile Image
             const profileImage = document.getElementById('profileImage');
@@ -84,7 +76,6 @@ async function loadProfile() {
             // Fix social media icons
             ensureSocialIcons();
         } else {
-            console.log('No user data found');
         }
     } catch (error) {
         console.error("Error loading profile:", error);
@@ -129,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const galleryButton = document.getElementById('dynamicGalleryButton');
         galleryButton.setAttribute('onclick', `navToEvent('Gallery/gallery.html?artistId=${artistId}')`);
     } else {
-        console.error("Artist ID not found.");
     }
 });
 
@@ -190,7 +180,6 @@ window.handleAdminAction = async function(profileId) {
 
 // Ensure profile loads on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, calling loadProfile');
     loadProfile();
 });
 
@@ -199,11 +188,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileImage = document.getElementById('profileImage');
     if (profileImage) {
         profileImage.addEventListener('load', () => {
-            console.log('Profile image loaded');
             profileImage.style.visibility = 'visible';
         });
         profileImage.addEventListener('error', () => {
-            console.log('Profile image failed to load');
             profileImage.src = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
         });
     }
@@ -243,14 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Initialize profile when auth state changes
 auth.onAuthStateChanged((user) => {
     if (user) {
-        console.log('User is signed in:', user.uid);
-        // If no specific profile is requested, load the current user's profile
         if (!profileId) {
             loadProfile();
         }
     } else {
-        console.log('No user is signed in');
-        // Handle not logged in state if needed
     }
 });
 //             break;
@@ -278,11 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileImage = document.getElementById('profileImage');
     if (profileImage) {
         profileImage.addEventListener('load', () => {
-            console.log('Profile image loaded');
             profileImage.style.visibility = 'visible';
         });
         profileImage.addEventListener('error', () => {
-            console.log('Profile image failed to load');
             profileImage.src = 'https://github.com/ALmiiiii/ArtistHub-BaguioCity/blob/master/images/default-profile.png?raw=true';
         });
     }

@@ -45,3 +45,67 @@ function closeAnnouncement() {
 
 // Make closeAnnouncement available globally
 window.closeAnnouncement = closeAnnouncement;
+
+// Dropdown functionality for Explore section
+function toggleDropdown() {
+    const dropdown = document.getElementById('dropdownMenu');
+    const icon = document.getElementById('dropdownIcon');
+    
+    if (dropdown && icon) {
+        dropdown.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+}
+
+function selectCategory(category) {
+    const dropdownText = document.getElementById('dropdownText');
+    const dropdown = document.getElementById('dropdownMenu');
+    const icon = document.getElementById('dropdownIcon');
+    const items = document.querySelectorAll('.dropdown-item');
+    
+    // Update text based on category
+    const categoryNames = {
+        'artworks': 'Artworks',
+        'artists': 'Artists', 
+        'events': 'Events'
+    };
+    
+    if (dropdownText) {
+        dropdownText.textContent = categoryNames[category] || 'Artworks';
+    }
+    
+    // Update active state
+    items.forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.category === category) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Close dropdown
+    if (dropdown && icon) {
+        dropdown.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+    }
+    
+    // Handle category switching logic here
+    console.log('Selected category:', category);
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdownMenu');
+    const button = document.getElementById('dropdownButton');
+    
+    if (dropdown && button && !button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add('hidden');
+        const icon = document.getElementById('dropdownIcon');
+        if (icon) {
+            icon.classList.remove('rotate-180');
+        }
+    }
+});
+
+// Make dropdown functions available globally
+window.toggleDropdown = toggleDropdown;
+window.selectCategory = selectCategory;

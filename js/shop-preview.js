@@ -112,8 +112,6 @@ async function loadArtworkPreview() {
             const data = doc.data();
             const artwork = { id: doc.id, ...data };
             
-            console.log(`Processing artwork: ${artwork.title || 'Untitled'}`);
-            
             // Get appropriate icon for the genre
             const genre = artwork.genre || artwork.category || 'default';
             const genreIcon = genreIcons[genre.toLowerCase()] || genreIcons.default;
@@ -168,7 +166,6 @@ async function loadArtworkPreview() {
         console.log("Artwork preview loaded successfully!");
         
     } catch (error) {
-        console.error("Error loading artwork preview:", error);
         sampleArtsContainer.innerHTML = `
             <div class="text-center text-red-500 my-8">
                 <p>Error loading artworks: ${error.message}</p>
