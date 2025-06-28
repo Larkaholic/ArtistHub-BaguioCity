@@ -209,7 +209,7 @@ export async function showFeatureArtworkModal() {
                 <!-- Header Section -->
                 <div class="text-center mb-8">
                     <div class="inline-block p-4 rounded-full mb-4" style="background: linear-gradient(135deg, #f76400, #ff8c42);">
-                        <i class="fa fa-star text-white text-3xl bg-transparent"></i>
+                        <i class="fa fa-star text-white text-3xl bg-transparent "></i>
                     </div>
                     <h1 class="text-4xl font-bold mb-3" style="background: linear-gradient(135deg, #f76400, #ff8c42); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                         Feature Your Artworks
@@ -228,7 +228,7 @@ export async function showFeatureArtworkModal() {
                                 Cancel
                             </button>
                             <button type="submit" class="px-8 py-3 rounded-xl font-semibold text-white border-2 transition-all duration-300 transform hover:scale-105 shadow-lg" style="background: linear-gradient(135deg, #f76400, #ff8c42); border-color: #f76400; box-shadow: 0 4px 15px rgba(247, 100, 0, 0.3);">
-                                <i class="fa fa-star mr-2 bg-transparent"></i>Save Featured Artworks
+                                <i class="fa fa-star mr-2 bg-transparent text-white"></i>Save Featured Artworks
                             </button>
                         </div>
                     </form>
