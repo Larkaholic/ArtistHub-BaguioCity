@@ -88,8 +88,57 @@ function selectCategory(category) {
         icon.classList.remove('rotate-180');
     }
     
-    // Handle category switching logic here
+    // Handle category switching logic - show/hide containers
+    const artworksContainer = document.getElementById('artworksContainer');
+    const artistsContainer = document.getElementById('artistsContainer');
+    const eventsContainer = document.getElementById('eventsContainer');
+    
+    // Hide all containers
+    if (artworksContainer) artworksContainer.classList.add('hidden');
+    if (artistsContainer) artistsContainer.classList.add('hidden');
+    if (eventsContainer) eventsContainer.classList.add('hidden');
+    
+    // Show selected container and load appropriate content
+    switch(category) {
+        case 'artworks':
+            if (artworksContainer) artworksContainer.classList.remove('hidden');
+            // Load artworks functionality can be added here
+            break;
+        case 'artists':
+            if (artistsContainer) artistsContainer.classList.remove('hidden');
+            // Load artists using the loadAllArtists function
+            loadAllArtistsFromModule();
+            break;
+        case 'events':
+            if (eventsContainer) eventsContainer.classList.remove('hidden');
+            // Load events using the loadAllEvents function
+            loadAllEventsFromModule();
+            break;
+    }
+    
     console.log('Selected category:', category);
+}
+
+// Function to load all artists - will be connected to loadArtists.js
+async function loadAllArtistsFromModule() {
+    try {
+        // Dynamic import to avoid module loading issues
+        const { loadAllArtists } = await import('./js/loadArtists.js');
+        await loadAllArtists();
+    } catch (error) {
+        console.error('Error loading artists:', error);
+    }
+}
+
+// Function to load all events - will be connected to loadEvents.js
+async function loadAllEventsFromModule() {
+    try {
+        // Dynamic import to avoid module loading issues
+        const { loadAllEvents } = await import('./js/loadEvents.js');
+        await loadAllEvents();
+    } catch (error) {
+        console.error('Error loading events:', error);
+    }
 }
 
 // Close dropdown when clicking outside

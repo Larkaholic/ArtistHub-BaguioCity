@@ -369,7 +369,8 @@
                         <!-- filter buttons is to be dynamically loaded here -->
                     </div>
                 </div>
-                <div class="sampleArts">
+                <!-- Content containers for different categories -->
+                <div class="sampleArts" id="artworksContainer">
                     <!-- Artwork cards will be dynamically loaded here -->
                     <div class="loading-spinner my-10 flex justify-center">
                         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
@@ -428,12 +429,26 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Artists Grid Container -->
+                <div class="artistsGrid hidden" id="artistsContainer">
+                    <div id="allArtistsGrid">
+                        <!-- Artists will be dynamically loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Events Container -->
+                <div class="eventsGrid hidden" id="eventsContainer">
+                    <div id="allEventsGrid">
+                        <!-- Events will be dynamically loaded here -->
+                    </div>
+                </div>
             </div>
         </section>
     
         <!-- artists section -->
-        <section id="featuredArtistsSection" class="flex flex-col gap-4 p-4">
-            <!-- title container -->
+        <!-- <section id="featuredArtistsSection" class="flex flex-col gap-4 p-4">
+            title container
             <div class="header text-center py-1 mt-10 w-full flex ml-4 justify-start items-center">
                 <h3 class="text-3xl font-bold text-black ml-5">FEATURED ARTISTS</h3>
             </div>
@@ -453,14 +468,14 @@
                 </div>
             </div>
             
-            <!-- artist grid container -->
+            artist grid container
             <div class="rounded-lg p-2 overflow-y-auto" style="max-height: 100vh;">
                 <div id="featuredArtistsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- artists will dynamically load here -->
+                    artists will dynamically load here
                 </div>
             </div>
         </section>
-   
+    -->
         
         <!-- through the years -->
         <section class="baguio-timeline-section my-8">

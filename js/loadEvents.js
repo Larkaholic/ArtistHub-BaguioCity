@@ -218,6 +218,89 @@ function addEventClickHandlers() {
     });
 }
 
+// New function to load all events for the shop section
+export async function loadAllEvents() {
+    const eventsGrid = document.getElementById('allEventsGrid');
+    if (!eventsGrid) {
+        console.error('allEventsGrid element not found');
+        return;
+    }
+    
+    try {
+        eventsGrid.innerHTML = '<div class="loading-spinner my-10 flex justify-center col-span-full"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div></div>';
+        
+        // Load all events from the events collection
+        const q = query(collection(db, "events"), orderBy("startDate", "desc"));
+        const querySnapshot = await getDocs(q);
+        const events = [];
+        
+        querySnapshot.forEach((doc) => {
+            events.push({ id: doc.id, ...doc.data() });
+        });
+
+        if (events.length === 0) {
+            eventsGrid.innerHTML = '<p class="text-center text-gray-600 col-span-full">No events found</p>';
+            return;
+        }
+
+        // Clear loading spinner
+        eventsGrid.innerHTML = '';
+
+        // Display events in a grid (limit to 12 for consistent layout)
+        const displayEvents = events.slice(0, 12);
+        
+        displayEvents.forEach(event => {
+            const card = document.createElement('div');
+            card.className = `bg-white rounded-lg border-2 shadow-lg overflow-hidden flex flex-col event-card h-full`;
+            card.style.borderColor = '#f76400';
+
+            const startDate = formatDate(event.startDate);
+            const endDate = formatDate(event.endDate);
+            const imageUrl = event.imageUrl || 'https://via.placeholder.com/300x200?text=Event+Image';
+
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${imageUrl}" alt="${event.title}" 
+                        class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4 bg-white bg-opacity-90 px-3 py-1 rounded-full">
+                        <p class="text-sm font-semibold text-gray-800">${startDate}</p>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow h-full">
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold mb-2 text-black">${event.title}</h3>
+                        <div class="flex items-center gap-1 mb-2">
+                            <i class="fas fa-map-marker-alt text-sm text-gray-600"></i>
+                            <p class="text-sm text-gray-600">${event.location}</p>
+                        </div>
+                        <div class="flex items-center gap-1 mb-3">
+                            <i class="fas fa-calendar text-sm text-gray-600"></i>
+                            <p class="text-sm text-gray-600">${startDate} - ${endDate}</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto flex bottom-0 flex-shrink-0">
+                        <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2"
+                            style="background-color: #f76400; color: white;">
+                            View Event
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            card.querySelector('button').onclick = () => {
+                const basePath = getBasePath();
+                window.location.href = `${basePath}/events/events.html?id=${event.id}`;
+            };
+
+            eventsGrid.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Error loading all events:", error);
+        eventsGrid.innerHTML = '<div class="text-center text-gray-600 col-span-full">Error loading events</div>';
+    }
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', loadEvents);
 
