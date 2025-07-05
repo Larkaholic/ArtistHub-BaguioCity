@@ -111,7 +111,8 @@ function selectCategory(category) {
             break;
         case 'events':
             if (eventsContainer) eventsContainer.classList.remove('hidden');
-            // Load events functionality can be added here
+            // Load events using the loadAllEvents function
+            loadAllEventsFromModule();
             break;
     }
     
@@ -126,6 +127,17 @@ async function loadAllArtistsFromModule() {
         await loadAllArtists();
     } catch (error) {
         console.error('Error loading artists:', error);
+    }
+}
+
+// Function to load all events - will be connected to loadEvents.js
+async function loadAllEventsFromModule() {
+    try {
+        // Dynamic import to avoid module loading issues
+        const { loadAllEvents } = await import('./js/loadEvents.js');
+        await loadAllEvents();
+    } catch (error) {
+        console.error('Error loading events:', error);
     }
 }
 

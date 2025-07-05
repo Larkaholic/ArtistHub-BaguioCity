@@ -1454,7 +1454,8 @@
     
     /* Ensure all artist cards have consistent height in both grids */
     #featuredArtistsGrid > div,
-    #allArtistsGrid > div {
+    #allArtistsGrid > div,
+    #allEventsGrid > div {
         height: 100%;
         min-height: 350px;
         max-height: 400px;
@@ -1466,13 +1467,15 @@
 
     /* Ensure consistent spacing and layout */
     #featuredArtistsGrid > div > div:last-child,
-    #allArtistsGrid > div > div:last-child {
+    #allArtistsGrid > div > div:last-child,
+    #allEventsGrid > div > div:last-child {
         margin-top: auto;
     }
 
     /* Force equal height for all cards in grid */
     #featuredArtistsGrid,
-    #allArtistsGrid {
+    #allArtistsGrid,
+    #allEventsGrid {
         display: grid;
         gap: 1rem;
         align-items: stretch;
@@ -1505,21 +1508,87 @@
     /* Responsive grid layout for consistency */
     @media (max-width: 768px) {
         #featuredArtistsGrid,
-        #allArtistsGrid {
+        #allArtistsGrid,
+        #allEventsGrid {
             grid-template-columns: 1fr;
         }
     }
 
     @media (min-width: 769px) and (max-width: 1024px) {
         #featuredArtistsGrid,
-        #allArtistsGrid {
+        #allArtistsGrid,
+        #allEventsGrid {
             grid-template-columns: repeat(2, 1fr);
         }
     }
 
     @media (min-width: 1025px) {
         #featuredArtistsGrid,
-        #allArtistsGrid {
+        #allArtistsGrid,
+        #allEventsGrid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    /* ==========================================================================
+        EVENTS GRID STYLES
+        ========================================================================== */
+    
+    .eventsGrid {
+        margin-top: 2rem;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        overflow-y: auto;
+        max-height: 100vh;
+    }
+    
+    .eventsGrid #allEventsGrid {
+        display: grid;
+        gap: 1rem;
+        align-items: stretch;
+        justify-items: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Event card consistency */
+    .event-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        min-height: 350px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Specific fixes for events grid items */
+    #allEventsGrid .event-card {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Responsive adjustments for events grid */
+    @media (max-width: 768px) {
+        .eventsGrid #allEventsGrid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .eventsGrid #allEventsGrid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (min-width: 1025px) {
+        .eventsGrid #allEventsGrid {
             grid-template-columns: repeat(3, 1fr);
         }
     }
