@@ -253,6 +253,8 @@
         ========================================================================== */
     .shopPrev {
         margin-bottom: 2rem;
+        min-height: auto;
+        padding: 2rem 0;
     }
 
     .shopHeader {
@@ -325,7 +327,7 @@
     .sampleArts {
         margin-top: 2rem;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 1.5rem;
         overflow-x: auto;
         width: 100%;
@@ -373,6 +375,13 @@
         display: flex;
         flex-direction: column;
         background-color: #fff8ec;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+
+    .artwork-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     .artwork-card .p-4 {
@@ -516,10 +525,14 @@
         min-width: 200px;
         transition: transform 0.2s;
         padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
     
     .artist-card:hover {
         transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
     
     .search-button:hover {
@@ -1370,4 +1383,143 @@
     .filter-tag.active:hover {
         background: #e55a00;
         border-color: #e55a00;
+    }
+
+    /* ==========================================================================
+        Shop Section and Artists Grid Styles
+        ========================================================================== */
+    
+    .shopPrev {
+        min-height: auto;
+        padding: 2rem 0;
+    }
+    
+    .sampleArts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .artistsGrid {
+        margin-top: 2rem;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        overflow-y: auto;
+        max-height: 100vh;
+    }
+    
+    .artistsGrid #allArtistsGrid {
+        display: grid;
+        gap: 1rem;
+        align-items: stretch;
+        justify-items: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .artwork-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .artwork-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Responsive adjustments for artists grid to match featured artists */
+    @media (max-width: 768px) {
+        .artistsGrid #allArtistsGrid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .artistsGrid #allArtistsGrid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (min-width: 1025px) {
+        .artistsGrid #allArtistsGrid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    
+    /* ==========================================================================
+    ARTIST CARDS CONSISTENCY
+    ========================================================================== */
+    
+    /* Ensure all artist cards have consistent height in both grids */
+    #featuredArtistsGrid > div,
+    #allArtistsGrid > div {
+        height: 100%;
+        min-height: 350px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Ensure consistent spacing and layout */
+    #featuredArtistsGrid > div > div:last-child,
+    #allArtistsGrid > div > div:last-child {
+        margin-top: auto;
+    }
+
+    /* Force equal height for all cards in grid */
+    #featuredArtistsGrid,
+    #allArtistsGrid {
+        display: grid;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    /* Additional card consistency rules */
+    .artist-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        min-height: 350px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .artist-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Specific fixes for grid items */
+    #allArtistsGrid .artist-card {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Responsive grid layout for consistency */
+    @media (max-width: 768px) {
+        #featuredArtistsGrid,
+        #allArtistsGrid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        #featuredArtistsGrid,
+        #allArtistsGrid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #featuredArtistsGrid,
+        #allArtistsGrid {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
