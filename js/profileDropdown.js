@@ -1,5 +1,5 @@
 import { auth } from './firebase-config.js';
-import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { handleEditProfile } from './profile-navigation.js';
 
 function initProfileDropdown() {
@@ -185,11 +185,10 @@ function initProfileDropdown() {
                     const userData = userDoc.data();
                     
                     // Update admin button visibility based on isAdmin property
-                    const adminButtons = document.querySelectorAll('.admin-button');
-                    adminButtons.forEach(button => {
-                        button.style.display = userData.isAdmin === true ? 'block' : 'none';
-                    });
-
+                    // Handle both boolean true and string "true", and check for missing field
+                    const isAdmin = userData.isAdmin === true || userData.isAdmin === 'true';
+                    updateAdminButtons(isAdmin);
+                    
                     // Update profile picture
                     if (userData.photoURL) {
                         userProfilePic.src = userData.photoURL;
@@ -235,10 +234,7 @@ function initProfileDropdown() {
             if (mobileLogoutButton) mobileLogoutButton.style.display = 'none';
             
             // Hide admin button when logged out
-            const adminButtons = document.querySelectorAll('.admin-button');
-            adminButtons.forEach(button => {
-                button.style.display = 'none';
-            });
+            updateAdminButtons(false);
             
             // Reset mobile profile link if needed
             if (mobileProfileLink) {
@@ -308,6 +304,86 @@ function navigateToUserProfile() {
     // Navigate to profile page
     window.location.href = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
 }
+
+// Enhanced admin button management
+function updateAdminButtons(isAdmin) {
+    const adminButtons = document.querySelectorAll('.admin-button');
+    
+    adminButtons.forEach((button, index) => {
+        if (isAdmin) {
+            button.style.display = 'block';
+            button.style.visibility = 'visible';
+        } else {
+            button.style.display = 'none';
+            button.style.visibility = 'hidden';
+        }
+    });
+    
+    // Also check for admin buttons that might be added later
+    setTimeout(() => {
+        const lateButtons = document.querySelectorAll('.admin-button');
+        lateButtons.forEach((button) => {
+            if (isAdmin) {
+                button.style.display = 'block';
+                button.style.visibility = 'visible';
+            } else {
+                button.style.display = 'none';
+                button.style.visibility = 'hidden';
+            }
+        });
+    }, 1000);
+}
+
+// Test function to manually check admin status - for debugging
+window.testAdminStatus = async function() {
+    const { auth } = await import('./firebase-config.js');
+    const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+    
+    const user = auth.currentUser;
+    if (user) {
+        const db = getFirestore();
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            console.log('=== ADMIN STATUS DEBUG ===');
+            console.log('User ID:', user.uid);
+            console.log('User data:', userData);
+            console.log('isAdmin value:', userData.isAdmin);
+            console.log('isAdmin type:', typeof userData.isAdmin);
+            console.log('Admin buttons found:', document.querySelectorAll('.admin-button').length);
+            
+            // Force show admin buttons for testing
+            const adminButtons = document.querySelectorAll('.admin-button');
+            adminButtons.forEach((button, index) => {
+                console.log(`Admin button ${index}:`, button);
+                console.log(`Current display style:`, button.style.display);
+                button.style.display = 'block';
+                button.style.backgroundColor = 'yellow'; // Highlight for testing
+            });
+        }
+    } else {
+        console.log('No user logged in');
+    }
+};
+
+
+
+// Force show admin buttons for testing
+window.forceShowAdminButtons = function() {
+    console.log('Forcing admin buttons to show...');
+    updateAdminButtons(true);
+    
+    // Double-check and force override any CSS
+    setTimeout(() => {
+        const adminButtons = document.querySelectorAll('.admin-button');
+        adminButtons.forEach((button, index) => {
+            button.style.display = 'block !important';
+            button.style.visibility = 'visible !important';
+            button.style.backgroundColor = 'lightgreen';
+            console.log(`Forced button ${index} to show:`, button);
+        });
+    }, 500);
+};
 
 // Make these functions available globally
 window.toggleProfileDropdown = function(event) {

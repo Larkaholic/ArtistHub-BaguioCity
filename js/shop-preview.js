@@ -163,7 +163,6 @@ async function loadArtworkPreview() {
         artworksHTML += `</div>`;
                 
         sampleArtsContainer.innerHTML = artworksHTML;
-        console.log("Artwork preview loaded successfully!");
         
     } catch (error) {
         sampleArtsContainer.innerHTML = `
