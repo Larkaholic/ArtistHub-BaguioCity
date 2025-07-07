@@ -28,9 +28,9 @@
     </script>
 </head>
 <body class="bg-cover">
-    <header class="flex fixed z-50 max-w-full max-h-full bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-70 backdrop-saturate-100 backdrop-contrast-125 bg-blend-overlay rounded-full right-10 left-10 mt-5 p-2 justify-evenly">
+    <header class="flex fixed z-50 max-w-full max-h-full bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-70 backdrop-saturate-100 backdrop-contrast-125 bg-blend-overlay rounded-full right-10 left-10 mt-5 p-2 justify-evenly" data-aos="fade-down" data-aos-duration="1000">
         <div class="flex">
-            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubOrange.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer; height: 70px;">
+            <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubOrange.png" alt="HeaderLogo" onclick="navToEvent('index.html')" style="cursor: pointer; height: 70px;" data-aos="zoom-in" data-aos-delay="200">
         </div>
 
         <div class="sm:hidden flex items-center">
@@ -150,7 +150,7 @@
 
     <div id="LoginFlyout" class="flyout fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
         <!-- Login Form -->
-        <div id="loginForm" class="glass-header2 items-center rounded-lg w-96 mx-10">
+        <div id="loginForm" class="glass-header2 items-center rounded-lg w-96 mx-10" data-aos="zoom-in" data-aos-duration="300">
             <h2 class="flex justify-center font-bold text-2xl my-4">Login</h2>
             <form id="loginFormElement" onsubmit="handleLogin(event)">
                 <div class="mx-2 mb-4">
@@ -190,7 +190,7 @@
             </form>
         </div>
         <!-- register -->
-        <div id="registerForm" class="glass-header2 items-center rounded-lg w-96 mx-10 hidden">
+        <div id="registerForm" class="glass-header2 items-center rounded-lg w-96 mx-10 hidden" data-aos="zoom-in" data-aos-duration="300">
             <h2 class="flex justify-center font-bold text-2xl my-4">Register</h2>
             <form onsubmit="return handleRegister(event)">
                 <div class="mx-2 mb-4">
@@ -242,14 +242,14 @@
     <main class="hero-section max-w-full h-screen">
         <!-- hero section -->
         <section id="landingPage" class="">
-            <div class="banner mt-36 ml-2 sm:ml-36 sm:mt-56 bg-white rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-40 border border-gray-100">
-                <h1 class="banner-text p-2 tracking-wide ml-5">
+            <div class="banner mt-36 ml-2 sm:ml-36 sm:mt-56 bg-white rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-40 border border-gray-100" data-aos="fade-up" data-aos-duration="1200">
+                <h1 class="banner-text p-2 tracking-wide ml-5" data-aos="fade-right" data-aos-delay="300">
                 A Digital Home for <br>Every <span class="banner-span font-mono tracking-tighter" style="color: #f76400; -webkit-text-stroke: 0.1px black; text-stroke: 0.1px black;">Cordilleran Artists</span>
                 </h1>
-                <p class="bannerSub ml-2 p-3 font-semibold justify-self-center items-center">
+                <p class="bannerSub ml-2 p-3 font-semibold justify-self-center items-center" data-aos="fade-left" data-aos-delay="500">
                     Showcase your craft, connect with the community, and grow your artistic journey.
                 </p>
-                <div class="bannerbuttons flex justify-evenly mt-3 tracking-widest text-xl">
+                <div class="bannerbuttons flex justify-evenly mt-3 tracking-widest text-xl" data-aos="fade-up" data-aos-delay="700">
                     <button class="decline p-3 rounded-xl px-3 sm:px-6">Browse Artworks</button>
                     <button class="confirm p-3 rounded-xl px-3 sm:px-6">Join as Artist</button>
                 </div>
@@ -283,17 +283,17 @@
         </section> -->
 
         <div class="introduction flex-col">
-            <div class="floatingEvent flex gap-10 rounded-3xl max-w-full justify-self-center bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-100 backdrop-saturate-100 backdrop-contrast-125 bg-blend-overlay shadow-xl">
+            <div class="floatingEvent flex gap-10 rounded-3xl max-w-full justify-self-center bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-100 backdrop-saturate-100 backdrop-contrast-125 bg-blend-overlay shadow-xl" data-aos="fade-up" data-aos-duration="1000">
                 <div class="dataDiv p-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <!-- Events will be loaded dynamically here -->
                 </div>
             </div>
             <div class="mt-12 ">
-                <h1 class="head font-bold text-4xl md:text-6xl sm:text-5xl text-center" style="position:relative;">
+                <h1 class="head font-bold text-4xl md:text-6xl sm:text-5xl text-center" style="position:relative;" data-aos="fade-up" data-aos-delay="200">
                     A Platform Built to Celebrate and <br>
                     Uplift <span class="underline-artistry font-mono tracking-tighter">Local Artistry</span>
                 </h1>
-                <div class="flex max-w-full mx-4 sm:mx-32 justify-center mt-4">
+                <div class="flex max-w-full mx-4 sm:mx-32 justify-center mt-4" data-aos="fade-up" data-aos-delay="400">
                     <h2 class="headSub text-center max-w-96 break-keep text-gray-600">
                         Artisthub is a digital platform designed to empower Cordilleran artists by
                         providing a centralized web space to showcase their ta lents, connect with
@@ -306,12 +306,12 @@
         <section class="shopPrev h-full">
             <div class="shopHeader max-w-7xl mx-auto mt-24 px-4 md:px-8">
                 <!-- Header with Explore title and dropdown -->
-                <div class="flex flex-col mb-6">
+                <div class="flex flex-col mb-6" data-aos="fade-up">
                     <div class="flex items-center justify-between mb-4">
-                        <h1 class="text-4xl font-bold text-gray-900 md:mr-10">Explore</h1>
+                        <h1 class="text-4xl font-bold text-gray-900 md:mr-10" data-aos="fade-right" data-aos-delay="100">Explore</h1>
                         
                         <!-- Search and Categories section -->
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-4" data-aos="fade-left" data-aos-delay="200">
                             <div class="relative">
                                 <input class="px-4 py-3 pl-12 rounded-full border border-gray-300 w-80 text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
                                        type="text" 
@@ -338,7 +338,7 @@
                 </div>
                 
                 <!-- Filter buttons section -->
-                <div class="flex items-center gap-3 mb-8">
+                <div class="flex items-center gap-3 mb-8" data-aos="fade-up" data-aos-delay="300">
                     <div class="dropdown-container relative">
                         <button id="dropdownButton" class="text-4xl font-bold text-orange-500 flex items-center cursor-pointer transition-colors hover:text-orange-600 mr-10" onclick="toggleDropdown()">
                             <span id="dropdownText">Artworks</span>
@@ -372,7 +372,7 @@
                     </div>
                 </div>
                 <!-- Content containers for different categories -->
-                <div class="sampleArts" id="artworksContainer">
+                <div class="sampleArts" id="artworksContainer" data-aos="fade-up" data-aos-delay="400">
                     <!-- Artwork cards will be dynamically loaded here -->
                     <div class="loading-spinner my-10 flex justify-center">
                         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
@@ -481,11 +481,11 @@
         
         <!-- through the years -->
         <section class="baguio-timeline-section my-8">
-            <div class="header text-center py-1 mt-10 w-full flex ml-4 justify-start items-center" style="position: relative; z-index: 30;">
+            <div class="header text-center py-1 mt-10 w-full flex ml-4 justify-start items-center" style="position: relative; z-index: 30;" data-aos="fade-up">
                 <h3 class="text-3xl font-bold text-black ml-5">THROUGH THE YEARS</h3>
             </div>
             
-            <div class="relative w-full flex justify-center mb-2">
+            <div class="relative w-full flex justify-center mb-2" data-aos="fade-up" data-aos-delay="200">
                 <button class="timeline-search-btn border-2 border-green-600" onclick="toggleTimelineSearch()">
                     <i class="fas fa-search"></i>
                 </button>
@@ -500,8 +500,8 @@
                 </div>
             </div>
 
-            <div class="baguio-timeline-backgrounds"></div>
-            <div class="baguio-timeline-content-wrapper">
+            <div class="baguio-timeline-backgrounds" data-aos="fade-in" data-aos-delay="400"></div>
+            <div class="baguio-timeline-content-wrapper" data-aos="fade-up" data-aos-delay="600">
                 <div class="baguio-timeline-navigation"></div>
                 <div class="baguio-timeline-content-box">
                     <div class="baguio-timeline-year baguio-timeline-fade-in"></div>
@@ -515,7 +515,7 @@
         <footer class="lrk-footer-wrapper py-8 px-4">
             <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
                 <!-- Brand Section -->
-                <div class="footer-brand flex flex-col items-start gap-4 mb-6 md:mb-0 text-left drop-shadow-lg drop-shadow-red-500">
+                <div class="footer-brand flex flex-col items-start gap-4 mb-6 md:mb-0 text-left drop-shadow-lg drop-shadow-red-500" data-aos="fade-right" data-aos-delay="200">
                     <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/artisthubOrange.png" 
                          alt="Artist Hub Logo" 
                          class="footerLogo h-12 md:h-24 object-contain">
@@ -529,7 +529,7 @@
                 </div>
         
                 <!-- Navigation and Social Links -->
-                <div class="footer-socials-nav flex flex-row items-center md:items-center mr-10 gap-10">
+                <div class="footer-socials-nav flex flex-row items-center md:items-center mr-10 gap-10" data-aos="fade-left" data-aos-delay="400">
                     <!-- Navigation Links -->
                     <nav class="lrk-nav-container f flex flex-col md:flex-col md:space-x-4 mb-4 md:mb-0">
                         <h3 class="font-bold mb-2 md:mb-0">Useful Links</h3>
@@ -569,14 +569,14 @@
 
         <!-- Contact Us Modal -->
         <div id="contactModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
-            <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+            <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl" data-aos="zoom-in" data-aos-duration="300">
                 <button onclick="closeContactModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
                 <h2 class="text-center font-bold text-2xl mb-6">Contact Us</h2>
-                <form>
+                <form data-aos="fade-up" data-aos-delay="200">
                     <div class="mb-4">
                         <label for="contactName" class="block font-medium">Name:</label>
                         <input type="text" id="contactName" class="block mt-1 p-2 border border-gray-400 rounded-md w-full" placeholder="Enter your name" required>
@@ -614,7 +614,32 @@
         document.addEventListener("DOMContentLoaded", function() {
             AOS.init({
                 duration: 1500,
-                once:true,
+                once: true,
+                offset: 100,
+                easing: 'ease-in-out'
+            });
+            
+            // Re-initialize AOS when content is dynamically loaded
+            const observer = new MutationObserver(() => {
+                AOS.refresh();
+            });
+            
+            // Observe changes in containers that have dynamic content
+            const containers = [
+                document.getElementById('artworksContainer'),
+                document.getElementById('artistsContainer'),
+                document.getElementById('eventsContainer'),
+                document.querySelector('.dataDiv'),
+                document.querySelector('.baguio-timeline-content-box')
+            ];
+            
+            containers.forEach(container => {
+                if (container) {
+                    observer.observe(container, {
+                        childList: true,
+                        subtree: true
+                    });
+                }
             });
         });
     </script>
@@ -870,14 +895,14 @@
     
     <!-- User Type Selection Modal -->
     <div id="userTypeModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 hidden" style="z-index: 3000;">
-        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl" data-aos="zoom-in" data-aos-duration="300">
             <button onclick="cancelUserTypeSelection()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
             <h2 class="text-center font-bold text-2xl mb-6">Select Account Type</h2>
-            <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4" data-aos="fade-up" data-aos-delay="200">
                 <button onclick="selectUserType('artist')" class="py-4 px-6 rounded-lg hover:bg-gray-100 transition-all border-2 border-green-500 hover:border-green-600">
                     <h3 class="font-bold text-lg mb-2">Artist</h3>
                     <p class="text-sm text-gray-600">Create an artist profile to showcase your work and connect with art enthusiasts</p>
