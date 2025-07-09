@@ -179,8 +179,8 @@
     }
 
     .banner {
-        width: 360px;
-        height: 600px;
+        width: 300px;
+        height: 470px;
     }
     
     .banner-span {
@@ -192,12 +192,6 @@
         color: #f76400;
         display: inline-block;
         z-index: 1;
-    }
-
-
-    .banner-text {
-        font-size:xxx-large;
-        font-weight: 700;
     }
 
     .bannerSub {

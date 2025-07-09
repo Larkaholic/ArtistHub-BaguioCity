@@ -108,7 +108,7 @@
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
                     <li class="relative">
-                        <button id="profileLinkMobile" class="flex items-center w-full">
+                        <button id="profileLinkMobile" class="flex items-center w-full justify-center" onclick="toggleNav(event)">
                             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
                                  alt="Profile" 
                                  class="w-8 h-8 rounded-full object-cover border-2 border-green-500 mr-2">
@@ -137,7 +137,7 @@
                             Cart (<span id="cartCountMobile">0</span>)
                         </a>
                     </li>
-                    <li class="login-button">
+                    <li class="login-button bg-[#f76400] rounded-md">
                         <button onclick="toggleLoginFlyout(event)" class="nav-login py-2 px-4 text-white rounded-lg w-full">Join Community</button>
                     </li>
                     <li class="logout-button" style="display: none;">
@@ -243,15 +243,15 @@
         <!-- hero section -->
         <section id="landingPage" class="">
             <div class="banner mt-36 ml-2 sm:ml-36 sm:mt-56 bg-white rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-40 border border-gray-100" data-aos="fade-up" data-aos-duration="1200">
-                <h1 class="banner-text p-2 tracking-wide ml-5" data-aos="fade-right" data-aos-delay="300">
-                A Digital Home for <br>Every <span class="banner-span font-mono tracking-tighter" style="color: #f76400; -webkit-text-stroke: 0.1px black; text-stroke: 0.1px black;">Cordilleran Artists</span>
+                <h1 class="font-bold text-4xl p-5 tracking-wide ml-5" data-aos="fade-right" data-aos-delay="300">
+                A Digital Home for <br> Every <span class="banner-span tracking-tighter" style="color: #f76400;">Cordilleran Artists</span>
                 </h1>
-                <p class="bannerSub ml-2 p-3 font-semibold justify-self-center items-center" data-aos="fade-left" data-aos-delay="500">
+                <p class="bannerSub ml-2 p-3 font-normal justify-self-center items-center text-lg" data-aos="fade-left" data-aos-delay="500">
                     Showcase your craft, connect with the community, and grow your artistic journey.
                 </p>
-                <div class="bannerbuttons flex justify-evenly mt-3 tracking-widest text-xl" data-aos="fade-up" data-aos-delay="700">
-                    <button class="decline p-3 rounded-xl px-3 sm:px-6">Browse Artworks</button>
-                    <button class="confirm p-3 rounded-xl px-3 sm:px-6">Join as Artist</button>
+                <div class="bannerbuttons flex justify-evenly mt-3 tracking-widest text-normal md:text-lg p-2 gap-2" data-aos="fade-up" data-aos-delay="700">
+                    <button class="decline md:p-3 rounded-xl px-3 md:px-3 sm:px-6">Browse Artworks</button>
+                    <button onclick="toggleLoginFlyout(event)" class="confirm md:p-3 rounded-xl px-3 md:px-3 sm:px-6">Join as Artist</button>
                 </div>
             </div>
         </section>
@@ -283,7 +283,7 @@
         </section> -->
 
         <div class="introduction flex-col">
-            <div class="floatingEvent flex gap-10 rounded-3xl max-w-full justify-self-center bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-100 backdrop-saturate-100 backdrop-contrast-125 bg-blend-overlay shadow-xl" data-aos="fade-up" data-aos-duration="1000">
+            <div class="floatingEvent flex gap-10 rounded-3xl max-w-full justify-self-center bg-white bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-100 backdrop-saturate-100 backdrop-contrast-125 bg-blend-overlay shadow-xl">
                 <div class="dataDiv p-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <!-- Events will be loaded dynamically here -->
                 </div>
@@ -705,6 +705,14 @@
     <script>
         function toggleLoginFlyout(event) {
             if (event) event.preventDefault();
+            
+            // Hide the flyout menu if it's open
+            const flyoutMenu = document.getElementById('flyout-menu');
+            if (flyoutMenu && !flyoutMenu.classList.contains('translate-x-full')) {
+                flyoutMenu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+            }
+            
             const flyout = document.getElementById('LoginFlyout');
             flyout.classList.toggle('hidden');
         }
