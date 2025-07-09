@@ -11,6 +11,7 @@ import {
     serverTimestamp,
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { addNotification } from '../js/notifications.js';
 
 // Load pending artist registrations
 export async function loadPendingArtists() {
@@ -318,6 +319,24 @@ export async function approveArtist(artistId) {
                     "idVerification.deletionAttemptedAt": serverTimestamp()
                 });
             }
+        }
+        
+        // Add notification for the approved artist
+        try {
+            await addNotification(
+                artistId,
+                'artist_approved',
+                'Artist Profile Approved! 🎨',
+                'Congratulations! Your artist profile has been approved. You can now configure your profile and start showcasing your artwork.',
+                {
+                    approvalDate: new Date().toISOString(),
+                    canConfigureProfile: true
+                }
+            );
+            console.log('Notification added for approved artist');
+        } catch (notificationError) {
+            console.error('Error adding notification:', notificationError);
+            // Don't fail the approval if notification fails
         }
         
         alert("Artist approved successfully!" + idDeletionMessage);
