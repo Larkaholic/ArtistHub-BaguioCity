@@ -108,7 +108,7 @@
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
                     <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
                     <li class="relative">
-                        <button id="profileLinkMobile" class="flex items-center w-full">
+                        <button id="profileLinkMobile" class="flex items-center w-full" onclick="toggleNav(event)">
                             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
                                  alt="Profile" 
                                  class="w-8 h-8 rounded-full object-cover border-2 border-green-500 mr-2">
@@ -705,6 +705,14 @@
     <script>
         function toggleLoginFlyout(event) {
             if (event) event.preventDefault();
+            
+            // Hide the flyout menu if it's open
+            const flyoutMenu = document.getElementById('flyout-menu');
+            if (flyoutMenu && !flyoutMenu.classList.contains('translate-x-full')) {
+                flyoutMenu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+            }
+            
             const flyout = document.getElementById('LoginFlyout');
             flyout.classList.toggle('hidden');
         }
