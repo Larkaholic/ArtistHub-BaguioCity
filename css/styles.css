@@ -179,8 +179,8 @@
     }
 
     .banner {
-        width: 360px;
-        height: 600px;
+        width: 300px;
+        height: 470px;
     }
     
     .banner-span {
@@ -192,12 +192,6 @@
         color: #f76400;
         display: inline-block;
         z-index: 1;
-    }
-
-
-    .banner-text {
-        font-size:xxx-large;
-        font-weight: 700;
     }
 
     .bannerSub {
@@ -979,14 +973,6 @@
     z-index: 9999;
 }
 
-#flyout-menu .login-button button.nav-login {
-    background-color: #f76400;
-    color: white;
-    font-weight: 600;
-    width: 100%;
-    text-align: center;
-}
-
 #flyout-menu .logout-button {
     display: none;
 }
@@ -1182,7 +1168,6 @@
     /* color: #f76400; */
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1599,48 +1584,5 @@
     @media (min-width: 1025px) {
         .eventsGrid #allEventsGrid {
             grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    /* ==========================================================================
-        Mobile navigation improvements
-        ========================================================================== */
-    @media (max-width: 640px) {
-        #flyout-menu {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        #flyout-menu .glass-header {
-            border-radius: 0 0 0 20px;
-            box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        #flyout-menu li a,
-        #flyout-menu li button {
-            font-weight: 600;
-            display: block;
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-        
-        #flyout-menu li a:hover,
-        #flyout-menu li button:hover:not(.nav-login) {
-            background-color: rgba(247, 100, 0, 0.1);
-            color: #f76400;
-        }
-        
-        #flyout-menu .login-button {
-            margin-top: 20px;
-        }
-        
-        #flyout-menu .login-button button.nav-login:hover {
-            background-color: #e35a00;
-        }
-        
-        /* Fix for modal displays */
-        .modal-container.flex {
-            display: flex !important;
         }
     }
