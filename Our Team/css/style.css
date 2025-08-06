@@ -32,6 +32,7 @@ body {
   text-align: center;
 }
 
+/*
 .title-container img {
   width: 250px;
   max-width: 80%;
@@ -43,6 +44,7 @@ body {
 .title-container img:hover {
   transform: scale(1.05);
 }
+  */
 
 .header {
   display: flex;
@@ -194,8 +196,8 @@ body {
 }
 
 .logo-container img {
-  width: 200px;
-  max-width: 80%;
+  width: 55%;
+  max-width: 90%;
   height: auto;
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
   transition: transform 0.3s ease;
@@ -236,17 +238,17 @@ body {
   .info p {
     font-size: 15px;
   }
-
+/*
   .title {
     font-size: 30px;
-  }
+    }
 
   .title-container img {
     width: 70%;
   }
-
+*/
   .logo-container img {
-    width: 150px;
+    width: 300%;
   }
 
   .socials img {
