@@ -3,129 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ArtistHub - Our Team</title>
-  <link rel="stylesheet" href="./css/style.css" />
-  <link rel="icon" href="https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/artisthubLogo.png?raw=true" type="image/x-icon" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+  <title>Our Team</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div class="blur-background"></div>
+  <div class="header">
+    <a href="/" class="back-button">← Back to Home</a>
+    <div class="title-container">
+    <img src="./img/meet the team.png" alt="Main Logo">
+  </div>
+  </div>
 
-  
-  <div id="content" style="opacity: 1; pointer-events: auto;">
-    <!-- Button to go back to the home page -->
-    <button class="back-button" type="button" onclick="navToEvent('index.html')">Back to Home Page</button>
+  <div class="tabs">
+    <button class="tab active" onclick="showProfile(0)">UI/UX Designer</button>
+    <button class="tab" onclick="showProfile(1)">Web Analysis</button>
+    <button class="tab" onclick="showProfile(2)">Frontend Developer</button>
+    <button class="tab" onclick="showProfile(3)">Full-stack Developer</button>
+  </div>
 
-    <div class="main">
-      <div class="title">Our Team</div>
-
-      <br><br><br><br><br>
-      <div class="card_container">
-        <!-- Card 1 -->
-        <div class="card">
-          <div class="squareBox"></div>
-          <div class="round_box"></div>
-          <div class="img_box">
-            <img src="./img/Sir Leandro.jpg" alt="">
-          </div>
-          <br><br><br><br>
-          <div class="user_content">
-            <h5 class="name">Leandro Rey Gepila</h5>
-            <p class="post">UI/UX Designer</p>
-            <br>
-            <!-- Social Media Links -->
-            <ul class="sci">
-              <li style="--i: 1"><a href="#"><i class="fab fa-instagram"></i></a></li>
-              <li style="--i: 2"><a href="#"><i class="fab fa-github"></i></a></li>
-              <li style="--i: 3"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-            </ul>
+  <div class="team-container">
+    <div id="profiles">
+      <div class="profile active">
+        <img src="./img/Sir Leandro.jpg" alt="UI/UX Designer">
+        <div class="info">
+          <h2>Leandro Rey Gepila</h2>
+          <p>Expert in crafting clean and intuitive designs with years of experience in UI/UX design for web and mobile platforms.</p>
+          <div class="socials">
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Google"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn"></a>
           </div>
         </div>
-        
-        <!-- Card 2 -->
-        <div class="card">
-          <div class="squareBox"></div>
-          <div class="round_box"></div>
-          <div class="img_box">
-            <img src="./img/Sir venn.png" alt="">
-          </div>
-          <br><br><br><br>
-          <div class="user_content">
-            <h5 class="name">Venn Edward Nicolas</h5>
-            <p class="post">Web Analysis</p>
-            <br>
-            <!-- Social Media Links -->
-            <ul class="sci">
-              <li style="--i: 1"><a href="#"><i class="fab fa-instagram"></i></a></li>
-              <li style="--i: 2"><a href="#"><i class="fab fa-github"></i></a></li>
-              <li style="--i: 3"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-            </ul>
+      </div>
+      <div class="profile">
+        <img src="./img/Sir venn.png" alt="Web Analyst">
+        <div class="info">
+          <h2>Venn Edward Nicolas</h2>
+          <p>Passionate about data-driven decisions, specializing in user behavior analytics and performance optimization.</p>
+          <div class="socials">
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Google"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn"></a>
           </div>
         </div>
-
-        <!-- Card 3 -->
-        <div class="card">
-          <div class="squareBox"></div>
-          <div class="round_box"></div>
-          <div class="img_box">
-            <img src="./img/Kyle.png" alt="">
-          </div>
-          <br><br><br><br>
-          <div class="user_content">
-            <h5 class="name">Kyle Joshua Noel Alvaro</h5>
-            <p class="post">Front-End Developer</p>
-            <br>
-            <!-- Social Media Links -->
-            <ul class="sci">
-              <li style="--i: 1"><a href="#"><i class="fab fa-instagram"></i></a></li>
-              <li style="--i: 2"><a href="#"><i class="fab fa-github"></i></a></li>
-              <li style="--i: 3"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-            </ul>
+      </div>
+      <div class="profile">
+        <img src="./img/Kyle.png" alt="Frontend Developer">
+        <div class="info">
+          <h2>Kyle Joshua Noel Alvaro</h2>
+          <p>Specialist in crafting responsive interfaces and visually refined UIs using HTML and CSS, driven by creativity and self-taught design insights.</p>
+          <div class="socials">
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Google"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn"></a>
           </div>
         </div>
-
-        <!-- Card 4 -->
-        <div class="card">
-          <div class="squareBox"></div>
-          <div class="round_box"></div>
-          <div class="img_box">
-            <img src="./img/Lark.png" alt="">
-          </div>
-          <br><br><br><br>
-          <div class="user_content">
-            <h5 class="name">Lark Dominique Orillos</h5>
-            <p class="post">Back-End Developer</p>
-            <br>
-            <!-- Social Media Links -->
-            <ul class="sci">
-              <li style="--i: 1"><a href="#"><i class="fab fa-instagram"></i></a></li>
-              <li style="--i: 2"><a href="#"><i class="fab fa-github"></i></a></li>
-              <li style="--i: 3"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="card">
-          <div class="squareBox"></div>
-          <div class="round_box"></div>
-          <div class="img_box">
-            <img src="./img/sir Art.jfif" alt="">
-          </div>
-          <br><br><br><br>
-          <div class="user_content">
-            <h5 class="name">Joel Arthur Tibaldo</h5>
-            <p class="post">Executive, Director CBCC</p>
-            <br>
-            <!-- Social Media Links -->
-            <ul class="sci">
-              <li style="--i: 1"><a href="#"><i class="fab fa-instagram"></i></a></li>
-              <li style="--i: 2"><a href="#"><i class="fab fa-github"></i></a></li>
-              <li style="--i: 3"><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-            </ul>
+      </div>
+      <div class="profile">
+        <img src="./img/Lark.png" alt="Full-stack Developer">
+        <div class="info">
+          <h2>Lark Dominique Orillos</h2>
+          <p>Full-stack developer with a strong focus on building responsive and user-friendly interfaces using HTML, CSS, JavaScript, Tailwind CSS, React, and TypeScript. Experienced in backend development with Node.js, PHP, Laravel, Python, and Java, and skilled in designing scalable and efficient system architectures.</p>
+          <div class="socials">
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Google"></a>
+            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn"></a>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="logo-container">
+    <img src="/images/artisthubOrange.png" alt="Main Logo">
+  </div>
+
+  <script src="script/script.js"></script>
 </body>
 </html>

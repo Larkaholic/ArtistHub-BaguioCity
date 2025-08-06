@@ -1,171 +1,256 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300&family=Poppins:wght@300&display=swap');
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background: url('/images/background.png') no-repeat center center fixed;
-    background-size: cover; /* Ensures the image covers the entire viewport */
-    background-attachment: fixed; /* Keeps the image fixed while scrolling */
-    height: 100vh; /* Makes sure the body takes up the full height of the viewport */
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.blur-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/images/background.png') no-repeat center center;
+  background-size: cover;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+
+/* TITLE LOGO ABOVE */
+.title-container {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.title-container img {
+  width: 250px;
+  max-width: 80%;
+  height: auto;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.title-container img:hover {
+  transform: scale(1.05);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .back-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #391d0f;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-      z-index: 1000;
-    }
-
-    .back-button:hover {
-      background: #955428;
-      transform: scale(1.1);
-    }
-
-.main{
-    margin: 10px;
+  background-color: #6c63ff;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 999px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  white-space: nowrap;
 }
 
-.main .title{
-    font-size: 50px;
-    margin-bottom: 15px;
+.back-button:hover {
+  transform: scale(1.1);
+}
+
+.title {
+  font-size: 60px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  flex: 1 1 100%;
+}
+
+.tabs {
+  margin-bottom: 30px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.tab:hover, .tab.active {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.tab:nth-child(1) { background-color: #6c63ff; }
+.tab:nth-child(2) { background-color: #00c897; }
+.tab:nth-child(3) { background-color: #00b4d8; }
+.tab:nth-child(4) { background-color: #a259ff; }
+
+.team-container {
+  width: 100%;
+  max-width: 1000px;
+  background: rgba(255, 255, 255, 0.6); /* semi-transparent */
+  border-radius: 20px;
+  backdrop-filter: blur(10px); /* ✅ adds blur to background */
+  -webkit-backdrop-filter: blur(10px); /* for Safari support */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  transition: all 0.3s ease;
+}
+
+.team-container:hover {
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.2);
+}
+
+.profile {
+  display: none;
+  animation: fade 0.5s ease forwards;
+}
+
+.profile.active {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+
+.profile img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.info h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.info p {
+  margin-bottom: 20px;
+  color: #444;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.socials {
+  margin-top: 20px;
+}
+
+.socials a {
+  display: inline-block;
+  margin-right: 15px;
+  transition: transform 0.3s ease;
+}
+
+.socials a:hover {
+  transform: scale(1.2);
+}
+
+.socials img {
+  width: 30px;
+  height: 30px;
+}
+
+/* MAIN LOGO BELOW */
+.logo-container {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.logo-container img {
+  width: 200px;
+  max-width: 80%;
+  height: auto;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.logo-container img:hover {
+  transform: scale(1.05);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 768px) {
+  .profile {
+    flex-direction: column;
     text-align: center;
-    color: #f1f5f9;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
+  }
 
-.main .card_container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 30px;
-}
+  .profile img {
+    margin: 0 auto;
+    width: 280px;
+    height: 280px;
+  }
 
-.card_container .card{
-    max-width: 410px;
-    margin-top: 50px;
-    border-radius: 20px;
-    background: #1e293b;
-    border: 0.5px solid #f1f5f9;
-    padding: 15px;
-    color: #f1f5f9;
-    position: relative;
-}
+  .info h2 {
+    font-size: 24px;
+  }
 
-.user_content .name{
-    font-size: 20px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-} 
-
-.user_content .post{
+  .info p {
     font-size: 15px;
-    color: #6e77d3;
-    margin: 15px 0;
-    font-weight: 400;
-    font-family: 'Nunito Sans', sans-serif;
-    position: relative;
-    left: 16px;
-}
+  }
 
-.user_content .post::before{
-    content: "";
-    height: 1px;
-    width: 15px;
-    background: #6c77d3;
-    position: absolute;
-    top: 50%;
-    left: -16px;
-}
+  .title {
+    font-size: 30px;
+  }
 
-.fa-solid{
-    color: #ffc107;
-}
+  .title-container img {
+    width: 70%;
+  }
 
-.transparent{
-    color: transparent;
-}
+  .logo-container img {
+    width: 150px;
+  }
 
-.user_content .about{
-    color: #cbd5e1;
-    font-family: 'Poppins', sans-serif;
-    margin-top: 10px;
-    font-size: 13px;
+  .socials img {
+    width: 30px !important;
+    height: 30px !important;
+  }
 }
-
-.card .round_box{
-    position: absolute;
-    top: -20%;
-    right: 5%;
-    background: #1e293b !important;
-    width: 130px;
-    height: 130px;
-    border: 1px solid #f1f5f9;
-    border-radius: 50%;
-    z-index: 333;
-}
-
-.card .img_box{
-    position: absolute;
-    top: -20%;
-    right: 5%;
-    z-index: 555;
-}
-
-.card .img_box img{
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    padding: 10px;
-}
-
-/* Social Icons Style */
-.sci {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-    list-style: none;
-}
-
-.sci li {
-    position: relative;
-    transition: all 0.3s ease-in-out;
-}
-
-.sci li a {
-    color: #f1f5f9;
-    font-size: 20px;
-    text-decoration: none;
-    transition: color 0.3s ease-in-out;  /* Transition color change */
-}
-
-.sci li:hover {
-    transform: scale(1.1);  /* Slightly enlarge the icons on hover */
-}
-
-.sci li a:hover {
-    color: #6e77d3;  /* Change color on hover */
-}
-
-.sci li i {
-    transition: color 0.3s ease-in-out;
-}
-
-/* Optional: Add a scale effect to the icons themselves */
-.sci li a:hover i {
-    color: #6e77d3;  /* Change icon color on hover */
-    transform: scale(1.2);  /* Slightly enlarge the icon */
-}
-
