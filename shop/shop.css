@@ -107,11 +107,11 @@
             box-shadow: none !important;
         }
         
-        .solid-header {
+        /* .solid-header {
             background: #FFF2C8 !important;
             transition: all 0.3s ease !important;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-        }
+        } */
 
         /* Glass Effect Styles */
         .glass-header {
