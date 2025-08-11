@@ -1,10 +1,6 @@
 import { db } from './firebase-config.js';
 import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
-    ? '' 
-    : '/';
-
 let allArtists = [];
 
 export async function loadArtists() {
@@ -68,7 +64,7 @@ export async function loadArtists() {
             `;
 
             card.querySelector('button').onclick = () => {
-                window.location.href = `${baseUrl}/profile/profile.html?id=${artist.id}`;
+                window.location.href = `/profile/profile.html?id=${artist.id}`;
             };
 
             artistsGrid.appendChild(card);

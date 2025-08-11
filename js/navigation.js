@@ -8,10 +8,6 @@ export function initNavigation() {
                 window.location.href = path;
                 return;
             }
-            const baseUrl = window.location.hostname.includes() 
-
-                ? '/'
-                : '';
 
             const cleanPath = path.startsWith('/') ? path.slice(1) : path;
             const hasAnchor = cleanPath.includes('#');

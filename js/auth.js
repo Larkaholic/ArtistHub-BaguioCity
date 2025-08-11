@@ -26,11 +26,6 @@ function goToProfile() {
     window.location.href = './profile/profile.html';
 }
 
-// get base url for both environments
-const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
-    ? '' 
-    : '/ArtistHub-BaguioCity';
-
 // registration handler
 window.handleRegister = async function(event) {
     event.preventDefault();
@@ -101,9 +96,9 @@ window.handleLogin = async function(e) {
 
         // Secure redirect without exposing role
         if (userData?.isAdmin) {
-            window.location.href = `${baseUrl}/admin/dashboard.html`;
+            window.location.href = `/admin/dashboard.html`;
         } else {
-            window.location.href = `${baseUrl}/profile/profile.html`;
+            window.location.href = `/profile/profile.html`;
         }
 
     } catch (error) {
@@ -555,9 +550,9 @@ window.selectRole = async function(role) {
         
         // Redirect based on role
         if (role === 'artist') {
-            window.location.href = `${baseUrl}/profile/edit-profile.html`;
+            window.location.href = `/profile/edit-profile.html`;
         } else {
-            window.location.href = `${baseUrl}/profile/profile.html`;
+            window.location.href = `/profile/profile.html`;
         }
     } catch (error) {
         console.error('Error saving user role:', error);
