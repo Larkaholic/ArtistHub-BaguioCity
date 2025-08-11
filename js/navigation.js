@@ -49,10 +49,6 @@ window.handleProfileNavigation = async () => {
                 return;
             }
         }
-        
-        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-            ? '/'
-            : '';
             
         const profileUrl = `/profile/profile.html?id=${auth.currentUser.uid}`;
         window.location.href = profileUrl;

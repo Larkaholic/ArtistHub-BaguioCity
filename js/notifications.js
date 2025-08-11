@@ -316,13 +316,9 @@ window.closeArtistApprovalModal = function() {
 
 // Navigate to edit profile
 window.navigateToEditProfile = function() {
-    // Get the base URL for GitHub Pages
-    const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-        ? '/ArtistHub-BaguioCity'
-        : '';
     
     // Navigate to edit profile page
-    window.location.href = `${baseUrl}/profile/edit-profile.html`;
+    window.location.href = `/profile/edit-profile.html`;
     
     // Close the modal
     closeArtistApprovalModal();
