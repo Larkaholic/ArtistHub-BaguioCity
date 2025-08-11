@@ -64,7 +64,7 @@ export async function loadArtists() {
             `;
 
             card.querySelector('button').onclick = () => {
-                window.location.href = `/profile/profile.html?id=${artist.id}`;
+                window.location.href = `profile/profile.html?id=${artist.id}`;
             };
 
             artistsGrid.appendChild(card);
@@ -132,7 +132,7 @@ export async function loadAllArtists() {
             `;
 
             card.querySelector('button').onclick = () => {
-                window.location.href = `/profile/profile.html?id=${artist.id}`;
+                window.location.href = `profile/profile.html?id=${artist.id}`;
             };
 
             artistsGrid.appendChild(card);
