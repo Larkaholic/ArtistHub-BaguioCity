@@ -3,7 +3,7 @@ import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/fireba
 
 const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
     ? '' 
-    : '/ArtistHub-BaguioCity';
+    : '/';
 
 let allArtists = [];
 
