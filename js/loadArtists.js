@@ -116,7 +116,7 @@ export async function loadAllArtists() {
         displayArtists.forEach(artist => {
             const card = document.createElement('div');
             card.className = `bg-white rounded-lg border-2 shadow-lg overflow-hidden flex flex-col items-center p-6 artist-card`;
-            card.style.borderColor = '#f76400';
+            card.style.borderColor = '#ffffff';
 
             const specialization = artist.artistDetails?.specialization || 'Artist';
             const photoURL = artist.photoURL || 'https://via.placeholder.com/150x150?text=No+Image';

@@ -88,8 +88,8 @@ async function loadArtworks(forceRefresh = false) {
             return;
         }
 
-        // Change limit from 50 to 8
-        let artworksQuery = query(artworksRef, limit(8));
+        // Change limit from 16 to 20
+        let artworksQuery = query(artworksRef, limit(16));
         const querySnapshot = await getDocs(artworksQuery);
         
         if (querySnapshot.empty) {
@@ -244,7 +244,7 @@ function createArtworkCard(id, data, genreIcon) {
                     loading="lazy"
                 >
             </div>
-            <div class="p-6 flex flex-col h-full">
+            <div class="p-6 flex flex-col h-full mt-12">
                 <h3 class="artwork-title mb-1">${data.title || 'Untitled artwork'}</h3>
                 <p class="artwork-description text-gray-600 mb-2">${data.description || 'No description available.'}</p>
                 <div class="flex items-center gap-2 mb-2">
