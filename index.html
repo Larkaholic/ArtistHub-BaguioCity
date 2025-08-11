@@ -104,9 +104,9 @@
         <div class="glass-header h-full p-6">
             <nav>
                 <ul class="flex flex-col space-y-4 mt-5">
-                    <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a></li>
-                    <li><a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('/index.html')">Home</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('/index.html#events')">Events</a></li>
+                    <li><a href="javascript:void(0)" onclick="navToEvent('/shop/shop.html')">Shop</a></li>
                     <li class="relative">
                         <button id="profileLinkMobile" class="flex items-center w-full justify-center" onclick="toggleNav(event)">
                             <img src="https://raw.githubusercontent.com/Larkaholic/ArtistHub-BaguioCity/master/images/defaultProfile.png" 
@@ -833,7 +833,7 @@
                 }
                 // Get the base URL for GitHub Pages
                 const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/ArtistHub-BaguioCity'
+                    ? '/'
                     : '';
                 // Construct the profile URL
                 const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
@@ -878,7 +878,7 @@
                 }
                 // Get the base URL for GitHub Pages
                 const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/ArtistHub-BaguioCity'
+                    ? '/'
                     : '';
                 // Go directly to edit profile page
                 const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${auth.currentUser.uid}`;
@@ -959,7 +959,7 @@
                 }
                 // Get the base URL for GitHub Pages
                 const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/ArtistHub-BaguioCity'
+                    ? '/'
                     : '';
                 // Construct the profile URL
                 const profileUrl = `${baseUrl}/profile/profile.html?id=${window.firebaseAuth.currentUser.uid}`;
@@ -1004,7 +1004,7 @@
                 }
                 // Get the base URL for GitHub Pages
                 const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/ArtistHub-BaguioCity'
+                    ? '/'
                     : '';
                 // Go directly to edit profile page
                 const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${window.firebaseAuth.currentUser.uid}`;
