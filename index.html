@@ -834,12 +834,8 @@
                         return;
                     }
                 }
-                // Get the base URL for GitHub Pages
-                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/'
-                    : '';
                 // Construct the profile URL
-                const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
+                const profileUrl = `/profile/profile.html?id=${auth.currentUser.uid}`;
                 window.location.href = profileUrl;
             } catch (error) {
                 console.error('Profile navigation error:', error);
@@ -879,12 +875,8 @@
                         return;
                     }
                 }
-                // Get the base URL for GitHub Pages
-                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/'
-                    : '';
                 // Go directly to edit profile page
-                const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${auth.currentUser.uid}`;
+                const editProfileUrl = `/profile/edit-profile.html?id=${auth.currentUser.uid}`;
                 window.location.href = editProfileUrl;
             } catch (error) {
                 console.error('Profile navigation error:', error);
@@ -960,12 +952,8 @@
                         return;
                     }
                 }
-                // Get the base URL for GitHub Pages
-                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/'
-                    : '';
                 // Construct the profile URL
-                const profileUrl = `${baseUrl}/profile/profile.html?id=${window.firebaseAuth.currentUser.uid}`;
+                const profileUrl = `/profile/profile.html?id=${window.firebaseAuth.currentUser.uid}`;
                 window.location.href = profileUrl;
             } catch (error) {
                 console.error('Profile navigation error:', error);
@@ -1005,12 +993,8 @@
                         return;
                     }
                 }
-                // Get the base URL for GitHub Pages
-                const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-                    ? '/'
-                    : '';
                 // Go directly to edit profile page
-                const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${window.firebaseAuth.currentUser.uid}`;
+                const editProfileUrl = `/profile/edit-profile.html?id=${window.firebaseAuth.currentUser.uid}`;
                 window.location.href = editProfileUrl;
             } catch (error) {
                 console.error('Profile navigation error:', error);
