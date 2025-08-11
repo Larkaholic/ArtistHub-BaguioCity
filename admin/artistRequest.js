@@ -11,23 +11,82 @@ import {
     serverTimestamp,
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { addNotification } from '../js/notifications.js';
 
 // Load pending artist registrations
 export async function loadPendingArtists() {
+    console.log("Loading pending artists...");
     try {
         const usersRef = collection(db, "users");
         
-        // Simple query without orderBy to avoid index requirement
-        const q = query(
-            usersRef, 
-            where("userType", "==", "artist"), 
-            where("status", "==", "pending")
-        );
+        // Try different query approaches to handle various data structures
+        let querySnapshot;
         
-        const querySnapshot = await getDocs(q);
+        // First try with both conditions
+        try {
+            const q = query(
+                usersRef, 
+                where("userType", "==", "artist"), 
+                where("status", "==", "pending")
+            );
+            querySnapshot = await getDocs(q);
+        } catch (queryError) {
+            console.log("Compound query failed, trying simpler approach:", queryError);
+            
+            // If compound query fails, try with just userType
+            try {
+                const q = query(usersRef, where("userType", "==", "artist"));
+                const allArtists = await getDocs(q);
+                
+                // Filter pending artists in memory
+                const pendingArtists = [];
+                allArtists.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.status === "pending") {
+                        pendingArtists.push(doc);
+                    }
+                });
+                
+                // Create a mock QuerySnapshot-like object
+                querySnapshot = {
+                    empty: pendingArtists.length === 0,
+                    forEach: (callback) => {
+                        pendingArtists.forEach(callback);
+                    }
+                };
+            } catch (fallbackError) {
+                console.log("Fallback query failed, trying to get all users:", fallbackError);
+                
+                // Last resort: get all users and filter
+                const allUsers = await getDocs(collection(db, "users"));
+                const pendingArtists = [];
+                
+                allUsers.forEach((doc) => {
+                    const data = doc.data();
+                    if ((data.userType === "artist" || data.role === "artist") && 
+                        (data.status === "pending" || !data.status)) {
+                        pendingArtists.push(doc);
+                    }
+                });
+                
+                querySnapshot = {
+                    empty: pendingArtists.length === 0,
+                    forEach: (callback) => {
+                        pendingArtists.forEach(callback);
+                    }
+                };
+            }
+        }
         
         const pendingArtistsTable = document.getElementById('pendingArtists');
+        if (!pendingArtistsTable) {
+            console.error("Pending artists table not found!");
+            return;
+        }
+        
         pendingArtistsTable.innerHTML = '';
+        
+        console.log("Query completed, processing results...");
         
         if (querySnapshot.empty) {
             pendingArtistsTable.innerHTML = `
@@ -35,28 +94,38 @@ export async function loadPendingArtists() {
                     <td colspan="7" class="px-6 py-4 text-center text-gray-400">No pending artist registrations found.</td>
                 </tr>
             `;
+            console.log("No pending artists found");
             return;
         }
         
         // Sort in memory instead of using orderBy in the query
         const artists = [];
         querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            console.log("Found artist:", data.email || data.name || 'Unknown', "Status:", data.status);
             artists.push({
                 id: doc.id,
-                data: doc.data()
+                data: data
             });
         });
         
+        console.log(`Found ${artists.length} pending artists`);
+        
         // Sort by createdAt if available
         artists.sort((a, b) => {
-            const timeA = a.data.createdAt?.toDate?.() || 0;
-            const timeB = b.data.createdAt?.toDate?.() || 0;
+            const timeA = a.data.createdAt?.toDate?.() || a.data.createdAt || 0;
+            const timeB = b.data.createdAt?.toDate?.() || b.data.createdAt || 0;
             return timeB - timeA; // descending order (newest first)
         });
         
         // Generate the HTML from the sorted array
+        let tableHTML = '';
         artists.forEach(({ id: artistId, data: artist }) => {
-            const createdAt = artist.createdAt?.toDate ? new Date(artist.createdAt.toDate()).toLocaleDateString() : 'Unknown';
+            const createdAt = artist.createdAt?.toDate ? 
+                new Date(artist.createdAt.toDate()).toLocaleDateString() : 
+                artist.createdAt ? 
+                new Date(artist.createdAt).toLocaleDateString() : 
+                'Unknown';
             
             // Create ID preview column content
             let idPreviewContent = 'No ID uploaded';
@@ -69,7 +138,7 @@ export async function loadPendingArtists() {
                 `;
             }
             
-            pendingArtistsTable.innerHTML += `
+            tableHTML += `
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-200">${artist.name || artist.displayName || 'Unknown'}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">${artist.email || 'Unknown'}</td>
@@ -89,30 +158,39 @@ export async function loadPendingArtists() {
             `;
         });
         
+        pendingArtistsTable.innerHTML = tableHTML;
+        console.log("Pending artists table updated successfully");
+        
     } catch (error) {
         console.error("Error loading pending artists:", error);
         
-        // Specific error handling for the index error
-        if (error.code === 'failed-precondition' || error.message?.includes('requires an index')) {
-            const pendingArtistsTable = document.getElementById('pendingArtists');
-            pendingArtistsTable.innerHTML = `
-                <tr>
-                    <td colspan="7" class="px-6 py-4 text-center">
-                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
-                            <p class="font-bold">Database Index Required</p>
-                            <p>This query requires a Firestore index. Please ask the administrator to create the required index.</p>
-                            <p class="mt-2">Error details: ${error.message}</p>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        } else {
-            const pendingArtistsTable = document.getElementById('pendingArtists');
-            pendingArtistsTable.innerHTML = `
-                <tr>
-                    <td colspan="7" class="px-6 py-4 text-center text-red-400">Error loading pending artists. Please try again.</td>
-                </tr>
-            `;
+        const pendingArtistsTable = document.getElementById('pendingArtists');
+        if (pendingArtistsTable) {
+            if (error.code === 'failed-precondition' || error.message?.includes('requires an index')) {
+                pendingArtistsTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center">
+                            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
+                                <p class="font-bold">Database Index Required</p>
+                                <p>This query requires a Firestore index. Please ask the administrator to create the required index.</p>
+                                <p class="mt-2">Error details: ${error.message}</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                pendingArtistsTable.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-red-400">
+                            Error loading pending artists: ${error.message}
+                            <br>
+                            <button onclick="loadPendingArtists()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                Try Again
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
         }
     }
 }
@@ -185,6 +263,8 @@ async function deleteFromCloudinary(imageUrl) {
 // Approve artist
 export async function approveArtist(artistId) {
     try {
+        console.log("Approving artist:", artistId);
+        
         const artistRef = doc(db, "users", artistId);
         const artistDoc = await getDoc(artistRef);
         
@@ -213,6 +293,7 @@ export async function approveArtist(artistId) {
         }
         
         await updateDoc(artistRef, updateData);
+        console.log("Artist approved successfully in database");
         
         // After successful database update, delete the ID image from Cloudinary
         let idDeletionMessage = "";
@@ -240,8 +321,31 @@ export async function approveArtist(artistId) {
             }
         }
         
+        // Add notification for the approved artist
+        try {
+            await addNotification(
+                artistId,
+                'artist_approved',
+                'Artist Profile Approved! 🎨',
+                'Congratulations! Your artist profile has been approved. You can now configure your profile and start showcasing your artwork.',
+                {
+                    approvalDate: new Date().toISOString(),
+                    canConfigureProfile: true
+                }
+            );
+            console.log('Notification added for approved artist');
+        } catch (notificationError) {
+            console.error('Error adding notification:', notificationError);
+            // Don't fail the approval if notification fails
+        }
+        
         alert("Artist approved successfully!" + idDeletionMessage);
-        loadPendingArtists(); // Reload the list
+        
+        // Refresh the pending artists list
+        console.log("Refreshing pending artists list...");
+        setTimeout(() => {
+            loadPendingArtists();
+        }, 500); // Small delay to ensure database update is complete
         
     } catch (error) {
         console.error("Error approving artist:", error);
@@ -252,16 +356,24 @@ export async function approveArtist(artistId) {
 // Reject artist - simply removes the user from the database
 export async function rejectArtist(artistId) {
     try {
+        console.log("Rejecting artist:", artistId);
+        
         if (confirm("Are you sure you want to reject and delete this artist? This action cannot be undone.")) {
             // Delete the artist document from the users collection
             const artistRef = doc(db, "users", artistId);
             await deleteDoc(artistRef);
+            console.log("Artist rejected and removed from database");
             
             // Note: The ID image will remain in Cloudinary
             // Due to security restrictions, we cannot delete Cloudinary images directly from the browser
             
             alert("Artist rejected and removed from the system");
-            loadPendingArtists();
+            
+            // Refresh the pending artists list
+            console.log("Refreshing pending artists list...");
+            setTimeout(() => {
+                loadPendingArtists();
+            }, 500); // Small delay to ensure database update is complete
         }
     } catch (error) {
         console.error("Error rejecting artist:", error);
@@ -272,8 +384,4 @@ export async function rejectArtist(artistId) {
 // Make functions available globally
 window.approveArtist = approveArtist;
 window.rejectArtist = rejectArtist;
-
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    loadPendingArtists();
-});
+window.loadPendingArtists = loadPendingArtists;

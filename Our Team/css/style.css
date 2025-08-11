@@ -1,268 +1,171 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: auto;
-    padding: auto;
-    background: url("../img/bg.jpg") no-repeat center center fixed;
-    background-size: cover;
-    text-align: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300&family=Poppins:wght@300&display=swap');
 
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    z-index: -1;
-}
-html {
-    scroll-behavior: smooth;
-}
-.back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background: #391d0f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-}
-
-.back-button:hover {
-    background: #955428;
-    box-shadow: #cb8f35;
-    transform: scale(1.1);
-}
-
-.team-container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.member-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    width: 100%;
-    margin-bottom: 20px;
-    align-items: center;
-}
-
-.member {
-    width: 280px;
-    height: 350px;
-    perspective: 1000px; 
-}
-
-
-
-.member.large {
-    width: 300px;
-    height: 400px;
-}
-
-
-.member .flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-}
-
-
-.member:hover .flip-card-inner {
-    transform: rotateY(180deg);
-}
-
-
-.flip-card-front, .flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.flip-card {
-    cursor: pointer;
-}
-
-
-.flip-card-front {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.flip-card-front img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-.flip-card-back {
-    background: #391d0f;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transform: rotateY(180deg);
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); 
-    transition: background 0.3s ease-in-out; 
-}
-
-
-.member:hover .flip-card-back {
-    background: #955428;
-}
-
-.flip-card-back p {
-    margin: 10px 0;
-    font-size: 1.2em;
-    text-align: center;
-}
-
-
-.button-container {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-
-.map-button, .link-button {
-    background-color: #e0cba8;
-    border: none;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.map-button:hover, .link-button:hover {
-    background: #331a15;
-}
-
-.link-button img, .map-button img {
-    width: 22px;
-    height: 22px;
-}
-
-.link-button img {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.link-button:hover img {
-    transform: scale(1.2);
-    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.5);
-}
-
-
-.category {
-    width: 100%;
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 2.2em;
-    background: url(../img/wood.jpg);
-    border-radius: 40%;
-}
-@keyframes fadeInSlide {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.category {
-    animation: fadeInSlide 1s ease-in-out;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Soft shadow for better visibility */
-}
-
-/*============================
-        Loader Screen
-==============================*/
-
-@font-face {
-    font-family: 'Rockybilly';
-    src: url('../font/Rockybilly.ttf') format('truetype'); 
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Rockybilly.ttf';
-    src: url('../font/Rockybilly.ttf') format('truetype'); 
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* Loader Text */
-#typing {
-    font-family: 'Rockybilly';
-    font-size: 3.5rem;
-    white-space: nowrap;
-    overflow: hidden;
+*{
     margin: 0;
     padding: 0;
-    line-height:5.2;
+    box-sizing: border-box;
 }
 
-/* ArtistHub Heading */
-h4{
-        font-family: 'Rockybilly', cursive;
-        font-size: 4.5rem;
-        font-weight: bolder;
-        color: black;
-        -webkit-text-stroke: 0.4px white;
-        text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.6);
-        margin: 0;
-        padding: 0;
-        line-height: 4.5;
-        display: inline-block;
+body {
+    background: url('/images/background.png') no-repeat center center fixed;
+    background-size: cover; /* Ensures the image covers the entire viewport */
+    background-attachment: fixed; /* Keeps the image fixed while scrolling */
+    height: 100vh; /* Makes sure the body takes up the full height of the viewport */
+}
+
+.back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #391d0f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      z-index: 1000;
     }
 
-/* Loader Container */
-#loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
+    .back-button:hover {
+      background: #955428;
+      transform: scale(1.1);
+    }
+
+.main{
+    margin: 10px;
+}
+
+.main .title{
+    font-size: 50px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #f1f5f9;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.main .card_container{
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    transition: transform 1s ease, opacity 1s ease;
+    flex-wrap: wrap;
+    gap: 30px;
 }
 
+.card_container .card{
+    max-width: 410px;
+    margin-top: 50px;
+    border-radius: 20px;
+    background: #1e293b;
+    border: 0.5px solid #f1f5f9;
+    padding: 15px;
+    color: #f1f5f9;
+    position: relative;
+}
 
+.user_content .name{
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+} 
 
+.user_content .post{
+    font-size: 15px;
+    color: #6e77d3;
+    margin: 15px 0;
+    font-weight: 400;
+    font-family: 'Nunito Sans', sans-serif;
+    position: relative;
+    left: 16px;
+}
+
+.user_content .post::before{
+    content: "";
+    height: 1px;
+    width: 15px;
+    background: #6c77d3;
+    position: absolute;
+    top: 50%;
+    left: -16px;
+}
+
+.fa-solid{
+    color: #ffc107;
+}
+
+.transparent{
+    color: transparent;
+}
+
+.user_content .about{
+    color: #cbd5e1;
+    font-family: 'Poppins', sans-serif;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.card .round_box{
+    position: absolute;
+    top: -20%;
+    right: 5%;
+    background: #1e293b !important;
+    width: 130px;
+    height: 130px;
+    border: 1px solid #f1f5f9;
+    border-radius: 50%;
+    z-index: 333;
+}
+
+.card .img_box{
+    position: absolute;
+    top: -20%;
+    right: 5%;
+    z-index: 555;
+}
+
+.card .img_box img{
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+/* Social Icons Style */
+.sci {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    list-style: none;
+}
+
+.sci li {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.sci li a {
+    color: #f1f5f9;
+    font-size: 20px;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;  /* Transition color change */
+}
+
+.sci li:hover {
+    transform: scale(1.1);  /* Slightly enlarge the icons on hover */
+}
+
+.sci li a:hover {
+    color: #6e77d3;  /* Change color on hover */
+}
+
+.sci li i {
+    transition: color 0.3s ease-in-out;
+}
+
+/* Optional: Add a scale effect to the icons themselves */
+.sci li a:hover i {
+    color: #6e77d3;  /* Change icon color on hover */
+    transform: scale(1.2);  /* Slightly enlarge the icon */
+}
 

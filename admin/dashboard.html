@@ -398,5 +398,17 @@
         window.loadEventRequests = loadEventRequests;
     </script>
     
+    <script type="module">
+        // Import and expose dashboard functions
+        import { openAddEventModal, closeEventModal } from './dashboard.js';
+        import { loadPendingArtists, approveArtist, rejectArtist } from './artistRequest.js';
+        
+        window.openAddEventModal = openAddEventModal;
+        window.closeEventModal = closeEventModal;
+        window.loadPendingArtists = loadPendingArtists;
+        window.approveArtist = approveArtist;
+        window.rejectArtist = rejectArtist;
+    </script>
+    
 </body>
 </html>

@@ -6,12 +6,10 @@
     -ms-overflow-style: none; /* IE/Edge */
 }
 
-/* Hide scrollbar for Chrome/Safari/Opera */
 *::-webkit-scrollbar {
     display: none;
 }
 
-/* Only enable scrolling where specifically needed */
 .overflow-y-auto {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -32,12 +30,8 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/back.jpg?raw=true");
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #1B1B1B; /* Fallback color */
+    background: #ededed !important;
+    background-image: none !important;
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
@@ -46,8 +40,6 @@ body {
     -webkit-overflow-scrolling: touch;
     padding-bottom: 2rem;
 }
-/* global header */
-
 
 /* nav */
 .nav-item button,
@@ -69,6 +61,7 @@ main {
     z-index: 1;
     margin: 0;
     padding-top: 80px;
+    background: #ededed !important;
 }
 
 .glass-header {
@@ -99,10 +92,30 @@ main {
 
 .profile-details {
     width: 80%;
+    margin: 0 auto;
 }
+
 .profile-details img {
     height: 60dvh;
     height: 70dvh;
+}
+
+.profile-details .aspect-\[4\/5\] {
+    height: 70dvh;
+}
+
+.profile-details h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-details .text-gray-700 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-details .text-gray-600 {
+    line-height: 1.75;
 }
 
 .option-btn {
@@ -712,4 +725,285 @@ button,
 #mobileProfileDropdown .border-b {
     text-align: center;
     padding: 1rem;
+}
+
+#displayName {
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+}
+
+#specialization {
+    font-size: 1.15rem;
+    color: #374151;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+#locationText {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+#genre {
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#genre span {
+    background: #4b5563;
+    color: #fff;
+    border-radius: 9999px;
+    padding: 0.2rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+#artistBio {
+    color: white;
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 1.5;
+    max-height: 6em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    margin-bottom: 0.5rem;
+}
+
+#profileEmail {
+    color: #6b7280;
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 0.25rem;
+    word-break: break-all;
+}
+
+@media (max-width: 1024px) {
+    #displayName { font-size: 1.5rem; }
+    #specialization { font-size: 1rem; }
+    #artistBio { font-size: 0.9rem; }
+}
+
+@media (max-width: 640px) {
+    #displayName { font-size: 1.2rem; }
+    #specialization { font-size: 0.95rem; }
+    #artistBio { font-size: 0.85rem; }
+}
+
+.profile-card-custom {
+    background: #181818;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    padding: 0;
+    color: #fff;
+    min-width: 340px;
+    position: relative;
+    overflow: visible !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-card-custom img#profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50% !important;
+    position: relative !important;
+    margin: 0 !important;
+}
+
+/* Text styling */
+.profile-card-custom #displayName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    color: white;
+}
+
+.profile-card-custom #specialization {
+    font-size: 0.875rem;
+    color: #bbb;
+    font-weight: normal;
+}
+
+/* Buttons styling */
+.profile-card-custom button {
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: flex;
+}
+
+.profile-card-custom hr {
+    border-color: #333;
+    opacity: 0.5;
+    margin: 0.75rem 0;
+}
+
+.social-btn-custom {
+    background: #333;
+    color: #fff;
+    border-radius: 0.5rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    transition: all 0.2s ease;
+}
+
+.social-btn-custom:hover {
+    background: #FF6B1A;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.social-btn-custom .fa {
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+    border-radius: 0;
+}
+
+.hidden {
+    line-height: 1.4;
+    color: #bbb;
+    margin: 0;
+}
+
+#profileImage {
+    position: static !important;
+    margin: 0 !important;
+    inset: auto !important;
+    border-radius: 50% !important;
+}
+
+.lg\:col-span-2.flex.items-center.justify-center {
+    padding-top: 1rem;
+}
+
+header {
+    z-index: 30 !important;
+}
+
+#flyout-menu {
+    z-index: 40 !important;
+}
+
+/* Center flyout menu items and profile row */
+#flyout-menu ul {
+    align-items: center;
+    text-align: center;
+}
+
+#flyout-menu ul li {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#profileLinkMobile {
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.5rem;
+}
+
+#profileLinkMobile img {
+    margin-right: 0.5rem;
+}
+
+#flyout-menu .logout-button,
+#flyout-menu .login-button {
+    display: flex;
+    justify-content: center;
+}
+
+/* Feature Artwork Modal Styles */
+#featureArtworkModal .artwork-card-container {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+#featureArtworkModal .artwork-card-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(247, 100, 0, 0.1), rgba(255, 140, 66, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    border-radius: 16px;
+}
+
+#featureArtworkModal label:hover .artwork-card-container::before {
+    opacity: 1;
+}
+
+#featureArtworkModal input[type="checkbox"]:checked + div {
+    border-color: #f76400 !important;
+    box-shadow: 0 0 20px rgba(247, 100, 0, 0.4);
+}
+
+#featureArtworkModal input[type="checkbox"]:checked + div::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(247, 100, 0, 0.2), rgba(255, 140, 66, 0.2));
+    border-radius: 16px;
+}
+
+#featureArtworkModal .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+#featureArtworkModal .border-3 {
+    border-width: 3px;
+}
+
+/* Loading Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Backdrop styles */
+#featureArtworkModal {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #featureArtworkModal .glass-header2 {
+        min-width: 90vw;
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    #featureArtworkModal h1 {
+        font-size: 2rem;
+    }
 }

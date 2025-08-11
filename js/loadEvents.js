@@ -41,7 +41,7 @@ async function loadEvents() {
             } else {
                 importantEventsContainer.innerHTML = upcomingFeaturedEvents.map(event => `
                     <div class="glass-header2 rounded-lg p-4 m-4 event-card relative" 
-                        data-id="${event.id}" data-aos="fade-left" style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px;">
+                        data-id="${event.id}" data-aos="fade-left" style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px; border: 2px solid #f76400;">
                         <div class="event-content flex-grow">
                             <h3 class="rubik-dirt-regular font-custom text-2xl font-bold mb-2">${event.title}</h3>
                             <p class="text-sm font-bold">Start: ${event.startDate}</p>
@@ -75,10 +75,10 @@ async function loadEvents() {
                 eventsContainer.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overscroll-y-auto" style="max-height: 100%;">
                         ${limitedEvents.map(event => `
-                            <div class="artist-card border-2 border-black rounded-lg p-4 mb-4 event-card relative"
+                            <div class="artist-card rounded-lg p-4 mb-4 event-card relative bg-white shadow-lg"
                             style="cursor: pointer; display: flex; flex-direction: column; min-height: 280px;" data-id="${event.id}">
                                 <div class="event-content flex-grow" style="position: relative; z-index: 12;">
-                                    <h3 class="rubik-dirt-regular text-2xl font-bold mb-2 text-black">${event.title}</h3>
+                                    <h3 class="text-2xl font-bold mb-2 text-black">${event.title}</h3>
                                     <p class="text-sm text-black">Start: ${event.startDate}</p>
                                     <p class="text-sm text-black">End: ${event.endDate}</p>
                                     <p class="text-sm text-black">Location: ${event.location}</p>
@@ -89,7 +89,7 @@ async function loadEvents() {
                                     ` : ''}
                                 </div>
                                 <div class="mt-auto text-right">
-                                    <button class="view-event-btn mt-4 p-2 text-black rounded" style="background: #F4A900;">View Event</button>
+                                    <button class="view-event-btn mt-4 p-2 text-black rounded" style="background: #f76400; color: white;">View Event</button>
                                 </div>
                             </div>
                         `).join('')}
@@ -139,12 +139,12 @@ function loadFloatingEvents(events, limit = 3) {
     const recentEvents = events.slice(0, itemsToShow);
 
     floatingEventContainer.innerHTML = recentEvents.map(event => `
-        <div class="event-preview-card overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" data-id="${event.id}">
+        <div class="event-preview-card overflow-hidden rounded-lg  hover:shadow-xl transition-shadow duration-300 cursor-pointer" data-id="${event.id}" style="border: 2px solid #f76400;">
             <img src="${event.imageUrl || 'images/events/default-event.jpg'}" 
                  alt="${event.title}" 
-                 class="w-full h-48 object-cover">
+                 class="w-full h-40 md:h-48 object-cover">
             <div class="p-4 bg-white">
-                <h3 class="text-lg font-semibold text-gray-800 rubik-dirt-regular mb-2">${event.title}</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">${event.title}</h3>
                 <div class="flex items-center text-sm text-gray-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -152,12 +152,7 @@ function loadFloatingEvents(events, limit = 3) {
                     </svg>
                     <p>${event.location}</p>
                 </div>
-                <div class="flex items-center text-sm text-gray-600 mt-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <p>${formatDate(event.startDate)}</p>
-                </div>
+                
             </div>
         </div>
     `).join('');
@@ -221,6 +216,89 @@ function addEventClickHandlers() {
             }
         });
     });
+}
+
+// New function to load all events for the shop section
+export async function loadAllEvents() {
+    const eventsGrid = document.getElementById('allEventsGrid');
+    if (!eventsGrid) {
+        console.error('allEventsGrid element not found');
+        return;
+    }
+    
+    try {
+        eventsGrid.innerHTML = '<div class="loading-spinner my-10 flex justify-center col-span-full"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div></div>';
+        
+        // Load all events from the events collection
+        const q = query(collection(db, "events"), orderBy("startDate", "desc"));
+        const querySnapshot = await getDocs(q);
+        const events = [];
+        
+        querySnapshot.forEach((doc) => {
+            events.push({ id: doc.id, ...doc.data() });
+        });
+
+        if (events.length === 0) {
+            eventsGrid.innerHTML = '<p class="text-center text-gray-600 col-span-full">No events found</p>';
+            return;
+        }
+
+        // Clear loading spinner
+        eventsGrid.innerHTML = '';
+
+        // Display events in a grid (limit to 12 for consistent layout)
+        const displayEvents = events.slice(0, 12);
+        
+        displayEvents.forEach(event => {
+            const card = document.createElement('div');
+            card.className = `bg-white rounded-lg border-2 shadow-lg overflow-hidden flex flex-col event-card h-full`;
+            card.style.borderColor = '#f76400';
+
+            const startDate = formatDate(event.startDate);
+            const endDate = formatDate(event.endDate);
+            const imageUrl = event.imageUrl || 'https://via.placeholder.com/300x200?text=Event+Image';
+
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${imageUrl}" alt="${event.title}" 
+                        class="w-full h-48 object-cover">
+                    <div class="absolute top-4 left-4 bg-white bg-opacity-90 px-3 py-1 rounded-full">
+                        <p class="text-sm font-semibold text-gray-800">${startDate}</p>
+                    </div>
+                </div>
+                <div class="p-6 flex flex-col flex-grow h-full">
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold mb-2 text-black">${event.title}</h3>
+                        <div class="flex items-center gap-1 mb-2">
+                            <i class="fas fa-map-marker-alt text-sm text-gray-600"></i>
+                            <p class="text-sm text-gray-600">${event.location}</p>
+                        </div>
+                        <div class="flex items-center gap-1 mb-3">
+                            <i class="fas fa-calendar text-sm text-gray-600"></i>
+                            <p class="text-sm text-gray-600">${startDate} - ${endDate}</p>
+                        </div>
+                    </div>
+                    <div class="mt-auto flex bottom-0 flex-shrink-0">
+                        <button class="bg-white text-black py-2 px-6 rounded-md hover:bg-gray-300 transition duration-300 font-semibold border-2"
+                            style="background-color: #f76400; color: white;">
+                            View Event
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            card.querySelector('button').onclick = () => {
+                const basePath = getBasePath();
+                window.location.href = `${basePath}/events/events.html?id=${event.id}`;
+            };
+
+            eventsGrid.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Error loading all events:", error);
+        eventsGrid.innerHTML = '<div class="text-center text-gray-600 col-span-full">Error loading events</div>';
+    }
 }
 
 // Initialize when DOM is loaded

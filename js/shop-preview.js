@@ -112,8 +112,6 @@ async function loadArtworkPreview() {
             const data = doc.data();
             const artwork = { id: doc.id, ...data };
             
-            console.log(`Processing artwork: ${artwork.title || 'Untitled'}`);
-            
             // Get appropriate icon for the genre
             const genre = artwork.genre || artwork.category || 'default';
             const genreIcon = genreIcons[genre.toLowerCase()] || genreIcons.default;
@@ -133,7 +131,7 @@ async function loadArtworkPreview() {
             
             // Create artwork card HTML
             artworksHTML += `
-                <div class="artwork-card bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                <div class="artwork-card bg-[#fff8ec] rounded-3xl shadow-lg overflow-hidden flex flex-col">
                     <div class="relative">
                         <img 
                             src="${imageUrl}" 
@@ -148,8 +146,9 @@ async function loadArtworkPreview() {
                         <h3 class="artwork-title mb-1">${artwork.title || 'Untitled artwork'}</h3>
                         <p class="artwork-description text-gray-600 mb-2">${artwork.description || 'No description available.'}</p>
                         <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-${genreIcon} text-sm text-gray-600"></i>
-                            <span class="artwork-genre text-xs">${genre.charAt(0).toUpperCase() + genre.slice(1)}</span>
+                            <div class="border-2 rounded-full px-3 pb-1">
+                                <span class="artwork-genre text-xs">${genre.charAt(0).toUpperCase() + genre.slice(1)}</span>
+                            </div>                            
                         </div>
                         <hr class="my-2">
                         <div class="flex justify-between items-center">
@@ -164,10 +163,8 @@ async function loadArtworkPreview() {
         artworksHTML += `</div>`;
                 
         sampleArtsContainer.innerHTML = artworksHTML;
-        console.log("Artwork preview loaded successfully!");
         
     } catch (error) {
-        console.error("Error loading artwork preview:", error);
         sampleArtsContainer.innerHTML = `
             <div class="text-center text-red-500 my-8">
                 <p>Error loading artworks: ${error.message}</p>

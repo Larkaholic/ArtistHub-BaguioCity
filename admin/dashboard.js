@@ -15,7 +15,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { ImageCrawler } from '../Gallery/imageCrawler.js';
 import { removeFeaturedArtist, displayCurrentlyFeaturedArtists } from './featuredArtists.js';
-import { loadPendingArtists } from './artistRequest.js';
+import { loadPendingArtists, approveArtist, rejectArtist } from './artistRequest.js';
 import { loadEvents } from './eventManagement.js';
 import { loadPendingIdVerifications } from './idVerification.js'; 
 import { loadEventRequests } from './eventRequests.js';
@@ -169,6 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
     displayCurrentlyFeaturedArtists();
     document.getElementById('eventForm').addEventListener('submit', handleFormSubmit);
     addRemoveButtonToFeaturedArtists();
+    
+    // Load pending artists
+    console.log("Loading pending artists...");
     loadPendingArtists();
     
     console.log("Loading ID verifications...");
@@ -176,6 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     loadEventRequests();
     loadFeaturedArtists();
+    
+    // Make functions available globally
+    window.loadPendingArtists = loadPendingArtists;
+    window.approveArtist = approveArtist;
+    window.rejectArtist = rejectArtist;
     
     // Fix the querySelector to use a valid selector
     const idVerificationSection = document.querySelector('.bg-gray-800 h2[data-section="pending-verifications"]');
@@ -185,6 +193,20 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshButton.textContent = 'Refresh';
         refreshButton.onclick = loadPendingIdVerifications;
         idVerificationSection.appendChild(refreshButton);
+    }
+    
+    // Add refresh button for pending artists
+    const pendingArtistsSection = document.querySelector('h2:contains("Pending Artist Registrations")') || 
+                                 Array.from(document.querySelectorAll('h2')).find(h2 => h2.textContent.includes('Pending Artist Registrations'));
+    if (pendingArtistsSection) {
+        const refreshButton = document.createElement('button');
+        refreshButton.className = 'ml-2 text-sm text-blue-500 hover:text-blue-700';
+        refreshButton.textContent = 'Refresh';
+        refreshButton.onclick = () => {
+            console.log("Refreshing pending artists...");
+            loadPendingArtists();
+        };
+        pendingArtistsSection.appendChild(refreshButton);
     }
 });
 
@@ -383,5 +405,8 @@ export {
     loadEvents,
     handleFormSubmit,
     deleteEvent,
-    getStatusClass
+    getStatusClass,
+    loadPendingArtists,
+    approveArtist,
+    rejectArtist
 };

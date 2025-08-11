@@ -46,58 +46,115 @@ function closeAnnouncement() {
 // Make closeAnnouncement available globally
 window.closeAnnouncement = closeAnnouncement;
 
-
-// Start the typing effect
-
-function typeWriter(element, text, speed, callback) {
-    let i = 0;
-    function typing() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(typing, speed);
-        } else {
-            if (callback) {
-                setTimeout(callback, 1000); 
-            }
-        }
+// Dropdown functionality for Explore section
+function toggleDropdown() {
+    const dropdown = document.getElementById('dropdownMenu');
+    const icon = document.getElementById('dropdownIcon');
+    
+    if (dropdown && icon) {
+        dropdown.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
     }
-    element.innerHTML = ""; 
-    typing();
 }
 
-function eraseText(element, speed, callback) {
-    let text = element.innerHTML;
-    let i = text.length;
-    function erasing() {
-        if (i > 0) {
-            element.innerHTML = text.substring(0, i - 1);
-            i--;
-            setTimeout(erasing, speed);
-        } else {
-            if (callback) {
-                setTimeout(callback, 500); 
-            }
-        }
+function selectCategory(category) {
+    const dropdownText = document.getElementById('dropdownText');
+    const dropdown = document.getElementById('dropdownMenu');
+    const icon = document.getElementById('dropdownIcon');
+    const items = document.querySelectorAll('.dropdown-item');
+    
+    // Update text based on category
+    const categoryNames = {
+        'artworks': 'Artworks',
+        'artists': 'Artists', 
+        'events': 'Events'
+    };
+    
+    if (dropdownText) {
+        dropdownText.textContent = categoryNames[category] || 'Artworks';
     }
-    erasing();
-}
-
-function startTypingSequence() {
-    typeWriter(document.getElementById("typing-h1"), "ArtistHub", 150, function() {
-        document.getElementById("typing-h1").innerHTML += "";
-        typeWriter(document.getElementById("typing-h2"), "Cordillera Administrative Region", 100, function() {
-            setTimeout(() => {
-                eraseText(document.getElementById("typing-h2"), 50, function() {
-                    eraseText(document.getElementById("typing-h1"), 50, function() {
-                        setTimeout(startTypingSequence, 500); 
-                    });
-                });
-            }, 3000); 
-        });
+    
+    // Update active state
+    items.forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.category === category) {
+            item.classList.add('active');
+        }
     });
+    
+    // Close dropdown
+    if (dropdown && icon) {
+        dropdown.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+    }
+    
+    // Handle category switching logic - show/hide containers
+    const artworksContainer = document.getElementById('artworksContainer');
+    const artistsContainer = document.getElementById('artistsContainer');
+    const eventsContainer = document.getElementById('eventsContainer');
+    
+    // Hide all containers
+    if (artworksContainer) artworksContainer.classList.add('hidden');
+    if (artistsContainer) artistsContainer.classList.add('hidden');
+    if (eventsContainer) eventsContainer.classList.add('hidden');
+    
+    // Show selected container and load appropriate content
+    switch(category) {
+        case 'artworks':
+            if (artworksContainer) artworksContainer.classList.remove('hidden');
+            // Load artworks functionality can be added here
+            break;
+        case 'artists':
+            if (artistsContainer) artistsContainer.classList.remove('hidden');
+            // Load artists using the loadAllArtists function
+            loadAllArtistsFromModule();
+            break;
+        case 'events':
+            if (eventsContainer) eventsContainer.classList.remove('hidden');
+            // Load events using the loadAllEvents function
+            loadAllEventsFromModule();
+            break;
+    }
+    
+    console.log('Selected category:', category);
 }
 
-startTypingSequence();
+// Function to load all artists - will be connected to loadArtists.js
+async function loadAllArtistsFromModule() {
+    try {
+        // Dynamic import to avoid module loading issues
+        const { loadAllArtists } = await import('./js/loadArtists.js');
+        await loadAllArtists();
+    } catch (error) {
+        console.error('Error loading artists:', error);
+    }
+}
 
-/* End of Typing Loop */
+// Function to load all events - will be connected to loadEvents.js
+async function loadAllEventsFromModule() {
+    try {
+        // Dynamic import to avoid module loading issues
+        const { loadAllEvents } = await import('./js/loadEvents.js');
+        await loadAllEvents();
+    } catch (error) {
+        console.error('Error loading events:', error);
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdownMenu');
+    const button = document.getElementById('dropdownButton');
+    
+    if (dropdown && button && !button.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.add('hidden');
+        const icon = document.getElementById('dropdownIcon');
+        if (icon) {
+            icon.classList.remove('rotate-180');
+        }
+    }
+});
+
+// Make dropdown functions available globally
+window.toggleDropdown = toggleDropdown;
+window.selectCategory = selectCategory;

@@ -92,11 +92,12 @@
        } 
 
         .nav-login {
-            background-color: #f76400;
+            /* background-color: #f76400; */
         }
 
         .nav-item:hover {
-            background-color: #fff8ec;
+            background-color: #f76400;
+            color: #fff8ec;
         }
         
         /* Glass Effect Styles */
@@ -168,7 +169,7 @@
     #landingPage {
         width: 100%;
         height: 100vh;
-        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/934fab3b32333e471ae7b9bd18d55278d63b7da0.png?raw=true");
+        background-image: url("https://github.com/Larkaholic/ArtistHub-BaguioCity/blob/master/images/background.png?raw=true");
         backdrop-filter: blur(1px);
         z-index: 1;
         background-attachment: fixed;
@@ -178,8 +179,8 @@
     }
 
     .banner {
-        width: 360px;
-        height: 600px;
+        width: 300px;
+        height: 470px;
     }
     
     .banner-span {
@@ -191,12 +192,6 @@
         color: #f76400;
         display: inline-block;
         z-index: 1;
-    }
-
-
-    .banner-text {
-        font-size:xxx-large;
-        font-weight: 700;
     }
 
     .bannerSub {
@@ -228,7 +223,6 @@
             width: 85%;
             min-height: 12rem;
             height: 21.5rem;
-            border: #f76400 2px solid;
             padding: 1rem;
         }
 
@@ -248,15 +242,13 @@
             color: #f76400;
         }
 
-
-
-
-
     /* ==========================================================================
         INDEX SHOP SECTION
         ========================================================================== */
     .shopPrev {
         margin-bottom: 2rem;
+        min-height: auto;
+        padding: 2rem 0;
     }
 
     .shopHeader {
@@ -265,7 +257,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* Center all content inside shopHeader */
     }
 
     .shopSearch {
@@ -305,8 +296,8 @@
     }
 
     .shopFilter {
-        margin-top: 1.5rem;
-        position: relative;
+        /* margin-top: 1.5rem;
+        position: relative; */
     }
 
     .artworksDropdown {
@@ -330,13 +321,11 @@
     .sampleArts {
         margin-top: 2rem;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 1.5rem;
         overflow-x: auto;
-        overflow-y: visible;
         width: 100%;
         max-width: 100vw;
-        /* Remove fixed minmax(850px, 5fr) for better responsiveness */
     }
 
     @media (max-width: 1024px) {
@@ -379,6 +368,14 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        background-color: #fff8ec;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+    }
+
+    .artwork-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
     .artwork-card .p-4 {
@@ -387,309 +384,6 @@
         min-height: 0;
     }
 
-    .shopFilter {
-        margin-top: 1.5rem;
-        position: relative;
-    }
-
-    .artworksDropdown {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .artworksDropdown i {
-        margin-left: 0.5rem;
-        font-size: 1.25rem;
-    }
-
-    .dropdownFilter {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
-    }
-
-    .sampleArts {
-        margin-top: 2rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 1.5rem;
-        overflow-x: auto;
-        overflow-y: visible;
-        width: 100%;
-        max-width: 100vw;
-        /* Remove fixed minmax(850px, 5fr) for better responsiveness */
-    }
-
-    @media (max-width: 1024px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .sampleArts {
-            grid-template-columns: 1fr;
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    /* Make artwork cards scrollable if content overflows */
-    .artwork-card {
-        max-height: 480px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .artwork-card .p-4 {
-        overflow-y: auto;
-        flex: 1 1 auto;
-        min-height: 0;
-    }
-
-    .shopFilter {
-        margin-top: 1.5rem;
-        position: relative;
-    }
-
-    .artworksDropdown {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .artworksDropdown i {
-        margin-left: 0.5rem;
-        font-size: 1.25rem;
-    }
-
-    .dropdownFilter {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
-    }
-
-    .sampleArts {
-        margin-top: 2rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 1.5rem;
-        overflow-x: auto;
-        overflow-y: visible;
-        width: 100%;
-        max-width: 100vw;
-        /* Remove fixed minmax(850px, 5fr) for better responsiveness */
-    }
-
-    @media (max-width: 1024px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .sampleArts {
-            grid-template-columns: 1fr;
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    /* Make artwork cards scrollable if content overflows */
-    .artwork-card {
-        max-height: 480px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .artwork-card .p-4 {
-        overflow-y: auto;
-        flex: 1 1 auto;
-        min-height: 0;
-    }
-
-    .shopFilter {
-        margin-top: 1.5rem;
-        position: relative;
-    }
-
-    .artworksDropdown {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .artworksDropdown i {
-        margin-left: 0.5rem;
-        font-size: 1.25rem;
-    }
-
-    .dropdownFilter {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
-    }
-
-    .sampleArts {
-        margin-top: 2rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 1.5rem;
-        overflow-x: auto;
-        overflow-y: visible;
-        width: 100%;
-        max-width: 100vw;
-        /* Remove fixed minmax(850px, 5fr) for better responsiveness */
-    }
-
-    @media (max-width: 1024px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .sampleArts {
-            grid-template-columns: 1fr;
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    /* Make artwork cards scrollable if content overflows */
-    .artwork-card {
-        max-height: 480px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .artwork-card .p-4 {
-        overflow-y: auto;
-        flex: 1 1 auto;
-        min-height: 0;
-    }
-
-    .shopFilter {
-        margin-top: 1.5rem;
-        position: relative;
-    }
-
-    .artworksDropdown {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-    .artworksDropdown i {
-        margin-left: 0.5rem;
-        font-size: 1.25rem;
-    }
-
-    .dropdownFilter {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
-    }
-
-    .sampleArts {
-        margin-top: 2rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 1.5rem;
-        overflow-x: auto;
-        overflow-y: visible;
-        width: 100%;
-        max-width: 100vw;
-        /* Remove fixed minmax(850px, 5fr) for better responsiveness */
-    }
-
-    @media (max-width: 1024px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .sampleArts {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .sampleArts {
-            grid-template-columns: 1fr;
-            overflow-x: auto;
-            overflow-y: visible;
-            padding-bottom: 1rem;
-        }
-    }
-
-    /* Make artwork cards scrollable if content overflows */
-    .artwork-card {
-        max-height: 480px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .artwork-card .p-4 {
-        overflow-y: auto;
-        flex: 1 1 auto;
-        min-height: 0;
-    }
     /* ==========================================================================
         7. ARTISTS SECTION
         ========================================================================== */
@@ -825,10 +519,14 @@
         min-width: 200px;
         transition: transform 0.2s;
         padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
     }
     
     .artist-card:hover {
         transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
     
     .search-button:hover {
@@ -1448,7 +1146,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem; /* Added margin to separate cards better */
+    margin-bottom: 1rem;
 }
 
 .event-preview-card:hover {
@@ -1457,7 +1155,7 @@
 }
 
 .event-preview-card img {
-    height: 180px; /* Slightly reduced from 200px */
+    height: 180px;
     object-fit: cover;
     width: 100%;
 }
@@ -1467,9 +1165,9 @@
     font-weight: 600;
     margin-bottom: 0.5rem;
     line-height: 1.2;
-    color: #f76400;
-    display: -webkit-box; /* For text truncation */
-    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    /* color: #f76400; */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1481,3 +1179,410 @@
     display: flex;
     flex-direction: column;
 }
+
+/* ==========================================================================
+        DROPDOWN MENU STYLES
+        ========================================================================== */
+    .dropdown-container {
+        position: relative;
+        display: inline-block;
+    }    .dropdown-menu {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-5px);
+        transition: all 0.15s ease;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 8px;
+        background: white;
+        min-width: 120px;
+        overflow: hidden;
+    }
+
+    .dropdown-menu:not(.hidden) {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }    .dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 8px 16px;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #374151;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        margin: 0;
+        border-radius: 0;
+        line-height: 1.5;
+    }    .dropdown-item:hover {
+        background-color: #f9fafb;
+        color: #374151;
+    }    .dropdown-item.active {
+        background-color: #f76400;
+        color: #fff8ec;
+    }
+
+    .dropdown-item.active:hover {
+        background-color: #e55a00;
+        color: #fff8ec;
+    }    .dropdown-item i {
+        display: none; /* Hide all icons for minimal look */
+    }    .artworksDropdown {
+        color: #f76400;
+        transition: all 0.15s ease;
+        background: none;
+        border: none;
+        outline: none;
+        font-size: 1.875rem;
+        font-weight: 700;
+    }    .artworksDropdown:hover {
+        color: #e55a00;
+    }
+
+    .artworksDropdown:focus {
+        outline: none;
+    }    #dropdownIcon {
+        transition: transform 0.15s ease;
+        font-size: 0.75rem;
+        color: #f76400;
+    }
+
+    #dropdownIcon.rotate-180 {
+        transform: rotate(180deg);
+    }    /* Responsive dropdown */
+    @media (max-width: 768px) {
+        .dropdown-menu {
+            min-width: 100px;
+            right: 0;
+            left: auto;
+        }
+        
+        .dropdown-item {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+        
+        .searchContainer {
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        
+        .searchContainer input {
+            width: 100%;
+        }
+        
+        .shopHeader .flex {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .explore {
+            font-size: 2rem !important;
+        }
+        
+        .artworksDropdown {
+            font-size: 1.5rem !important;
+        }
+        
+        .filter-tag {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .searchContainer input {
+            padding-left: 2.5rem;
+            width: 100%;
+        }
+        
+        .dropdown-menu {
+            min-width: 90px;
+        }
+        
+        .dropdown-item {
+            font-size: 0.75rem;
+            padding: 5px 10px;
+        }
+        
+        .filter-tag {
+            font-size: 0.75rem;
+            padding: 3px 10px;
+        }
+        
+        .shopHeader .flex {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .searchContainer {
+            width: 100%;
+        }
+        
+        .searchContainer input {
+            width: 100%;
+        }
+        
+        .searchContainer select {
+            width: 100%;
+        }
+    }
+
+    /* Additional dropdown fine-tuning for reference image match */
+    .dropdown-menu {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .dropdown-container button {
+        outline: none;
+        border: none;
+        background: none;
+    }
+
+    .dropdown-container button:focus {
+        outline: none;
+    }
+
+    /* Filter tags styling to match reference image */
+    .filter-tag {
+        padding: 6px 16px;
+        border-radius: 20px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        color: #6b7280;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .filter-tag:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+    }
+
+    .filter-tag.active {
+        background: #f76400;
+        color: white;
+        border-color: #f76400;
+    }
+
+    .filter-tag.active:hover {
+        background: #e55a00;
+        border-color: #e55a00;
+    }
+
+    /* ==========================================================================
+        Shop Section and Artists Grid Styles
+        ========================================================================== */
+    
+    .shopPrev {
+        min-height: auto;
+        padding: 2rem 0;
+    }
+    
+    .sampleArts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .artistsGrid {
+        margin-top: 2rem;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        overflow-y: auto;
+        max-height: 100vh;
+    }
+    
+    .artistsGrid #allArtistsGrid {
+        display: grid;
+        gap: 1rem;
+        align-items: stretch;
+        justify-items: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .artwork-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .artwork-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Responsive adjustments for artists grid to match featured artists */
+    @media (max-width: 768px) {
+        .artistsGrid #allArtistsGrid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .artistsGrid #allArtistsGrid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (min-width: 1025px) {
+        .artistsGrid #allArtistsGrid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    
+    /* ==========================================================================
+    ARTIST CARDS CONSISTENCY
+    ========================================================================== */
+    
+    /* Ensure all artist cards have consistent height in both grids */
+    #featuredArtistsGrid > div,
+    #allArtistsGrid > div,
+    #allEventsGrid > div {
+        height: 100%;
+        min-height: 350px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Ensure consistent spacing and layout */
+    #featuredArtistsGrid > div > div:last-child,
+    #allArtistsGrid > div > div:last-child,
+    #allEventsGrid > div > div:last-child {
+        margin-top: auto;
+    }
+
+    /* Force equal height for all cards in grid */
+    #featuredArtistsGrid,
+    #allArtistsGrid,
+    #allEventsGrid {
+        display: grid;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    /* Additional card consistency rules */
+    .artist-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        min-height: 350px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .artist-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Specific fixes for grid items */
+    #allArtistsGrid .artist-card {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Responsive grid layout for consistency */
+    @media (max-width: 768px) {
+        #featuredArtistsGrid,
+        #allArtistsGrid,
+        #allEventsGrid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        #featuredArtistsGrid,
+        #allArtistsGrid,
+        #allEventsGrid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1025px) {
+        #featuredArtistsGrid,
+        #allArtistsGrid,
+        #allEventsGrid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    /* ==========================================================================
+        EVENTS GRID STYLES
+        ========================================================================== */
+    
+    .eventsGrid {
+        margin-top: 2rem;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        overflow-y: auto;
+        max-height: 100vh;
+    }
+    
+    .eventsGrid #allEventsGrid {
+        display: grid;
+        gap: 1rem;
+        align-items: stretch;
+        justify-items: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Event card consistency */
+    .event-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        min-height: 350px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Specific fixes for events grid items */
+    #allEventsGrid .event-card {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* Responsive adjustments for events grid */
+    @media (max-width: 768px) {
+        .eventsGrid #allEventsGrid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .eventsGrid #allEventsGrid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (min-width: 1025px) {
+        .eventsGrid #allEventsGrid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
