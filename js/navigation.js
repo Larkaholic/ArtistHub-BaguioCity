@@ -49,7 +49,7 @@ window.handleProfileNavigation = async () => {
                 return;
             }
         }
-        
+
         const profileUrl = `/profile/profile.html?id=${auth.currentUser.uid}`;
         window.location.href = profileUrl;
     } catch (error) {

@@ -25,14 +25,9 @@ export async function handleProfileNavigation() {
                 return;
             }
         }
-        
-        // Get the base URL for GitHub Pages
-        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-            ? '/ArtistHub-BaguioCity'
-            : '';
             
         // Construct the profile URL
-        const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
+        const profileUrl = `/profile/profile.html?id=${auth.currentUser.uid}`;
         window.location.href = profileUrl;
     } catch (error) {
         console.error('Profile navigation error:', error);
@@ -61,14 +56,8 @@ export async function handleEditProfile() {
                 return;
             }
         }
-        
-        // Get the base URL for GitHub Pages
-        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-            ? '/ArtistHub-BaguioCity'
-            : '';
-            
         // Go directly to edit profile page
-        const editProfileUrl = `${baseUrl}/profile/edit-profile.html?id=${auth.currentUser.uid}`;
+        const editProfileUrl = `/profile/edit-profile.html?id=${auth.currentUser.uid}`;
         window.location.href = editProfileUrl;
     } catch (error) {
         console.error('Profile navigation error:', error);
