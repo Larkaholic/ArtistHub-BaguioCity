@@ -9,7 +9,7 @@ export function initNavigation() {
                 return;
             }
 
-            const baseUrl = window.location.hostname.includes('github.io') 
+            const baseUrl = window.location.hostname.includes() 
                 ? '/'
                 : '';
 
