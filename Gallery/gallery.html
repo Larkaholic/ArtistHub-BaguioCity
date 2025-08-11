@@ -72,13 +72,13 @@
         <nav class="hidden sm:flex sm:items-center sm:space-x-5 mr-5">
             <ul class="text-black text-md flex space-x-5 text-xl font-semibold">
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html')">Home</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('/index.html')">Home</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/index.html#events')">Events</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('/index.html#events')">Events</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
-                    <a href="javascript:void(0)" onclick="navToEvent('/ArtistHub-BaguioCity/shop/shop.html')">Shop</a>
+                    <a href="javascript:void(0)" onclick="navToEvent('/shop/shop.html')">Shop</a>
                 </li>
                 <li class="nav-item p-1 rounded-lg">
                     <a href="javascript:void(0)" onclick="handleEditProfile()">Profile</a>
@@ -645,10 +645,6 @@ function hidePasswordChangeForm() {
     <script type="module">
         import { auth } from '../js/firebase-config.js';
         
-        const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost' 
-            ? '' 
-            : '/ArtistHub-BaguioCity';
-
         // Make other functions available globally
         window.handleLogin = async (event) => {
             event.preventDefault();
@@ -657,7 +653,7 @@ function hidePasswordChangeForm() {
 
             try {
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                window.location.href = `${baseUrl}/profile/profile.html?id=${userCredential.user.uid}`;
+                window.location.href = `/profile/profile.html?id=${userCredential.user.uid}`;
             } catch (error) {
                 console.error('Login failed:', error);
                 alert('Login failed: ' + error.message);

@@ -152,8 +152,7 @@ export async function handleAdminAction(profileId) {
                 break;
 
             case '4':
-                const basePath = getBasePath();
-                window.location.href = `${basePath}/admin/reports.html?userId=${profileId}`;
+                window.location.href = `/admin/reports.html?userId=${profileId}`;
                 break;
 
             case '5':
@@ -171,7 +170,7 @@ export async function handleAdminAction(profileId) {
                             await deleteDoc(userRef);
 
                             alert('Profile deleted successfully');
-                            window.location.href = `${getBasePath()}/index.html`;
+                            window.location.href = `/index.html`;
                         } catch (deleteError) {
                             console.error('Error during deletion:', deleteError);
                             alert('Error deleting profile. Please try again.');
@@ -192,15 +191,14 @@ export async function handleAdminAction(profileId) {
 }
 
 export function navToEvent(url) {
-    const basePath = getBasePath();
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('id') || urlParams.get('artistId');
 
     // Special handling for gallery navigation
     if (url.includes('gallery')) {
         if (userId) {
-            const fullPath = `${basePath}/Gallery/gallery.html?artistId=${userId}`;
-            console.log('Gallery navigation:', { basePath, userId, fullPath });
+            const fullPath = `/Gallery/gallery.html?artistId=${userId}`;
+            console.log('Gallery navigation:', { userId, fullPath });
             window.location.href = fullPath;
             return;
         }
@@ -209,21 +207,17 @@ export function navToEvent(url) {
     if (url.startsWith('/')) {
         window.location.href = url;
     } else {
-        window.location.href = `${basePath}/${url}`;
+        window.location.href = `/${url}`;
     }
 }
 
 export function getBasePath() {
-    if (window.location.hostname === 'larkaholic.github.io') {
-        return '/ArtistHub-BaguioCity';
-    }
     return '';
 }
 
 // Add a navigation helper that uses the base path
 export function navigateTo(path) {
-    const basePath = getBasePath();
-    window.location.href = `${basePath}${path}`;
+    window.location.href = path;
 }
 
 /**
