@@ -297,12 +297,8 @@ function navigateToUserProfile() {
         return;
     }
     
-    // Get the base URL for GitHub Pages
-    const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-        ? '/ArtistHub-BaguioCity'
-        : '';
     // Navigate to profile page
-    window.location.href = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
+    window.location.href = `/profile/profile.html?id=${auth.currentUser.uid}`;
 }
 
 // Enhanced admin button management
