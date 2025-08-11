@@ -114,6 +114,15 @@
                                     <p class="text-xs text-gray-500" id="profileDropdownEmail">Loading...</p>
                                 </div>
                                 <a href="javascript:void(0)" onclick="navigateToUserProfile()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Profile</a>
+                                <a href="javascript:void(0)" onclick="openNotificationsModal()" class="flex items-center justify-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-center relative">
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                                        </svg>
+                                        Notifications
+                                    </div>
+                                    <span id="notificationBadge" class="absolute right-3 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden">0</span>
+                                </a>
                                 <a href="javascript:void(0)" onclick="navToEvent('../admin/dashboard.html')" class="admin-button block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" style="display: none;">Admin Dashboard</a>
                                 <a href="javascript:void(0)" onclick="openSettingsModal()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
                                 <a href="javascript:void(0)" onclick="handleLogout()" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
@@ -773,6 +782,68 @@ function hidePasswordChangeForm() {
 
         // Make functions available globally
         window.toggleProfileDropdown = toggleProfileDropdown;
+    </script>
+
+    <!-- Artist Approval Modal -->
+    <div id="artistApprovalModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md mx-4 relative">
+            <button onclick="closeArtistApprovalModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <div class="text-center">
+                <div class="mb-4">
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100">
+                        <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">🎨 Artist Profile Approved!</h2>
+                <p class="text-gray-600 mb-6">
+                    Congratulations! Your artist profile has been approved by our admin team. 
+                    You can now configure your profile and start showcasing your amazing artwork to the world.
+                </p>
+                
+                <div class="space-y-3">
+                    <button onclick="navigateToEditProfile()" 
+                            class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+                        Configure My Profile
+                    </button>
+                    <button onclick="closeArtistApprovalModal()" 
+                            class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-4 rounded-lg transition-colors">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div id="notificationsModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-10 hidden">
+        <div class="glass-header2 items-center rounded-lg w-96 mx-10 p-6 relative bg-white shadow-xl">
+            <button onclick="closeNotificationsModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h2 class="text-center font-bold text-2xl mb-6">Notifications</h2>
+            <div id="notificationsList" class="overflow-y-auto max-h-64">
+                <!-- Notifications will be loaded here -->
+                <div class="text-center text-gray-500 py-4">No new notifications</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/notifications.js"></script>
+    <script type="module">
+        import { initNotifications } from '../js/notifications.js';
+        document.addEventListener('DOMContentLoaded', function() {
+            initNotifications();
+        });
     </script>
 
 </body>

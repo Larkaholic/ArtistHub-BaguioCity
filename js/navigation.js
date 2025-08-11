@@ -25,58 +25,15 @@ export function initNavigation() {
                         return;
                     }
                 }
-                window.location.href = `${baseUrl}/${cleanPath}`;
+                window.location.href = `/${cleanPath}`;
             } else {
-                window.location.href = `${baseUrl}/${cleanPath}`;
+                window.location.href = `/${cleanPath}`;
             }
         } catch (error) {
             console.error('Navigation error:', error);
         }
     };
 }
-
-(function(d, t) {
-    var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-    v.onload = function() {
-        window.voiceflow.chat.load({
-            verify: { 
-                projectID: '6706887ba2382c6fe907495e',
-                apiKey: VOICEFLOW_API_KEY
-            },
-            url: 'https://general-runtime.voiceflow.com',
-            versionID: 'production',
-            voice: {
-                url: "https://runtime-api.voiceflow.com"
-            },
-            theme: {
-                button: {
-                    size: 56,
-                    radius: 28,
-                    backgroundColor: '#4CAF50',
-                    iconColor: '#FFFFFF'
-                },
-                chat: {
-                    backgroundColor: '#F4F8FF',
-                    width: 400,
-                    height: 600,
-                    borderRadius: 16,
-                    poweredBy: false,
-                },
-                messages: {
-                    fontFamily: 'Montserrat, sans-serif',
-                    fontSize: 16,
-                    textColor: '#000000',
-                    userBackgroundColor: '#4CAF50',
-                    userTextColor: '#FFFFFF',
-                    assistantBackgroundColor: '#FFFFFF',
-                    assistantTextColor: '#000000'
-                }
-            }
-        });
-    }
-    v.type = "text/javascript";
-    s.parentNode.insertBefore(v, s);
-})(document, 'script');
 
 // Profile navigation handling
 window.handleProfileNavigation = async () => {
@@ -101,7 +58,7 @@ window.handleProfileNavigation = async () => {
             ? '/'
             : '';
             
-        const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
+        const profileUrl = `/profile/profile.html?id=${auth.currentUser.uid}`;
         window.location.href = profileUrl;
     } catch (error) {
         console.error('Profile navigation error:', error);

@@ -801,11 +801,14 @@
     <script type="module" src="./js/loadEvents.js"></script>
     <script type="module" src="./js/profileDropdown.js"></script>
     <script type="module" src="./js/profile-navigation.js"></script>
+    <script type="module" src="./js/notifications.js"></script>
 
     <script type="module">
         import { initProfileDropdown } from './js/profileDropdown.js';
+        import { initNotifications } from './js/notifications.js';
         document.addEventListener('DOMContentLoaded', function() {
             initProfileDropdown();
+            initNotifications();
         });
     </script>
 
