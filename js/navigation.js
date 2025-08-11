@@ -50,7 +50,7 @@ window.handleProfileNavigation = async () => {
             }
         }
 
-        const profileUrl = `/profile/profile.html?id=${auth.currentUser.uid}`;
+        const profileUrl = `profile/profile.html?id=${auth.currentUser.uid}`;
         window.location.href = profileUrl;
     } catch (error) {
         console.error('Profile navigation error:', error);
