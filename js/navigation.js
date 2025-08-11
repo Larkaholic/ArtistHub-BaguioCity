@@ -8,8 +8,8 @@ export function initNavigation() {
                 window.location.href = path;
                 return;
             }
+            const baseUrl = window.location.hostname.includes() 
 
-            const baseUrl = window.location.hostname.includes('github.io') 
                 ? '/'
                 : '';
 
