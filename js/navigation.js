@@ -8,10 +8,6 @@ export function initNavigation() {
                 window.location.href = path;
                 return;
             }
-            const baseUrl = window.location.hostname.includes() 
-
-                ? '/'
-                : '';
 
             const cleanPath = path.startsWith('/') ? path.slice(1) : path;
             const hasAnchor = cleanPath.includes('#');
@@ -54,10 +50,6 @@ window.handleProfileNavigation = async () => {
             }
         }
         
-        const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-            ? '/'
-            : '';
-            
         const profileUrl = `/profile/profile.html?id=${auth.currentUser.uid}`;
         window.location.href = profileUrl;
     } catch (error) {
