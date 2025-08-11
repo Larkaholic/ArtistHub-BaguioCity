@@ -4,13 +4,13 @@ import { auth } from './firebase-config.js';
 export function initNavigation() {
     window.navToEvent = function(path) {
         try {
-            if (path.startsWith('/ArtistHub-BaguioCity/')) {
+            if (path.startsWith('/')) {
                 window.location.href = path;
                 return;
             }
 
             const baseUrl = window.location.hostname.includes('github.io') 
-                ? '/ArtistHub-BaguioCity'
+                ? '/'
                 : '';
 
             const cleanPath = path.startsWith('/') ? path.slice(1) : path;
@@ -98,7 +98,7 @@ window.handleProfileNavigation = async () => {
         }
         
         const baseUrl = window.location.hostname === 'larkaholic.github.io' 
-            ? '/ArtistHub-BaguioCity'
+            ? '/'
             : '';
             
         const profileUrl = `${baseUrl}/profile/profile.html?id=${auth.currentUser.uid}`;
