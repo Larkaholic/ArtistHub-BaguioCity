@@ -54,6 +54,12 @@ function toggleDropdown() {
     if (dropdown && icon) {
         dropdown.classList.toggle('hidden');
         icon.classList.toggle('rotate-180');
+        // Disable underlying grid clicks while open
+        if (!dropdown.classList.contains('hidden')) {
+            document.body.classList.add('dropdown-open');
+        } else {
+            document.body.classList.remove('dropdown-open');
+        }
     }
 }
 
@@ -86,6 +92,7 @@ function selectCategory(category) {
     if (dropdown && icon) {
         dropdown.classList.add('hidden');
         icon.classList.remove('rotate-180');
+        document.body.classList.remove('dropdown-open');
     }
     
     // Handle category switching logic - show/hide containers
@@ -152,6 +159,7 @@ document.addEventListener('click', function(event) {
         if (icon) {
             icon.classList.remove('rotate-180');
         }
+        document.body.classList.remove('dropdown-open');
     }
 });
 

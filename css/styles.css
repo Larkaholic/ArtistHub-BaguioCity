@@ -257,6 +257,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative; /* Create a reference stacking context */
+        overflow: visible;  /* Don’t clip dropdown */
     }
 
     .shopSearch {
@@ -326,6 +328,8 @@
         overflow-x: auto;
         width: 100%;
         max-width: 100vw;
+        position: relative; /* allow z-index to work if ever needed */
+        z-index: 1;         /* keep below dropdown (9990/10000) */
     }
 
     @media (max-width: 1024px) {
@@ -1186,18 +1190,21 @@
     .dropdown-container {
         position: relative;
         display: inline-block;
-    }    .dropdown-menu {
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-5px);
-        transition: all 0.15s ease;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(0, 0, 0, 0.06);
-        border-radius: 8px;
-        background: white;
-        min-width: 120px;
-        overflow: hidden;
+        z-index: 9990; /* Ensure container stacks above cards */
     }
+    .dropdown-menu {
+         opacity: 0;
+         visibility: hidden;
+         transform: translateY(-5px);
+         transition: all 0.15s ease;
+         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+         border: 1px solid rgba(0, 0, 0, 0.06);
+         border-radius: 8px;
+         background: white;
+         min-width: 120px;
+         overflow: hidden;
+         z-index: 10000; /* Above everything in this section */
+     }
 
     .dropdown-menu:not(.hidden) {
         opacity: 1;
