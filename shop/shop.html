@@ -259,6 +259,32 @@
                 <p class="ml-3 text-lg font-medium text-gray-600">Loading artworks...</p>
             </div>
         </div>
+
+        <!-- Pagination Navigation -->
+        <div id="paginationContainer" class="flex justify-center items-center mt-8 space-x-2">
+            <button id="prevBtn" class="px-4 py-2 bg-white bg-opacity-70 backdrop-filter backdrop-blur-md text-gray-600 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+            </button>
+            
+            <div id="pageNumbers" class="flex space-x-1">
+                <!-- Page numbers will be dynamically generated here -->
+            </div>
+            
+            <button id="nextBtn" class="px-4 py-2 bg-white bg-opacity-70 backdrop-filter backdrop-blur-md text-gray-600 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Page info -->
+        <div id="pageInfo" class="text-center mt-4 text-gray-600 bg-white bg-opacity-70 backdrop-filter backdrop-blur-md rounded-lg p-3 mx-auto max-w-md">
+            <span id="pageInfoText">Showing 1-16 of 0 artworks</span>
+        </div>
     </main>
 
     <!-- Debugging Panel -->

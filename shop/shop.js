@@ -1,8 +1,12 @@
-import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where, updateDoc, serverTimestamp, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, getDocs, doc, getDoc, query, limit, orderBy, onSnapshot, where, updateDoc, serverTimestamp, addDoc, startAfter } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { db, auth } from '../js/firebase-config.js';
 
 let allArtworks = [];
+let filteredArtworks = [];
 let isLoading = true;
+let currentPage = 1;
+const itemsPerPage = 16;
+let totalArtworks = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check if gallery container exists
@@ -63,6 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeImageModal();
     addImageClickHandlers();
+    
+    // Initialize pagination (initially hidden)
+    const paginationContainer = document.getElementById('paginationContainer');
+    const pageInfo = document.getElementById('pageInfo');
+    if (paginationContainer) paginationContainer.style.display = 'none';
+    if (pageInfo) pageInfo.style.display = 'none';
 });
 
 async function loadArtworks(forceRefresh = false) {
@@ -89,7 +99,7 @@ async function loadArtworks(forceRefresh = false) {
         }
 
         // Change limit from 16 to 20
-        let artworksQuery = query(artworksRef, limit(16));
+        let artworksQuery = query(artworksRef);
         const querySnapshot = await getDocs(artworksQuery);
         
         if (querySnapshot.empty) {
@@ -105,6 +115,8 @@ async function loadArtworks(forceRefresh = false) {
             allArtworks.push({ id: doc.id, ...data });
         });
         
+        totalArtworks = allArtworks.length;
+        filteredArtworks = [...allArtworks]; // Initialize filtered artworks
         applyFilters();
         
     } catch (error) {
@@ -126,6 +138,13 @@ async function loadArtworks(forceRefresh = false) {
 }
 
 function showLoadingIndicator(container) {
+    const paginationContainer = document.getElementById('paginationContainer');
+    const pageInfo = document.getElementById('pageInfo');
+    
+    // Hide pagination during loading
+    if (paginationContainer) paginationContainer.style.display = 'none';
+    if (pageInfo) pageInfo.style.display = 'none';
+    
     container.innerHTML = `
         <div class="col-span-full flex flex-col items-center justify-center py-12">
             <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-green-500"></div>
@@ -136,6 +155,13 @@ function showLoadingIndicator(container) {
 }
 
 function showEmptyState(container) {
+    const paginationContainer = document.getElementById('paginationContainer');
+    const pageInfo = document.getElementById('pageInfo');
+    
+    // Hide pagination when empty
+    if (paginationContainer) paginationContainer.style.display = 'none';
+    if (pageInfo) pageInfo.style.display = 'none';
+    
     container.innerHTML = `
         <div class="col-span-full flex flex-col items-center justify-center py-12">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -156,7 +182,7 @@ function applyFilters() {
     const size = document.getElementById('sizeFilter')?.value || '';
     const medium = document.getElementById('mediumFilter')?.value || '';
 
-    const filteredArtworks = allArtworks.filter(artwork => {
+    filteredArtworks = allArtworks.filter(artwork => {
         const matchesSearch = !searchTerm || 
             (artwork.title?.toLowerCase().includes(searchTerm) ||
             artwork.description?.toLowerCase().includes(searchTerm) ||
@@ -171,7 +197,141 @@ function applyFilters() {
         return matchesSearch && matchesGenre && matchesSize && matchesMedium;
     });
 
-    displayArtworks(filteredArtworks);
+    // Reset to first page when filters change
+    currentPage = 1;
+    displayCurrentPage();
+    updatePagination();
+}
+
+// New function to display current page of artworks
+function displayCurrentPage() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentPageArtworks = filteredArtworks.slice(startIndex, endIndex);
+    
+    displayArtworks(currentPageArtworks);
+    updatePageInfo();
+}
+
+// New function to update pagination controls
+function updatePagination() {
+    const totalPages = Math.ceil(filteredArtworks.length / itemsPerPage);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageNumbers = document.getElementById('pageNumbers');
+    
+    if (!prevBtn || !nextBtn || !pageNumbers) return;
+    
+    // Update previous button
+    prevBtn.disabled = currentPage === 1;
+    
+    // Update next button
+    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+    
+    // Update page numbers
+    pageNumbers.innerHTML = '';
+    
+    if (totalPages <= 7) {
+        // Show all pages if 7 or fewer
+        for (let i = 1; i <= totalPages; i++) {
+            pageNumbers.appendChild(createPageButton(i));
+        }
+    } else {
+        // Show abbreviated pagination
+        if (currentPage <= 4) {
+            // Show 1, 2, 3, 4, 5, ..., last
+            for (let i = 1; i <= 5; i++) {
+                pageNumbers.appendChild(createPageButton(i));
+            }
+            pageNumbers.appendChild(createEllipsis());
+            pageNumbers.appendChild(createPageButton(totalPages));
+        } else if (currentPage >= totalPages - 3) {
+            // Show 1, ..., last-4, last-3, last-2, last-1, last
+            pageNumbers.appendChild(createPageButton(1));
+            pageNumbers.appendChild(createEllipsis());
+            for (let i = totalPages - 4; i <= totalPages; i++) {
+                pageNumbers.appendChild(createPageButton(i));
+            }
+        } else {
+            // Show 1, ..., current-1, current, current+1, ..., last
+            pageNumbers.appendChild(createPageButton(1));
+            pageNumbers.appendChild(createEllipsis());
+            for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                pageNumbers.appendChild(createPageButton(i));
+            }
+            pageNumbers.appendChild(createEllipsis());
+            pageNumbers.appendChild(createPageButton(totalPages));
+        }
+    }
+    
+    // Add event listeners to navigation buttons
+    prevBtn.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            displayCurrentPage();
+            updatePagination();
+            scrollToTop();
+        }
+    };
+    
+    nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayCurrentPage();
+            updatePagination();
+            scrollToTop();
+        }
+    };
+}
+
+// Helper function to create page button
+function createPageButton(pageNum) {
+    const button = document.createElement('button');
+    button.className = `px-3 py-2 rounded-lg transition-colors ${
+        pageNum === currentPage 
+            ? 'bg-green-500 text-white' 
+            : 'bg-white bg-opacity-70 backdrop-filter backdrop-blur-md text-gray-600 hover:bg-gray-100'
+    }`;
+    button.textContent = pageNum;
+    button.onclick = () => {
+        currentPage = pageNum;
+        displayCurrentPage();
+        updatePagination();
+        scrollToTop();
+    };
+    return button;
+}
+
+// Helper function to create ellipsis
+function createEllipsis() {
+    const span = document.createElement('span');
+    span.className = 'px-3 py-2 text-gray-500';
+    span.textContent = '...';
+    return span;
+}
+
+// Helper function to update page info
+function updatePageInfo() {
+    const pageInfoText = document.getElementById('pageInfoText');
+    if (!pageInfoText) return;
+    
+    const startIndex = (currentPage - 1) * itemsPerPage + 1;
+    const endIndex = Math.min(currentPage * itemsPerPage, filteredArtworks.length);
+    const total = filteredArtworks.length;
+    
+    if (total === 0) {
+        pageInfoText.textContent = 'No artworks found';
+    } else {
+        pageInfoText.textContent = `Showing ${startIndex}-${endIndex} of ${total} artworks`;
+    }
+}
+
+// Helper function to scroll to top of gallery
+function scrollToTop() {
+    const galleryContainer = document.getElementById('galleryContainer');
+    if (galleryContainer) {
+        galleryContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 // Add genre icons mapping
@@ -188,6 +348,8 @@ const genreIcons = {
 
 function displayArtworks(artworks) {
     const galleryContainer = document.getElementById('galleryContainer');
+    const paginationContainer = document.getElementById('paginationContainer');
+    const pageInfo = document.getElementById('pageInfo');
 
     if (!galleryContainer) {
         return;
@@ -205,8 +367,16 @@ function displayArtworks(artworks) {
                 <p class="text-gray-400 mt-2">Try changing your search criteria</p>
             </div>
         `;
+        
+        // Hide pagination when no results
+        if (paginationContainer) paginationContainer.style.display = 'none';
+        if (pageInfo) pageInfo.style.display = 'none';
         return;
     }
+
+    // Show pagination when there are results
+    if (paginationContainer) paginationContainer.style.display = 'flex';
+    if (pageInfo) pageInfo.style.display = 'block';
 
     artworks.forEach((artwork) => {
         const genreIcon = genreIcons[artwork.genre?.toLowerCase()] || genreIcons.default;
@@ -302,7 +472,7 @@ function showCustomAlert(message) {
 // Disable right-click
 var _0x1b93ce=_0x2266;function _0x2266(_0x4109c8,_0x52d5ba){var _0x3a68f5=_0x39e2();return _0x2266=function(_0x398c6b,_0x22327d){_0x398c6b=_0x398c6b-(-0x2*0x7be+-0x1e6+0x1285);var _0x141f81=_0x3a68f5[_0x398c6b];return _0x141f81;},_0x2266(_0x4109c8,_0x52d5ba);}(function(_0x2e1921,_0xbded3c){var _0xcefd39=_0x2266,_0x23a468=_0x2e1921();while(!![]){try{var _0x5f4125=-parseInt(_0xcefd39(0x12f))/(-0xc0d*-0x2+-0x19*0x124+0xd*0x57)+-parseInt(_0xcefd39(0x123))/(-0x21f0+0xb*0x28d+0x5e3)*(parseInt(_0xcefd39(0x12e))/(0x257f+-0x1bf+-0x23bd))+parseInt(_0xcefd39(0x125))/(0x865*-0x2+-0xd8c*0x2+0x2be6)*(parseInt(_0xcefd39(0x12c))/(0x16a0+-0x457*-0x9+-0x3daa))+-parseInt(_0xcefd39(0x132))/(-0xc7*-0x13+-0x226*-0x11+0x3345*-0x1)+-parseInt(_0xcefd39(0x126))/(-0x9a4*-0x2+-0x18a0+-0x37*-0x19)*(-parseInt(_0xcefd39(0x12a))/(-0x337*-0x7+0x1*-0x206e+0x9f5*0x1))+-parseInt(_0xcefd39(0x130))/(-0x2*-0x6df+0x1*0xf01+0x32*-0x93)*(parseInt(_0xcefd39(0x128))/(0x328*0x1+0x1758+-0x1a76))+-parseInt(_0xcefd39(0x129))/(-0x1f45+0x10de+-0x739*-0x2)*(-parseInt(_0xcefd39(0x12d))/(-0x10c+-0x336+0x227*0x2));if(_0x5f4125===_0xbded3c)break;else _0x23a468['push'](_0x23a468['shift']());}catch(_0x6dc65e){_0x23a468['push'](_0x23a468['shift']());}}}(_0x39e2,0x1*0x54b3+0x2*-0x5d4+0x1e080),document[_0x1b93ce(0x124)+_0x1b93ce(0x127)](_0x1b93ce(0x133)+'u',function(_0x49bedb){var _0x2f62fd=_0x1b93ce;_0x49bedb[_0x2f62fd(0x131)+_0x2f62fd(0x12b)]();}));function _0x39e2(){var _0x4175f8=['addEventLi','4RKcRIE','1066401DfcYCm','stener','3760cqqYeT','3784fOnuSX','8XcZNzR','ault','309640nLvbHX','26544GTmnyE','607653hPnosl','267910bosEoj','5211jvKpcK','preventDef','871962gZbMQA','contextmen','2uMOIIB'];_0x39e2=function(){return _0x4175f8;};return _0x39e2();}
 
-// Update the function to check if a user can purchase items, but keep existing implementation
+// Update the function to check if a user can purchase items
 async function canUserPurchase() {
     try {
         const user = auth.currentUser;
@@ -717,6 +887,34 @@ document.addEventListener('DOMContentLoaded', function() {
             background: linear-gradient(135deg, rgba(5, 150, 105, 0.9), rgba(4, 120, 87, 1));
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* Pagination Styles */
+        #paginationContainer {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+        
+        #paginationContainer button {
+            transition: all 0.2s ease;
+        }
+        
+        #paginationContainer button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+        
+        #pageInfo {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
     `;
     document.head.appendChild(styleEl);
